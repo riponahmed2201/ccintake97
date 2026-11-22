@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
+use App\Models\Business;
 use App\Models\College;
 use App\Models\Committee;
 use App\Models\Event;
@@ -38,6 +39,11 @@ class HomeController extends Controller
             ->orderBy('display_order')
             ->first();
 
+        $businesses = Business::with(['industry', 'category', 'owner.college', 'owner.user'])
+            ->where('status', 'approved')
+            ->limit(4)
+            ->get();
+
         $metrics = [
             'total_members' => Member::count(),
             'verified_members' => Member::where('verification_status', 'verified')->count(),
@@ -50,6 +56,7 @@ class HomeController extends Controller
             'events' => $featuredEvents,
             'articles' => $latestArticles,
             'committee' => $executiveCommittee,
+            'businesses' => $businesses,
             'metrics' => $metrics,
         ]);
     }
