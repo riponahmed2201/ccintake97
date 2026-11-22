@@ -412,31 +412,31 @@ export default function Welcome({ colleges = [], events = [], articles = [], com
                             </div>
                         </Link>
 
-                        {/* Desktop Navigation Menu Items (Exact iutaa.com order) */}
+                        {/* Desktop Navigation Menu Items (Option 1: Executive Sequence) */}
                         <nav className="hidden xl:flex items-center gap-6 text-[13px] font-semibold text-slate-700 tracking-wide">
                             <a href="#about" className="hover:text-[#7B1113] transition-colors py-1">
                                 About
                             </a>
-                            <a href="#contact" className="hover:text-[#7B1113] transition-colors py-1">
-                                Contact
+                            <a href="#directory" className="hover:text-[#7B1113] transition-colors py-1">
+                                Directory
                             </a>
                             <a href="#committee" className="hover:text-[#7B1113] transition-colors py-1">
                                 Committee
                             </a>
-                            <a href="#directory" className="hover:text-[#7B1113] transition-colors py-1">
-                                Directory
+                            <a href="#welfare" className="hover:text-[#7B1113] transition-colors py-1">
+                                Welfare & Trust
                             </a>
                             <a href="#businesses" className="hover:text-[#7B1113] transition-colors py-1">
                                 Businesses
                             </a>
-                            <a href="#constitution" className="hover:text-[#7B1113] transition-colors py-1">
-                                Constitution
-                            </a>
                             <a href="#news" className="hover:text-[#7B1113] transition-colors py-1">
                                 News
                             </a>
-                            <a href="#offers" className="hover:text-[#7B1113] transition-colors py-1">
-                                Offers
+                            <a href="#constitution" className="hover:text-[#7B1113] transition-colors py-1">
+                                Constitution
+                            </a>
+                            <a href="#contact" className="hover:text-[#7B1113] transition-colors py-1">
+                                Contact
                             </a>
                             
                             {/* Grand Reunion 2027 Button (Featured highlighted CTA) */}
@@ -485,32 +485,32 @@ export default function Welcome({ colleges = [], events = [], articles = [], com
                         </div>
                     </div>
 
-                    {/* Mobile Drawer Navigation (Matching exact iutaa.com items) */}
+                    {/* Mobile Drawer Navigation (Option 1: Executive Sequence) */}
                     {mobileMenuOpen && (
                         <div className="xl:hidden border-b border-slate-200 bg-white px-5 py-4 space-y-2 text-sm font-semibold shadow-lg">
                             <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 hover:text-[#7B1113] border-b border-slate-100">
                                 About
                             </a>
-                            <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 hover:text-[#7B1113] border-b border-slate-100">
-                                Contact
+                            <a href="#directory" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 hover:text-[#7B1113] border-b border-slate-100">
+                                Directory
                             </a>
                             <a href="#committee" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 hover:text-[#7B1113] border-b border-slate-100">
                                 Committee
                             </a>
-                            <a href="#directory" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 hover:text-[#7B1113] border-b border-slate-100">
-                                Directory
+                            <a href="#welfare" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 hover:text-[#7B1113] border-b border-slate-100">
+                                Welfare & Trust
                             </a>
                             <a href="#businesses" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 hover:text-[#7B1113] border-b border-slate-100">
                                 Businesses
                             </a>
-                            <a href="#constitution" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 hover:text-[#7B1113] border-b border-slate-100">
-                                Constitution
-                            </a>
                             <a href="#news" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 hover:text-[#7B1113] border-b border-slate-100">
                                 News
                             </a>
-                            <a href="#offers" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 hover:text-[#7B1113] border-b border-slate-100">
-                                Offers
+                            <a href="#constitution" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 hover:text-[#7B1113] border-b border-slate-100">
+                                Constitution
+                            </a>
+                            <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-slate-800 hover:text-[#7B1113] border-b border-slate-100">
+                                Contact
                             </a>
                             <a href="#reunion" onClick={() => setMobileMenuOpen(false)} className="block py-2.5 px-3 bg-[#7B1113] text-[#FFFDF8] font-bold rounded uppercase text-xs">
                                 Grand Reunion 2027
@@ -929,175 +929,6 @@ export default function Welcome({ colleges = [], events = [], articles = [], com
                     </div>
                 </section>
 
-                {/* 6. SECTION: GRAND REUNION 2027 (#reunion) — Milestone Conclave */}
-                <section id="reunion" className="py-24 bg-[#0B1528] text-white border-b border-slate-800 scroll-mt-20">
-                    <div className="mx-auto max-w-7xl px-4 sm:px-8">
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                            
-                            <div className="lg:col-span-8 space-y-6">
-                                <div className="inline-flex items-center gap-2 bg-[#7B1113] text-[#F3E5AB] border border-[#D4AF37]/50 font-mono text-[11px] uppercase tracking-wider px-3.5 py-1 rounded">
-                                    <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" />
-                                    <span>Milestone 30th Anniversary Conclave</span>
-                                </div>
-
-                                <div className="space-y-3">
-                                    <h2 className="font-serif text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
-                                        Grand Reunion 2027 • 30-Year Jubilee & National Assembly
-                                    </h2>
-                                    <p className="font-serif text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl">
-                                        Three decades of unbroken brotherhood, courageous public service, and global impact. Bringing together all 642 batchmates, our families, and our revered cadet college faculty members for the historic assembly in Dhaka.
-                                    </p>
-                                </div>
-
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-800 text-xs font-serif text-slate-300">
-                                    <div className="flex items-start gap-2.5">
-                                        <MapPin className="h-4 w-4 text-[#D4AF37] shrink-0 mt-0.5" />
-                                        <div>
-                                            <strong className="block text-white font-sans uppercase text-[11px] font-mono">Assembly Venue</strong>
-                                            <span>Sena Malancha / Dhaka Club / Kurmitola Golf Club</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-2.5">
-                                        <Calendar className="h-4 w-4 text-[#D4AF37] shrink-0 mt-0.5" />
-                                        <div>
-                                            <strong className="block text-white font-sans uppercase text-[11px] font-mono">Date & Timing</strong>
-                                            <span>Winter 2027 • Three-Day National Conclave</span>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-start gap-2.5">
-                                        <QrCode className="h-4 w-4 text-[#D4AF37] shrink-0 mt-0.5" />
-                                        <div>
-                                            <strong className="block text-white font-sans uppercase text-[11px] font-mono">Access Pass</strong>
-                                            <span>Encrypted Digital Pass for Verified Alumni</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="lg:col-span-4">
-                                <div className="bg-[#1E293B] p-8 border border-slate-700 rounded shadow-2xl space-y-5">
-                                    <div className="border-b border-slate-700 pb-3 flex items-center justify-between">
-                                        <span className="text-[11px] font-mono text-[#D4AF37] uppercase tracking-wider font-semibold">
-                                            Reunion Registration
-                                        </span>
-                                        <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-[10px] font-mono">
-                                            Pre-Reg Open
-                                        </Badge>
-                                    </div>
-
-                                    <div>
-                                        <div className="text-2xl font-bold font-serif text-white">Class of 1997 Pass</div>
-                                        <p className="text-xs text-slate-400 mt-1 font-serif leading-relaxed">
-                                            Includes All-Access Conclave Pass, Grand Mess Dinner, 30th Anniversary Yearbook, and Family Banquet invitation.
-                                        </p>
-                                    </div>
-
-                                    <div className="space-y-2 text-xs font-mono text-slate-300">
-                                        <div className="flex items-center gap-2">
-                                            <CheckCircle2 className="h-3.5 w-3.5 text-[#D4AF37]" />
-                                            <span>Exclusive to Verified 1997 Alumni</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <CheckCircle2 className="h-3.5 w-3.5 text-[#D4AF37]" />
-                                            <span>Official Commemorative Medallion</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <CheckCircle2 className="h-3.5 w-3.5 text-[#D4AF37]" />
-                                            <span>Spouse & Children Registration Included</span>
-                                        </div>
-                                    </div>
-
-                                    <Link href="/login" className="block w-full pt-2">
-                                        <Button className="w-full bg-[#7B1113] hover:bg-[#600C0E] text-white font-bold text-xs uppercase tracking-wider h-11 border border-[#D4AF37]/50 shadow-md">
-                                            Reserve Reunion Seat / Pass
-                                        </Button>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {/* 7. SECTION: COMMITTEE (#committee) — Leadership & Governance */}
-                <section id="committee" className="py-24 bg-white border-b border-slate-200 scroll-mt-20">
-                    <div className="mx-auto max-w-7xl px-4 sm:px-8 space-y-12">
-                        
-                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                            <div>
-                                <span className="text-[11px] font-mono tracking-widest uppercase font-bold text-[#7B1113] block">
-                                    Secretariat Stewardship
-                                </span>
-                                <h2 className="font-serif text-3xl sm:text-4xl font-bold text-slate-950 mt-1">
-                                    {committee?.name || 'Central Executive Committee'}
-                                </h2>
-                                <p className="font-serif text-sm text-slate-600 mt-1 max-w-2xl italic">
-                                    “We took an oath not merely to achieve personal eminence, but to maintain an inviolable lifeline for one another and to serve the Republic with fearless rectitude.”
-                                </p>
-                            </div>
-
-                            <a href="#constitution" className="text-xs font-mono font-semibold text-[#7B1113] hover:underline flex items-center gap-1">
-                                <span>View Governance Charter</span>
-                                <ChevronRight className="h-3.5 w-3.5" />
-                            </a>
-                        </div>
-
-                        {/* Executive Committee Cards */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {committee?.members && committee.members.length > 0 ? (
-                                committee.members.map((cm) => (
-                                    <div key={cm.id} className="bg-slate-50/70 border border-slate-200 p-6 text-center rounded hover:border-[#D4AF37] hover:shadow-sm transition-all group">
-                                        <div className="mx-auto h-20 w-20 rounded-full bg-white border-2 border-[#D4AF37] flex items-center justify-center font-serif text-slate-800 font-bold text-xl mb-4 shadow-xs overflow-hidden">
-                                            {cm.member?.user?.avatar_path ? (
-                                                <img src={cm.member.user.avatar_path} alt="" className="h-full w-full object-cover" />
-                                            ) : (
-                                                <span className="text-[#0B1528]">{cm.member?.user?.name?.slice(0, 2).toUpperCase() || 'CC'}</span>
-                                            )}
-                                        </div>
-                                        <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#7B1113] mb-1">
-                                            {cm.position_title}
-                                        </div>
-                                        <h3 className="font-serif font-bold text-base text-slate-950 group-hover:text-[#7B1113] transition-colors">
-                                            {cm.member?.user?.name}
-                                        </h3>
-                                        <p className="text-xs text-slate-600 font-serif mt-1">
-                                            {cm.member?.profile?.designation || cm.position_title || 'Executive Steward'}
-                                        </p>
-                                        <div className="mt-3 pt-3 border-t border-slate-200 text-[10px] font-mono text-slate-500">
-                                            {cm.member?.college?.short_name || 'Cadet College'} • Class of 1997
-                                        </div>
-                                    </div>
-                                ))
-                            ) : (
-                                // Canonical executive stewards fallback if committee records are empty
-                                [
-                                    { title: 'PRESIDENT', name: 'Brig. Gen. (Retd.) K. M. Tanvir', college: 'JCC #97', role: 'Strategic Advisor & Trustee' },
-                                    { title: 'GENERAL SECRETARY', name: 'Barrister Navid Huq', college: 'MCC #97', role: 'Supreme Court Appellate Division' },
-                                    { title: 'TREASURER & TRUST', name: 'Kazi Farhan Ahmed, FCA', college: 'FCC #97', role: 'Partner, Institutional Audits' },
-                                    { title: 'WELFARE DIRECTOR', name: 'Dr. Nusrat Ahmed, FRCS', college: 'MGCC #97', role: 'Royal College Fellow, Surgeon' },
-                                ].map((sec, i) => (
-                                    <div key={i} className="bg-slate-50/70 border border-slate-200 p-6 text-center rounded hover:border-[#D4AF37] hover:shadow-sm transition-all group">
-                                        <div className="mx-auto h-16 w-16 rounded-full bg-[#0B1528] text-[#F3E5AB] border-2 border-[#D4AF37] flex items-center justify-center font-serif font-bold text-lg mb-3 shadow-xs">
-                                            {sec.name.split(' ').map(n => n[0]).filter(Boolean).slice(0, 2).join('')}
-                                        </div>
-                                        <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#7B1113] mb-1">
-                                            {sec.title}
-                                        </div>
-                                        <h3 className="font-serif font-bold text-base text-slate-950 group-hover:text-[#7B1113] transition-colors">
-                                            {sec.name}
-                                        </h3>
-                                        <p className="text-xs text-slate-600 font-serif mt-0.5">
-                                            {sec.role}
-                                        </p>
-                                        <div className="mt-3 pt-3 border-t border-slate-200 text-[10px] font-mono text-slate-500">
-                                            {sec.college} • Central Secretariat
-                                        </div>
-                                    </div>
-                                ))
-                            )}
-                        </div>
-                    </div>
-                </section>
-
                 {/* 8. SECTION: DIRECTORY (#directory) — Cadet Roll & Global Sectors */}
                 <section id="directory" className="py-24 bg-slate-50 border-b border-slate-200 scroll-mt-20">
                     <div className="mx-auto max-w-7xl px-4 sm:px-8 space-y-16">
@@ -1254,6 +1085,174 @@ export default function Welcome({ colleges = [], events = [], articles = [], com
                     </div>
                 </section>
 
+                {/* 7. SECTION: COMMITTEE (#committee) — Leadership & Governance */}
+                <section id="committee" className="py-24 bg-white border-b border-slate-200 scroll-mt-20">
+                    <div className="mx-auto max-w-7xl px-4 sm:px-8 space-y-12">
+                        
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                            <div>
+                                <span className="text-[11px] font-mono tracking-widest uppercase font-bold text-[#7B1113] block">
+                                    Secretariat Stewardship
+                                </span>
+                                <h2 className="font-serif text-3xl sm:text-4xl font-bold text-slate-950 mt-1">
+                                    {committee?.name || 'Central Executive Committee'}
+                                </h2>
+                                <p className="font-serif text-sm text-slate-600 mt-1 max-w-2xl italic">
+                                    “We took an oath not merely to achieve personal eminence, but to maintain an inviolable lifeline for one another and to serve the Republic with fearless rectitude.”
+                                </p>
+                            </div>
+
+                            <a href="#constitution" className="text-xs font-mono font-semibold text-[#7B1113] hover:underline flex items-center gap-1">
+                                <span>View Governance Charter</span>
+                                <ChevronRight className="h-3.5 w-3.5" />
+                            </a>
+                        </div>
+
+                        {/* Executive Committee Cards */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {committee?.members && committee.members.length > 0 ? (
+                                committee.members.map((cm) => (
+                                    <div key={cm.id} className="bg-slate-50/70 border border-slate-200 p-6 text-center rounded hover:border-[#D4AF37] hover:shadow-sm transition-all group">
+                                        <div className="mx-auto h-20 w-20 rounded-full bg-white border-2 border-[#D4AF37] flex items-center justify-center font-serif text-slate-800 font-bold text-xl mb-4 shadow-xs overflow-hidden">
+                                            {cm.member?.user?.avatar_path ? (
+                                                <img src={cm.member.user.avatar_path} alt="" className="h-full w-full object-cover" />
+                                            ) : (
+                                                <span className="text-[#0B1528]">{cm.member?.user?.name?.slice(0, 2).toUpperCase() || 'CC'}</span>
+                                            )}
+                                        </div>
+                                        <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#7B1113] mb-1">
+                                            {cm.position_title}
+                                        </div>
+                                        <h3 className="font-serif font-bold text-base text-slate-950 group-hover:text-[#7B1113] transition-colors">
+                                            {cm.member?.user?.name}
+                                        </h3>
+                                        <p className="text-xs text-slate-600 font-serif mt-1">
+                                            {cm.member?.profile?.designation || cm.position_title || 'Executive Steward'}
+                                        </p>
+                                        <div className="mt-3 pt-3 border-t border-slate-200 text-[10px] font-mono text-slate-500">
+                                            {cm.member?.college?.short_name || 'Cadet College'} • Class of 1997
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                // Canonical executive stewards fallback if committee records are empty
+                                [
+                                    { title: 'PRESIDENT', name: 'Brig. Gen. (Retd.) K. M. Tanvir', college: 'JCC #97', role: 'Strategic Advisor & Trustee' },
+                                    { title: 'GENERAL SECRETARY', name: 'Barrister Navid Huq', college: 'MCC #97', role: 'Supreme Court Appellate Division' },
+                                    { title: 'TREASURER & TRUST', name: 'Kazi Farhan Ahmed, FCA', college: 'FCC #97', role: 'Partner, Institutional Audits' },
+                                    { title: 'WELFARE DIRECTOR', name: 'Dr. Nusrat Ahmed, FRCS', college: 'MGCC #97', role: 'Royal College Fellow, Surgeon' },
+                                ].map((sec, i) => (
+                                    <div key={i} className="bg-slate-50/70 border border-slate-200 p-6 text-center rounded hover:border-[#D4AF37] hover:shadow-sm transition-all group">
+                                        <div className="mx-auto h-16 w-16 rounded-full bg-[#0B1528] text-[#F3E5AB] border-2 border-[#D4AF37] flex items-center justify-center font-serif font-bold text-lg mb-3 shadow-xs">
+                                            {sec.name.split(' ').map(n => n[0]).filter(Boolean).slice(0, 2).join('')}
+                                        </div>
+                                        <div className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#7B1113] mb-1">
+                                            {sec.title}
+                                        </div>
+                                        <h3 className="font-serif font-bold text-base text-slate-950 group-hover:text-[#7B1113] transition-colors">
+                                            {sec.name}
+                                        </h3>
+                                        <p className="text-xs text-slate-600 font-serif mt-0.5">
+                                            {sec.role}
+                                        </p>
+                                        <div className="mt-3 pt-3 border-t border-slate-200 text-[10px] font-mono text-slate-500">
+                                            {sec.college} • Central Secretariat
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </section>
+
+                {/* 12. SECTION: OFFERS (#offers) — Sacred Welfare Trust & Perks */}
+                <section id="welfare" className="py-24 bg-slate-50 border-b border-slate-200 scroll-mt-20 relative">
+                    <span id="offers" className="absolute -top-24 sr-only" />
+                    <div className="mx-auto max-w-7xl px-4 sm:px-8 space-y-12">
+                        
+                        <div className="max-w-3xl space-y-2">
+                            <span className="text-[11px] font-mono tracking-widest uppercase font-bold text-[#7B1113] block">
+                                The Sacred Covenant • Welfare & Trust
+                            </span>
+                            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-slate-950">
+                                Welfare, Endowment & Batchmate Privileges
+                            </h2>
+                            <p className="font-serif text-sm text-slate-600 leading-relaxed italic">
+                                We leave no comrade behind. The Intake 97 Welfare Trust provides guaranteed medical lifelines, protects the educational future of fallen batchmates' children, and fosters mutual commercial privileges.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 font-serif">
+                            <div className="bg-white p-6 border border-slate-200 rounded shadow-xs flex flex-col justify-between">
+                                <div className="space-y-3">
+                                    <div className="h-10 w-10 rounded bg-[#0B1528] text-[#F3E5AB] flex items-center justify-center">
+                                        <HeartHandshake className="h-5 w-5" />
+                                    </div>
+                                    <h3 className="font-bold text-base text-slate-950">Emergency Medical Lifeline</h3>
+                                    <p className="text-xs text-slate-600 leading-relaxed">
+                                        Guaranteed zero-friction ICU and emergency funding disbursal within 3 hours of verification anywhere across the globe.
+                                    </p>
+                                </div>
+                                <div className="mt-5 pt-3 border-t border-slate-100 text-[10px] font-mono text-[#7B1113] font-bold uppercase">
+                                    BDT 42M+ Disbursed
+                                </div>
+                            </div>
+
+                            <div className="bg-white p-6 border border-slate-200 rounded shadow-xs flex flex-col justify-between">
+                                <div className="space-y-3">
+                                    <div className="h-10 w-10 rounded bg-[#0B1528] text-[#F3E5AB] flex items-center justify-center">
+                                        <GraduationCap className="h-5 w-5" />
+                                    </div>
+                                    <h3 className="font-bold text-base text-slate-950">Children's Education Trust</h3>
+                                    <p className="text-xs text-slate-600 leading-relaxed">
+                                        Full academic tuition and mentoring endowments for every child of deceased 1997 batchmates through university graduation.
+                                    </p>
+                                </div>
+                                <div className="mt-5 pt-3 border-t border-slate-100 text-[10px] font-mono text-[#7B1113] font-bold uppercase">
+                                    18 Scholars Supported
+                                </div>
+                            </div>
+
+                            <div className="bg-white p-6 border border-slate-200 rounded shadow-xs flex flex-col justify-between">
+                                <div className="space-y-3">
+                                    <div className="h-10 w-10 rounded bg-[#0B1528] text-[#F3E5AB] flex items-center justify-center">
+                                        <Globe2 className="h-5 w-5" />
+                                    </div>
+                                    <h3 className="font-bold text-base text-slate-950">National Disaster Relief</h3>
+                                    <p className="text-xs text-slate-600 leading-relaxed">
+                                        Rapid deployment of water filtration, medical camps, and family rehabilitation during national flood crises in Bangladesh.
+                                    </p>
+                                </div>
+                                <div className="mt-5 pt-3 border-t border-slate-100 text-[10px] font-mono text-[#7B1113] font-bold uppercase">
+                                    12,000+ Families Aided
+                                </div>
+                            </div>
+
+                            <div className="bg-white p-6 border border-slate-200 rounded shadow-xs flex flex-col justify-between">
+                                <div className="space-y-3">
+                                    <div className="h-10 w-10 rounded bg-[#0B1528] text-[#F3E5AB] flex items-center justify-center">
+                                        <Percent className="h-5 w-5" />
+                                    </div>
+                                    <h3 className="font-bold text-base text-slate-950">Batchmate Enterprise Offers</h3>
+                                    <p className="text-xs text-slate-600 leading-relaxed">
+                                        Preferential alumni pricing on diagnostic imaging, legal retainers, cloud infrastructure, and international logistics.
+                                    </p>
+                                </div>
+                                <div className="mt-5 pt-3 border-t border-slate-100 text-[10px] font-mono text-[#7B1113] font-bold uppercase">
+                                    Verified Alumni Rates
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="p-4 bg-white border border-slate-200 rounded text-center text-xs font-serif text-slate-500">
+                            Have an initiative or enterprise perk to extend to batchmates?{' '}
+                            <Link href="/login" className="text-[#7B1113] font-bold hover:underline font-mono">
+                                Submit via Member Portal →
+                            </Link>
+                        </div>
+                    </div>
+                </section>
+
                 {/* 9. SECTION: BUSINESSES (#businesses) — Commercial Directory */}
                 <section id="businesses" className="py-24 bg-white border-b border-slate-200 scroll-mt-20">
                     <div className="mx-auto max-w-7xl px-4 sm:px-8 space-y-12">
@@ -1330,77 +1329,6 @@ export default function Welcome({ colleges = [], events = [], articles = [], com
                                 ))}
                             </div>
                         )}
-                    </div>
-                </section>
-
-                {/* 10. SECTION: CONSTITUTION (#constitution) — Sovereign Charter */}
-                <section id="constitution" className="py-24 bg-slate-50 border-b border-slate-200 scroll-mt-20">
-                    <div className="mx-auto max-w-7xl px-4 sm:px-8 space-y-12">
-                        
-                        <div className="max-w-3xl space-y-2">
-                            <span className="text-[11px] font-mono tracking-widest uppercase font-bold text-[#7B1113] block">
-                                Governance & Legal Charter
-                            </span>
-                            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-slate-950">
-                                The Association Constitution
-                            </h2>
-                            <p className="font-serif text-sm text-slate-600 leading-relaxed italic">
-                                The formal legal charter and constitutional by-laws governing the 1997 intake central alumni body.
-                            </p>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 font-serif">
-                            <div className="bg-white p-6 border border-slate-200 rounded space-y-3 shadow-xs">
-                                <div className="h-9 w-9 rounded bg-[#7B1113] text-white flex items-center justify-center font-bold text-xs font-mono">
-                                    I
-                                </div>
-                                <h3 className="font-bold text-base text-slate-950">Name & Parity</h3>
-                                <p className="text-xs text-slate-600 leading-relaxed">
-                                    The association is formally constituted as the central alumni body representing exclusively cadets of the 1997 intake with equal sovereign parity among all 12 colleges.
-                                </p>
-                            </div>
-
-                            <div className="bg-white p-6 border border-slate-200 rounded space-y-3 shadow-xs">
-                                <div className="h-9 w-9 rounded bg-[#0B1528] text-white flex items-center justify-center font-bold text-xs font-mono">
-                                    II
-                                </div>
-                                <h3 className="font-bold text-base text-slate-950">Strict 1997 Scoping</h3>
-                                <p className="text-xs text-slate-600 leading-relaxed">
-                                    Admission criteria: verified intake roll records from participating cadet colleges, verified batchmate endorsement, and executive committee approval.
-                                </p>
-                            </div>
-
-                            <div className="bg-white p-6 border border-slate-200 rounded space-y-3 shadow-xs">
-                                <div className="h-9 w-9 rounded bg-[#7B1113] text-white flex items-center justify-center font-bold text-xs font-mono">
-                                    III
-                                </div>
-                                <h3 className="font-bold text-base text-slate-950">Non-Political Mandate</h3>
-                                <p className="text-xs text-slate-600 leading-relaxed">
-                                    The association is strictly non-political, non-partisan, and fraternal. Bi-annual leadership transitions ensure democratic rotation across all cadet college chapters.
-                                </p>
-                            </div>
-
-                            <div className="bg-white p-6 border border-slate-200 rounded space-y-3 shadow-xs">
-                                <div className="h-9 w-9 rounded bg-[#0B1528] text-white flex items-center justify-center font-bold text-xs font-mono">
-                                    IV
-                                </div>
-                                <h3 className="font-bold text-base text-slate-950">Fiduciary Transparency</h3>
-                                <p className="text-xs text-slate-600 leading-relaxed">
-                                    100% of welfare and endowment contributions are subjected to annual third-party chartered accounting audits published openly to all verified members.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="p-5 bg-white border border-slate-200 rounded flex flex-col sm:flex-row items-center justify-between text-xs font-serif gap-3">
-                            <div className="flex items-center gap-2">
-                                <FileText className="h-4 w-4 text-[#7B1113]" />
-                                <span>Official Constitution & By-Laws of Intake '97 (Certified Legal PDF)</span>
-                            </div>
-                            <Link href="/login" className="text-[#7B1113] font-bold hover:underline font-mono inline-flex items-center gap-1">
-                                <span>Download Full Legal Charter</span>
-                                <ArrowRight className="h-3.5 w-3.5" />
-                            </Link>
-                        </div>
                     </div>
                 </section>
 
@@ -1484,89 +1412,162 @@ export default function Welcome({ colleges = [], events = [], articles = [], com
                     </div>
                 </section>
 
-                {/* 12. SECTION: OFFERS (#offers) — Sacred Welfare Trust & Perks */}
-                <section id="offers" className="py-24 bg-slate-50 border-b border-slate-200 scroll-mt-20">
+                {/* 10. SECTION: CONSTITUTION (#constitution) — Sovereign Charter */}
+                <section id="constitution" className="py-24 bg-slate-50 border-b border-slate-200 scroll-mt-20">
                     <div className="mx-auto max-w-7xl px-4 sm:px-8 space-y-12">
                         
                         <div className="max-w-3xl space-y-2">
                             <span className="text-[11px] font-mono tracking-widest uppercase font-bold text-[#7B1113] block">
-                                The Sacred Covenant
+                                Governance & Legal Charter
                             </span>
                             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-slate-950">
-                                Welfare, Endowment & Batchmate Privileges
+                                The Association Constitution
                             </h2>
                             <p className="font-serif text-sm text-slate-600 leading-relaxed italic">
-                                We leave no comrade behind. The Intake 97 Welfare Trust provides guaranteed medical lifelines, protects the educational future of fallen batchmates' children, and fosters mutual commercial privileges.
+                                The formal legal charter and constitutional by-laws governing the 1997 intake central alumni body.
                             </p>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 font-serif">
-                            <div className="bg-white p-6 border border-slate-200 rounded shadow-xs flex flex-col justify-between">
-                                <div className="space-y-3">
-                                    <div className="h-10 w-10 rounded bg-[#0B1528] text-[#F3E5AB] flex items-center justify-center">
-                                        <HeartHandshake className="h-5 w-5" />
-                                    </div>
-                                    <h3 className="font-bold text-base text-slate-950">Emergency Medical Lifeline</h3>
-                                    <p className="text-xs text-slate-600 leading-relaxed">
-                                        Guaranteed zero-friction ICU and emergency funding disbursal within 3 hours of verification anywhere across the globe.
-                                    </p>
+                            <div className="bg-white p-6 border border-slate-200 rounded space-y-3 shadow-xs">
+                                <div className="h-9 w-9 rounded bg-[#7B1113] text-white flex items-center justify-center font-bold text-xs font-mono">
+                                    I
                                 </div>
-                                <div className="mt-5 pt-3 border-t border-slate-100 text-[10px] font-mono text-[#7B1113] font-bold uppercase">
-                                    BDT 42M+ Disbursed
-                                </div>
+                                <h3 className="font-bold text-base text-slate-950">Name & Parity</h3>
+                                <p className="text-xs text-slate-600 leading-relaxed">
+                                    The association is formally constituted as the central alumni body representing exclusively cadets of the 1997 intake with equal sovereign parity among all 12 colleges.
+                                </p>
                             </div>
 
-                            <div className="bg-white p-6 border border-slate-200 rounded shadow-xs flex flex-col justify-between">
-                                <div className="space-y-3">
-                                    <div className="h-10 w-10 rounded bg-[#0B1528] text-[#F3E5AB] flex items-center justify-center">
-                                        <GraduationCap className="h-5 w-5" />
-                                    </div>
-                                    <h3 className="font-bold text-base text-slate-950">Children's Education Trust</h3>
-                                    <p className="text-xs text-slate-600 leading-relaxed">
-                                        Full academic tuition and mentoring endowments for every child of deceased 1997 batchmates through university graduation.
-                                    </p>
+                            <div className="bg-white p-6 border border-slate-200 rounded space-y-3 shadow-xs">
+                                <div className="h-9 w-9 rounded bg-[#0B1528] text-white flex items-center justify-center font-bold text-xs font-mono">
+                                    II
                                 </div>
-                                <div className="mt-5 pt-3 border-t border-slate-100 text-[10px] font-mono text-[#7B1113] font-bold uppercase">
-                                    18 Scholars Supported
-                                </div>
+                                <h3 className="font-bold text-base text-slate-950">Strict 1997 Scoping</h3>
+                                <p className="text-xs text-slate-600 leading-relaxed">
+                                    Admission criteria: verified intake roll records from participating cadet colleges, verified batchmate endorsement, and executive committee approval.
+                                </p>
                             </div>
 
-                            <div className="bg-white p-6 border border-slate-200 rounded shadow-xs flex flex-col justify-between">
-                                <div className="space-y-3">
-                                    <div className="h-10 w-10 rounded bg-[#0B1528] text-[#F3E5AB] flex items-center justify-center">
-                                        <Globe2 className="h-5 w-5" />
-                                    </div>
-                                    <h3 className="font-bold text-base text-slate-950">National Disaster Relief</h3>
-                                    <p className="text-xs text-slate-600 leading-relaxed">
-                                        Rapid deployment of water filtration, medical camps, and family rehabilitation during national flood crises in Bangladesh.
-                                    </p>
+                            <div className="bg-white p-6 border border-slate-200 rounded space-y-3 shadow-xs">
+                                <div className="h-9 w-9 rounded bg-[#7B1113] text-white flex items-center justify-center font-bold text-xs font-mono">
+                                    III
                                 </div>
-                                <div className="mt-5 pt-3 border-t border-slate-100 text-[10px] font-mono text-[#7B1113] font-bold uppercase">
-                                    12,000+ Families Aided
-                                </div>
+                                <h3 className="font-bold text-base text-slate-950">Non-Political Mandate</h3>
+                                <p className="text-xs text-slate-600 leading-relaxed">
+                                    The association is strictly non-political, non-partisan, and fraternal. Bi-annual leadership transitions ensure democratic rotation across all cadet college chapters.
+                                </p>
                             </div>
 
-                            <div className="bg-white p-6 border border-slate-200 rounded shadow-xs flex flex-col justify-between">
-                                <div className="space-y-3">
-                                    <div className="h-10 w-10 rounded bg-[#0B1528] text-[#F3E5AB] flex items-center justify-center">
-                                        <Percent className="h-5 w-5" />
-                                    </div>
-                                    <h3 className="font-bold text-base text-slate-950">Batchmate Enterprise Offers</h3>
-                                    <p className="text-xs text-slate-600 leading-relaxed">
-                                        Preferential alumni pricing on diagnostic imaging, legal retainers, cloud infrastructure, and international logistics.
-                                    </p>
+                            <div className="bg-white p-6 border border-slate-200 rounded space-y-3 shadow-xs">
+                                <div className="h-9 w-9 rounded bg-[#0B1528] text-white flex items-center justify-center font-bold text-xs font-mono">
+                                    IV
                                 </div>
-                                <div className="mt-5 pt-3 border-t border-slate-100 text-[10px] font-mono text-[#7B1113] font-bold uppercase">
-                                    Verified Alumni Rates
-                                </div>
+                                <h3 className="font-bold text-base text-slate-950">Fiduciary Transparency</h3>
+                                <p className="text-xs text-slate-600 leading-relaxed">
+                                    100% of welfare and endowment contributions are subjected to annual third-party chartered accounting audits published openly to all verified members.
+                                </p>
                             </div>
                         </div>
 
-                        <div className="p-4 bg-white border border-slate-200 rounded text-center text-xs font-serif text-slate-500">
-                            Have an initiative or enterprise perk to extend to batchmates?{' '}
-                            <Link href="/login" className="text-[#7B1113] font-bold hover:underline font-mono">
-                                Submit via Member Portal →
+                        <div className="p-5 bg-white border border-slate-200 rounded flex flex-col sm:flex-row items-center justify-between text-xs font-serif gap-3">
+                            <div className="flex items-center gap-2">
+                                <FileText className="h-4 w-4 text-[#7B1113]" />
+                                <span>Official Constitution & By-Laws of Intake '97 (Certified Legal PDF)</span>
+                            </div>
+                            <Link href="/login" className="text-[#7B1113] font-bold hover:underline font-mono inline-flex items-center gap-1">
+                                <span>Download Full Legal Charter</span>
+                                <ArrowRight className="h-3.5 w-3.5" />
                             </Link>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 6. SECTION: GRAND REUNION 2027 (#reunion) — Milestone Conclave */}
+                <section id="reunion" className="py-24 bg-[#0B1528] text-white border-b border-slate-800 scroll-mt-20">
+                    <div className="mx-auto max-w-7xl px-4 sm:px-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                            
+                            <div className="lg:col-span-8 space-y-6">
+                                <div className="inline-flex items-center gap-2 bg-[#7B1113] text-[#F3E5AB] border border-[#D4AF37]/50 font-mono text-[11px] uppercase tracking-wider px-3.5 py-1 rounded">
+                                    <Sparkles className="h-3.5 w-3.5 text-[#D4AF37]" />
+                                    <span>Milestone 30th Anniversary Conclave</span>
+                                </div>
+
+                                <div className="space-y-3">
+                                    <h2 className="font-serif text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
+                                        Grand Reunion 2027 • 30-Year Jubilee & National Assembly
+                                    </h2>
+                                    <p className="font-serif text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl">
+                                        Three decades of unbroken brotherhood, courageous public service, and global impact. Bringing together all 642 batchmates, our families, and our revered cadet college faculty members for the historic assembly in Dhaka.
+                                    </p>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-800 text-xs font-serif text-slate-300">
+                                    <div className="flex items-start gap-2.5">
+                                        <MapPin className="h-4 w-4 text-[#D4AF37] shrink-0 mt-0.5" />
+                                        <div>
+                                            <strong className="block text-white font-sans uppercase text-[11px] font-mono">Assembly Venue</strong>
+                                            <span>Sena Malancha / Dhaka Club / Kurmitola Golf Club</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-2.5">
+                                        <Calendar className="h-4 w-4 text-[#D4AF37] shrink-0 mt-0.5" />
+                                        <div>
+                                            <strong className="block text-white font-sans uppercase text-[11px] font-mono">Date & Timing</strong>
+                                            <span>Winter 2027 • Three-Day National Conclave</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-2.5">
+                                        <QrCode className="h-4 w-4 text-[#D4AF37] shrink-0 mt-0.5" />
+                                        <div>
+                                            <strong className="block text-white font-sans uppercase text-[11px] font-mono">Access Pass</strong>
+                                            <span>Encrypted Digital Pass for Verified Alumni</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="lg:col-span-4">
+                                <div className="bg-[#1E293B] p-8 border border-slate-700 rounded shadow-2xl space-y-5">
+                                    <div className="border-b border-slate-700 pb-3 flex items-center justify-between">
+                                        <span className="text-[11px] font-mono text-[#D4AF37] uppercase tracking-wider font-semibold">
+                                            Reunion Registration
+                                        </span>
+                                        <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-[10px] font-mono">
+                                            Pre-Reg Open
+                                        </Badge>
+                                    </div>
+
+                                    <div>
+                                        <div className="text-2xl font-bold font-serif text-white">Class of 1997 Pass</div>
+                                        <p className="text-xs text-slate-400 mt-1 font-serif leading-relaxed">
+                                            Includes All-Access Conclave Pass, Grand Mess Dinner, 30th Anniversary Yearbook, and Family Banquet invitation.
+                                        </p>
+                                    </div>
+
+                                    <div className="space-y-2 text-xs font-mono text-slate-300">
+                                        <div className="flex items-center gap-2">
+                                            <CheckCircle2 className="h-3.5 w-3.5 text-[#D4AF37]" />
+                                            <span>Exclusive to Verified 1997 Alumni</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <CheckCircle2 className="h-3.5 w-3.5 text-[#D4AF37]" />
+                                            <span>Official Commemorative Medallion</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <CheckCircle2 className="h-3.5 w-3.5 text-[#D4AF37]" />
+                                            <span>Spouse & Children Registration Included</span>
+                                        </div>
+                                    </div>
+
+                                    <Link href="/login" className="block w-full pt-2">
+                                        <Button className="w-full bg-[#7B1113] hover:bg-[#600C0E] text-white font-bold text-xs uppercase tracking-wider h-11 border border-[#D4AF37]/50 shadow-md">
+                                            Reserve Reunion Seat / Pass
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -1746,10 +1747,10 @@ export default function Welcome({ colleges = [], events = [], articles = [], com
                                 </h4>
                                 <ul className="space-y-2 text-xs">
                                     <li><a href="#about" className="hover:text-white transition">About</a></li>
-                                    <li><a href="#committee" className="hover:text-white transition">Committee</a></li>
                                     <li><a href="#directory" className="hover:text-white transition">Directory</a></li>
+                                    <li><a href="#committee" className="hover:text-white transition">Committee</a></li>
+                                    <li><a href="#welfare" className="hover:text-white transition">Welfare & Trust</a></li>
                                     <li><a href="#businesses" className="hover:text-white transition">Businesses</a></li>
-                                    <li><a href="#constitution" className="hover:text-white transition">Constitution</a></li>
                                 </ul>
                             </div>
 
@@ -1759,7 +1760,7 @@ export default function Welcome({ colleges = [], events = [], articles = [], com
                                 </h4>
                                 <ul className="space-y-2 text-xs">
                                     <li><a href="#news" className="hover:text-white transition">News & Gazette</a></li>
-                                    <li><a href="#offers" className="hover:text-white transition">Welfare & Offers</a></li>
+                                    <li><a href="#constitution" className="hover:text-white transition">Constitution</a></li>
                                     <li><a href="#reunion" className="hover:text-white transition">Grand Reunion 2027</a></li>
                                     <li><a href="#contact" className="hover:text-white transition">Contact Secretariat</a></li>
                                 </ul>
