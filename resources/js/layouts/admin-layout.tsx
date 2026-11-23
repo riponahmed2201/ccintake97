@@ -75,7 +75,7 @@ export default function AdminLayout({ children, title, breadcrumbs = [] }: Admin
                     <Link href="/admin/dashboard" className="flex items-center gap-3">
                         <BrandMark className="h-10 w-auto shrink-0" />
                         <div>
-                            <div className="font-bold text-sm tracking-wide text-white">
+                            <div className="font-brand text-lg leading-tight font-semibold text-white">
                                 ccIntake97
                             </div>
                             <div className="text-[10px] text-emerald-400 font-medium tracking-wider">

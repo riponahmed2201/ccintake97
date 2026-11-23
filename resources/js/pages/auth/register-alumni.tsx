@@ -108,7 +108,7 @@ export default function RegisterAlumni({ colleges = [] }: RegisterAlumniProps) {
                         <div className="flex items-center justify-between">
                             <Link href="/" className="flex items-center gap-3">
                                 <BrandMark className="h-11 w-auto shrink-0" />
-                                <span className="font-serif text-xl tracking-[0.02em]">
+                                <span className="font-brand text-xl font-semibold tracking-[0.02em]">
                                     ccIntake<span className="text-[#C9A55C] [font-variant-numeric:lining-nums]">97</span>
                                 </span>
                             </Link>
@@ -122,7 +122,7 @@ export default function RegisterAlumni({ colleges = [] }: RegisterAlumniProps) {
                             <h1 className="mt-5 font-serif text-[2.6rem] leading-[1.04] font-medium tracking-[-0.015em] sm:text-5xl lg:text-[3.75rem]">
                                 Take your place
                                 <br />
-                                <span className="bg-gradient-to-r from-[#F1DFB0] via-[#C9A55C] to-[#E8D5A3] bg-clip-text font-normal text-transparent italic">on the roll.</span>
+                                <span className="bg-gradient-to-r from-[#F1DFB0] via-[#C9A55C] to-[#E8D5A3] bg-clip-text font-normal text-transparent">on the roll.</span>
                             </h1>
                             <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-[#F7F3EA]/50">
                                 For cadets who entered a Bangladesh Cadet College in 1997.

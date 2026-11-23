@@ -8,15 +8,18 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-    --font-serif:
-        'Cormorant Garamond', 'Playfair Display', Georgia, Cambria, 'Times New Roman', serif;
+    /* Site-wide typeface is Barlow (HATIL-style). `font-serif` is kept as an
+       alias so existing headings switch over without touching every file. */
     --font-sans:
-        'Plus Jakarta Sans', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-        'Noto Color Emoji';
-
+        'Barlow', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif:
+        'Barlow', ui-sans-serif, system-ui, sans-serif;
     --font-nav:
-        'Barlow', 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+        'Barlow', ui-sans-serif, system-ui, sans-serif;
+    /* Brand wordmark only — matches the outlined lettering in the crest logo. */
+    --font-brand:
+        'Cormorant Garamond', Georgia, 'Times New Roman', serif;
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -144,5 +147,10 @@
 
     body {
         @apply bg-background text-foreground;
+    }
+
+    /* Headline accent words stay upright in the sans typeface. */
+    :is(h1, h2, h3) :is(em, .italic) {
+        font-style: normal;
     }
 }

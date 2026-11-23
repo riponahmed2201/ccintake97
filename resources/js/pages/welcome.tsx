@@ -409,7 +409,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                         <Link href="/" className="group flex shrink-0 items-center gap-3">
                             <BrandMark className="h-12 w-auto shrink-0 drop-shadow-[0_6px_14px_rgba(0,0,0,0.3)] transition-transform duration-500 group-hover:-translate-y-0.5" />
                             <span className="leading-tight">
-                                <span className={`block font-serif text-[22px] font-medium tracking-[0.02em] transition-colors duration-500 ${solidHeader ? 'text-[#0B1220]' : 'text-[#F7F3EA]'}`}>
+                                <span className={`block font-brand text-[22px] font-semibold tracking-[0.02em] transition-colors duration-500 ${solidHeader ? 'text-[#0B1220]' : 'text-[#F7F3EA]'}`}>
                                     ccIntake<span className="text-[#C9A55C] [font-variant-numeric:lining-nums]">97</span>
                                 </span>
                                 <span className={`hidden text-[9.5px] font-medium uppercase tracking-[0.3em] transition-colors duration-500 sm:block ${solidHeader ? 'text-[#0B1220]/45' : 'text-[#F7F3EA]/45'}`}>
@@ -519,7 +519,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                             <h1 className="mt-7 max-w-4xl font-serif text-[3.25rem] leading-[0.98] font-medium tracking-[-0.02em] sm:text-7xl lg:text-[6rem]">
                                 Different colleges.
                                 <br />
-                                <span className="font-normal text-[#E8D5A3] italic">One intake.</span>
+                                <span className="font-normal text-[#E8D5A3]">One intake.</span>
                             </h1>
                         </Reveal>
                         <Reveal delay={200}>
@@ -1161,7 +1161,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                     <h2 className="mt-8 font-serif text-6xl leading-[0.95] font-medium tracking-[-0.02em] sm:text-7xl lg:text-[6.5rem]">
                                         Grand Reunion
                                         <br />
-                                        <span className="bg-gradient-to-r from-[#F1DFB0] via-[#C9A55C] to-[#E8D5A3] bg-clip-text text-transparent italic">2027.</span>
+                                        <span className="bg-gradient-to-r from-[#F1DFB0] via-[#C9A55C] to-[#E8D5A3] bg-clip-text text-transparent">2027.</span>
                                     </h2>
                                 </Reveal>
                                 <Reveal delay={200}>
@@ -1319,7 +1319,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                 <div className="flex items-center gap-3">
                                     <BrandMark className="h-16 w-auto shrink-0" />
                                     <div>
-                                        <div className="font-serif text-2xl">ccIntake<span className="text-[#C9A55C] [font-variant-numeric:lining-nums]">97</span></div>
+                                        <div className="font-brand text-2xl font-semibold">ccIntake<span className="text-[#C9A55C] [font-variant-numeric:lining-nums]">97</span></div>
                                         <div className="text-[10px] tracking-[0.3em] text-[#F7F3EA]/40 uppercase">Cadet College Alumni Association</div>
                                     </div>
                                 </div>
@@ -1369,7 +1369,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                             </ul>
                         </details>
 
-                        <div className="pointer-events-none py-10 text-center font-serif text-[15vw] leading-none font-medium tracking-[-0.04em] text-[#F7F3EA]/[0.04] select-none lg:text-[12rem]">
+                        <div className="pointer-events-none py-10 text-center font-brand text-[15vw] leading-none font-medium tracking-[-0.04em] text-[#F7F3EA]/[0.04] select-none lg:text-[12rem]">
                             ccIntake97
                         </div>
 

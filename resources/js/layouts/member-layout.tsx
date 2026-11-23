@@ -75,7 +75,7 @@ export default function MemberLayout({ children, title, breadcrumbs = [] }: Memb
                     <Link href="/member/dashboard" className="flex items-center gap-3">
                         <BrandMark className="h-10 w-auto shrink-0" />
                         <div>
-                            <div className="font-bold text-sm tracking-wide text-slate-900 dark:text-white">
+                            <div className="font-brand text-lg leading-tight font-semibold text-slate-900 dark:text-white">
                                 ccIntake97
                             </div>
                             <div className="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold tracking-wider">
