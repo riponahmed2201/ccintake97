@@ -9,6 +9,7 @@ use App\Models\College;
 use App\Models\Committee;
 use App\Models\Event;
 use App\Models\Member;
+use App\Support\PublicMemberPresenter;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -52,7 +53,15 @@ class HomeController extends Controller
             'intake_year' => 1997,
         ];
 
+        $directoryPreview = PublicMemberPresenter::query()
+            ->latest('verified_at')
+            ->limit(4)
+            ->get()
+            ->map(fn ($m) => PublicMemberPresenter::present($m))
+            ->values();
+
         return Inertia::render('welcome', [
+            'directoryPreview' => $directoryPreview,
             'colleges' => $colleges,
             'events' => $featuredEvents,
             'articles' => $latestArticles,

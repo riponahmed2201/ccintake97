@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import BrandMark from '@/components/brand-mark';
 import type { College, Event, Article, Committee, Business } from '@/types/intake97';
 import {
@@ -40,6 +40,16 @@ interface WelcomeProps {
         total_colleges: number;
         intake_year: number;
     };
+    directoryPreview?: {
+        id: number;
+        name: string;
+        initials: string;
+        college: { short_name?: string; name: string; logo_url?: string | null } | null;
+        photo_url: string | null;
+        designation: string | null;
+        organization: string | null;
+        city: string | null;
+    }[];
 }
 
 /* -------------------------------------------------------------------------- */
@@ -321,7 +331,7 @@ const initialsOf = (name?: string) =>
 /*  Page                                                                      */
 /* -------------------------------------------------------------------------- */
 
-export default function Welcome({ colleges = [], articles = [], committee, businesses = [] }: WelcomeProps) {
+export default function Welcome({ colleges = [], articles = [], committee, businesses = [], directoryPreview = [] }: WelcomeProps) {
     const { auth } = usePage().props as { auth?: { user?: unknown } };
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
@@ -839,100 +849,225 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 {/* ================================================================ */}
                 {/* DIRECTORY                                                        */}
                 {/* ================================================================ */}
-                <section id="directory" className="relative scroll-mt-20 overflow-hidden bg-[#0B1220] py-24 text-[#F7F3EA] lg:py-32">
-                    <div className="pointer-events-none absolute top-0 left-1/2 h-[600px] w-[1000px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(201,165,92,0.10),transparent_65%)]" />
-                    <div className="relative mx-auto max-w-[1320px] space-y-14 px-5 sm:px-8 lg:px-10">
-                        <SectionHeading
-                            light
-                            index="04"
-                            eyebrow="The Cadet Roll"
-                            title={<>Your batchmates. <em className="font-normal text-[#D9BF85]">Your network.</em></>}
-                            intro="A private directory of verified batchmates — searchable by college, house, sector or city."
-                        />
+                <section id="directory" className="relative isolate scroll-mt-20 overflow-hidden bg-[#0B1220] py-24 text-[#F7F3EA] lg:py-32">
+                    <div className="pointer-events-none absolute inset-0 -z-10">
+                        <div className="absolute -top-40 right-[-10%] h-[620px] w-[620px] rounded-full bg-[radial-gradient(circle,rgba(201,165,92,0.14),transparent_62%)]" />
+                        <div className="absolute bottom-[-30%] left-[-10%] h-[560px] w-[560px] rounded-full bg-[radial-gradient(circle,rgba(30,58,110,0.45),transparent_65%)]" />
+                    </div>
 
-                        <Reveal>
-                            <div className="rounded-3xl border border-[#F7F3EA]/10 bg-white/[0.03] p-3 backdrop-blur-sm">
-                                <div className="grid grid-cols-1 gap-2 md:grid-cols-12">
-                                    <div className="relative md:col-span-5">
-                                        <Search className="absolute top-1/2 left-5 h-4 w-4 -translate-y-1/2 text-[#F7F3EA]/40" />
-                                        <input
-                                            type="text"
-                                            value={directorySearch}
-                                            onChange={(e) => setDirectorySearch(e.target.value)}
-                                            placeholder="Search by name, roll number or sector"
-                                            className="h-14 w-full rounded-2xl border-0 bg-white/[0.04] pr-4 pl-12 text-[15px] text-[#F7F3EA] placeholder:text-[#F7F3EA]/35 focus:bg-white/[0.07] focus:ring-1 focus:ring-[#C9A55C]/50 focus:outline-none"
-                                        />
-                                    </div>
-                                    <select
-                                        value={selectedCollegeFilter}
-                                        onChange={(e) => setSelectedCollegeFilter(e.target.value)}
-                                        className="h-14 rounded-2xl border-0 bg-white/[0.04] px-4 text-[14px] text-[#F7F3EA]/80 focus:ring-1 focus:ring-[#C9A55C]/50 focus:outline-none md:col-span-3 [&>option]:text-[#0B1220]"
-                                    >
-                                        <option value="">All colleges</option>
-                                        {mergedColleges.map((c) => (
-                                            <option key={c.short_name} value={c.short_name}>{c.name}</option>
-                                        ))}
-                                    </select>
-                                    <select
-                                        value={selectedChapterFilter}
-                                        onChange={(e) => setSelectedChapterFilter(e.target.value)}
-                                        className="h-14 rounded-2xl border-0 bg-white/[0.04] px-4 text-[14px] text-[#F7F3EA]/80 focus:ring-1 focus:ring-[#C9A55C]/50 focus:outline-none md:col-span-2 [&>option]:text-[#0B1220]"
-                                    >
-                                        <option value="">All chapters</option>
-                                        <option value="dhaka">Dhaka Central</option>
-                                        <option value="london">London & UK</option>
-                                        <option value="ny">North America (East)</option>
-                                        <option value="california">Silicon Valley</option>
-                                        <option value="dubai">Gulf & MENA</option>
-                                        <option value="sydney">Australia & NZ</option>
-                                    </select>
-                                    <Link href="/login" className="flex h-14 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#E8D5A3] to-[#C9A55C] text-sm font-semibold text-[#0B1220] transition-opacity hover:opacity-90 md:col-span-2">
-                                        Search <ArrowRight className="h-4 w-4" />
-                                    </Link>
-                                </div>
-                            </div>
-                        </Reveal>
+                    <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
+                        <div className="grid grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-16">
+                            {/* Left: pitch + search */}
+                            <div className="lg:col-span-5">
+                                <Reveal>
+                                    <Eyebrow index="04" light>The Cadet Roll</Eyebrow>
+                                    <h2 className="mt-6 text-5xl leading-[1.02] font-medium tracking-[-0.015em] lg:text-[3.6rem]">
+                                        Find any batchmate, <em className="font-normal text-[#E8D5A3]">anywhere.</em>
+                                    </h2>
+                                    <p className="mt-6 max-w-md text-[16px] leading-relaxed text-[#F7F3EA]/60">
+                                        A private, verified directory of the 1997 intake — search by name, college, profession or the city they now call home.
+                                    </p>
+                                </Reveal>
 
-                        <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 lg:grid-cols-4">
-                            {SAMPLE_VERIFIED_MEMBERS.map((m, i) => (
-                                <Reveal key={m.name} delay={i * 80} className="h-full">
-                                    <div className="group flex h-full items-center gap-4 bg-white/[0.03] p-5 transition-colors duration-500 hover:bg-white/[0.06]">
-                                        <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-[#C9A55C]/40 bg-gradient-to-br from-[#1A2438] to-[#0B1220] font-serif text-lg text-[#E8D5A3]">{m.initials}</span>
-                                        <div className="min-w-0">
-                                            <div className="flex items-center gap-1.5 truncate font-serif text-lg leading-tight">
-                                                <span className="truncate">{m.name}</span>
-                                                <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-[#C9A55C]" />
-                                            </div>
-                                            <div className="mt-0.5 truncate text-[12.5px] text-[#F7F3EA]/55">{m.role}</div>
-                                            <div className="mt-1 text-[11px] tracking-[0.12em] text-[#F7F3EA]/35 uppercase">{m.code} · {m.location}</div>
+                                <Reveal delay={100}>
+                                    <form
+                                        onSubmit={(e) => {
+                                            e.preventDefault();
+                                            const params = new URLSearchParams();
+                                            if (directorySearch.trim()) params.set('search', directorySearch.trim());
+                                            const col = mergedColleges.find((c) => c.short_name === selectedCollegeFilter);
+                                            if (col && typeof col.id === 'number') params.set('college_id', String(col.id));
+                                            if (directorySearch.trim() && selectedChapterFilter) params.set('field', selectedChapterFilter);
+                                            const qs = params.toString();
+                                            router.get(`/directory${qs ? `?${qs}` : ''}`);
+                                        }}
+                                        className="mt-10"
+                                    >
+                                        <div className="flex items-center gap-2 rounded-full bg-white p-1.5 pl-5 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)]">
+                                            <Search className="h-5 w-5 shrink-0 text-[#0B1220]/40" />
+                                            <input
+                                                type="text"
+                                                value={directorySearch}
+                                                onChange={(e) => setDirectorySearch(e.target.value)}
+                                                placeholder={selectedChapterFilter === 'profession' ? 'e.g. surgeon, Google' : selectedChapterFilter === 'city' ? 'e.g. London, Dhaka' : 'Type a batchmate’s name'}
+                                                aria-label="Search the directory"
+                                                className="h-12 min-w-0 flex-1 border-0 bg-transparent text-[16px] text-[#0B1220] placeholder:text-[#0B1220]/40 focus:ring-0 focus:outline-none"
+                                            />
+                                            <button type="submit" className="flex h-12 shrink-0 items-center gap-2 rounded-full bg-[#0B1220] px-6 text-[15px] font-medium text-white transition-colors hover:bg-[#1A2438]">
+                                                Search <ArrowRight className="h-4 w-4" />
+                                            </button>
+                                        </div>
+                                        <div className="mt-3 grid grid-cols-2 gap-2">
+                                            <select
+                                                value={selectedCollegeFilter}
+                                                onChange={(e) => setSelectedCollegeFilter(e.target.value)}
+                                                aria-label="College"
+                                                className="h-11 rounded-full border border-[#F7F3EA]/15 bg-white/[0.04] px-4 text-[14px] text-[#F7F3EA]/85 focus:border-[#C9A55C]/60 focus:ring-0 focus:outline-none [&>option]:text-[#0B1220]"
+                                            >
+                                                <option value="">Any college</option>
+                                                {mergedColleges.map((c) => (
+                                                    <option key={c.short_name} value={c.short_name}>{c.name}</option>
+                                                ))}
+                                            </select>
+                                            <select
+                                                value={selectedChapterFilter}
+                                                onChange={(e) => setSelectedChapterFilter(e.target.value)}
+                                                aria-label="Search by"
+                                                className="h-11 rounded-full border border-[#F7F3EA]/15 bg-white/[0.04] px-4 text-[14px] text-[#F7F3EA]/85 focus:border-[#C9A55C]/60 focus:ring-0 focus:outline-none [&>option]:text-[#0B1220]"
+                                            >
+                                                <option value="">Search by name</option>
+                                                <option value="profession">Search by profession</option>
+                                                <option value="city">Search by city</option>
+                                            </select>
+                                        </div>
+                                    </form>
+                                </Reveal>
+
+                                <Reveal delay={150}>
+                                    <div className="mt-10">
+                                        <div className="flex items-center justify-between">
+                                            <div className="text-[11px] font-medium tracking-[0.22em] text-[#F7F3EA]/45 uppercase">Browse by college</div>
+                                            <ExploreLink href="/directory" light internal={false}>Full directory</ExploreLink>
+                                        </div>
+                                        <div className="mt-4 flex flex-wrap gap-2">
+                                            {mergedColleges.map((c) => {
+                                                const active = selectedCollegeFilter === c.short_name;
+                                                return (
+                                                    <button
+                                                        key={c.short_name}
+                                                        type="button"
+                                                        title={c.name}
+                                                        aria-label={c.name}
+                                                        aria-pressed={active}
+                                                        onClick={() => (typeof c.id === 'number' ? router.get(`/directory?college_id=${c.id}`) : setSelectedCollegeFilter(active ? '' : c.short_name))}
+                                                        className={`group relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-white transition-all duration-300 hover:-translate-y-0.5 ${
+                                                            active ? 'ring-2 ring-[#C9A55C] ring-offset-2 ring-offset-[#0B1220]' : 'opacity-80 ring-1 ring-white/20 hover:opacity-100'
+                                                        }`}
+                                                    >
+                                                        {c.logo_url ? (
+                                                            <img src={c.logo_url} alt="" className="h-full w-full object-contain p-1" />
+                                                        ) : (
+                                                            <span className="text-[10px] font-semibold text-[#0B1220]">{c.short_name}</span>
+                                                        )}
+                                                    </button>
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                 </Reveal>
-                            ))}
+                            </div>
+
+                            {/* Right: profile preview cards */}
+                            <div className="lg:col-span-7">
+                                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                    {(directoryPreview.length >= 4
+                                        ? directoryPreview.map((d) => ({
+                                              id: d.id as number | undefined,
+                                              name: d.name,
+                                              post: '',
+                                              initials: d.initials,
+                                              role: [d.designation, d.organization].filter(Boolean).join(', ') || 'Verified batchmate',
+                                              code: `${d.college?.short_name ?? 'CC'} ’97`,
+                                              location: d.city || 'Bangladesh',
+                                              photo: d.photo_url,
+                                          }))
+                                        : SAMPLE_VERIFIED_MEMBERS.map((m) => ({ ...m, id: undefined as number | undefined, photo: null as string | null }))
+                                    ).map((m, i) => {
+                                        const code = m.code.split(' ')[0];
+                                        const col = mergedColleges.find((c) => c.short_name === code);
+                                        return (
+                                            <Reveal key={m.name} delay={i * 90} className={i % 2 === 1 ? 'sm:translate-y-8' : ''}>
+                                                <article className="group rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.07] to-white/[0.02] p-6 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:border-[#C9A55C]/40">
+                                                    <div className="flex items-start justify-between">
+                                                        <div className="relative">
+                                                            {m.photo ? (
+                                                                <img src={m.photo} alt={m.name} className="h-16 w-16 rounded-full object-cover" />
+                                                            ) : (
+                                                                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#E8D5A3] to-[#9A7B3F] text-xl font-semibold text-[#0B1220]">{m.initials}</span>
+                                                            )}
+                                                            {col?.logo_url && (
+                                                                <img src={col.logo_url} alt={col.name} className="absolute -right-1 -bottom-1 h-7 w-7 rounded-full bg-white object-contain p-0.5 ring-2 ring-[#0B1220]" />
+                                                            )}
+                                                        </div>
+                                                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/10 px-2.5 py-1 text-[11px] font-medium text-emerald-300">
+                                                            <ShieldCheck className="h-3.5 w-3.5" /> Verified
+                                                        </span>
+                                                    </div>
+                                                    <h3 className="mt-5 text-[20px] leading-tight font-semibold">
+                                                        {m.name}
+                                                        {m.post && <span className="font-normal text-[#F7F3EA]/45">, {m.post}</span>}
+                                                    </h3>
+                                                    <p className="mt-1 text-[14px] text-[#F7F3EA]/65">{m.role}</p>
+                                                    <div className="mt-4 flex items-center gap-4 text-[13px] text-[#F7F3EA]/50">
+                                                        <span>{m.code}</span>
+                                                        <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{m.location}</span>
+                                                    </div>
+                                                    <div className="mt-5 flex items-center justify-between rounded-xl bg-black/25 px-4 py-3">
+                                                        <span className="flex items-center gap-2 text-[13px]">
+                                                            <Phone className="h-3.5 w-3.5 text-[#F7F3EA]/40" />
+                                                            <span className="tracking-widest text-[#F7F3EA]/70 blur-[3px] select-none">+880 17•• ••••••</span>
+                                                        </span>
+                                                        <span className="flex items-center gap-1 text-[11px] text-[#E8D5A3]">
+                                                            <Lock className="h-3 w-3" /> Members only
+                                                        </span>
+                                                    </div>
+                                                </article>
+                                            </Reveal>
+                                        );
+                                    })}
+                                </div>
+                            </div>
                         </div>
 
+                        {/* Where we serve */}
                         <Reveal>
-                            <div className="grid grid-cols-2 gap-px overflow-hidden border-y border-[#F7F3EA]/10 bg-[#F7F3EA]/10 sm:grid-cols-3 lg:grid-cols-6">
-                                {SECTORS.map((sec) => {
-                                    const Icon = sec.icon;
-                                    return (
-                                        <div key={sec.title} className="group bg-[#0B1220] px-5 py-7">
-                                            <Icon className="h-4 w-4 text-[#C9A55C]" strokeWidth={1.5} />
-                                            <div className="mt-4 font-serif text-4xl font-medium transition-colors group-hover:text-[#E8D5A3]">{sec.count}</div>
-                                            <div className="mt-1 text-[13px] leading-snug text-[#F7F3EA]/55">{sec.title}</div>
-                                        </div>
-                                    );
-                                })}
+                            <div className="mt-24 border-t border-white/10 pt-12">
+                                <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+                                    <h3 className="text-3xl font-medium sm:text-4xl">Where we <em className="font-normal text-[#E8D5A3]">serve.</em></h3>
+                                    <p className="text-[14px] text-[#F7F3EA]/50">Batchmates by profession</p>
+                                </div>
+                                <div className="mt-10 grid grid-cols-1 gap-x-12 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
+                                    {(() => {
+                                        const max = Math.max(...SECTORS.map((x) => parseInt(x.count, 10)));
+                                        return SECTORS.map((sec) => {
+                                            const Icon = sec.icon;
+                                            const pct = Math.round((parseInt(sec.count, 10) / max) * 100);
+                                            return (
+                                                <div key={sec.title}>
+                                                    <div className="flex items-baseline justify-between gap-4">
+                                                        <span className="flex items-center gap-2.5 text-[15px] font-medium">
+                                                            <Icon className="h-4 w-4 text-[#C9A55C]" strokeWidth={1.75} />
+                                                            {sec.title}
+                                                        </span>
+                                                        <span className="text-2xl font-semibold tabular-nums">{sec.count}</span>
+                                                    </div>
+                                                    <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/10">
+                                                        <div className="h-full rounded-full bg-gradient-to-r from-[#9A7B3F] to-[#E8D5A3]" style={{ width: `${pct}%` }} />
+                                                    </div>
+                                                    <div className="mt-2 text-[12px] text-[#F7F3EA]/40">{sec.highlight}</div>
+                                                </div>
+                                            );
+                                        });
+                                    })()}
+                                </div>
                             </div>
                         </Reveal>
 
+                        {/* CTA */}
                         <Reveal>
-                            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-                                <div className="flex items-center gap-3 text-[14px] text-[#F7F3EA]/55">
-                                    <Lock className="h-4 w-4 shrink-0 text-[#C9A55C]" />
-                                    Contact details are visible only to verified batchmates.
+                            <div className="mt-20 flex flex-col items-start justify-between gap-6 rounded-3xl bg-gradient-to-r from-[#C9A55C] to-[#E8D5A3] p-8 text-[#0B1220] sm:p-10 md:flex-row md:items-center">
+                                <div>
+                                    <div className="text-2xl font-semibold sm:text-3xl">642 batchmates. One private network.</div>
+                                    <p className="mt-1.5 flex items-center gap-2 text-[15px] text-[#0B1220]/70">
+                                        <Lock className="h-4 w-4" /> Phone, email and WhatsApp are visible only to verified members.
+                                    </p>
                                 </div>
-                                <ExploreLink href="/login" light internal={false}>Sign in to the full roll</ExploreLink>
+                                <div className="flex shrink-0 gap-3">
+                                    <Link href="/login" className="rounded-full border border-[#0B1220]/25 px-6 py-3.5 text-[15px] font-medium transition-colors hover:bg-[#0B1220]/5">Sign in</Link>
+                                    <Link href="/register-alumni" className="inline-flex items-center gap-2 rounded-full bg-[#0B1220] px-6 py-3.5 text-[15px] font-medium text-white transition-colors hover:bg-[#1A2438]">
+                                        Join the roll <ArrowRight className="h-4 w-4" />
+                                    </Link>
+                                </div>
                             </div>
                         </Reveal>
                     </div>
@@ -969,7 +1104,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                         ) : (
                                             <div className="absolute inset-0 -z-10 bg-gradient-to-br from-[#1E2A42] via-[#0E1628] to-[#070B14]">
                                                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(201,165,92,0.22),transparent_60%)]" />
-                                                <span className="absolute inset-x-0 top-[30%] text-center font-serif text-[5.5rem] leading-none text-[#E8D5A3]/85 transition-transform duration-700 group-hover:scale-105">{initialsOf(p.name)}</span>
+                                                <span className="absolute inset-x-0 top-[22%] text-center font-serif text-[3.25rem] leading-none sm:top-[30%] sm:text-[5.5rem] text-[#E8D5A3]/85 transition-transform duration-700 group-hover:scale-105">{initialsOf(p.name)}</span>
                                             </div>
                                         )}
                                         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />

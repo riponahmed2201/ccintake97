@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 // Public Portal
 Route::get('/', [Public\HomeController::class, 'index'])->name('home');
+Route::get('/directory', [Public\DirectoryController::class, 'index'])->name('directory.public');
 Route::get('/register-alumni', [Public\RegistrationController::class, 'create'])->name('register.alumni');
 Route::post('/register-alumni', [Public\RegistrationController::class, 'store'])->name('register.alumni.store');
 
