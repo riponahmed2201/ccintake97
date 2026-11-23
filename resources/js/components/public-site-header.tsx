@@ -19,7 +19,7 @@ export default function PublicSiteHeader({ active }: { active?: string }) {
 
     return (
         <header className="sticky top-0 z-50 border-b border-[#0B1220]/[0.06] bg-[#FAF7F0]/90 backdrop-blur-xl">
-            <div className="mx-auto flex h-[76px] max-w-[1320px] items-center justify-between px-5 sm:px-8 lg:px-10">
+            <div className="mx-auto flex h-[76px] max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-10">
                 <Link href="/" className="flex shrink-0 items-center gap-3">
                     <BrandMark className="h-12 w-auto shrink-0" />
                     <span className="leading-tight">

@@ -68,7 +68,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                         <img src="/images/campus/playground-mcc.jpg" alt="" className="h-full w-full object-cover opacity-30" />
                         <div className="absolute inset-0 bg-gradient-to-r from-[#0B1220] via-[#0B1220]/85 to-[#0B1220]/50" />
                     </div>
-                    <div className="mx-auto max-w-[1320px] px-5 pt-14 pb-28 sm:px-8 lg:px-10 lg:pt-20 lg:pb-32">
+                    <div className="mx-auto max-w-[1440px] px-5 pt-14 pb-28 sm:px-8 lg:px-10 lg:pt-20 lg:pb-32">
                         <Link href="/" className="inline-flex items-center gap-2 text-[14px] text-[#F7F3EA]/60 hover:text-[#F7F3EA]">
                             <ArrowLeft className="h-4 w-4" /> Home
                         </Link>
@@ -93,7 +93,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                     </div>
                 </section>
 
-                <main className="mx-auto max-w-[1320px] px-5 pb-24 sm:px-8 lg:px-10">
+                <main className="mx-auto max-w-[1440px] px-5 pb-24 sm:px-8 lg:px-10">
                     {/* Search panel — overlaps the hero band */}
                     <div className="relative -mt-16 rounded-3xl bg-white p-4 shadow-[0_30px_60px_-30px_rgba(11,18,32,0.35)] ring-1 ring-[#0B1220]/[0.05] sm:p-6">
                         <form
@@ -302,7 +302,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                 </main>
 
                 <footer className="border-t border-[#0B1220]/[0.06] bg-white">
-                    <div className="mx-auto flex max-w-[1320px] flex-col items-center justify-between gap-3 px-5 py-8 text-[13px] text-[#0B1220]/45 sm:flex-row sm:px-8 lg:px-10">
+                    <div className="mx-auto flex max-w-[1440px] flex-col items-center justify-between gap-3 px-5 py-8 text-[13px] text-[#0B1220]/45 sm:flex-row sm:px-8 lg:px-10">
                         <span>© {new Date().getFullYear()} ccIntake97 · Cadet College Alumni Association</span>
                         <span className="tracking-[0.28em] uppercase">Fidelitas et Disciplina</span>
                     </div>

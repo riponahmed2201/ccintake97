@@ -4,6 +4,9 @@ import BrandMark from '@/components/brand-mark';
 import type { College, Event, Article, Committee, Business } from '@/types/intake97';
 import {
     ArrowRight,
+    ScrollText,
+    Landmark,
+    Award,
     ArrowUpRight,
     Calendar,
     Check,
@@ -82,6 +85,16 @@ const CAMPUS_PHOTOS: Record<string, string> = {
     CCC: '/images/campus/ccc.jpg',
 };
 
+// Hero slideshow — only photos sharp enough for a full-screen background.
+// `dim` adds extra shade so the headline stays legible on bright daytime shots.
+const HERO_SLIDES = [
+    { src: '/images/campus/hero-rcc-sunset.jpg', college: 'RCC', caption: 'Rajshahi Cadet College, at dusk', position: 'center 60%', dim: 0 },
+    { src: '/images/campus/hero-fcc.jpg', college: 'FCC', caption: 'Faujdarhat Cadet College', position: 'center 45%', dim: 0.35 },
+    { src: '/images/campus/hero-mcc.jpg', college: 'MCC', caption: 'Mirzapur Cadet College', position: 'center 40%', dim: 0.4 },
+    { src: '/images/campus/hero-ccc.jpg', college: 'CCC', caption: 'Cumilla Cadet College', position: 'center 55%', dim: 0.4 },
+];
+const HERO_INTERVAL = 6500;
+
 const CAMPUS_LIFE = [
     { src: '/images/campus/athletics.jpg', title: 'Inter-house athletics', place: 'RCC' },
     { src: '/images/campus/playground-mcc.jpg', title: 'The parade ground', place: 'MCC' },
@@ -93,7 +106,8 @@ const CAMPUS_LIFE = [
 // Wikimedia Commons photographs — CC BY-SA unless noted. Attribution is required.
 const PHOTO_CREDITS = [
     { file: 'Sunset at Rajshahi Cadet College (3)', author: 'AfnanAnwar20', license: 'CC BY-SA 4.0' },
-    { file: 'Faujdarhat Cadet College Front View', author: 'Rafi Bin Tofa', license: 'CC BY-SA 4.0' },
+    { file: 'Faujdarhat Cadet College Front View (cropped)', author: 'Rafi Bin Tofa', license: 'CC BY-SA 4.0' },
+    { file: 'Mirzapur Cadet College, Dhaka', author: 'মুসফিক মুন্না', license: 'CC BY-SA 4.0' },
     { file: 'Jcc Academic Block', author: 'Mrislamreaz', license: 'CC BY-SA 3.0' },
     { file: 'MCC BLOCK', author: 'Kazi Maruf Abdullah', license: 'CC BY-SA 3.0' },
     { file: 'Academic Block of RCC', author: 'Rajshahi Cadet College', license: 'CC BY-SA 4.0' },
@@ -123,7 +137,7 @@ const SECTORS = [
 ];
 
 const TIMELINE_MILESTONES = [
-    { year: '1997', title: 'Induction & Reveille', tagline: 'January 1997', description: '642 adolescents pass through the iron gates — issued khakis, footlockers and roll numbers that would stay with them for life.' },
+    { year: '1997', title: 'Induction & Reveille', tagline: 'January 1997', description: '500 adolescents pass through the iron gates — issued khakis, footlockers and roll numbers that would stay with them for life.' },
     { year: '1999', title: 'The Crucible', tagline: 'Inter-Cadet Championships', description: 'Ten-mile cross-country, firing ranges, debates and fierce house rivalries cement an unbreakable fraternal trust.' },
     { year: '2003', title: 'Passing Out', tagline: 'Commissioning & Universities', description: 'The final salute. Cadets step out to BMA, Sandhurst, BUET, Dhaka Medical, IBA and leading universities abroad.' },
     { year: '2010–22', title: 'Global Ascent', tagline: 'Command, Boardrooms, Embassies', description: 'Alumni rise to command ranks, chief executive offices, diplomatic missions and surgical fellowships across 34 nations.' },
@@ -178,7 +192,7 @@ const CHARTER_ARTICLES = [
 const NAV_LINKS = [
     { href: '#about', label: 'About' },
     { href: '#colleges', label: 'Colleges' },
-    { href: '#directory', label: 'Directory' },
+    { href: '/directory', label: 'Directory' },
     { href: '#committee', label: 'Committee' },
     { href: '#welfare', label: 'Welfare' },
     { href: '#contact', label: 'Contact' },
@@ -225,16 +239,6 @@ function Reveal({ children, className = '', delay = 0 }: { children: React.React
     );
 }
 
-function Eyebrow({ index, children, light = false }: { index?: string; children: React.ReactNode; light?: boolean }) {
-    return (
-        <div className={`flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.28em] ${light ? 'text-[#D9BF85]' : 'text-[#9A7B3F]'}`}>
-            {index && <span className="font-serif text-sm italic tracking-normal normal-case">{index}</span>}
-            <span className={`h-px w-8 ${light ? 'bg-[#D9BF85]/50' : 'bg-[#9A7B3F]/50'}`} />
-            <span>{children}</span>
-        </div>
-    );
-}
-
 function SectionHeading({ index, eyebrow, title, intro, light = false, align = 'left', action }: {
     index?: string;
     eyebrow: string;
@@ -248,7 +252,6 @@ function SectionHeading({ index, eyebrow, title, intro, light = false, align = '
     return (
         <Reveal className={`flex flex-col gap-8 ${centered ? 'items-center text-center' : 'md:flex-row md:items-end md:justify-between'}`}>
             <div className={`max-w-3xl space-y-5 ${centered ? 'flex flex-col items-center' : ''}`}>
-                <Eyebrow index={index} light={light}>{eyebrow}</Eyebrow>
                 <h2 className={`font-serif text-4xl leading-[1.05] font-medium tracking-[-0.01em] sm:text-5xl lg:text-[3.5rem] ${light ? 'text-[#F7F3EA]' : 'text-[#0B1220]'}`}>
                     {title}
                 </h2>
@@ -343,6 +346,21 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
     const [selectedRegion, setSelectedRegion] = useState('All');
     const [activeCollegeCode, setActiveCollegeCode] = useState(CADET_COLLEGES_DATA[0].short_name);
     const featureRef = useRef<HTMLDivElement>(null);
+    const [heroSlide, setHeroSlide] = useState(0);
+    const [heroPaused, setHeroPaused] = useState(false);
+
+    useEffect(() => {
+        if (heroPaused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const t = window.setTimeout(() => setHeroSlide((i) => (i + 1) % HERO_SLIDES.length), HERO_INTERVAL);
+        return () => window.clearTimeout(t);
+    }, [heroSlide, heroPaused]);
+
+    useEffect(() => {
+        const onVis = () => setHeroPaused(document.hidden);
+        document.addEventListener('visibilitychange', onVis);
+        return () => document.removeEventListener('visibilitychange', onVis);
+    }, []);
+
     const spotlightRef = useRef<HTMLDivElement>(null);
     const [spotlightPaused, setSpotlightPaused] = useState(false);
 
@@ -438,7 +456,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                             : 'border-b border-transparent bg-transparent'
                     }`}
                 >
-                    <div className="mx-auto flex h-[76px] max-w-[1320px] items-center justify-between px-5 sm:px-8 lg:px-10">
+                    <div className="mx-auto flex h-[76px] max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-10">
                         <Link href="/" className="group flex shrink-0 items-center gap-3">
                             <BrandMark className="h-12 w-auto shrink-0 drop-shadow-[0_6px_14px_rgba(0,0,0,0.3)] transition-transform duration-500 group-hover:-translate-y-0.5" />
                             <span className="leading-tight">
@@ -533,23 +551,31 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 {/* HERO — full-bleed photograph                                     */}
                 {/* ================================================================ */}
                 <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-[#070B14] text-[#F7F3EA]">
-                    <img
-                        src="/images/campus/hero-rcc-sunset.jpg"
-                        alt="Rajshahi Cadet College silhouetted at sunset"
-                        fetchPriority="high"
-                        className="absolute inset-0 -z-20 h-full w-full scale-105 animate-[heroZoom_18s_ease-out_forwards] object-cover object-[center_60%] motion-reduce:animate-none"
-                    />
+                    {HERO_SLIDES.map((sl, i) => {
+                        const active = i === heroSlide;
+                        return (
+                            <div key={sl.src} aria-hidden={!active} className={`absolute inset-0 -z-20 transition-opacity duration-[1600ms] ease-in-out ${active ? 'opacity-100' : 'opacity-0'}`}>
+                                <img
+                                    key={active ? `${sl.src}-on` : sl.src}
+                                    src={sl.src}
+                                    alt={active ? sl.caption : ''}
+                                    fetchPriority={i === 0 ? 'high' : 'low'}
+                                    decoding="async"
+                                    style={{ objectPosition: sl.position }}
+                                    className={`h-full w-full object-cover ${active ? 'animate-[heroZoom_9s_ease-out_forwards] motion-reduce:animate-none' : 'scale-105'}`}
+                                />
+                                {sl.dim > 0 && <div className="absolute inset-0 bg-[#070B14]" style={{ opacity: sl.dim }} />}
+                            </div>
+                        );
+                    })}
                     <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#070B14] via-[#070B14]/40 to-[#070B14]/5" />
                     <div className="absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-[#070B14]/60 to-transparent" />
-                    <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#070B14]/70 via-[#070B14]/15 to-transparent" />
-                    <style>{`@keyframes heroZoom { from { transform: scale(1.12) } to { transform: scale(1.02) } }`}</style>
+                    <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#070B14]/75 via-[#070B14]/20 to-transparent" />
+                    <style>{`@keyframes heroZoom { from { transform: scale(1.12) } to { transform: scale(1.02) } } @keyframes heroProgress { from { transform: scaleX(0) } to { transform: scaleX(1) } }`}</style>
 
-                    <div className="mx-auto w-full max-w-[1320px] px-5 pt-40 pb-14 sm:px-8 lg:px-10 lg:pb-16">
+                    <div className="mx-auto w-full max-w-[1440px] px-5 pt-40 pb-14 sm:px-8 lg:px-10 lg:pb-16">
                         <Reveal>
-                            <Eyebrow light>Est. January 1997 · Bangladesh</Eyebrow>
-                        </Reveal>
-                        <Reveal delay={100}>
-                            <h1 className="mt-7 max-w-4xl font-serif text-[3.25rem] leading-[0.98] font-medium tracking-[-0.02em] sm:text-7xl lg:text-[6rem]">
+                            <h1 className="max-w-4xl font-serif text-[3.25rem] leading-[0.98] font-medium tracking-[-0.02em] sm:text-7xl lg:text-[6rem]">
                                 Different colleges.
                                 <br />
                                 <span className="font-normal text-[#E8D5A3]">One intake.</span>
@@ -557,7 +583,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                         </Reveal>
                         <Reveal delay={200}>
                             <p className="mt-7 max-w-lg text-base leading-relaxed text-[#F7F3EA]/75 sm:text-lg">
-                                642 cadets. Ten colleges. A lifetime of brotherhood that began on the parade grounds of 1997.
+                                500 cadets. Ten colleges. A lifetime of brotherhood that began on the parade grounds of 1997.
                             </p>
                         </Reveal>
                         <Reveal delay={300}>
@@ -578,7 +604,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                 <dl className="flex gap-10 sm:gap-14">
                                     {[
                                         { v: '10', l: 'Colleges' },
-                                        { v: '642', l: 'Cadets' },
+                                        { v: '500', l: 'Cadets' },
                                         { v: '34', l: 'Nations' },
                                     ].map((st) => (
                                         <div key={st.l}>
@@ -587,7 +613,44 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                         </div>
                                     ))}
                                 </dl>
-                                <span className="text-[11px] tracking-[0.18em] text-[#F7F3EA]/40 uppercase">Rajshahi Cadet College, at dusk</span>
+                                <div className="flex flex-col items-start gap-3 sm:items-end" onMouseEnter={() => setHeroPaused(true)} onMouseLeave={() => setHeroPaused(false)}>
+                                    <div key={heroSlide} className="flex animate-in items-center gap-3 duration-700 fade-in slide-in-from-bottom-1">
+                                        {(() => {
+                                            const col = mergedColleges.find((c) => c.short_name === HERO_SLIDES[heroSlide].college);
+                                            return col?.logo_url ? <img src={col.logo_url} alt="" className="h-9 w-9 rounded-full bg-white object-contain p-0.5" /> : null;
+                                        })()}
+                                        <div className="sm:text-right">
+                                            <div className="text-[14px] font-medium text-white">{HERO_SLIDES[heroSlide].caption}</div>
+                                            <div className="text-[11px] tracking-[0.18em] text-white/45 uppercase">
+                                                {String(heroSlide + 1).padStart(2, '0')} / {String(HERO_SLIDES.length).padStart(2, '0')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-1.5" role="tablist" aria-label="Hero slides">
+                                        {HERO_SLIDES.map((sl, i) => (
+                                            <button
+                                                key={sl.src}
+                                                type="button"
+                                                role="tab"
+                                                aria-selected={i === heroSlide}
+                                                aria-label={sl.caption}
+                                                onClick={() => setHeroSlide(i)}
+                                                className="group relative h-6 w-12 py-2.5"
+                                            >
+                                                <span className="block h-[3px] w-full overflow-hidden rounded-full bg-white/25 transition-colors group-hover:bg-white/45">
+                                                    {i === heroSlide && (
+                                                        <span
+                                                            key={`p-${heroSlide}-${heroPaused}`}
+                                                            className="block h-full w-full origin-left rounded-full bg-[#E8D5A3]"
+                                                            style={{ animation: heroPaused ? 'none' : `heroProgress ${HERO_INTERVAL}ms linear forwards`, transform: heroPaused ? 'scaleX(1)' : undefined }}
+                                                        />
+                                                    )}
+                                                    {i < heroSlide && <span className="block h-full w-full rounded-full bg-white/60" />}
+                                                </span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
                         </Reveal>
                     </div>
@@ -597,16 +660,15 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 {/* ABOUT — text + photo mosaic                                      */}
                 {/* ================================================================ */}
                 <section id="about" className="scroll-mt-20 bg-white py-24 lg:py-32">
-                    <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
+                    <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
                         <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-16">
                             <div className="lg:col-span-5">
                                 <Reveal>
-                                    <Eyebrow index="01">Our Story</Eyebrow>
-                                    <h2 className="mt-6 font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] text-[#0B1220] lg:text-[3.75rem]">
+                                    <h2 className="font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] text-[#0B1220] lg:text-[3.75rem]">
                                         Bound by a <em className="font-normal text-[#9A7B3F]">shared</em> beginning.
                                     </h2>
                                     <p className="mt-7 text-[17px] leading-[1.75] text-[#4A4F5C]">
-                                        In January 1997, 642 adolescents walked through the gates of ten cadet colleges. Reveille at 0530, ten-mile runs and drill-square inspections turned strangers into brothers and sisters.
+                                        In January 1997, 500 adolescents walked through the gates of ten cadet colleges. Reveille at 0530, ten-mile runs and drill-square inspections turned strangers into brothers and sisters.
                                     </p>
                                     <p className="mt-4 text-[17px] leading-[1.75] text-[#4A4F5C]">
                                         Today we lead across continents — and remain exactly who we were.
@@ -630,9 +692,9 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                 </Reveal>
                             </div>
 
-                            <div className="lg:col-span-7">
+                            <div className="-mx-5 sm:-mx-8 lg:col-span-7 lg:mx-0 lg:-mr-[max(2.5rem,calc((100vw_-_1440px)/2_+_2.5rem))]">
                                 <Reveal delay={100}>
-                                    <div className="grid h-[520px] grid-cols-5 grid-rows-2 gap-1.5 sm:h-[600px]">
+                                    <div className="grid h-[520px] grid-cols-5 grid-rows-2 gap-1.5 sm:h-[600px] lg:h-[680px]">
                                         {[
                                             { src: '/images/campus/cadets-in-class.jpg', alt: 'Cadets in a classroom', caption: 'Prep hour', cls: 'col-span-3 row-span-2' },
                                             { src: '/images/campus/flag-raising.jpg', alt: 'Flag raising ceremony', caption: 'Morning colours', cls: 'col-span-2' },
@@ -656,12 +718,11 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 {/* COLLEGES — featured banner + photo tiles                         */}
                 {/* ================================================================ */}
                 <section id="colleges" className="scroll-mt-20 bg-[#F4F2EE] py-24 lg:py-32">
-                    <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
+                    <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
                         <Reveal>
                             <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
                                 <div className="max-w-2xl">
-                                    <Eyebrow index="02">The Ten Pillars</Eyebrow>
-                                    <h2 className="mt-6 font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] text-[#0B1220] lg:text-[3.75rem]">
+                                    <h2 className="font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] text-[#0B1220] lg:text-[3.75rem]">
                                         Ten colleges. <em className="font-normal text-[#9A7B3F]">Equal voice.</em>
                                     </h2>
                                     <p className="mt-5 max-w-xl text-[16px] leading-relaxed text-[#4A4F5C]">
@@ -691,7 +752,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                         </Reveal>
 
                         {activeCollege && (
-                            <div className="mt-12 space-y-1.5">
+                            <div className="-mx-5 mt-12 space-y-1.5 px-1.5 sm:-mx-8 lg:-mx-[max(2.5rem,calc((100vw_-_1440px)/2_+_2.5rem))]">
                                 {/* Featured banner */}
                                 <div ref={featureRef} className="relative isolate scroll-mt-24 overflow-hidden bg-[#0B1220] text-[#F7F3EA]">
                                     <div key={activeCollege.short_name} className="animate-in duration-700 fade-in">
@@ -708,7 +769,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                     <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#070B14]/95 via-[#070B14]/45 to-[#070B14]/10" />
                                     <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#070B14]/70 to-transparent" />
 
-                                    <div className="flex min-h-[520px] flex-col justify-between p-6 sm:p-10 lg:min-h-[560px] lg:p-12">
+                                    <div className="flex min-h-[520px] flex-col justify-between p-6 sm:p-10 lg:min-h-[640px] lg:px-[max(2.5rem,calc((100vw_-_1440px)/2_+_2.5rem))] lg:py-12">
                                         <div className="flex items-start justify-between text-[11px] tracking-[0.2em] uppercase">
                                             <span className="text-[#E8D5A3]">
                                                 <span className="font-serif text-lg tracking-normal normal-case italic">{String(CADET_COLLEGES_DATA.findIndex((c) => c.short_name === activeCollege.short_name) + 1).padStart(2, '0')}</span>
@@ -816,7 +877,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 {/* TIMELINE                                                         */}
                 {/* ================================================================ */}
                 <section className="py-28 lg:py-36">
-                    <div className="mx-auto max-w-[1320px] space-y-20 px-5 sm:px-8 lg:px-10">
+                    <div className="mx-auto max-w-[1440px] space-y-20 px-5 sm:px-8 lg:px-10">
                         <SectionHeading index="03" eyebrow="Since 1997" title={<>The crucible <em className="font-normal text-[#9A7B3F]">&amp; beyond.</em></>} align="center" intro="From adolescents on the obstacle course to leaders shaping industries on six continents." />
 
                         <div className="relative">
@@ -846,7 +907,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 {/* CAMPUS LIFE — horizontal photo strip                             */}
                 {/* ================================================================ */}
                 <section className="bg-[#FAF7F0] pb-24 lg:pb-32">
-                    <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
+                    <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
                         <Reveal>
                             <div className="flex items-end justify-between gap-6">
                                 <h3 className="flex items-center gap-4 font-serif text-3xl font-medium text-[#0B1220] sm:text-4xl">
@@ -856,7 +917,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                             </div>
                         </Reveal>
                     </div>
-                    <div className="mt-8 flex snap-x snap-mandatory gap-1.5 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:px-8 lg:px-[max(2.5rem,calc((100vw_-_1320px)/2_+_2.5rem))]">
+                    <div className="mt-8 flex snap-x snap-mandatory gap-1.5 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:px-8 lg:px-[max(2.5rem,calc((100vw_-_1440px)/2_+_2.5rem))]">
                         {CAMPUS_LIFE.map((ph) => (
                             <figure key={ph.src} className="group relative w-[78vw] shrink-0 snap-start overflow-hidden bg-[#0B1220] sm:w-[420px]">
                                 <img src={ph.src} alt={ph.title} loading="lazy" className="aspect-[4/5] h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105" />
@@ -877,12 +938,11 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                         <div className="absolute -top-48 left-1/2 h-[640px] w-[1100px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(201,165,92,0.13),transparent_62%)]" />
                     </div>
 
-                    <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
+                    <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
                         <Reveal>
                             <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
                                 <div className="max-w-2xl">
-                                    <Eyebrow index="04" light>The Cadet Roll</Eyebrow>
-                                    <h2 className="mt-6 text-5xl leading-[1.02] font-medium tracking-[-0.015em] lg:text-[3.75rem]">
+                                    <h2 className="text-5xl leading-[1.02] font-medium tracking-[-0.015em] lg:text-[3.75rem]">
                                         Meet the <span className="font-normal text-[#E8D5A3]">batch.</span>
                                     </h2>
                                     <p className="mt-5 max-w-lg text-[17px] leading-relaxed text-[#F7F3EA]/60">
@@ -912,7 +972,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                         onFocus={() => setSpotlightPaused(true)}
                         onBlur={() => setSpotlightPaused(false)}
                         onTouchStart={() => setSpotlightPaused(true)}
-                        className="mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-5 pb-4 [scrollbar-width:none] sm:px-8 lg:px-[max(2.5rem,calc((100vw_-_1320px)/2_+_2.5rem))] [&::-webkit-scrollbar]:hidden"
+                        className="mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-5 pb-4 [scrollbar-width:none] sm:px-8 lg:px-[max(2.5rem,calc((100vw_-_1440px)/2_+_2.5rem))] [&::-webkit-scrollbar]:hidden"
                     >
                         {(directoryPreview.length >= 4
                             ? directoryPreview.map((d) => ({
@@ -994,7 +1054,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                         >
                             <Users className="h-8 w-8" strokeWidth={1.5} />
                             <div>
-                                <div className="text-[56px] leading-none font-semibold tabular-nums">642</div>
+                                <div className="text-[56px] leading-none font-semibold tabular-nums">500</div>
                                 <div className="mt-2 text-[22px] leading-tight font-semibold">batchmates across 34 nations</div>
                                 <span className="mt-6 inline-flex items-center gap-2 text-[15px] font-medium">
                                     Browse everyone <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -1004,7 +1064,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                     </div>
 
                     {/* Search strip */}
-                    <div className="mx-auto mt-14 max-w-[1320px] px-5 sm:px-8 lg:px-10">
+                    <div className="mx-auto mt-14 max-w-[1440px] px-5 sm:px-8 lg:px-10">
                         <Reveal>
                             <div className="flex flex-col gap-6 border-t border-white/10 pt-10 lg:flex-row lg:items-center lg:justify-between">
                                 <form
@@ -1020,7 +1080,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                         type="text"
                                         value={directorySearch}
                                         onChange={(e) => setDirectorySearch(e.target.value)}
-                                        placeholder="Search 642 batchmates by name"
+                                        placeholder="Search 500 batchmates by name"
                                         aria-label="Search the directory"
                                         className="h-11 min-w-0 flex-1 border-0 bg-transparent text-[16px] text-[#0B1220] placeholder:text-[#0B1220]/40 focus:ring-0 focus:outline-none"
                                     />
@@ -1056,63 +1116,156 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 {/* ================================================================ */}
                 {/* COMMITTEE + CHARTER                                              */}
                 {/* ================================================================ */}
-                <section id="committee" className="scroll-mt-20 bg-white py-24 lg:py-32">
-                    <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
-                        <SectionHeading
-                            index="05"
-                            eyebrow="Stewardship"
-                            title={committee?.name ? committee.name : <>The Executive <em className="font-normal text-[#9A7B3F]">Council.</em></>}
-                            intro="Elected from every college chapter, serving a two-year term."
-                        />
-
-                        <div className="mt-12 grid grid-cols-2 gap-1.5 lg:grid-cols-4">
-                            {(committee?.members && committee.members.length > 0
+                <section id="committee" className="scroll-mt-20 bg-[#F4F2EE] py-24 lg:py-32">
+                    <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
+                        {(() => {
+                            const people = (committee?.members && committee.members.length > 0
                                 ? committee.members.map((cm) => ({
                                       key: String(cm.id),
-                                      title: cm.position_title,
+                                      title: cm.position_title || 'Council Member',
                                       name: cm.member?.user?.name || '',
-                                      role: cm.member?.profile?.designation || cm.position_title || 'Executive Steward',
-                                      college: `${cm.member?.college?.short_name || 'Cadet College'} ’97`,
-                                      avatar: cm.member?.user?.avatar_path,
+                                      role: cm.member?.profile?.designation || '',
+                                      college: cm.member?.college?.short_name || '',
+                                      avatar: cm.member?.user?.avatar_path as string | undefined,
                                   }))
-                                : FALLBACK_COMMITTEE.map((c) => ({ key: c.name, ...c, avatar: undefined as string | undefined }))
-                            ).map((p, i) => (
-                                <Reveal key={p.key} delay={i * 80}>
-                                    <article className="group relative isolate aspect-[3/4] overflow-hidden bg-[#0B1220] text-white">
-                                        {p.avatar ? (
-                                            <img src={p.avatar} alt={p.name} className="absolute inset-0 -z-10 h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" />
-                                        ) : (
-                                            <div className="absolute inset-0 -z-10 bg-gradient-to-br from-[#1E2A42] via-[#0E1628] to-[#070B14]">
-                                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(201,165,92,0.22),transparent_60%)]" />
-                                                <span className="absolute inset-x-0 top-[22%] text-center font-serif text-[3.25rem] leading-none sm:top-[30%] sm:text-[5.5rem] text-[#E8D5A3]/85 transition-transform duration-700 group-hover:scale-105">{initialsOf(p.name)}</span>
-                                            </div>
-                                        )}
-                                        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
-                                        <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
-                                            <div className="text-[10.5px] font-medium tracking-[0.2em] text-[#E8D5A3] uppercase">{p.title}</div>
-                                            <h3 className="mt-2 font-serif text-xl leading-tight sm:text-2xl">{p.name}</h3>
-                                            <p className="mt-1 line-clamp-1 text-[13px] text-white/60">{p.role} · {p.college}</p>
-                                        </div>
-                                    </article>
-                                </Reveal>
-                            ))}
-                        </div>
+                                : FALLBACK_COMMITTEE.map((c) => ({ key: c.name, title: c.title, name: c.name, role: c.role, college: c.college.split(' ')[0], avatar: undefined as string | undefined }))
+                            ).map((p) => ({ ...p, avatar: p.avatar ? (/^(https?:)?\/\/|^\//.test(p.avatar) ? p.avatar : `/storage/${p.avatar}`) : undefined }));
+                            const leadIdx = Math.max(0, people.findIndex((p) => /^president$/i.test(p.title.trim())));
+                            const lead = people[leadIdx];
+                            const others = people.filter((_, i) => i !== leadIdx);
+                            const term = committee?.name?.match(/\((\d{4})\s*[-–]\s*(\d{4})\)/);
+                            const committeeName = (committee?.name || 'Central Executive Committee').replace(/\s*\(\d{4}\s*[-–]\s*\d{4}\)\s*/, '');
+                            const logoOf = (code: string) => mergedColleges.find((c) => c.short_name === code)?.logo_url;
 
-                        {/* Charter — compact */}
-                        <div id="constitution" className="mt-20 scroll-mt-24 border-t border-[#0B1220]/10 pt-12">
+                            return (
+                                <>
+                                    <Reveal>
+                                        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+                                            <div>
+                                                <h2 className="text-5xl leading-[1.02] font-medium tracking-[-0.015em] text-[#0B1220] lg:text-[3.75rem]">
+                                                    Led by <span className="font-normal text-[#9A7B3F]">batchmates.</span>
+                                                </h2>
+                                                <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-[#4A4F5C]">
+                                                    The {committeeName} — elected from every college chapter to serve the whole intake.
+                                                </p>
+                                            </div>
+                                            <div className="flex shrink-0 items-center gap-3 rounded-full bg-white py-2 pr-5 pl-2 ring-1 ring-[#0B1220]/[0.06]">
+                                                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0B1220] text-[#E8D5A3]">
+                                                    <Calendar className="h-4 w-4" />
+                                                </span>
+                                                <span>
+                                                    <span className="block text-[11px] tracking-[0.18em] text-[#0B1220]/45 uppercase">Current term</span>
+                                                    <span className="block text-[16px] font-semibold text-[#0B1220]">{term ? `${term[1]} – ${term[2]}` : 'Two-year term'}</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </Reveal>
+
+                                    <div className="mt-12 grid grid-cols-1 gap-4 lg:grid-cols-12">
+                                        {/* Featured: President */}
+                                        {lead && (
+                                            <Reveal className="lg:col-span-5">
+                                                <article className="group relative isolate flex h-full min-h-[520px] flex-col justify-end overflow-hidden rounded-3xl bg-[#0B1220] text-white">
+                                                    {lead.avatar ? (
+                                                        <img src={lead.avatar} alt={lead.name} className="absolute inset-0 -z-20 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105" />
+                                                    ) : (
+                                                        <div className="absolute inset-0 -z-20">
+                                                            {CAMPUS_PHOTOS[lead.college] && <img src={CAMPUS_PHOTOS[lead.college]} alt="" className="h-full w-full object-cover opacity-30" />}
+                                                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(201,165,92,0.28),transparent_55%)]" />
+                                                            <div className="absolute inset-x-0 top-[18%] flex justify-center">
+                                                                <div className="rounded-full bg-gradient-to-b from-[#F3E3B5] to-[#9A7B3F] p-1 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.8)]">
+                                                                    <span className="flex h-40 w-40 items-center justify-center rounded-full bg-[#0B1220] text-5xl font-semibold text-[#E8D5A3]">{initialsOf(lead.name)}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#070B14] via-[#070B14]/55 to-transparent" />
+                                                    <div className="p-8 sm:p-10">
+                                                        <span className="inline-flex items-center gap-2 rounded-full bg-[#C9A55C] px-3 py-1 text-[11px] font-semibold tracking-[0.18em] text-[#0B1220] uppercase">
+                                                            <Award className="h-3.5 w-3.5" /> {lead.title}
+                                                        </span>
+                                                        <h3 className="mt-4 text-4xl leading-tight font-semibold">{lead.name}</h3>
+                                                        {lead.role && <p className="mt-2 text-[16px] text-white/70">{lead.role}</p>}
+                                                        <div className="mt-6 flex items-center gap-3 border-t border-white/15 pt-5 text-[14px] text-white/70">
+                                                            {logoOf(lead.college) && <img src={logoOf(lead.college)!} alt="" className="h-8 w-8 rounded-full bg-white object-contain p-0.5" />}
+                                                            {mergedColleges.find((c) => c.short_name === lead.college)?.name ?? lead.college} · Class of ’97
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                            </Reveal>
+                                        )}
+
+                                        {/* Council */}
+                                        <div className="flex flex-col gap-4 lg:col-span-7">
+                                            {others.length > 0 && (
+                                            <div className={`grid grid-cols-1 gap-4 ${others.length > 1 ? 'sm:grid-cols-2' : ''}`}>
+                                            {others.map((p, i) => (
+                                                <Reveal key={p.key} delay={i * 70}>
+                                                    <article className="group flex items-center gap-5 rounded-3xl bg-white p-6 ring-1 ring-[#0B1220]/[0.05] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_-28px_rgba(11,18,32,0.35)]">
+                                                        <div className="relative shrink-0">
+                                                            {p.avatar ? (
+                                                                <img src={p.avatar} alt={p.name} className="h-20 w-20 rounded-full object-cover" />
+                                                            ) : (
+                                                                <span className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#1E2A42] to-[#0B1220] text-2xl font-semibold text-[#E8D5A3]">{initialsOf(p.name)}</span>
+                                                            )}
+                                                            {logoOf(p.college) && (
+                                                                <img src={logoOf(p.college)!} alt="" className="absolute -right-1 -bottom-1 h-8 w-8 rounded-full bg-white object-contain p-0.5 ring-2 ring-white" />
+                                                            )}
+                                                        </div>
+                                                        <div className="min-w-0">
+                                                            <div className="text-[11px] font-semibold tracking-[0.16em] text-[#9A7B3F] uppercase">{p.title}</div>
+                                                            <h3 className="mt-1.5 text-[19px] leading-snug font-semibold text-[#0B1220]">{p.name}</h3>
+                                                            {p.role && <p className="mt-0.5 line-clamp-1 text-[14px] text-[#4A4F5C]">{p.role}</p>}
+                                                            <p className="mt-1 text-[12.5px] text-[#0B1220]/45">{p.college ? `${p.college} ’97` : 'Class of ’97'}</p>
+                                                        </div>
+                                                    </article>
+                                                </Reveal>
+                                            ))}
+                                            </div>
+                                            )}
+
+                                            <Reveal delay={others.length * 70} className="flex-1">
+                                                <div className="relative isolate flex h-full flex-col justify-between gap-8 overflow-hidden rounded-3xl bg-[#0B1220] p-7 text-white sm:p-9">
+                                                    <div className="pointer-events-none absolute -top-24 -right-24 -z-10 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(201,165,92,0.22),transparent_65%)]" />
+                                                    <div className="max-w-md">
+                                                        <Landmark className="h-6 w-6 text-[#C9A55C]" strokeWidth={1.5} />
+                                                        <h3 className="mt-4 text-[22px] leading-tight font-semibold">Every college, an equal seat.</h3>
+                                                        <p className="mt-2 text-[14px] leading-relaxed text-white/60">
+                                                            Each of the ten colleges is represented on the council. Leadership rotates every two years.
+                                                        </p>
+                                                    </div>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {mergedColleges.map((c) => (
+                                                            <span key={c.short_name} title={c.name} className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-white">
+                                                                {c.logo_url ? <img src={c.logo_url} alt={c.name} className="h-full w-full object-contain p-0.5" /> : <span className="text-[8px] text-[#0B1220]">{c.short_name}</span>}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </Reveal>
+                                        </div>
+                                    </div>
+                                </>
+                            );
+                        })()}
+
+                        {/* Charter */}
+                        <div id="constitution" className="mt-24 scroll-mt-24">
                             <Reveal>
                                 <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-                                    <h3 className="font-serif text-3xl font-medium text-[#0B1220] sm:text-4xl">The <em className="font-normal text-[#9A7B3F]">Charter.</em></h3>
+                                    <div>
+                                        <h3 className="text-3xl font-medium text-[#0B1220] sm:text-4xl">The <span className="font-normal text-[#9A7B3F]">Charter.</span></h3>
+                                    </div>
                                     <ExploreLink href="/login" internal={false}>Download full charter</ExploreLink>
                                 </div>
                             </Reveal>
-                            <ol className="mt-10 grid grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+                            <ol className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                                 {CHARTER_ARTICLES.map((c, i) => (
-                                    <Reveal key={c.numeral} delay={i * 70}>
-                                        <li>
-                                            <span className="font-serif text-3xl text-[#9A7B3F]/70">{c.numeral}</span>
-                                            <h4 className="mt-3 text-[15px] font-semibold text-[#0B1220]">{c.title}</h4>
-                                            <p className="mt-1.5 text-[14px] leading-relaxed text-[#4A4F5C]">{c.text}</p>
+                                    <Reveal key={c.numeral} delay={i * 70} className="h-full">
+                                        <li className="h-full rounded-3xl bg-white p-7 ring-1 ring-[#0B1220]/[0.05]">
+                                            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#0B1220] text-[15px] font-semibold text-[#E8D5A3]">{c.numeral}</span>
+                                            <h4 className="mt-5 text-[17px] font-semibold text-[#0B1220]">{c.title}</h4>
+                                            <p className="mt-2 text-[14px] leading-relaxed text-[#4A4F5C]">{c.text}</p>
                                         </li>
                                     </Reveal>
                                 ))}
@@ -1130,10 +1283,9 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                     <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#070B14] via-[#070B14]/60 to-[#070B14]/30" />
                     <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#070B14]/80 to-transparent" />
 
-                    <div className="mx-auto flex min-h-[720px] max-w-[1320px] flex-col justify-between px-5 py-24 sm:px-8 lg:px-10 lg:py-28">
+                    <div className="mx-auto flex min-h-[720px] max-w-[1440px] flex-col justify-between px-5 py-24 sm:px-8 lg:px-10 lg:py-28">
                         <Reveal>
-                            <Eyebrow index="06" light>Welfare &amp; Trust</Eyebrow>
-                            <h2 className="mt-6 max-w-3xl font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] lg:text-[4.25rem]">
+                            <h2 className="max-w-3xl font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] lg:text-[4.25rem]">
                                 We leave <em className="font-normal text-[#E8D5A3]">no comrade</em> behind.
                             </h2>
                             <p className="mt-6 max-w-lg text-[16px] leading-relaxed text-[#F7F3EA]/70">
@@ -1167,7 +1319,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 {/* ================================================================ */}
                 <section id="news" className="scroll-mt-20 bg-[#F4F2EE] py-24 lg:py-32">
                     <span id="businesses" className="sr-only" />
-                    <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
+                    <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
                         <SectionHeading
                             index="07"
                             eyebrow="Community"
@@ -1268,12 +1420,11 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                         <div className="absolute inset-0 bg-gradient-to-r from-[#070B14]/95 via-[#070B14]/75 to-[#070B14]/40" />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#070B14]/70 to-transparent" />
                     </div>
-                    <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
+                    <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
                         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12">
                             <div className="lg:col-span-7">
-                                <Reveal><Eyebrow light>The 30th Anniversary Conclave</Eyebrow></Reveal>
                                 <Reveal delay={100}>
-                                    <h2 className="mt-8 font-serif text-6xl leading-[0.95] font-medium tracking-[-0.02em] sm:text-7xl lg:text-[6.5rem]">
+                                    <h2 className="font-serif text-6xl leading-[0.95] font-medium tracking-[-0.02em] sm:text-7xl lg:text-[6.5rem]">
                                         Grand Reunion
                                         <br />
                                         <span className="bg-gradient-to-r from-[#F1DFB0] via-[#C9A55C] to-[#E8D5A3] bg-clip-text text-transparent">2027.</span>
@@ -1281,7 +1432,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                 </Reveal>
                                 <Reveal delay={200}>
                                     <p className="mt-8 max-w-xl text-lg leading-relaxed text-[#F7F3EA]/60">
-                                        Three decades of unbroken brotherhood. All 642 batchmates, our families and our revered faculty — together in Dhaka for a historic national assembly.
+                                        Three decades of unbroken brotherhood. All 500 batchmates, our families and our revered faculty — together in Dhaka for a historic national assembly.
                                     </p>
                                 </Reveal>
                                 <Reveal delay={300}>
@@ -1335,12 +1486,11 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 {/* CONTACT                                                          */}
                 {/* ================================================================ */}
                 <section id="contact" className="scroll-mt-20 bg-white py-20 lg:py-28">
-                    <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
+                    <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
                         <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-20">
                             <div className="lg:col-span-5">
                                 <Reveal>
-                                    <Eyebrow index="08">Secretariat</Eyebrow>
-                                    <h2 className="mt-6 font-serif text-5xl leading-[1.02] font-medium text-[#0B1220] lg:text-[3.25rem]">
+                                    <h2 className="font-serif text-5xl leading-[1.02] font-medium text-[#0B1220] lg:text-[3.25rem]">
                                         Write to the <em className="font-normal text-[#9A7B3F]">Council.</em>
                                     </h2>
                                     <p className="mt-6 max-w-md text-[15px] leading-relaxed text-[#4A4F5C]">
@@ -1428,7 +1578,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 {/* FOOTER                                                           */}
                 {/* ================================================================ */}
                 <footer className="relative overflow-hidden bg-[#070B14] text-[#F7F3EA]">
-                    <div className="mx-auto max-w-[1320px] px-5 pt-24 pb-10 sm:px-8 lg:px-10">
+                    <div className="mx-auto max-w-[1440px] px-5 pt-24 pb-10 sm:px-8 lg:px-10">
                         <div className="grid grid-cols-1 gap-12 border-b border-[#F7F3EA]/[0.08] pb-16 md:grid-cols-12">
                             <div className="md:col-span-5">
                                 <div className="flex items-center gap-3">
@@ -1446,7 +1596,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                 </Link>
                             </div>
                             {[
-                                { h: 'Association', links: [['#about', 'About'], ['#colleges', 'Colleges'], ['#directory', 'Directory'], ['#committee', 'Committee']] },
+                                { h: 'Association', links: [['#about', 'About'], ['#colleges', 'Colleges'], ['/directory', 'Directory'], ['#committee', 'Committee']] },
                                 { h: 'Activities', links: [['#welfare', 'Welfare & Trust'], ['#news', 'News & ventures'], ['#constitution', 'Charter'], ['#reunion', 'Reunion 2027']] },
                             ].map((col) => (
                                 <div key={col.h} className="md:col-span-2">
