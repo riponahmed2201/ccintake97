@@ -55,7 +55,7 @@ class HomeController extends Controller
 
         $directoryPreview = PublicMemberPresenter::query()
             ->latest('verified_at')
-            ->limit(4)
+            ->limit(12)
             ->get()
             ->map(fn ($m) => PublicMemberPresenter::present($m))
             ->values();

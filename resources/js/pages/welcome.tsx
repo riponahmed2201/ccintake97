@@ -25,6 +25,7 @@ import {
     Shield,
     ShieldCheck,
     Stethoscope,
+    Users,
     X,
 } from 'lucide-react';
 
@@ -134,6 +135,10 @@ const SAMPLE_VERIFIED_MEMBERS = [
     { name: 'Dr. Nusrat Ahmed', post: 'FRCS', code: 'MGCC ’97', role: 'Associate Professor of Surgery', location: 'London', initials: 'NA' },
     { name: 'Tariq Hasan', post: 'M.Sc.', code: 'FCC ’97', role: 'VP, Cloud Infrastructure & AI', location: 'Austin, TX', initials: 'TH' },
     { name: 'Barrister Navid Huq', post: '', code: 'MCC ’97', role: 'Advocate, Supreme Court', location: 'Dhaka', initials: 'NH' },
+    { name: 'Cdre. Shafiqul Islam', post: 'psc, BN', code: 'CCC ’97', role: 'Commodore, Bangladesh Navy', location: 'Chattogram', initials: 'SI' },
+    { name: 'Farzana Rahman', post: 'CFA', code: 'MGCC ’97', role: 'Managing Director, Private Equity', location: 'Singapore', initials: 'FR' },
+    { name: 'Mahmud Karim', post: '', code: 'RCC ’97', role: 'Counsellor, Ministry of Foreign Affairs', location: 'Geneva', initials: 'MK' },
+    { name: 'Dr. Ashraf Uddin', post: 'MRCP', code: 'SCC ’97', role: 'Consultant Cardiologist', location: 'Manchester', initials: 'AU' },
 ];
 
 const FALLBACK_COMMITTEE = [
@@ -338,6 +343,24 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
     const [selectedRegion, setSelectedRegion] = useState('All');
     const [activeCollegeCode, setActiveCollegeCode] = useState(CADET_COLLEGES_DATA[0].short_name);
     const featureRef = useRef<HTMLDivElement>(null);
+    const spotlightRef = useRef<HTMLDivElement>(null);
+    const [spotlightPaused, setSpotlightPaused] = useState(false);
+
+    const scrollSpotlight = (dir: 1 | -1) => {
+        const el = spotlightRef.current;
+        if (!el) return;
+        const card = el.querySelector<HTMLElement>('[data-card]');
+        const step = (card?.offsetWidth ?? 300) + 16;
+        const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 8;
+        if (dir === 1 && atEnd) el.scrollTo({ left: 0, behavior: 'smooth' });
+        else el.scrollBy({ left: dir * step, behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        if (spotlightPaused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const t = window.setInterval(() => scrollSpotlight(1), 4500);
+        return () => window.clearInterval(t);
+    }, [spotlightPaused]);
     const [directorySearch, setDirectorySearch] = useState('');
     const [selectedCollegeFilter, setSelectedCollegeFilter] = useState('');
     const [selectedChapterFilter, setSelectedChapterFilter] = useState('');
@@ -847,228 +870,185 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 </section>
 
                 {/* ================================================================ */}
-                {/* DIRECTORY                                                        */}
+                {/* DIRECTORY — alumni spotlight carousel                            */}
                 {/* ================================================================ */}
                 <section id="directory" className="relative isolate scroll-mt-20 overflow-hidden bg-[#0B1220] py-24 text-[#F7F3EA] lg:py-32">
                     <div className="pointer-events-none absolute inset-0 -z-10">
-                        <div className="absolute -top-40 right-[-10%] h-[620px] w-[620px] rounded-full bg-[radial-gradient(circle,rgba(201,165,92,0.14),transparent_62%)]" />
-                        <div className="absolute bottom-[-30%] left-[-10%] h-[560px] w-[560px] rounded-full bg-[radial-gradient(circle,rgba(30,58,110,0.45),transparent_65%)]" />
+                        <div className="absolute -top-48 left-1/2 h-[640px] w-[1100px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(201,165,92,0.13),transparent_62%)]" />
                     </div>
 
                     <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
-                        <div className="grid grid-cols-1 gap-14 lg:grid-cols-12 lg:gap-16">
-                            {/* Left: pitch + search */}
-                            <div className="lg:col-span-5">
-                                <Reveal>
-                                    <Eyebrow index="04" light>The Cadet Roll</Eyebrow>
-                                    <h2 className="mt-6 text-5xl leading-[1.02] font-medium tracking-[-0.015em] lg:text-[3.6rem]">
-                                        Find any batchmate, <em className="font-normal text-[#E8D5A3]">anywhere.</em>
-                                    </h2>
-                                    <p className="mt-6 max-w-md text-[16px] leading-relaxed text-[#F7F3EA]/60">
-                                        A private, verified directory of the 1997 intake — search by name, college, profession or the city they now call home.
-                                    </p>
-                                </Reveal>
-
-                                <Reveal delay={100}>
-                                    <form
-                                        onSubmit={(e) => {
-                                            e.preventDefault();
-                                            const params = new URLSearchParams();
-                                            if (directorySearch.trim()) params.set('search', directorySearch.trim());
-                                            const col = mergedColleges.find((c) => c.short_name === selectedCollegeFilter);
-                                            if (col && typeof col.id === 'number') params.set('college_id', String(col.id));
-                                            if (directorySearch.trim() && selectedChapterFilter) params.set('field', selectedChapterFilter);
-                                            const qs = params.toString();
-                                            router.get(`/directory${qs ? `?${qs}` : ''}`);
-                                        }}
-                                        className="mt-10"
-                                    >
-                                        <div className="flex items-center gap-2 rounded-full bg-white p-1.5 pl-5 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.6)]">
-                                            <Search className="h-5 w-5 shrink-0 text-[#0B1220]/40" />
-                                            <input
-                                                type="text"
-                                                value={directorySearch}
-                                                onChange={(e) => setDirectorySearch(e.target.value)}
-                                                placeholder={selectedChapterFilter === 'profession' ? 'e.g. surgeon, Google' : selectedChapterFilter === 'city' ? 'e.g. London, Dhaka' : 'Type a batchmate’s name'}
-                                                aria-label="Search the directory"
-                                                className="h-12 min-w-0 flex-1 border-0 bg-transparent text-[16px] text-[#0B1220] placeholder:text-[#0B1220]/40 focus:ring-0 focus:outline-none"
-                                            />
-                                            <button type="submit" className="flex h-12 shrink-0 items-center gap-2 rounded-full bg-[#0B1220] px-6 text-[15px] font-medium text-white transition-colors hover:bg-[#1A2438]">
-                                                Search <ArrowRight className="h-4 w-4" />
-                                            </button>
-                                        </div>
-                                        <div className="mt-3 grid grid-cols-2 gap-2">
-                                            <select
-                                                value={selectedCollegeFilter}
-                                                onChange={(e) => setSelectedCollegeFilter(e.target.value)}
-                                                aria-label="College"
-                                                className="h-11 rounded-full border border-[#F7F3EA]/15 bg-white/[0.04] px-4 text-[14px] text-[#F7F3EA]/85 focus:border-[#C9A55C]/60 focus:ring-0 focus:outline-none [&>option]:text-[#0B1220]"
-                                            >
-                                                <option value="">Any college</option>
-                                                {mergedColleges.map((c) => (
-                                                    <option key={c.short_name} value={c.short_name}>{c.name}</option>
-                                                ))}
-                                            </select>
-                                            <select
-                                                value={selectedChapterFilter}
-                                                onChange={(e) => setSelectedChapterFilter(e.target.value)}
-                                                aria-label="Search by"
-                                                className="h-11 rounded-full border border-[#F7F3EA]/15 bg-white/[0.04] px-4 text-[14px] text-[#F7F3EA]/85 focus:border-[#C9A55C]/60 focus:ring-0 focus:outline-none [&>option]:text-[#0B1220]"
-                                            >
-                                                <option value="">Search by name</option>
-                                                <option value="profession">Search by profession</option>
-                                                <option value="city">Search by city</option>
-                                            </select>
-                                        </div>
-                                    </form>
-                                </Reveal>
-
-                                <Reveal delay={150}>
-                                    <div className="mt-10">
-                                        <div className="flex items-center justify-between">
-                                            <div className="text-[11px] font-medium tracking-[0.22em] text-[#F7F3EA]/45 uppercase">Browse by college</div>
-                                            <ExploreLink href="/directory" light internal={false}>Full directory</ExploreLink>
-                                        </div>
-                                        <div className="mt-4 flex flex-wrap gap-2">
-                                            {mergedColleges.map((c) => {
-                                                const active = selectedCollegeFilter === c.short_name;
-                                                return (
-                                                    <button
-                                                        key={c.short_name}
-                                                        type="button"
-                                                        title={c.name}
-                                                        aria-label={c.name}
-                                                        aria-pressed={active}
-                                                        onClick={() => (typeof c.id === 'number' ? router.get(`/directory?college_id=${c.id}`) : setSelectedCollegeFilter(active ? '' : c.short_name))}
-                                                        className={`group relative flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-white transition-all duration-300 hover:-translate-y-0.5 ${
-                                                            active ? 'ring-2 ring-[#C9A55C] ring-offset-2 ring-offset-[#0B1220]' : 'opacity-80 ring-1 ring-white/20 hover:opacity-100'
-                                                        }`}
-                                                    >
-                                                        {c.logo_url ? (
-                                                            <img src={c.logo_url} alt="" className="h-full w-full object-contain p-1" />
-                                                        ) : (
-                                                            <span className="text-[10px] font-semibold text-[#0B1220]">{c.short_name}</span>
-                                                        )}
-                                                    </button>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                </Reveal>
-                            </div>
-
-                            {/* Right: profile preview cards */}
-                            <div className="lg:col-span-7">
-                                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                                    {(directoryPreview.length >= 4
-                                        ? directoryPreview.map((d) => ({
-                                              id: d.id as number | undefined,
-                                              name: d.name,
-                                              post: '',
-                                              initials: d.initials,
-                                              role: [d.designation, d.organization].filter(Boolean).join(', ') || 'Verified batchmate',
-                                              code: `${d.college?.short_name ?? 'CC'} ’97`,
-                                              location: d.city || 'Bangladesh',
-                                              photo: d.photo_url,
-                                          }))
-                                        : SAMPLE_VERIFIED_MEMBERS.map((m) => ({ ...m, id: undefined as number | undefined, photo: null as string | null }))
-                                    ).map((m, i) => {
-                                        const code = m.code.split(' ')[0];
-                                        const col = mergedColleges.find((c) => c.short_name === code);
-                                        return (
-                                            <Reveal key={m.name} delay={i * 90} className={i % 2 === 1 ? 'sm:translate-y-8' : ''}>
-                                                <article className="group rounded-2xl border border-white/[0.08] bg-gradient-to-b from-white/[0.07] to-white/[0.02] p-6 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:border-[#C9A55C]/40">
-                                                    <div className="flex items-start justify-between">
-                                                        <div className="relative">
-                                                            {m.photo ? (
-                                                                <img src={m.photo} alt={m.name} className="h-16 w-16 rounded-full object-cover" />
-                                                            ) : (
-                                                                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#E8D5A3] to-[#9A7B3F] text-xl font-semibold text-[#0B1220]">{m.initials}</span>
-                                                            )}
-                                                            {col?.logo_url && (
-                                                                <img src={col.logo_url} alt={col.name} className="absolute -right-1 -bottom-1 h-7 w-7 rounded-full bg-white object-contain p-0.5 ring-2 ring-[#0B1220]" />
-                                                            )}
-                                                        </div>
-                                                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/10 px-2.5 py-1 text-[11px] font-medium text-emerald-300">
-                                                            <ShieldCheck className="h-3.5 w-3.5" /> Verified
-                                                        </span>
-                                                    </div>
-                                                    <h3 className="mt-5 text-[20px] leading-tight font-semibold">
-                                                        {m.name}
-                                                        {m.post && <span className="font-normal text-[#F7F3EA]/45">, {m.post}</span>}
-                                                    </h3>
-                                                    <p className="mt-1 text-[14px] text-[#F7F3EA]/65">{m.role}</p>
-                                                    <div className="mt-4 flex items-center gap-4 text-[13px] text-[#F7F3EA]/50">
-                                                        <span>{m.code}</span>
-                                                        <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{m.location}</span>
-                                                    </div>
-                                                    <div className="mt-5 flex items-center justify-between rounded-xl bg-black/25 px-4 py-3">
-                                                        <span className="flex items-center gap-2 text-[13px]">
-                                                            <Phone className="h-3.5 w-3.5 text-[#F7F3EA]/40" />
-                                                            <span className="tracking-widest text-[#F7F3EA]/70 blur-[3px] select-none">+880 17•• ••••••</span>
-                                                        </span>
-                                                        <span className="flex items-center gap-1 text-[11px] text-[#E8D5A3]">
-                                                            <Lock className="h-3 w-3" /> Members only
-                                                        </span>
-                                                    </div>
-                                                </article>
-                                            </Reveal>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Where we serve */}
                         <Reveal>
-                            <div className="mt-24 border-t border-white/10 pt-12">
-                                <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-                                    <h3 className="text-3xl font-medium sm:text-4xl">Where we <em className="font-normal text-[#E8D5A3]">serve.</em></h3>
-                                    <p className="text-[14px] text-[#F7F3EA]/50">Batchmates by profession</p>
+                            <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+                                <div className="max-w-2xl">
+                                    <Eyebrow index="04" light>The Cadet Roll</Eyebrow>
+                                    <h2 className="mt-6 text-5xl leading-[1.02] font-medium tracking-[-0.015em] lg:text-[3.75rem]">
+                                        Meet the <span className="font-normal text-[#E8D5A3]">batch.</span>
+                                    </h2>
+                                    <p className="mt-5 max-w-lg text-[17px] leading-relaxed text-[#F7F3EA]/60">
+                                        Generals, surgeons, diplomats and founders — still the same cadets who stood the 0530 muster together.
+                                    </p>
                                 </div>
-                                <div className="mt-10 grid grid-cols-1 gap-x-12 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
-                                    {(() => {
-                                        const max = Math.max(...SECTORS.map((x) => parseInt(x.count, 10)));
-                                        return SECTORS.map((sec) => {
-                                            const Icon = sec.icon;
-                                            const pct = Math.round((parseInt(sec.count, 10) / max) * 100);
-                                            return (
-                                                <div key={sec.title}>
-                                                    <div className="flex items-baseline justify-between gap-4">
-                                                        <span className="flex items-center gap-2.5 text-[15px] font-medium">
-                                                            <Icon className="h-4 w-4 text-[#C9A55C]" strokeWidth={1.75} />
-                                                            {sec.title}
-                                                        </span>
-                                                        <span className="text-2xl font-semibold tabular-nums">{sec.count}</span>
-                                                    </div>
-                                                    <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/10">
-                                                        <div className="h-full rounded-full bg-gradient-to-r from-[#9A7B3F] to-[#E8D5A3]" style={{ width: `${pct}%` }} />
-                                                    </div>
-                                                    <div className="mt-2 text-[12px] text-[#F7F3EA]/40">{sec.highlight}</div>
-                                                </div>
-                                            );
-                                        });
-                                    })()}
+                                <div className="flex items-center gap-5">
+                                    <ExploreLink href="/directory" light internal={false}>Open directory</ExploreLink>
+                                    <div className="flex gap-2">
+                                        <button type="button" aria-label="Previous" onClick={() => scrollSpotlight(-1)} className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 transition-colors hover:bg-white hover:text-[#0B1220]">
+                                            <ArrowRight className="h-4 w-4 rotate-180" />
+                                        </button>
+                                        <button type="button" aria-label="Next" onClick={() => scrollSpotlight(1)} className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 transition-colors hover:bg-white hover:text-[#0B1220]">
+                                            <ArrowRight className="h-4 w-4" />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </Reveal>
+                    </div>
 
-                        {/* CTA */}
+                    {/* Carousel track */}
+                    <div
+                        ref={spotlightRef}
+                        onMouseEnter={() => setSpotlightPaused(true)}
+                        onMouseLeave={() => setSpotlightPaused(false)}
+                        onFocus={() => setSpotlightPaused(true)}
+                        onBlur={() => setSpotlightPaused(false)}
+                        onTouchStart={() => setSpotlightPaused(true)}
+                        className="mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-5 pb-4 [scrollbar-width:none] sm:px-8 lg:px-[max(2.5rem,calc((100vw_-_1320px)/2_+_2.5rem))] [&::-webkit-scrollbar]:hidden"
+                    >
+                        {(directoryPreview.length >= 4
+                            ? directoryPreview.map((d) => ({
+                                  key: `m${d.id}`,
+                                  href: `/member/directory/${d.id}`,
+                                  name: d.name,
+                                  post: '',
+                                  initials: d.initials,
+                                  role: [d.designation, d.organization].filter(Boolean).join(', ') || 'Verified batchmate',
+                                  college: d.college?.short_name ?? '',
+                                  location: d.city || '',
+                                  photo: d.photo_url,
+                              }))
+                            : SAMPLE_VERIFIED_MEMBERS.map((m) => ({
+                                  key: m.name,
+                                  href: '/directory',
+                                  name: m.name,
+                                  post: m.post,
+                                  initials: m.initials,
+                                  role: m.role,
+                                  college: m.code.split(' ')[0],
+                                  location: m.location,
+                                  photo: null as string | null,
+                              }))
+                        ).map((m) => {
+                            const col = mergedColleges.find((c) => c.short_name === m.college);
+                            const bg = CAMPUS_PHOTOS[m.college];
+                            return (
+                                <Link
+                                    key={m.key}
+                                    href={m.href}
+                                    data-card
+                                    className="group relative isolate flex h-[420px] w-[78vw] shrink-0 snap-start flex-col overflow-hidden rounded-3xl bg-[#121B2E] sm:w-[300px]"
+                                >
+                                    {bg && (
+                                        <img src={bg} alt="" loading="lazy" className="absolute inset-0 -z-20 h-full w-full object-cover opacity-45 transition-transform duration-[1200ms] ease-out group-hover:scale-110" />
+                                    )}
+                                    <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#0B1220]/40 via-[#0B1220]/70 to-[#0B1220]" />
+
+                                    <div className="flex items-center justify-between p-5">
+                                        <span className="flex items-center gap-2 rounded-full bg-white/10 py-1 pr-3 pl-1 text-[12px] font-medium backdrop-blur-md">
+                                            <span className="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-white">
+                                                {col?.logo_url ? <img src={col.logo_url} alt="" className="h-full w-full object-contain p-0.5" /> : <span className="text-[8px] text-[#0B1220]">{m.college}</span>}
+                                            </span>
+                                            {m.college} ’97
+                                        </span>
+                                        <ShieldCheck className="h-5 w-5 text-[#C9A55C]" aria-label="Verified" />
+                                    </div>
+
+                                    <div className="flex flex-1 items-center justify-center">
+                                        <div className="rounded-full bg-gradient-to-b from-[#F3E3B5] to-[#9A7B3F] p-[3px] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.7)] transition-transform duration-500 group-hover:scale-105">
+                                            {m.photo ? (
+                                                <img src={m.photo} alt={m.name} className="h-28 w-28 rounded-full object-cover" />
+                                            ) : (
+                                                <span className="flex h-28 w-28 items-center justify-center rounded-full bg-[#0B1220] text-3xl font-semibold text-[#E8D5A3]">{m.initials}</span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="p-6 pt-0 text-center">
+                                        <h3 className="text-[21px] leading-tight font-semibold">{m.name}</h3>
+                                        <div className="mt-0.5 min-h-[1.25rem] text-[13px] text-[#F7F3EA]/45">{m.post}</div>
+                                        <p className="mt-2 line-clamp-2 min-h-[2.6rem] text-[14px] leading-snug text-[#F7F3EA]/70">{m.role}</p>
+                                        {m.location && (
+                                            <div className="mt-3 inline-flex items-center gap-1 text-[12.5px] text-[#E8D5A3]/80">
+                                                <MapPin className="h-3.5 w-3.5" /> {m.location}
+                                            </div>
+                                        )}
+                                    </div>
+                                </Link>
+                            );
+                        })}
+
+                        {/* Final card — invitation */}
+                        <Link
+                            href="/directory"
+                            data-card
+                            className="group flex h-[420px] w-[78vw] shrink-0 snap-start flex-col justify-between rounded-3xl bg-gradient-to-br from-[#E8D5A3] to-[#B8924A] p-7 text-[#0B1220] sm:w-[300px]"
+                        >
+                            <Users className="h-8 w-8" strokeWidth={1.5} />
+                            <div>
+                                <div className="text-[56px] leading-none font-semibold tabular-nums">642</div>
+                                <div className="mt-2 text-[22px] leading-tight font-semibold">batchmates across 34 nations</div>
+                                <span className="mt-6 inline-flex items-center gap-2 text-[15px] font-medium">
+                                    Browse everyone <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                </span>
+                            </div>
+                        </Link>
+                    </div>
+
+                    {/* Search strip */}
+                    <div className="mx-auto mt-14 max-w-[1320px] px-5 sm:px-8 lg:px-10">
                         <Reveal>
-                            <div className="mt-20 flex flex-col items-start justify-between gap-6 rounded-3xl bg-gradient-to-r from-[#C9A55C] to-[#E8D5A3] p-8 text-[#0B1220] sm:p-10 md:flex-row md:items-center">
-                                <div>
-                                    <div className="text-2xl font-semibold sm:text-3xl">642 batchmates. One private network.</div>
-                                    <p className="mt-1.5 flex items-center gap-2 text-[15px] text-[#0B1220]/70">
-                                        <Lock className="h-4 w-4" /> Phone, email and WhatsApp are visible only to verified members.
-                                    </p>
-                                </div>
-                                <div className="flex shrink-0 gap-3">
-                                    <Link href="/login" className="rounded-full border border-[#0B1220]/25 px-6 py-3.5 text-[15px] font-medium transition-colors hover:bg-[#0B1220]/5">Sign in</Link>
-                                    <Link href="/register-alumni" className="inline-flex items-center gap-2 rounded-full bg-[#0B1220] px-6 py-3.5 text-[15px] font-medium text-white transition-colors hover:bg-[#1A2438]">
-                                        Join the roll <ArrowRight className="h-4 w-4" />
-                                    </Link>
+                            <div className="flex flex-col gap-6 border-t border-white/10 pt-10 lg:flex-row lg:items-center lg:justify-between">
+                                <form
+                                    onSubmit={(e) => {
+                                        e.preventDefault();
+                                        const q = directorySearch.trim();
+                                        router.get(q ? `/directory?search=${encodeURIComponent(q)}` : '/directory');
+                                    }}
+                                    className="flex w-full items-center gap-2 rounded-full bg-white p-1.5 pl-5 lg:max-w-xl"
+                                >
+                                    <Search className="h-5 w-5 shrink-0 text-[#0B1220]/40" />
+                                    <input
+                                        type="text"
+                                        value={directorySearch}
+                                        onChange={(e) => setDirectorySearch(e.target.value)}
+                                        placeholder="Search 642 batchmates by name"
+                                        aria-label="Search the directory"
+                                        className="h-11 min-w-0 flex-1 border-0 bg-transparent text-[16px] text-[#0B1220] placeholder:text-[#0B1220]/40 focus:ring-0 focus:outline-none"
+                                    />
+                                    <button type="submit" className="flex h-11 shrink-0 items-center gap-2 rounded-full bg-[#0B1220] px-6 text-[15px] font-medium text-white hover:bg-[#1A2438]">
+                                        Search
+                                    </button>
+                                </form>
+                                <div className="flex items-center gap-4">
+                                    <span className="hidden text-[13px] text-[#F7F3EA]/45 sm:block">Browse by college</span>
+                                    <div className="flex -space-x-2">
+                                        {mergedColleges.map((c) => (
+                                            <button
+                                                key={c.short_name}
+                                                type="button"
+                                                title={c.name}
+                                                aria-label={`Browse ${c.name}`}
+                                                onClick={() => router.get(typeof c.id === 'number' ? `/directory?college_id=${c.id}` : '/directory')}
+                                                className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white ring-2 ring-[#0B1220] transition-transform duration-300 hover:z-10 hover:-translate-y-1 hover:scale-110"
+                                            >
+                                                {c.logo_url ? <img src={c.logo_url} alt="" className="h-full w-full object-contain p-0.5" /> : <span className="text-[9px] font-semibold text-[#0B1220]">{c.short_name}</span>}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
+                            <p className="mt-6 flex items-center gap-2 text-[13px] text-[#F7F3EA]/40">
+                                <Lock className="h-3.5 w-3.5" /> Phone, email and WhatsApp are visible only to verified batchmates.
+                            </p>
                         </Reveal>
                     </div>
                 </section>
