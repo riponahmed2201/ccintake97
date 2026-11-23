@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import BrandMark from '@/components/brand-mark';
 import { Link, usePage } from '@inertiajs/react';
 import {
     LayoutDashboard,
@@ -72,12 +73,10 @@ export default function MemberLayout({ children, title, breadcrumbs = [] }: Memb
                 {/* Brand */}
                 <div className="h-16 px-6 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
                     <Link href="/member/dashboard" className="flex items-center gap-3">
-                        <div className="size-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-base shadow-sm">
-                            97
-                        </div>
+                        <BrandMark className="h-10 w-auto shrink-0" />
                         <div>
-                            <div className="font-bold text-sm tracking-wide text-slate-900 dark:text-white uppercase">
-                                INTAKE 97
+                            <div className="font-bold text-sm tracking-wide text-slate-900 dark:text-white">
+                                ccIntake97
                             </div>
                             <div className="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold tracking-wider">
                                 ALUMNI PORTAL

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import BrandMark from '@/components/brand-mark';
 import { Link, usePage } from '@inertiajs/react';
 import {
     LayoutDashboard,
@@ -72,12 +73,10 @@ export default function AdminLayout({ children, title, breadcrumbs = [] }: Admin
                 {/* Brand */}
                 <div className="h-16 px-6 flex items-center justify-between border-b border-slate-800 bg-slate-950/40">
                     <Link href="/admin/dashboard" className="flex items-center gap-3">
-                        <div className="size-8 rounded-lg bg-emerald-600 flex items-center justify-center font-bold text-white text-base shadow-sm">
-                            97
-                        </div>
+                        <BrandMark className="h-10 w-auto shrink-0" />
                         <div>
-                            <div className="font-bold text-sm tracking-wide text-white uppercase">
-                                INTAKE 97
+                            <div className="font-bold text-sm tracking-wide text-white">
+                                ccIntake97
                             </div>
                             <div className="text-[10px] text-emerald-400 font-medium tracking-wider">
                                 ADMIN MANAGEMENT

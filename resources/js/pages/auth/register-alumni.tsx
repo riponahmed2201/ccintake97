@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
+import BrandMark from '@/components/brand-mark';
 import { ArrowLeft, ArrowRight, Eye, EyeOff, Lock } from 'lucide-react';
 import type { College } from '@/types';
 
@@ -106,11 +107,9 @@ export default function RegisterAlumni({ colleges = [] }: RegisterAlumniProps) {
                     <div className="flex h-full flex-col px-6 py-7 sm:px-10 lg:px-14 lg:py-12">
                         <div className="flex items-center justify-between">
                             <Link href="/" className="flex items-center gap-3">
-                                <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[#D9BF85]/40">
-                                    <span className="font-serif text-base leading-none text-[#E8D5A3]">97</span>
-                                </span>
+                                <BrandMark className="h-11 w-auto shrink-0" />
                                 <span className="font-serif text-xl tracking-[0.02em]">
-                                    ccIntake<span className="text-[#C9A55C]">97</span>
+                                    ccIntake<span className="text-[#C9A55C] [font-variant-numeric:lining-nums]">97</span>
                                 </span>
                             </Link>
                             <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] text-[#F7F3EA]/50 transition-colors hover:text-[#F7F3EA]">

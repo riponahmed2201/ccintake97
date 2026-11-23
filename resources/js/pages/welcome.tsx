@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Head, Link, usePage } from '@inertiajs/react';
+import BrandMark from '@/components/brand-mark';
 import type { College, Event, Article, Committee, Business } from '@/types/intake97';
 import {
     ArrowRight,
@@ -71,7 +72,6 @@ const CAMPUS_PHOTOS: Record<string, string> = {
 };
 
 const CAMPUS_LIFE = [
-    { src: '/images/campus/aerial-mcc.jpg', title: 'Mirzapur from above', place: 'MCC' },
     { src: '/images/campus/athletics.jpg', title: 'Inter-house athletics', place: 'RCC' },
     { src: '/images/campus/playground-mcc.jpg', title: 'The parade ground', place: 'MCC' },
     { src: '/images/campus/rcc.jpg', title: 'The academic block', place: 'RCC' },
@@ -81,7 +81,7 @@ const CAMPUS_LIFE = [
 
 // Wikimedia Commons photographs — CC BY-SA unless noted. Attribution is required.
 const PHOTO_CREDITS = [
-    { file: 'MCC Front View at Night', author: 'Ishmum', license: 'CC BY-SA 4.0' },
+    { file: 'Sunset at Rajshahi Cadet College (3)', author: 'AfnanAnwar20', license: 'CC BY-SA 4.0' },
     { file: 'Faujdarhat Cadet College Front View', author: 'Rafi Bin Tofa', license: 'CC BY-SA 4.0' },
     { file: 'Jcc Academic Block', author: 'Mrislamreaz', license: 'CC BY-SA 3.0' },
     { file: 'MCC BLOCK', author: 'Kazi Maruf Abdullah', license: 'CC BY-SA 3.0' },
@@ -95,7 +95,7 @@ const PHOTO_CREDITS = [
     { file: 'Flag Raising Ceremony in RCC', author: 'Photography Club, Rajshahi Cadet College', license: 'CC BY-SA 4.0' },
     { file: 'Athletes contingent of Inter House Annual Athletics Competition 2024 at RCC', author: 'AfnanAnwar20', license: 'CC BY-SA 4.0' },
     { file: 'Glimpse of Inter House Annual Athletics Competition 2024', author: 'AfnanAnwar20', license: 'CC BY-SA 4.0' },
-    { file: 'Sunset at Rajshahi Cadet College (2)', author: 'AfnanAnwar20', license: 'CC BY-SA 4.0' },
+    { file: "CAS inspecting the parade of the Cadets' during ORCA Reunion 2025 at RCC", author: 'AfnanAnwar20', license: 'CC BY-SA 4.0' },
     { file: 'Aerial view of Mirzapur Cadet College', author: 'Bellfloyd', license: 'CC BY-SA 4.0' },
     { file: 'Play Ground of MCC College, Dhaka', author: 'মুসফিক মুন্না', license: 'CC BY-SA 4.0' },
 ];
@@ -162,14 +162,14 @@ const CHARTER_ARTICLES = [
 
 const NAV_LINKS = [
     { href: '#about', label: 'About' },
+    { href: '#colleges', label: 'Colleges' },
     { href: '#directory', label: 'Directory' },
     { href: '#committee', label: 'Committee' },
     { href: '#welfare', label: 'Welfare' },
-    { href: '#businesses', label: 'Businesses' },
-    { href: '#news', label: 'News' },
-    { href: '#constitution', label: 'Charter' },
     { href: '#contact', label: 'Contact' },
 ];
+
+const NEWS_FALLBACK_PHOTOS = ['/images/campus/playground-mcc.jpg', '/images/campus/athletics.jpg', '/images/campus/mgcc.jpg'];
 
 /* -------------------------------------------------------------------------- */
 /*  Small presentational helpers                                              */
@@ -407,12 +407,10 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 >
                     <div className="mx-auto flex h-[76px] max-w-[1320px] items-center justify-between px-5 sm:px-8 lg:px-10">
                         <Link href="/" className="group flex shrink-0 items-center gap-3">
-                            <span className={`flex h-10 w-10 items-center justify-center rounded-full border transition-colors duration-500 ${solidHeader ? 'border-[#9A7B3F]/60 bg-[#0B1220]' : 'border-[#D9BF85]/50 bg-white/5'}`}>
-                                <span className="font-serif text-lg leading-none font-medium text-[#E8D5A3]">97</span>
-                            </span>
+                            <BrandMark className="h-12 w-auto shrink-0 drop-shadow-[0_6px_14px_rgba(0,0,0,0.3)] transition-transform duration-500 group-hover:-translate-y-0.5" />
                             <span className="leading-tight">
                                 <span className={`block font-serif text-[22px] font-medium tracking-[0.02em] transition-colors duration-500 ${solidHeader ? 'text-[#0B1220]' : 'text-[#F7F3EA]'}`}>
-                                    ccIntake<span className="text-[#C9A55C]">97</span>
+                                    ccIntake<span className="text-[#C9A55C] [font-variant-numeric:lining-nums]">97</span>
                                 </span>
                                 <span className={`hidden text-[9.5px] font-medium uppercase tracking-[0.3em] transition-colors duration-500 sm:block ${solidHeader ? 'text-[#0B1220]/45' : 'text-[#F7F3EA]/45'}`}>
                                     Cadet College Alumni
@@ -503,12 +501,14 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 {/* ================================================================ */}
                 <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-[#070B14] text-[#F7F3EA]">
                     <img
-                        src="/images/campus/hero-mcc-night.jpg"
-                        alt="Mirzapur Cadet College illuminated at night"
-                        className="absolute inset-0 -z-20 h-full w-full scale-105 animate-[heroZoom_18s_ease-out_forwards] object-cover motion-reduce:animate-none"
+                        src="/images/campus/hero-rcc-sunset.jpg"
+                        alt="Rajshahi Cadet College silhouetted at sunset"
+                        fetchPriority="high"
+                        className="absolute inset-0 -z-20 h-full w-full scale-105 animate-[heroZoom_18s_ease-out_forwards] object-cover object-[center_60%] motion-reduce:animate-none"
                     />
-                    <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#070B14] via-[#070B14]/45 to-[#070B14]/40" />
-                    <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#070B14]/75 via-[#070B14]/20 to-transparent" />
+                    <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#070B14] via-[#070B14]/40 to-[#070B14]/5" />
+                    <div className="absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-[#070B14]/60 to-transparent" />
+                    <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#070B14]/70 via-[#070B14]/15 to-transparent" />
                     <style>{`@keyframes heroZoom { from { transform: scale(1.12) } to { transform: scale(1.02) } }`}</style>
 
                     <div className="mx-auto w-full max-w-[1320px] px-5 pt-40 pb-14 sm:px-8 lg:px-10 lg:pb-16">
@@ -554,7 +554,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                         </div>
                                     ))}
                                 </dl>
-                                <span className="text-[11px] tracking-[0.18em] text-[#F7F3EA]/40 uppercase">Mirzapur Cadet College, by night</span>
+                                <span className="text-[11px] tracking-[0.18em] text-[#F7F3EA]/40 uppercase">Rajshahi Cadet College, at dusk</span>
                             </div>
                         </Reveal>
                     </div>
@@ -622,7 +622,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 {/* ================================================================ */}
                 {/* COLLEGES — featured banner + photo tiles                         */}
                 {/* ================================================================ */}
-                <section className="bg-[#F4F2EE] py-24 lg:py-32">
+                <section id="colleges" className="scroll-mt-20 bg-[#F4F2EE] py-24 lg:py-32">
                     <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
                         <Reveal>
                             <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
@@ -839,15 +839,15 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 {/* ================================================================ */}
                 {/* DIRECTORY                                                        */}
                 {/* ================================================================ */}
-                <section id="directory" className="relative scroll-mt-20 overflow-hidden bg-[#0B1220] py-28 text-[#F7F3EA] lg:py-36">
+                <section id="directory" className="relative scroll-mt-20 overflow-hidden bg-[#0B1220] py-24 text-[#F7F3EA] lg:py-32">
                     <div className="pointer-events-none absolute top-0 left-1/2 h-[600px] w-[1000px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(201,165,92,0.10),transparent_65%)]" />
-                    <div className="relative mx-auto max-w-[1320px] space-y-20 px-5 sm:px-8 lg:px-10">
+                    <div className="relative mx-auto max-w-[1320px] space-y-14 px-5 sm:px-8 lg:px-10">
                         <SectionHeading
                             light
                             index="04"
                             eyebrow="The Cadet Roll"
-                            title={<>Your batchmates. <em className="font-normal text-[#D9BF85]">Your lifelong network.</em></>}
-                            intro="A private directory of verified brothers and sisters across all ten colleges — searchable by house, roll number, sector or chapter."
+                            title={<>Your batchmates. <em className="font-normal text-[#D9BF85]">Your network.</em></>}
+                            intro="A private directory of verified batchmates — searchable by college, house, sector or city."
                         />
 
                         <Reveal>
@@ -893,24 +893,18 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                             </div>
                         </Reveal>
 
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                        <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 lg:grid-cols-4">
                             {SAMPLE_VERIFIED_MEMBERS.map((m, i) => (
-                                <Reveal key={m.name} delay={i * 80}>
-                                    <div className="group h-full rounded-2xl border border-[#F7F3EA]/[0.08] bg-white/[0.02] p-6 transition-all duration-500 hover:border-[#C9A55C]/30 hover:bg-white/[0.04]">
-                                        <div className="flex items-center justify-between">
-                                            <span className="flex h-14 w-14 items-center justify-center rounded-full border border-[#C9A55C]/40 bg-gradient-to-br from-[#1A2438] to-[#0B1220] font-serif text-xl text-[#E8D5A3]">{m.initials}</span>
-                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-[#C9A55C]/10 px-2.5 py-1 text-[10px] font-medium tracking-wide text-[#D9BF85]">
-                                                <ShieldCheck className="h-3 w-3" /> Verified
-                                            </span>
-                                        </div>
-                                        <div className="mt-6 font-serif text-xl leading-tight text-[#F7F3EA]">
-                                            {m.name}
-                                            {m.post && <span className="text-[#F7F3EA]/40">, {m.post}</span>}
-                                        </div>
-                                        <div className="mt-1.5 text-[13px] text-[#F7F3EA]/55">{m.role}</div>
-                                        <div className="mt-6 flex items-center justify-between border-t border-[#F7F3EA]/[0.08] pt-4 text-[12px] text-[#F7F3EA]/40">
-                                            <span>{m.code}</span>
-                                            <span>{m.location}</span>
+                                <Reveal key={m.name} delay={i * 80} className="h-full">
+                                    <div className="group flex h-full items-center gap-4 bg-white/[0.03] p-5 transition-colors duration-500 hover:bg-white/[0.06]">
+                                        <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-[#C9A55C]/40 bg-gradient-to-br from-[#1A2438] to-[#0B1220] font-serif text-lg text-[#E8D5A3]">{m.initials}</span>
+                                        <div className="min-w-0">
+                                            <div className="flex items-center gap-1.5 truncate font-serif text-lg leading-tight">
+                                                <span className="truncate">{m.name}</span>
+                                                <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-[#C9A55C]" />
+                                            </div>
+                                            <div className="mt-0.5 truncate text-[12.5px] text-[#F7F3EA]/55">{m.role}</div>
+                                            <div className="mt-1 text-[11px] tracking-[0.12em] text-[#F7F3EA]/35 uppercase">{m.code} · {m.location}</div>
                                         </div>
                                     </div>
                                 </Reveal>
@@ -918,62 +912,45 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                         </div>
 
                         <Reveal>
-                            <div className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-[#F7F3EA]/[0.08] px-6 py-5 sm:flex-row sm:items-center">
-                                <div className="flex items-center gap-3 text-[14px] text-[#F7F3EA]/60">
-                                    <Lock className="h-4 w-4 shrink-0 text-[#C9A55C]" />
-                                    Contact details are shielded and visible only to authenticated batchmates.
-                                </div>
-                                <GhostLink href="/login" light>Sign in to the full roll</GhostLink>
-                            </div>
-                        </Reveal>
-
-                        {/* Sectors */}
-                        <div className="space-y-12 pt-8">
-                            <Reveal>
-                                <div className="flex flex-col justify-between gap-4 border-b border-[#F7F3EA]/10 pb-8 md:flex-row md:items-end">
-                                    <h3 className="font-serif text-3xl font-medium sm:text-4xl">Excellence across <em className="font-normal text-[#D9BF85]">every sector.</em></h3>
-                                    <p className="max-w-md text-[14px] text-[#F7F3EA]/50">From command centres and operating theatres to boardrooms and diplomatic missions.</p>
-                                </div>
-                            </Reveal>
-                            <div className="grid grid-cols-1 gap-x-12 md:grid-cols-2 lg:grid-cols-3">
-                                {SECTORS.map((sec, i) => {
+                            <div className="grid grid-cols-2 gap-px overflow-hidden border-y border-[#F7F3EA]/10 bg-[#F7F3EA]/10 sm:grid-cols-3 lg:grid-cols-6">
+                                {SECTORS.map((sec) => {
                                     const Icon = sec.icon;
                                     return (
-                                        <Reveal key={sec.title} delay={(i % 3) * 80}>
-                                            <div className="group border-b border-[#F7F3EA]/[0.08] py-8">
-                                                <div className="flex items-start justify-between">
-                                                    <Icon className="h-5 w-5 text-[#C9A55C]" strokeWidth={1.5} />
-                                                    <span className="text-[11px] tracking-[0.18em] text-[#F7F3EA]/35 uppercase">{sec.highlight}</span>
-                                                </div>
-                                                <div className="mt-6 flex items-baseline gap-3">
-                                                    <span className="font-serif text-5xl font-medium text-[#F7F3EA] transition-colors group-hover:text-[#E8D5A3]">{sec.count}</span>
-                                                    <span className="text-[13px] text-[#F7F3EA]/50">{sec.unit}</span>
-                                                </div>
-                                                <h4 className="mt-3 text-[15px] font-semibold text-[#F7F3EA]">{sec.title}</h4>
-                                                <p className="mt-2 text-[14px] leading-relaxed text-[#F7F3EA]/50">{sec.description}</p>
-                                            </div>
-                                        </Reveal>
+                                        <div key={sec.title} className="group bg-[#0B1220] px-5 py-7">
+                                            <Icon className="h-4 w-4 text-[#C9A55C]" strokeWidth={1.5} />
+                                            <div className="mt-4 font-serif text-4xl font-medium transition-colors group-hover:text-[#E8D5A3]">{sec.count}</div>
+                                            <div className="mt-1 text-[13px] leading-snug text-[#F7F3EA]/55">{sec.title}</div>
+                                        </div>
                                     );
                                 })}
                             </div>
-                        </div>
+                        </Reveal>
+
+                        <Reveal>
+                            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+                                <div className="flex items-center gap-3 text-[14px] text-[#F7F3EA]/55">
+                                    <Lock className="h-4 w-4 shrink-0 text-[#C9A55C]" />
+                                    Contact details are visible only to verified batchmates.
+                                </div>
+                                <ExploreLink href="/login" light internal={false}>Sign in to the full roll</ExploreLink>
+                            </div>
+                        </Reveal>
                     </div>
                 </section>
 
                 {/* ================================================================ */}
-                {/* COMMITTEE                                                        */}
+                {/* COMMITTEE + CHARTER                                              */}
                 {/* ================================================================ */}
-                <section id="committee" className="scroll-mt-20 py-28 lg:py-36">
-                    <div className="mx-auto max-w-[1320px] space-y-16 px-5 sm:px-8 lg:px-10">
+                <section id="committee" className="scroll-mt-20 bg-white py-24 lg:py-32">
+                    <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
                         <SectionHeading
                             index="05"
                             eyebrow="Stewardship"
-                            title={committee?.name ? committee.name : <>The Central <em className="font-normal text-[#9A7B3F]">Executive Council.</em></>}
-                            intro="“We took an oath not merely to achieve personal eminence, but to maintain an inviolable lifeline for one another.”"
-                            action={<GhostLink href="#constitution" internal>Governance charter</GhostLink>}
+                            title={committee?.name ? committee.name : <>The Executive <em className="font-normal text-[#9A7B3F]">Council.</em></>}
+                            intro="Elected from every college chapter, serving a two-year term."
                         />
 
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                        <div className="mt-12 grid grid-cols-2 gap-1.5 lg:grid-cols-4">
                             {(committee?.members && committee.members.length > 0
                                 ? committee.members.map((cm) => ({
                                       key: String(cm.id),
@@ -986,207 +963,193 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                 : FALLBACK_COMMITTEE.map((c) => ({ key: c.name, ...c, avatar: undefined as string | undefined }))
                             ).map((p, i) => (
                                 <Reveal key={p.key} delay={i * 80}>
-                                    <article className="group">
-                                        <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-gradient-to-br from-[#1A2438] via-[#0B1220] to-[#070B14]">
-                                            {p.avatar ? (
-                                                <img src={p.avatar} alt={p.name} className="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-[1.03] group-hover:grayscale-0" />
-                                            ) : (
-                                                <>
-                                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(201,165,92,0.22),transparent_55%)]" />
-                                                    <div className="absolute inset-0 flex items-center justify-center">
-                                                        <span className="font-serif text-[6rem] leading-none font-medium text-[#E8D5A3]/90 transition-transform duration-700 group-hover:scale-105">{initialsOf(p.name)}</span>
-                                                    </div>
-                                                </>
-                                            )}
-                                            <div className="absolute top-5 left-5 rounded-full border border-[#F7F3EA]/15 bg-[#0B1220]/40 px-3 py-1 text-[10px] font-medium tracking-[0.2em] text-[#E8D5A3] uppercase backdrop-blur-md">
-                                                {p.title}
+                                    <article className="group relative isolate aspect-[3/4] overflow-hidden bg-[#0B1220] text-white">
+                                        {p.avatar ? (
+                                            <img src={p.avatar} alt={p.name} className="absolute inset-0 -z-10 h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" />
+                                        ) : (
+                                            <div className="absolute inset-0 -z-10 bg-gradient-to-br from-[#1E2A42] via-[#0E1628] to-[#070B14]">
+                                                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(201,165,92,0.22),transparent_60%)]" />
+                                                <span className="absolute inset-x-0 top-[30%] text-center font-serif text-[5.5rem] leading-none text-[#E8D5A3]/85 transition-transform duration-700 group-hover:scale-105">{initialsOf(p.name)}</span>
                                             </div>
+                                        )}
+                                        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
+                                        <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+                                            <div className="text-[10.5px] font-medium tracking-[0.2em] text-[#E8D5A3] uppercase">{p.title}</div>
+                                            <h3 className="mt-2 font-serif text-xl leading-tight sm:text-2xl">{p.name}</h3>
+                                            <p className="mt-1 line-clamp-1 text-[13px] text-white/60">{p.role} · {p.college}</p>
                                         </div>
-                                        <h3 className="mt-6 font-serif text-2xl leading-tight text-[#0B1220]">{p.name}</h3>
-                                        <p className="mt-1.5 text-[14px] text-[#4A4F5C]">{p.role}</p>
-                                        <p className="mt-3 text-[11px] tracking-[0.2em] text-[#9A7B3F] uppercase">{p.college}</p>
                                     </article>
                                 </Reveal>
                             ))}
+                        </div>
+
+                        {/* Charter — compact */}
+                        <div id="constitution" className="mt-20 scroll-mt-24 border-t border-[#0B1220]/10 pt-12">
+                            <Reveal>
+                                <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+                                    <h3 className="font-serif text-3xl font-medium text-[#0B1220] sm:text-4xl">The <em className="font-normal text-[#9A7B3F]">Charter.</em></h3>
+                                    <ExploreLink href="/login" internal={false}>Download full charter</ExploreLink>
+                                </div>
+                            </Reveal>
+                            <ol className="mt-10 grid grid-cols-1 gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+                                {CHARTER_ARTICLES.map((c, i) => (
+                                    <Reveal key={c.numeral} delay={i * 70}>
+                                        <li>
+                                            <span className="font-serif text-3xl text-[#9A7B3F]/70">{c.numeral}</span>
+                                            <h4 className="mt-3 text-[15px] font-semibold text-[#0B1220]">{c.title}</h4>
+                                            <p className="mt-1.5 text-[14px] leading-relaxed text-[#4A4F5C]">{c.text}</p>
+                                        </li>
+                                    </Reveal>
+                                ))}
+                            </ol>
                         </div>
                     </div>
                 </section>
 
                 {/* ================================================================ */}
-                {/* WELFARE                                                          */}
+                {/* WELFARE — full-bleed photo banner                                */}
                 {/* ================================================================ */}
-                <section id="welfare" className="relative scroll-mt-20 border-t border-[#0B1220]/[0.07] bg-[#F3EEE3] py-28 lg:py-36">
+                <section id="welfare" className="relative isolate scroll-mt-20 overflow-hidden bg-[#070B14] text-[#F7F3EA]">
                     <span id="offers" className="sr-only absolute -top-24" />
-                    <div className="mx-auto max-w-[1320px] space-y-16 px-5 sm:px-8 lg:px-10">
-                        <SectionHeading
-                            index="06"
-                            eyebrow="Welfare & Trust"
-                            title={<>We leave <em className="font-normal text-[#9A7B3F]">no comrade</em> behind.</>}
-                            intro="Guaranteed medical lifelines, protected futures for the children of fallen batchmates, and privileges shared among our own."
-                        />
+                    <img src="/images/campus/aerial-mcc.jpg" alt="Aerial view of Mirzapur Cadet College" loading="lazy" className="absolute inset-0 -z-20 h-full w-full object-cover" />
+                    <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#070B14] via-[#070B14]/60 to-[#070B14]/30" />
+                    <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#070B14]/80 to-transparent" />
 
-                        <div className="grid grid-cols-1 gap-px overflow-hidden rounded-3xl border border-[#0B1220]/10 bg-[#0B1220]/10 md:grid-cols-2 lg:grid-cols-4">
+                    <div className="mx-auto flex min-h-[720px] max-w-[1320px] flex-col justify-between px-5 py-24 sm:px-8 lg:px-10 lg:py-28">
+                        <Reveal>
+                            <Eyebrow index="06" light>Welfare &amp; Trust</Eyebrow>
+                            <h2 className="mt-6 max-w-3xl font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] lg:text-[4.25rem]">
+                                We leave <em className="font-normal text-[#E8D5A3]">no comrade</em> behind.
+                            </h2>
+                            <p className="mt-6 max-w-lg text-[16px] leading-relaxed text-[#F7F3EA]/70">
+                                Medical lifelines, protected futures for the children of fallen batchmates, and privileges shared among our own.
+                            </p>
+                            <div className="mt-8">
+                                <ExploreLink href="/login" light internal={false}>Support the Trust</ExploreLink>
+                            </div>
+                        </Reveal>
+
+                        <div className="mt-16 grid grid-cols-2 gap-1.5 lg:grid-cols-4">
                             {WELFARE_PILLARS.map((w, i) => {
                                 const Icon = w.icon;
                                 return (
                                     <Reveal key={w.title} delay={i * 80} className="h-full">
-                                        <div className="flex h-full flex-col bg-[#FAF7F0] p-8 lg:p-10">
-                                            <Icon className="h-6 w-6 text-[#9A7B3F]" strokeWidth={1.5} />
-                                            <div className="mt-10 font-serif text-5xl font-medium text-[#0B1220]">{w.figure}</div>
-                                            <div className="mt-1 text-[11px] tracking-[0.2em] text-[#0B1220]/45 uppercase">{w.label}</div>
-                                            <h3 className="mt-8 text-[16px] font-semibold text-[#0B1220]">{w.title}</h3>
-                                            <p className="mt-2 text-[14px] leading-relaxed text-[#4A4F5C]">{w.description}</p>
+                                        <div className="h-full bg-white/[0.08] p-5 backdrop-blur-md sm:p-6">
+                                            <Icon className="h-5 w-5 text-[#E8D5A3]" strokeWidth={1.5} />
+                                            <div className="mt-5 font-serif text-4xl font-medium sm:text-[2.75rem]">{w.figure}</div>
+                                            <div className="mt-2 text-[14px] font-medium">{w.title}</div>
+                                            <div className="mt-0.5 text-[12px] tracking-[0.14em] text-[#F7F3EA]/50 uppercase">{w.label}</div>
                                         </div>
                                     </Reveal>
                                 );
                             })}
                         </div>
-
-                        <Reveal>
-                            <p className="text-center text-[14px] text-[#4A4F5C]">
-                                Have an initiative or enterprise perk for batchmates?{' '}
-                                <Link href="/login" className="font-medium text-[#0B1220] underline decoration-[#9A7B3F]/50 underline-offset-4 hover:decoration-[#9A7B3F]">Submit via the member portal</Link>
-                            </p>
-                        </Reveal>
                     </div>
                 </section>
 
                 {/* ================================================================ */}
-                {/* BUSINESSES                                                       */}
+                {/* COMMUNITY — news + businesses                                    */}
                 {/* ================================================================ */}
-                <section id="businesses" className="scroll-mt-20 py-28 lg:py-36">
-                    <div className="mx-auto max-w-[1320px] space-y-16 px-5 sm:px-8 lg:px-10">
+                <section id="news" className="scroll-mt-20 bg-[#F4F2EE] py-24 lg:py-32">
+                    <span id="businesses" className="sr-only" />
+                    <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
                         <SectionHeading
                             index="07"
-                            eyebrow="Enterprise Registry"
-                            title={<>Built by <em className="font-normal text-[#9A7B3F]">batchmates.</em></>}
-                            intro="Verified enterprises and practices founded by members of the 1997 intake."
-                            action={<GhostLink href="/login">All businesses</GhostLink>}
+                            eyebrow="Community"
+                            title={<>News &amp; <em className="font-normal text-[#9A7B3F]">ventures.</em></>}
+                            action={<ExploreLink href="/login" internal={false}>All dispatches</ExploreLink>}
                         />
 
-                        <div className="divide-y divide-[#0B1220]/10 border-y border-[#0B1220]/10">
-                            {(businesses.length > 0
-                                ? businesses.map((b) => ({
-                                      key: String(b.id),
-                                      tag: b.industry?.name || 'Enterprise',
-                                      lead: b.name,
-                                      sector: b.description || 'Alumni-owned commercial venture',
-                                      city: `${b.owner?.user?.name ? b.owner.user.name + ' · ' : ''}${b.owner?.college?.short_name ? b.owner.college.short_name + ' · ' : ''}${b.city || 'Dhaka'}`,
-                                  }))
-                                : FALLBACK_BUSINESSES.map((b) => ({ key: b.lead, ...b }))
-                            ).map((b, i) => (
-                                <Reveal key={b.key} delay={i * 60}>
-                                    <Link href="/login" className="group grid grid-cols-12 items-center gap-4 py-7 transition-colors sm:py-8">
-                                        <span className="col-span-2 font-serif text-sm text-[#9A7B3F] italic sm:col-span-1">{String(i + 1).padStart(2, '0')}</span>
-                                        <div className="col-span-10 sm:col-span-5">
-                                            <h3 className="font-serif text-2xl text-[#0B1220] transition-transform duration-500 group-hover:translate-x-2 sm:text-3xl">{b.lead}</h3>
-                                        </div>
-                                        <p className="col-span-12 line-clamp-1 text-[14px] text-[#4A4F5C] sm:col-span-3">{b.sector}</p>
-                                        <div className="col-span-12 flex items-center justify-between gap-4 sm:col-span-3">
-                                            <span className="text-[12px] text-[#0B1220]/45">{b.city}</span>
-                                            <span className="flex items-center gap-3">
-                                                <span className="rounded-full border border-[#0B1220]/10 px-3 py-1 text-[11px] text-[#0B1220]/60">{b.tag}</span>
-                                                <ArrowUpRight className="h-4 w-4 text-[#0B1220]/30 transition-all duration-300 group-hover:text-[#9A7B3F]" />
-                                            </span>
-                                        </div>
-                                    </Link>
-                                </Reveal>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
-                {/* ================================================================ */}
-                {/* NEWS                                                             */}
-                {/* ================================================================ */}
-                <section id="news" className="scroll-mt-20 border-t border-[#0B1220]/[0.07] bg-[#F3EEE3] py-28 lg:py-36">
-                    <div className="mx-auto max-w-[1320px] space-y-16 px-5 sm:px-8 lg:px-10">
-                        <SectionHeading
-                            index="08"
-                            eyebrow="The Cadet Gazette"
-                            title={<>News &amp; <em className="font-normal text-[#9A7B3F]">dispatches.</em></>}
-                            action={<GhostLink href="/login">Gazette archive</GhostLink>}
-                        />
-
-                        <div className={`grid grid-cols-1 gap-6 ${articles.length === 1 ? 'md:max-w-2xl' : articles.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'}`}>
-                            {(articles.length > 0
+                        {(() => {
+                            const news = (articles.length > 0
                                 ? articles.map((a) => ({
                                       key: String(a.id),
                                       title: a.title,
                                       cat: a.category?.name || 'Gazette',
                                       date: a.published_at ? new Date(a.published_at).toLocaleDateString(undefined, { month: 'long', year: 'numeric' }) : 'Recent',
                                       excerpt: a.excerpt || a.body?.slice(0, 160) || '',
+                                      image: a.cover_image_path ? `/storage/${a.cover_image_path.replace(/^\/+/, '')}` : null,
                                   }))
-                                : FALLBACK_ARTICLES.map((a) => ({ key: a.title, ...a }))
-                            ).map((a, i) => (
-                                <Reveal key={a.key} delay={i * 80} className="h-full">
-                                    <Link
-                                        href="/login"
-                                        className={`group flex h-full flex-col justify-between rounded-3xl p-8 transition-all duration-500 hover:-translate-y-1 ${
-                                            i === 0 ? 'bg-[#0B1220] text-[#F7F3EA] hover:shadow-[0_30px_60px_-30px_rgba(11,18,32,0.6)]' : 'bg-[#FAF7F0] hover:shadow-[0_30px_60px_-30px_rgba(11,18,32,0.25)]'
-                                        }`}
-                                    >
-                                        <div>
-                                            <div className={`flex items-center justify-between text-[11px] tracking-[0.18em] uppercase ${i === 0 ? 'text-[#D9BF85]' : 'text-[#9A7B3F]'}`}>
-                                                <span>{a.cat}</span>
-                                                <span className={i === 0 ? 'text-[#F7F3EA]/40' : 'text-[#0B1220]/40'}>{a.date}</span>
-                                            </div>
-                                            <h3 className={`mt-10 font-serif text-[1.75rem] leading-[1.15] ${i === 0 ? 'text-[#F7F3EA]' : 'text-[#0B1220]'}`}>{a.title}</h3>
-                                            <p className={`mt-4 line-clamp-3 text-[14px] leading-relaxed ${i === 0 ? 'text-[#F7F3EA]/55' : 'text-[#4A4F5C]'}`}>{a.excerpt}</p>
-                                        </div>
-                                        <span className={`mt-10 inline-flex items-center gap-2 text-[13px] font-medium ${i === 0 ? 'text-[#E8D5A3]' : 'text-[#0B1220]'}`}>
-                                            Read dispatch <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                                        </span>
-                                    </Link>
-                                </Reveal>
-                            ))}
-                        </div>
-                    </div>
-                </section>
+                                : FALLBACK_ARTICLES.map((a) => ({ key: a.title, ...a, image: null as string | null }))
+                            ).map((a, i) => ({ ...a, image: a.image || NEWS_FALLBACK_PHOTOS[i % NEWS_FALLBACK_PHOTOS.length] }));
+                            const [lead, ...rest] = news;
+                            const ventures = businesses.length > 0
+                                ? businesses.map((b) => ({ key: String(b.id), tag: b.industry?.name || 'Enterprise', lead: b.name, sector: b.description || 'Alumni-owned venture', city: b.city || 'Dhaka' }))
+                                : FALLBACK_BUSINESSES.map((b) => ({ key: b.lead, ...b }));
 
-                {/* ================================================================ */}
-                {/* CONSTITUTION                                                     */}
-                {/* ================================================================ */}
-                <section id="constitution" className="scroll-mt-20 py-28 lg:py-36">
-                    <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
-                        <div className="grid grid-cols-1 gap-16 lg:grid-cols-12">
-                            <div className="lg:col-span-4">
-                                <Reveal className="lg:sticky lg:top-32">
-                                    <Eyebrow index="09">Governance</Eyebrow>
-                                    <h2 className="mt-6 font-serif text-5xl leading-[1.02] font-medium text-[#0B1220]">
-                                        The <em className="font-normal text-[#9A7B3F]">Charter.</em>
-                                    </h2>
-                                    <p className="mt-6 text-[15px] leading-relaxed text-[#4A4F5C]">The constitutional by-laws governing the central alumni body of the 1997 intake.</p>
-                                    <Link href="/login" className="mt-10 inline-flex items-center gap-3 rounded-full border border-[#0B1220]/15 px-6 py-3.5 text-[13px] font-medium text-[#0B1220] transition-all hover:border-[#0B1220] hover:bg-[#0B1220] hover:text-[#F7F3EA]">
-                                        <FileText className="h-4 w-4" /> Download full charter
-                                    </Link>
-                                </Reveal>
-                            </div>
-                            <div className="lg:col-span-8">
-                                <ol className="divide-y divide-[#0B1220]/10 border-y border-[#0B1220]/10">
-                                    {CHARTER_ARTICLES.map((c, i) => (
-                                        <Reveal key={c.numeral} delay={i * 70}>
-                                            <li className="grid grid-cols-12 gap-6 py-10">
-                                                <span className="col-span-3 font-serif text-5xl leading-none font-medium text-[#9A7B3F]/70 sm:col-span-2">{c.numeral}</span>
-                                                <div className="col-span-9 sm:col-span-10">
-                                                    <h3 className="font-serif text-2xl text-[#0B1220]">{c.title}</h3>
-                                                    <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-[#4A4F5C]">{c.text}</p>
-                                                </div>
-                                            </li>
+                            return (
+                                <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
+                                    <div className="lg:col-span-7">
+                                        {lead && (
+                                            <Reveal>
+                                                <Link href="/login" className="group block">
+                                                    <div className="aspect-[16/10] overflow-hidden bg-[#0B1220]">
+                                                        <img src={lead.image} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105" />
+                                                    </div>
+                                                    <div className="mt-6 flex items-center gap-3 text-[11px] tracking-[0.18em] uppercase">
+                                                        <span className="text-[#9A7B3F]">{lead.cat}</span>
+                                                        <span className="text-[#0B1220]/35">{lead.date}</span>
+                                                    </div>
+                                                    <h3 className="mt-3 font-serif text-3xl leading-[1.15] text-[#0B1220] sm:text-[2.25rem]">{lead.title}</h3>
+                                                    <p className="mt-3 line-clamp-2 max-w-2xl text-[15px] leading-relaxed text-[#4A4F5C]">{lead.excerpt}</p>
+                                                </Link>
+                                            </Reveal>
+                                        )}
+                                        {rest.length > 0 && (
+                                            <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2">
+                                                {rest.slice(0, 2).map((a, i) => (
+                                                    <Reveal key={a.key} delay={i * 80}>
+                                                        <Link href="/login" className="group flex gap-4">
+                                                            <div className="h-24 w-28 shrink-0 overflow-hidden bg-[#0B1220]">
+                                                                <img src={a.image} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                                            </div>
+                                                            <div className="min-w-0">
+                                                                <div className="text-[10.5px] tracking-[0.18em] text-[#9A7B3F] uppercase">{a.cat}</div>
+                                                                <h4 className="mt-1.5 line-clamp-3 font-serif text-lg leading-snug text-[#0B1220] group-hover:underline group-hover:decoration-[#9A7B3F]/50 group-hover:underline-offset-4">{a.title}</h4>
+                                                            </div>
+                                                        </Link>
+                                                    </Reveal>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="lg:col-span-5">
+                                        <Reveal>
+                                            <div className="flex items-end justify-between border-b border-[#0B1220]/15 pb-4">
+                                                <h3 className="font-serif text-2xl text-[#0B1220]">Built by batchmates</h3>
+                                                <ExploreLink href="/login" internal={false}>Directory</ExploreLink>
+                                            </div>
                                         </Reveal>
-                                    ))}
-                                </ol>
-                            </div>
-                        </div>
+                                        <ul className="divide-y divide-[#0B1220]/10">
+                                            {ventures.slice(0, 5).map((b, i) => (
+                                                <Reveal key={b.key} delay={i * 60}>
+                                                    <li>
+                                                        <Link href="/login" className="group flex items-center gap-4 py-5">
+                                                            <span className="w-6 font-serif text-sm text-[#9A7B3F] italic">{String(i + 1).padStart(2, '0')}</span>
+                                                            <div className="min-w-0 flex-1">
+                                                                <div className="truncate font-serif text-xl text-[#0B1220] transition-transform duration-500 group-hover:translate-x-1">{b.lead}</div>
+                                                                <div className="mt-0.5 truncate text-[13px] text-[#4A4F5C]">{b.sector} · {b.city}</div>
+                                                            </div>
+                                                            <ArrowUpRight className="h-4 w-4 shrink-0 text-[#0B1220]/30 transition-colors group-hover:text-[#9A7B3F]" />
+                                                        </Link>
+                                                    </li>
+                                                </Reveal>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                            );
+                        })()}
                     </div>
                 </section>
 
                 {/* ================================================================ */}
                 {/* REUNION                                                          */}
                 {/* ================================================================ */}
-                <section id="reunion" className="relative isolate scroll-mt-20 overflow-hidden bg-[#070B14] py-28 text-[#F7F3EA] lg:py-40">
+                <section id="reunion" className="relative isolate scroll-mt-20 overflow-hidden bg-[#070B14] py-24 text-[#F7F3EA] lg:py-32">
                     <div className="pointer-events-none absolute inset-0 -z-10">
-                        <img src="/images/campus/sunset-rcc.jpg" alt="" loading="lazy" className="h-full w-full object-cover" />
+                        <img src="/images/campus/reunion-parade-rcc.jpg" alt="" loading="lazy" className="h-full w-full object-cover object-[center_35%]" />
                         <div className="absolute inset-0 bg-gradient-to-r from-[#070B14]/95 via-[#070B14]/75 to-[#070B14]/40" />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#070B14]/70 to-transparent" />
                     </div>
@@ -1256,13 +1219,13 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 {/* ================================================================ */}
                 {/* CONTACT                                                          */}
                 {/* ================================================================ */}
-                <section id="contact" className="scroll-mt-20 py-28 lg:py-36">
+                <section id="contact" className="scroll-mt-20 bg-white py-20 lg:py-28">
                     <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
                         <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-20">
                             <div className="lg:col-span-5">
                                 <Reveal>
-                                    <Eyebrow index="10">Secretariat</Eyebrow>
-                                    <h2 className="mt-6 font-serif text-5xl leading-[1.02] font-medium text-[#0B1220] lg:text-[3.75rem]">
+                                    <Eyebrow index="08">Secretariat</Eyebrow>
+                                    <h2 className="mt-6 font-serif text-5xl leading-[1.02] font-medium text-[#0B1220] lg:text-[3.25rem]">
                                         Write to the <em className="font-normal text-[#9A7B3F]">Council.</em>
                                     </h2>
                                     <p className="mt-6 max-w-md text-[15px] leading-relaxed text-[#4A4F5C]">
@@ -1271,7 +1234,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                 </Reveal>
 
                                 <Reveal delay={100}>
-                                    <dl className="mt-12 space-y-7">
+                                    <dl className="mt-10 space-y-5">
                                         {[
                                             { icon: MapPin, k: 'Address', v: <>Central Alumni Secretariat<br />Gulshan-2 / Mohakhali DOHS, Dhaka</> },
                                             { icon: Mail, k: 'Email', v: <a href="mailto:secretariat@intake97.com" className="underline decoration-[#9A7B3F]/40 underline-offset-4 hover:decoration-[#9A7B3F]">secretariat@intake97.com</a> },
@@ -1303,20 +1266,20 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
 
                             <div className="lg:col-span-7">
                                 <Reveal delay={100}>
-                                    <div className="rounded-[2rem] bg-white p-8 shadow-[0_40px_80px_-40px_rgba(11,18,32,0.18)] ring-1 ring-[#0B1220]/[0.06] sm:p-12">
+                                    <div className="bg-[#F4F2EE] p-7 sm:p-10">
                                         {contactSubmitted ? (
-                                            <div className="flex min-h-[420px] flex-col items-center justify-center text-center">
+                                            <div className="flex min-h-[360px] flex-col items-center justify-center text-center">
                                                 <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[#C9A55C]/15"><Check className="h-7 w-7 text-[#9A7B3F]" /></span>
                                                 <h3 className="mt-6 font-serif text-3xl text-[#0B1220]">Message received.</h3>
                                                 <p className="mt-3 max-w-sm text-[15px] text-[#4A4F5C]">Your note has reached the Central Secretariat. Expect a response within 24 hours.</p>
                                             </div>
                                         ) : (
-                                            <form onSubmit={handleContactSubmit} className="space-y-8">
+                                            <form onSubmit={handleContactSubmit} className="space-y-6">
                                                 <div>
                                                     <h3 className="font-serif text-3xl text-[#0B1220]">Send a message</h3>
                                                     <p className="mt-2 text-[14px] text-[#4A4F5C]">Official communications receive priority from the General Secretary’s desk.</p>
                                                 </div>
-                                                <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+                                                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                                     <label className="block">
                                                         <span className={labelCls}>Full name</span>
                                                         <input required type="text" value={contactForm.name} onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })} placeholder="Your name" className={inputCls} />
@@ -1332,7 +1295,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                                 </label>
                                                 <label className="block">
                                                     <span className={labelCls}>Message</span>
-                                                    <textarea required rows={4} value={contactForm.message} onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })} placeholder="How can the Council help?" className={`${inputCls} resize-none`} />
+                                                    <textarea required rows={3} value={contactForm.message} onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })} placeholder="How can the Council help?" className={`${inputCls} resize-none`} />
                                                 </label>
                                                 <button type="submit" className="group inline-flex items-center gap-3 rounded-full bg-[#0B1220] px-8 py-4 text-sm font-medium text-[#F7F3EA] transition-all hover:bg-[#1A2438]">
                                                     Send message <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -1354,9 +1317,9 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                         <div className="grid grid-cols-1 gap-12 border-b border-[#F7F3EA]/[0.08] pb-16 md:grid-cols-12">
                             <div className="md:col-span-5">
                                 <div className="flex items-center gap-3">
-                                    <span className="flex h-12 w-12 items-center justify-center rounded-full border border-[#C9A55C]/50"><span className="font-serif text-xl text-[#E8D5A3]">97</span></span>
+                                    <BrandMark className="h-16 w-auto shrink-0" />
                                     <div>
-                                        <div className="font-serif text-2xl">ccIntake<span className="text-[#C9A55C]">97</span></div>
+                                        <div className="font-serif text-2xl">ccIntake<span className="text-[#C9A55C] [font-variant-numeric:lining-nums]">97</span></div>
                                         <div className="text-[10px] tracking-[0.3em] text-[#F7F3EA]/40 uppercase">Cadet College Alumni Association</div>
                                     </div>
                                 </div>
@@ -1368,8 +1331,8 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                 </Link>
                             </div>
                             {[
-                                { h: 'Association', links: [['#about', 'About'], ['#directory', 'Directory'], ['#committee', 'Committee'], ['#welfare', 'Welfare & Trust']] },
-                                { h: 'Activities', links: [['#businesses', 'Businesses'], ['#news', 'News'], ['#constitution', 'Charter'], ['#reunion', 'Reunion 2027']] },
+                                { h: 'Association', links: [['#about', 'About'], ['#colleges', 'Colleges'], ['#directory', 'Directory'], ['#committee', 'Committee']] },
+                                { h: 'Activities', links: [['#welfare', 'Welfare & Trust'], ['#news', 'News & ventures'], ['#constitution', 'Charter'], ['#reunion', 'Reunion 2027']] },
                             ].map((col) => (
                                 <div key={col.h} className="md:col-span-2">
                                     <h4 className="text-[11px] tracking-[0.24em] text-[#D9BF85]/80 uppercase">{col.h}</h4>
