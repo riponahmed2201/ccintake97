@@ -69,7 +69,15 @@ export default function MemberDashboard({
                                 Welcome back, {member?.user?.name || 'Batchmate'}!
                             </h1>
                             <p className="text-xs sm:text-sm text-slate-300 max-w-xl">
-                                Connected with <strong>{member?.college?.name}</strong> · Member ID: <span className="font-mono text-indigo-300">{member?.member_code || 'Pending'}</span>
+                                {member?.college?.name ? (
+                                    <>Connected with <strong>{member.college.name}</strong> · </>
+                                ) : (
+                                    <>
+                                        <Link href="/member/profile" className="underline underline-offset-2 hover:text-white">Complete your profile</Link>
+                                        {' · '}
+                                    </>
+                                )}
+                                Member ID: <span className="font-mono text-indigo-300">{member?.member_code || 'Pending'}</span>
                             </p>
                         </div>
 

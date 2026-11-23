@@ -30,9 +30,15 @@ export const CAMPUS_PHOTOS: Record<string, string> = {
 // Hero slideshow — only photos sharp enough for a full-screen background.
 // `dim` adds extra shade so the headline stays legible on bright daytime shots.
 export const HERO_SLIDES = [
-    { src: '/images/campus/hero-rcc-sunset.jpg', college: 'RCC', caption: 'Rajshahi Cadet College, at dusk', position: 'center 60%', dim: 0 },
     { src: '/images/campus/hero-fcc.jpg', college: 'FCC', caption: 'Faujdarhat Cadet College', position: 'center 45%', dim: 0.35 },
+    { src: '/images/campus/hero-jcc.jpg', college: 'JCC', caption: 'Jhenaidah Cadet College', position: 'center 50%', dim: 0.45 },
     { src: '/images/campus/hero-mcc.jpg', college: 'MCC', caption: 'Mirzapur Cadet College', position: 'center 40%', dim: 0.4 },
+    { src: '/images/campus/hero-rcc-sunset.jpg', college: 'RCC', caption: 'Rajshahi Cadet College, at dusk', position: 'center 60%', dim: 0 },
+    { src: '/images/campus/hero-scc.jpg', college: 'SCC', caption: 'Sylhet Cadet College', position: 'center 50%', dim: 0.5 },
+    { src: '/images/campus/hero-ccr.jpg', college: 'CCR', caption: 'Rangpur Cadet College', position: 'center 50%', dim: 0.35 },
+    { src: '/images/campus/hero-bcc.jpg', college: 'BCC', caption: 'Barishal Cadet College', position: 'center 45%', dim: 0.45 },
+    { src: '/images/campus/hero-pcc.jpg', college: 'PCC', caption: 'Pabna Cadet College', position: 'center 50%', dim: 0.55 },
+    { src: '/images/campus/hero-mgcc.jpg', college: 'MGCC', caption: "Mymensingh Girls' Cadet College", position: 'center 50%', dim: 0.35 },
     { src: '/images/campus/hero-ccc.jpg', college: 'CCC', caption: 'Cumilla Cadet College', position: 'center 55%', dim: 0.4 },
 ];
 export const HERO_INTERVAL = 6500;

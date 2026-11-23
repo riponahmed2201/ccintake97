@@ -34,88 +34,62 @@ class Intake97AlumniSystemTest extends TestCase
         $response->assertOk();
     }
 
-    public function test_alumni_registration_creates_pending_member_and_application_with_1997_scope(): void
+    public function test_alumni_registration_creates_account_without_college_until_profile(): void
     {
-        $fcc = College::where('short_name', 'FCC')->first();
-
         $response = $this->post('/register-alumni', [
             'name' => 'Tariq Rahman',
             'email' => 'tariq.97@example.com',
-            'phone' => '+8801711000097',
             'password' => 'SecurePass97!',
             'password_confirmation' => 'SecurePass97!',
-            'college_id' => $fcc->id,
-            'college_roll_no' => '1097',
-            'passing_year' => 2003,
-            'city' => 'Dhaka',
-            'country_code' => 'BD',
-            'designation' => 'Lead Architect',
-            'organization' => 'Apex Systems',
-            'reference_name' => 'Brigadier Gen M. Alam',
-            'reference_phone' => '+8801811000000',
         ]);
 
         $response->assertRedirect('/member/dashboard');
 
-        // Check user creation
         $this->assertDatabaseHas('users', [
             'email' => 'tariq.97@example.com',
-            'phone' => '+8801711000097',
             'account_status' => 'active',
         ]);
 
         $user = User::where('email', 'tariq.97@example.com')->first();
-
-        // Check member record
-        $this->assertDatabaseHas('members', [
-            'user_id' => $user->id,
-            'college_id' => $fcc->id,
-            'college_roll_no' => '1097',
-            'intake_year' => 1997,
-            'membership_status' => 'pending',
-            'verification_status' => 'unverified',
-        ]);
-
         $member = Member::where('user_id', $user->id)->first();
 
-        // Check application record with APP97- prefix
-        $this->assertDatabaseHas('membership_applications', [
-            'member_id' => $member->id,
-            'declared_college_id' => $fcc->id,
-            'declared_roll_no' => '1097',
-            'status' => 'submitted',
-        ]);
-
-        $application = MembershipApplication::where('member_id', $member->id)->first();
-        $this->assertStringStartsWith('APP97-', $application->application_no);
+        $this->assertNull($member->college_id);
+        $this->assertNull($member->college_roll_no);
+        $this->assertSame(1997, $member->intake_year);
+        $this->assertDatabaseMissing('membership_applications', ['member_id' => $member->id]);
     }
 
-    public function test_alumni_registration_succeeds_with_only_essential_fields(): void
+    public function test_member_can_submit_cadet_details_from_profile_after_registration(): void
     {
-        $mcc = College::where('short_name', 'MCC')->first();
+        $fcc = College::where('short_name', 'FCC')->first();
 
         $response = $this->post('/register-alumni', [
             'name' => 'Navid Huq',
             'email' => 'navid.97@example.com',
             'password' => 'SecurePass97!',
             'password_confirmation' => 'SecurePass97!',
-            'college_id' => $mcc->id,
-            'college_roll_no' => '721',
         ]);
 
         $response->assertRedirect('/member/dashboard');
 
-        $member = User::where('email', 'navid.97@example.com')->first()->member;
-        $this->assertSame('pending', $member->membership_status);
-        $this->assertDatabaseHas('member_profiles', [
-            'member_id' => $member->id,
-            'country_code' => 'BD',
+        $user = User::where('email', 'navid.97@example.com')->first();
+
+        $cadet = $this->actingAs($user)->put('/member/profile/cadet', [
+            'college_id' => $fcc->id,
+            'college_roll_no' => '721',
+            'phone' => '+8801711000097',
         ]);
-        $this->assertDatabaseHas('membership_applications', [
-            'member_id' => $member->id,
-            'declared_roll_no' => '721',
-            'status' => 'submitted',
-        ]);
+
+        $cadet->assertSessionHas('success');
+
+        $member = $user->fresh()->member;
+        $this->assertSame($fcc->id, $member->college_id);
+        $this->assertSame('721', $member->college_roll_no);
+
+        $application = MembershipApplication::where('member_id', $member->id)->first();
+        $this->assertNotNull($application);
+        $this->assertStringStartsWith('APP97-', $application->application_no);
+        $this->assertSame('submitted', $application->status);
     }
 
     public function test_admin_can_approve_application_and_assign_sequenced_member_code(): void

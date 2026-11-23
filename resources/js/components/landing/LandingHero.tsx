@@ -4,6 +4,67 @@ import { ExploreLink, Reveal } from '@/components/landing/primitives';
 import { HERO_INTERVAL, HERO_SLIDES } from '@/components/landing/constants';
 import type { MergedCollege, WelcomeMetrics } from '@/components/landing/types';
 
+const HERO_DOT_RING_R = 6;
+const HERO_DOT_RING_C = 2 * Math.PI * HERO_DOT_RING_R;
+
+function HeroSlideDot({
+    active,
+    passed,
+    paused,
+    slideKey,
+    label,
+    onSelect,
+}: {
+    active: boolean;
+    passed: boolean;
+    paused: boolean;
+    slideKey: number;
+    label: string;
+    onSelect: () => void;
+}) {
+    return (
+        <button
+            type="button"
+            role="tab"
+            aria-selected={active}
+            aria-label={label}
+            onClick={onSelect}
+            className="group relative flex h-5 w-5 shrink-0 items-center justify-center rounded-full"
+        >
+            {active && (
+                <svg className="absolute inset-0 -rotate-90" viewBox="0 0 20 20" aria-hidden>
+                    <circle cx="10" cy="10" r={HERO_DOT_RING_R} fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="1.75" />
+                    <circle
+                        key={`${slideKey}-${paused ? 'p' : 'r'}`}
+                        cx="10"
+                        cy="10"
+                        r={HERO_DOT_RING_R}
+                        fill="none"
+                        stroke="#E8D5A3"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeDasharray={HERO_DOT_RING_C}
+                        className="motion-reduce:!stroke-dashoffset-0 motion-reduce:![animation:none]"
+                        style={{
+                            strokeDashoffset: paused ? 0 : HERO_DOT_RING_C,
+                            animation: paused ? 'none' : `heroProgressRing ${HERO_INTERVAL}ms linear forwards`,
+                        }}
+                    />
+                </svg>
+            )}
+            <span
+                className={`rounded-full transition-all duration-300 ${
+                    active
+                        ? 'h-1.5 w-1.5 bg-[#E8D5A3]'
+                        : passed
+                          ? 'h-1.5 w-1.5 bg-white/55 group-hover:bg-white/75'
+                          : 'h-1.5 w-1.5 bg-white/25 group-hover:bg-white/50'
+                }`}
+            />
+        </button>
+    );
+}
+
 export function LandingHero({
     metrics,
     mergedColleges,
@@ -97,31 +158,17 @@ export function LandingHero({
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex gap-1.5" role="tablist" aria-label="Hero slides">
+                            <div className="flex flex-nowrap items-center justify-start gap-0.5 sm:justify-end" role="tablist" aria-label="Hero slides">
                                 {HERO_SLIDES.map((sl, i) => (
-                                    <button
+                                    <HeroSlideDot
                                         key={sl.src}
-                                        type="button"
-                                        role="tab"
-                                        aria-selected={i === heroSlide}
-                                        aria-label={sl.caption}
-                                        onClick={() => setHeroSlide(i)}
-                                        className="group relative h-6 w-12 py-2.5"
-                                    >
-                                        <span className="block h-[3px] w-full overflow-hidden rounded-full bg-white/25 transition-colors group-hover:bg-white/45">
-                                            {i === heroSlide && (
-                                                <span
-                                                    key={`p-${heroSlide}-${heroPaused}`}
-                                                    className="block h-full w-full origin-left rounded-full bg-[#E8D5A3]"
-                                                    style={{
-                                                        animation: heroPaused ? 'none' : `heroProgress ${HERO_INTERVAL}ms linear forwards`,
-                                                        transform: heroPaused ? 'scaleX(1)' : undefined,
-                                                    }}
-                                                />
-                                            )}
-                                            {i < heroSlide && <span className="block h-full w-full rounded-full bg-white/60" />}
-                                        </span>
-                                    </button>
+                                        active={i === heroSlide}
+                                        passed={i < heroSlide}
+                                        paused={heroPaused}
+                                        slideKey={heroSlide}
+                                        label={sl.caption}
+                                        onSelect={() => setHeroSlide(i)}
+                                    />
                                 ))}
                             </div>
                         </div>

@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
+use App\Models\College;
 use App\Models\Industry;
 use App\Models\MemberPrivacySetting;
 use App\Models\MemberProfile;
+use App\Models\MembershipApplication;
+use App\Services\SequenceService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -18,10 +22,13 @@ class ProfileController extends Controller
         $user = $request->user();
         $member = $user->member->load(['college', 'profile.industry', 'privacySettings']);
         $industries = Industry::orderBy('name')->get(['id', 'name']);
+        $colleges = College::where('is_participating', true)->orderBy('display_order')->get(['id', 'name', 'short_name']);
 
         return Inertia::render('member/profile/edit', [
             'member' => $member,
             'industries' => $industries,
+            'colleges' => $colleges,
+            'cadetEditable' => ! $member->college_id && ! $member->applications()->where('status', 'submitted')->exists(),
         ]);
     }
 
@@ -52,7 +59,10 @@ class ProfileController extends Controller
         ]);
 
         // Calculate profile completion score
-        $score = 30; // base from registration
+        $score = 10;
+        if ($member->college_id) {
+            $score += 20;
+        }
         if (! empty($validatedProfile['designation'])) $score += 15;
         if (! empty($validatedProfile['organization'])) $score += 15;
         if (! empty($validatedProfile['professional_bio'])) $score += 15;
@@ -86,5 +96,55 @@ class ProfileController extends Controller
         }
 
         return back()->with('success', 'Privacy preferences saved.');
+    }
+
+    public function updateCadet(Request $request): RedirectResponse
+    {
+        $user = $request->user();
+        $member = $user->member;
+
+        if ($member->college_id || $member->applications()->where('status', 'submitted')->exists()) {
+            return back()->withErrors(['college_id' => 'Cadet college credentials are already on file. Contact administration to request changes.']);
+        }
+
+        $validated = $request->validate([
+            'college_id' => 'required|exists:colleges,id',
+            'college_roll_no' => 'required|string|max:50',
+            'reference_name' => 'nullable|string|max:150',
+            'reference_phone' => 'nullable|string|max:50',
+            'phone' => 'nullable|string|max:30',
+        ]);
+
+        DB::transaction(function () use ($user, $member, $validated) {
+            if (! empty($validated['phone'])) {
+                $user->update(['phone' => $validated['phone']]);
+            }
+
+            $member->update([
+                'college_id' => $validated['college_id'],
+                'college_roll_no' => $validated['college_roll_no'],
+            ]);
+
+            $appNo = SequenceService::next('application_no');
+            MembershipApplication::create([
+                'application_no' => $appNo,
+                'member_id' => $member->id,
+                'declared_college_id' => $validated['college_id'],
+                'declared_roll_no' => $validated['college_roll_no'],
+                'reference_name' => $validated['reference_name'] ?? null,
+                'reference_phone' => $validated['reference_phone'] ?? null,
+                'status' => 'submitted',
+                'submitted_at' => now(),
+            ]);
+
+            $profile = $member->profile;
+            if ($profile) {
+                $profile->update([
+                    'profile_completion' => min(100, ($profile->profile_completion ?? 10) + 20),
+                ]);
+            }
+        });
+
+        return back()->with('success', 'Your cadet college details have been saved and your membership application is submitted for verification.');
     }
 }

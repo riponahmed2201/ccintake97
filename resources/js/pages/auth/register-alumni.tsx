@@ -2,56 +2,34 @@ import React, { useMemo, useState } from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
 import BrandMark from '@/components/brand-mark';
 import { ArrowLeft, ArrowRight, Eye, EyeOff, Lock } from 'lucide-react';
-import type { College } from '@/types';
-
-interface RegisterAlumniProps {
-    colleges: College[];
-}
 
 const STEPS = [
-    { title: 'Apply', text: 'Your name, college and roll number.' },
+    { title: 'Sign up', text: 'Name, email and a secure password.' },
+    { title: 'Your profile', text: 'College, roll number, career and contact details.' },
     { title: 'Verification', text: 'Confirmed by your college batch representative.' },
-    { title: 'Welcome', text: 'Full access to the directory and events.' },
 ];
-
-/* ---------------------------------------------------------------- helpers */
 
 const inputBase =
     'h-12 w-full rounded-xl border bg-[#FCFBF8] px-3.5 text-[15px] text-[#0B1220] transition-all duration-200 placeholder:text-[#0B1220]/30 focus:bg-white focus:outline-none focus:ring-4';
 const inputOk = 'border-[#0B1220]/10 hover:border-[#0B1220]/20 focus:border-[#9A7B3F] focus:ring-[#C9A55C]/15';
 const inputErr = 'border-red-300 bg-red-50/40 focus:border-red-500 focus:ring-red-500/10';
 
-function Field({ label, optional, error, children, className = '' }: {
+function Field({ label, error, children, className = '' }: {
     label: string;
-    optional?: boolean;
     error?: string;
     children: React.ReactNode;
     className?: string;
 }) {
     return (
         <label className={`block ${className}`}>
-            <span className="mb-1.5 block text-[13px] font-medium text-[#0B1220]/80">
-                {label}
-                {optional && <span className="ml-1.5 font-normal text-[#0B1220]/35">Optional</span>}
-            </span>
+            <span className="mb-1.5 block text-[13px] font-medium text-[#0B1220]/80">{label}</span>
             {children}
             {error && <span className="mt-1.5 block text-[12.5px] text-red-600">{error}</span>}
         </label>
     );
 }
 
-function Divider({ children }: { children: React.ReactNode }) {
-    return (
-        <div className="flex items-center gap-4 pt-2">
-            <span className="text-[11px] font-medium tracking-[0.22em] text-[#9A7B3F] uppercase">{children}</span>
-            <span className="h-px flex-1 bg-[#0B1220]/[0.07]" />
-        </div>
-    );
-}
-
-/* ------------------------------------------------------------------- page */
-
-export default function RegisterAlumni({ colleges = [] }: RegisterAlumniProps) {
+export default function RegisterAlumni() {
     const [showPassword, setShowPassword] = useState(false);
 
     const { data, setData, post, processing, errors } = useForm({
@@ -59,9 +37,6 @@ export default function RegisterAlumni({ colleges = [] }: RegisterAlumniProps) {
         email: '',
         password: '',
         password_confirmation: '',
-        phone: '',
-        college_id: '',
-        college_roll_no: '',
     });
 
     const err = errors as Partial<Record<keyof typeof data, string>>;
@@ -97,7 +72,6 @@ export default function RegisterAlumni({ colleges = [] }: RegisterAlumniProps) {
             <Head title="Apply for Membership — ccIntake97" />
 
             <div className="min-h-screen bg-[#F5F1E8] font-sans text-[#0B1220] antialiased selection:bg-[#C9A55C] selection:text-[#0B1220] lg:grid lg:grid-cols-[5fr_7fr]">
-                {/* ================= LEFT — brand panel ================= */}
                 <aside className="relative isolate overflow-hidden bg-[#070B14] text-[#F7F3EA] lg:sticky lg:top-0 lg:h-screen">
                     <div className="pointer-events-none absolute inset-0 -z-10">
                         <div className="absolute -top-48 -right-48 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(201,165,92,0.18),transparent_62%)]" />
@@ -148,7 +122,6 @@ export default function RegisterAlumni({ colleges = [] }: RegisterAlumniProps) {
                     </div>
                 </aside>
 
-                {/* ================= RIGHT — form ================= */}
                 <main className="flex items-center justify-center px-3 py-10 sm:px-6 lg:min-h-screen lg:py-16">
                     <div className="w-full max-w-[500px]">
                         <div className="mb-8 text-center lg:text-left">
@@ -165,57 +138,49 @@ export default function RegisterAlumni({ colleges = [] }: RegisterAlumniProps) {
                             onSubmit={handleSubmit}
                             className="space-y-4 rounded-[1.75rem] bg-white px-4 py-6 shadow-[0_40px_80px_-48px_rgba(11,18,32,0.35)] ring-1 ring-[#0B1220]/[0.05] sm:px-5 sm:py-7"
                         >
-                            <Divider>Your details</Divider>
-
                             <Field label="Full name" error={err.name}>
                                 <input data-error={!!err.name} required autoComplete="name" placeholder="Enter your full name" value={data.name} onChange={(e) => setData('name', e.target.value)} className={cls('name')} />
                             </Field>
 
-                            <div className="grid grid-cols-1 gap-x-3 gap-y-4 sm:grid-cols-2">
-                                <Field label="Email" error={err.email}>
-                                    <input data-error={!!err.email} required type="email" autoComplete="email" placeholder="Enter your email" value={data.email} onChange={(e) => setData('email', e.target.value)} className={cls('email')} />
-                                </Field>
-                                <Field label="Mobile" optional error={err.phone}>
-                                    <input data-error={!!err.phone} type="tel" autoComplete="tel" placeholder="Enter mobile number" value={data.phone} onChange={(e) => setData('phone', e.target.value)} className={cls('phone')} />
-                                </Field>
-                            </div>
+                            <Field label="Email" error={err.email}>
+                                <input data-error={!!err.email} required type="email" autoComplete="email" placeholder="Enter your email" value={data.email} onChange={(e) => setData('email', e.target.value)} className={cls('email')} />
+                            </Field>
 
-                            <div className="grid grid-cols-1 gap-x-3 gap-y-4 sm:grid-cols-2">
-                                <Field label="Password" error={err.password}>
-                                    <div className="relative">
-                                        <input
-                                            data-error={!!err.password}
-                                            required
-                                            minLength={8}
-                                            type={showPassword ? 'text' : 'password'}
-                                            autoComplete="new-password"
-                                            placeholder="Enter password"
-                                            value={data.password}
-                                            onChange={(e) => setData('password', e.target.value)}
-                                            className={`${cls('password')} pr-11`}
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowPassword(!showPassword)}
-                                            aria-label={showPassword ? 'Hide password' : 'Show password'}
-                                            className="absolute top-1/2 right-2.5 -translate-y-1/2 rounded-lg p-1.5 text-[#0B1220]/35 transition-colors hover:text-[#0B1220]"
-                                        >
-                                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                                        </button>
-                                    </div>
-                                </Field>
-                                <Field label="Confirm password" error={err.password_confirmation || (passwordsMismatch ? 'Passwords don’t match.' : undefined)}>
+                            <Field label="Password" error={err.password}>
+                                <div className="relative">
                                     <input
+                                        data-error={!!err.password}
                                         required
+                                        minLength={8}
                                         type={showPassword ? 'text' : 'password'}
                                         autoComplete="new-password"
-                                        placeholder="Confirm your password"
-                                        value={data.password_confirmation}
-                                        onChange={(e) => setData('password_confirmation', e.target.value)}
-                                        className={`${inputBase} ${passwordsMismatch ? inputErr : inputOk}`}
+                                        placeholder="At least 8 characters"
+                                        value={data.password}
+                                        onChange={(e) => setData('password', e.target.value)}
+                                        className={`${cls('password')} pr-11`}
                                     />
-                                </Field>
-                            </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                        className="absolute top-1/2 right-2.5 -translate-y-1/2 rounded-lg p-1.5 text-[#0B1220]/35 transition-colors hover:text-[#0B1220]"
+                                    >
+                                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                    </button>
+                                </div>
+                            </Field>
+
+                            <Field label="Confirm password" error={err.password_confirmation || (passwordsMismatch ? 'Passwords don’t match.' : undefined)}>
+                                <input
+                                    required
+                                    type={showPassword ? 'text' : 'password'}
+                                    autoComplete="new-password"
+                                    placeholder="Confirm your password"
+                                    value={data.password_confirmation}
+                                    onChange={(e) => setData('password_confirmation', e.target.value)}
+                                    className={`${inputBase} ${passwordsMismatch || err.password_confirmation ? inputErr : inputOk}`}
+                                />
+                            </Field>
 
                             {data.password && (
                                 <div className="-mt-1 flex items-center gap-3">
@@ -233,35 +198,6 @@ export default function RegisterAlumni({ colleges = [] }: RegisterAlumniProps) {
                                 </div>
                             )}
 
-                            <div className="pt-2">
-                                <Divider>Cadet college</Divider>
-                            </div>
-
-                            <div className="grid grid-cols-1 gap-x-3 gap-y-4 sm:grid-cols-[1fr_130px]">
-                                <Field label="College" error={err.college_id}>
-                                    <div className="relative">
-                                        <select
-                                            data-error={!!err.college_id}
-                                            required
-                                            value={data.college_id}
-                                            onChange={(e) => setData('college_id', e.target.value)}
-                                            className={`${cls('college_id')} appearance-none pr-10 ${data.college_id === '' ? 'text-[#0B1220]/30' : ''}`}
-                                        >
-                                            <option value="" disabled>Select your cadet college</option>
-                                            {colleges.map((c) => (
-                                                <option key={c.id} value={c.id}>{c.name}</option>
-                                            ))}
-                                        </select>
-                                        <svg className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-[#0B1220]/35" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                                            <path d="M6 8l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
-                                    </div>
-                                </Field>
-                                <Field label="Roll no." error={err.college_roll_no}>
-                                    <input data-error={!!err.college_roll_no} required placeholder="Enter roll no." value={data.college_roll_no} onChange={(e) => setData('college_roll_no', e.target.value)} className={cls('college_roll_no')} />
-                                </Field>
-                            </div>
-
                             <button
                                 type="submit"
                                 disabled={processing}
@@ -270,18 +206,18 @@ export default function RegisterAlumni({ colleges = [] }: RegisterAlumniProps) {
                                 {processing ? (
                                     <>
                                         <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#E8D5A3]/30 border-t-[#E8D5A3]" />
-                                        Submitting…
+                                        Creating account…
                                     </>
                                 ) : (
                                     <>
-                                        Submit application
+                                        Create account
                                         <ArrowRight className="h-4 w-4 text-[#E8D5A3] transition-transform duration-300 group-hover:translate-x-1" />
                                     </>
                                 )}
                             </button>
 
                             <p className="text-center text-[12.5px] leading-relaxed text-[#0B1220]/45">
-                                Add your profession, city and other details from your profile after signing in.
+                                After sign-in, open <strong className="font-medium text-[#0B1220]/60">My Profile</strong> to add college, roll number, phone, and career details.
                             </p>
                         </form>
 

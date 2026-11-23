@@ -7,14 +7,16 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { UserCircle, GraduationCap, Briefcase, Lock, Save, ShieldCheck } from 'lucide-react';
-import type { Member, Industry } from '@/types';
+import type { Member, Industry, College } from '@/types';
 
 interface ProfileEditProps {
     member: Member;
     industries: Industry[];
+    colleges?: College[];
+    cadetEditable?: boolean;
 }
 
-export default function ProfileEdit({ member, industries }: ProfileEditProps) {
+export default function ProfileEdit({ member, industries, colleges = [], cadetEditable = false }: ProfileEditProps) {
     // User fields
     const [name, setName] = useState(member.user?.name || '');
     const [phone, setPhone] = useState(member.user?.phone || '');
@@ -74,6 +76,22 @@ export default function ProfileEdit({ member, industries }: ProfileEditProps) {
         });
     };
 
+    const [collegeId, setCollegeId] = useState(member.college_id ? String(member.college_id) : '');
+    const [collegeRollNo, setCollegeRollNo] = useState(member.college_roll_no || '');
+    const [referenceName, setReferenceName] = useState('');
+    const [referencePhone, setReferencePhone] = useState('');
+
+    const handleCadetSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        router.put('/member/profile/cadet', {
+            college_id: collegeId ? parseInt(collegeId, 10) : null,
+            college_roll_no: collegeRollNo,
+            reference_name: referenceName || null,
+            reference_phone: referencePhone || null,
+            phone: phone || null,
+        });
+    };
+
     return (
         <MemberLayout
             title="My Alumni Profile"
@@ -91,7 +109,7 @@ export default function ProfileEdit({ member, industries }: ProfileEditProps) {
                     </p>
                 </div>
 
-                <Tabs defaultValue="personal" className="space-y-4">
+                <Tabs defaultValue={cadetEditable ? 'cadet' : 'personal'} className="space-y-4">
                     <TabsList className="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
                         <TabsTrigger value="personal" className="text-xs">Personal Info</TabsTrigger>
                         <TabsTrigger value="cadet" className="text-xs">Cadet College Affiliation</TabsTrigger>
@@ -152,41 +170,97 @@ export default function ProfileEdit({ member, industries }: ProfileEditProps) {
 
                     {/* Cadet College Affiliation Tab */}
                     <TabsContent value="cadet">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                                    <GraduationCap className="size-4 text-emerald-600" />
-                                    Cadet College 1997 Intake Credentials
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-4 text-xs">
-                                <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border space-y-3">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-slate-500 font-medium">Cadet College Affiliation:</span>
-                                        <span className="font-bold text-slate-900 dark:text-white text-sm">
-                                            {member.college?.name}
-                                        </span>
+                        {cadetEditable ? (
+                            <form onSubmit={handleCadetSubmit} className="space-y-4">
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                                            <GraduationCap className="size-4 text-emerald-600" />
+                                            Cadet College &amp; Roll Number
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="space-y-4 text-xs">
+                                        <p className="text-slate-500">
+                                            Required to submit your membership application for INTAKE 97 verification.
+                                        </p>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="font-semibold block mb-1">Cadet college *</label>
+                                                <select
+                                                    required
+                                                    value={collegeId}
+                                                    onChange={(e) => setCollegeId(e.target.value)}
+                                                    className="w-full h-9 rounded-md border border-slate-200 bg-white px-2 text-xs dark:border-slate-700 dark:bg-slate-900"
+                                                >
+                                                    <option value="">Select college</option>
+                                                    {colleges.map((c) => (
+                                                        <option key={c.id} value={c.id}>{c.name}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="font-semibold block mb-1">College roll number *</label>
+                                                <Input required value={collegeRollNo} onChange={(e) => setCollegeRollNo(e.target.value)} placeholder="e.g. 721" />
+                                            </div>
+                                            <div>
+                                                <label className="font-semibold block mb-1">Mobile (optional)</label>
+                                                <Input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+880..." />
+                                            </div>
+                                            <div>
+                                                <label className="font-semibold block mb-1">Batchmate reference (optional)</label>
+                                                <Input value={referenceName} onChange={(e) => setReferenceName(e.target.value)} placeholder="Name" />
+                                            </div>
+                                            <div className="sm:col-span-2">
+                                                <label className="font-semibold block mb-1">Reference phone (optional)</label>
+                                                <Input type="tel" value={referencePhone} onChange={(e) => setReferencePhone(e.target.value)} />
+                                            </div>
+                                        </div>
+                                        <p className="text-[11px] text-slate-400">Intake year is fixed at <strong>1997</strong> for this portal.</p>
+                                        <div className="flex justify-end pt-2">
+                                            <Button type="submit" size="sm" className="bg-emerald-600 hover:bg-emerald-700 text-xs font-semibold">
+                                                <Save className="size-3.5 mr-1.5" /> Save &amp; submit application
+                                            </Button>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </form>
+                        ) : (
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                                        <GraduationCap className="size-4 text-emerald-600" />
+                                        Cadet College 1997 Intake Credentials
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4 text-xs">
+                                    <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/40 border space-y-3">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-slate-500 font-medium">Cadet College Affiliation:</span>
+                                            <span className="font-bold text-slate-900 dark:text-white text-sm">
+                                                {member.college?.name || '—'}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-slate-500 font-medium">Intake Year:</span>
+                                            <span className="font-bold text-slate-900 dark:text-white">1997 (Fixed)</span>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-slate-500 font-medium">Cadet College Roll #:</span>
+                                            <span className="font-mono font-bold text-slate-900 dark:text-white">{member.college_roll_no || 'N/A'}</span>
+                                        </div>
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-slate-500 font-medium">Verification Status:</span>
+                                            <Badge variant="outline" className="capitalize text-[10px] font-bold text-emerald-600">
+                                                {member.verification_status}
+                                            </Badge>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-slate-500 font-medium">Intake Year:</span>
-                                        <span className="font-bold text-slate-900 dark:text-white">1997 (Fixed)</span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-slate-500 font-medium">Cadet College Roll #:</span>
-                                        <span className="font-mono font-bold text-slate-900 dark:text-white">{member.college_roll_no || 'N/A'}</span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-slate-500 font-medium">Verification Status:</span>
-                                        <Badge variant="outline" className="capitalize text-[10px] font-bold text-emerald-600">
-                                            {member.verification_status}
-                                        </Badge>
-                                    </div>
-                                </div>
-                                <p className="text-[11px] text-slate-400">
-                                    Cadet College and intake year credentials cannot be edited directly after registration for community authenticity reasons. Contact administration for corrections.
-                                </p>
-                            </CardContent>
-                        </Card>
+                                    <p className="text-[11px] text-slate-400">
+                                        Cadet college and roll number cannot be changed here after your application is submitted. Contact administration for corrections.
+                                    </p>
+                                </CardContent>
+                            </Card>
+                        )}
                     </TabsContent>
 
                     {/* Professional Career Tab */}

@@ -179,3 +179,12 @@
         transform: scaleX(1);
     }
 }
+
+@keyframes heroProgressRing {
+    from {
+        stroke-dashoffset: 37.699;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
