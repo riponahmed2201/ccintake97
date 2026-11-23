@@ -93,7 +93,7 @@ export default function RegisterAlumni({ colleges = [] }: RegisterAlumniProps) {
 
     return (
         <>
-            <Head title="Apply for Membership — INTAKE97" />
+            <Head title="Apply for Membership — ccIntake97" />
 
             <div className="min-h-screen bg-[#F5F1E8] font-sans text-[#0B1220] antialiased selection:bg-[#C9A55C] selection:text-[#0B1220] lg:grid lg:grid-cols-[5fr_7fr]">
                 {/* ================= LEFT — brand panel ================= */}
@@ -110,7 +110,7 @@ export default function RegisterAlumni({ colleges = [] }: RegisterAlumniProps) {
                                     <span className="font-serif text-base leading-none text-[#E8D5A3]">97</span>
                                 </span>
                                 <span className="font-serif text-xl tracking-[0.02em]">
-                                    Intake<span className="text-[#C9A55C]">97</span>
+                                    ccIntake<span className="text-[#C9A55C]">97</span>
                                 </span>
                             </Link>
                             <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] text-[#F7F3EA]/50 transition-colors hover:text-[#F7F3EA]">

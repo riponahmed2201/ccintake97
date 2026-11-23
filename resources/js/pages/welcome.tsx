@@ -58,6 +58,48 @@ const CADET_COLLEGES_DATA = [
     { short_name: 'CCC', name: 'Cumilla Cadet College', established: 1983, location: 'Kotbari, Cumilla', region: 'Chittagong', houses: 'Shanti, Mukti, Bijoy Houses', cohort: '55 Cadets', tagline: 'Red Hills Fortress of Valour' },
 ];
 
+const CAMPUS_PHOTOS: Record<string, string> = {
+    FCC: '/images/campus/fcc.jpg',
+    JCC: '/images/campus/jcc.jpg',
+    MCC: '/images/campus/mcc.jpg',
+    RCC: '/images/campus/rcc.jpg',
+    SCC: '/images/campus/scc.jpg',
+    CCR: '/images/campus/ccr.jpg',
+    BCC: '/images/campus/bcc.jpg',
+    MGCC: '/images/campus/mgcc.jpg',
+    CCC: '/images/campus/ccc.jpg',
+};
+
+const CAMPUS_LIFE = [
+    { src: '/images/campus/aerial-mcc.jpg', title: 'Mirzapur from above', place: 'MCC' },
+    { src: '/images/campus/athletics.jpg', title: 'Inter-house athletics', place: 'RCC' },
+    { src: '/images/campus/playground-mcc.jpg', title: 'The parade ground', place: 'MCC' },
+    { src: '/images/campus/rcc.jpg', title: 'The academic block', place: 'RCC' },
+    { src: '/images/campus/fcc.jpg', title: 'Where it all began', place: 'FCC' },
+    { src: '/images/campus/ccr.jpg', title: 'Northern sentinel', place: 'CCR' },
+];
+
+// Wikimedia Commons photographs — CC BY-SA unless noted. Attribution is required.
+const PHOTO_CREDITS = [
+    { file: 'MCC Front View at Night', author: 'Ishmum', license: 'CC BY-SA 4.0' },
+    { file: 'Faujdarhat Cadet College Front View', author: 'Rafi Bin Tofa', license: 'CC BY-SA 4.0' },
+    { file: 'Jcc Academic Block', author: 'Mrislamreaz', license: 'CC BY-SA 3.0' },
+    { file: 'MCC BLOCK', author: 'Kazi Maruf Abdullah', license: 'CC BY-SA 3.0' },
+    { file: 'Academic Block of RCC', author: 'Rajshahi Cadet College', license: 'CC BY-SA 4.0' },
+    { file: 'Sylhet cadet college', author: 'Hussen Mahbub', license: 'CC BY-SA 3.0' },
+    { file: 'APC-4', author: 'Nasif05', license: 'CC BY-SA 4.0' },
+    { file: 'Barishal Cadet College Administration Building', author: 'Nfdul', license: 'CC BY-SA 4.0' },
+    { file: "Entrance of Mymensingh Girls' Cadet College 01", author: 'Rocky Masum', license: 'CC BY-SA 4.0' },
+    { file: 'Cumilla Cadet College-Academic Block-1', author: 'Ftahmed', license: 'Public domain' },
+    { file: 'Cadets in class', author: 'Wikimedia Commons contributor', license: 'CC BY-SA 3.0' },
+    { file: 'Flag Raising Ceremony in RCC', author: 'Photography Club, Rajshahi Cadet College', license: 'CC BY-SA 4.0' },
+    { file: 'Athletes contingent of Inter House Annual Athletics Competition 2024 at RCC', author: 'AfnanAnwar20', license: 'CC BY-SA 4.0' },
+    { file: 'Glimpse of Inter House Annual Athletics Competition 2024', author: 'AfnanAnwar20', license: 'CC BY-SA 4.0' },
+    { file: 'Sunset at Rajshahi Cadet College (2)', author: 'AfnanAnwar20', license: 'CC BY-SA 4.0' },
+    { file: 'Aerial view of Mirzapur Cadet College', author: 'Bellfloyd', license: 'CC BY-SA 4.0' },
+    { file: 'Play Ground of MCC College, Dhaka', author: 'মুসফিক মুন্না', license: 'CC BY-SA 4.0' },
+];
+
 const REGIONS = ['All', 'Greater Dhaka', 'Chittagong', 'Rajshahi/Rangpur', 'Khulna/Barishal', 'Sylhet', 'Girls Colleges'];
 
 const SECTORS = [
@@ -219,37 +261,17 @@ function GhostLink({ href, children, light = false, internal = false }: { href: 
     return internal ? <a href={href} className={cls}>{inner}</a> : <Link href={href} className={cls}>{inner}</Link>;
 }
 
-function Crest({ className = '' }: { className?: string }) {
-    return (
-        <svg viewBox="0 0 400 400" className={className} aria-hidden="true">
-            <defs>
-                <linearGradient id="crestGold" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#F1DFB0" />
-                    <stop offset="50%" stopColor="#C9A55C" />
-                    <stop offset="100%" stopColor="#8C6A2E" />
-                </linearGradient>
-                <path id="crestTextTop" d="M 70 200 A 130 130 0 0 1 330 200" />
-                <path id="crestTextBottom" d="M 62 200 A 138 138 0 0 0 338 200" />
-            </defs>
-            <circle cx="200" cy="200" r="190" fill="none" stroke="url(#crestGold)" strokeWidth="0.75" opacity="0.5" />
-            <circle cx="200" cy="200" r="168" fill="none" stroke="url(#crestGold)" strokeWidth="1.25" />
-            <circle cx="200" cy="200" r="108" fill="none" stroke="url(#crestGold)" strokeWidth="0.75" opacity="0.7" />
-            {Array.from({ length: 72 }).map((_, i) => {
-                const a = (i * 5 * Math.PI) / 180;
-                const r1 = 172;
-                const r2 = i % 6 === 0 ? 184 : 178;
-                return (
-                    <line key={i} x1={200 + r1 * Math.cos(a)} y1={200 + r1 * Math.sin(a)} x2={200 + r2 * Math.cos(a)} y2={200 + r2 * Math.sin(a)} stroke="#C9A55C" strokeWidth="0.75" opacity="0.55" />
-                );
-            })}
-            <text fill="#D9BF85" fontSize="13" letterSpacing="6" fontFamily="'Plus Jakarta Sans', sans-serif" fontWeight="500">
-                <textPath href="#crestTextTop" startOffset="50%" textAnchor="middle">FIDELITAS · ET · DISCIPLINA</textPath>
-            </text>
-            <text fill="#D9BF85" fontSize="12" letterSpacing="6" fontFamily="'Plus Jakarta Sans', sans-serif" fontWeight="500" dominantBaseline="hanging">
-                <textPath href="#crestTextBottom" startOffset="50%" textAnchor="middle">TEN COLLEGES · ONE INTAKE</textPath>
-            </text>
-        </svg>
+function ExploreLink({ href, children, light = false, internal = true }: { href: string; children: React.ReactNode; light?: boolean; internal?: boolean }) {
+    const cls = `group inline-flex items-center gap-2 text-[14px] font-medium ${light ? 'text-[#F7F3EA]' : 'text-[#0B1220]'}`;
+    const inner = (
+        <>
+            <span className={`relative pb-1 after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:transition-transform after:duration-500 group-hover:after:scale-x-50 ${light ? 'after:bg-[#F7F3EA]' : 'after:bg-[#0B1220]'}`}>
+                {children}
+            </span>
+            <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+        </>
     );
+    return internal ? <a href={href} className={cls}>{inner}</a> : <Link href={href} className={cls}>{inner}</Link>;
 }
 
 function CollegeEmblem({ logo, code, name, size = 88 }: { logo?: string | null; code: string; name: string; size?: number }) {
@@ -370,7 +392,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
 
     return (
         <>
-            <Head title="INTAKE97 — Cadet College Alumni Association · Class of 1997" />
+            <Head title="ccIntake97 — Cadet College Alumni Association · Class of 1997" />
 
             <div className="min-h-screen bg-[#FAF7F0] font-sans text-[#0B1220] antialiased selection:bg-[#C9A55C] selection:text-[#0B1220]">
                 {/* ================================================================ */}
@@ -390,7 +412,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                             </span>
                             <span className="leading-tight">
                                 <span className={`block font-serif text-[22px] font-medium tracking-[0.02em] transition-colors duration-500 ${solidHeader ? 'text-[#0B1220]' : 'text-[#F7F3EA]'}`}>
-                                    Intake<span className="text-[#C9A55C]">97</span>
+                                    ccIntake<span className="text-[#C9A55C]">97</span>
                                 </span>
                                 <span className={`hidden text-[9.5px] font-medium uppercase tracking-[0.3em] transition-colors duration-500 sm:block ${solidHeader ? 'text-[#0B1220]/45' : 'text-[#F7F3EA]/45'}`}>
                                     Cadet College Alumni
@@ -477,341 +499,280 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 </header>
 
                 {/* ================================================================ */}
-                {/* HERO                                                             */}
+                {/* HERO — full-bleed photograph                                     */}
                 {/* ================================================================ */}
-                <section className="relative isolate overflow-hidden bg-[#070B14] text-[#F7F3EA]">
-                    {/* Atmosphere */}
-                    <div className="pointer-events-none absolute inset-0 -z-10">
-                        <div className="absolute -top-40 right-[-10%] h-[720px] w-[720px] rounded-full bg-[radial-gradient(circle,rgba(201,165,92,0.20),transparent_62%)]" />
-                        <div className="absolute bottom-[-30%] left-[-15%] h-[680px] w-[680px] rounded-full bg-[radial-gradient(circle,rgba(123,17,19,0.28),transparent_65%)]" />
-                        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(247,243,234,0.035)_1px,transparent_1px)] bg-[size:120px_100%]" />
-                        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[#070B14]" />
-                    </div>
+                <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-[#070B14] text-[#F7F3EA]">
+                    <img
+                        src="/images/campus/hero-mcc-night.jpg"
+                        alt="Mirzapur Cadet College illuminated at night"
+                        className="absolute inset-0 -z-20 h-full w-full scale-105 animate-[heroZoom_18s_ease-out_forwards] object-cover motion-reduce:animate-none"
+                    />
+                    <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#070B14] via-[#070B14]/45 to-[#070B14]/40" />
+                    <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#070B14]/75 via-[#070B14]/20 to-transparent" />
+                    <style>{`@keyframes heroZoom { from { transform: scale(1.12) } to { transform: scale(1.02) } }`}</style>
 
-                    <div className="mx-auto grid max-w-[1320px] grid-cols-1 items-center gap-16 px-5 pt-36 pb-20 sm:px-8 lg:min-h-[100svh] lg:grid-cols-12 lg:gap-10 lg:px-10 lg:pt-32 lg:pb-28">
-                        <div className="lg:col-span-7">
-                            <Reveal>
-                                <Eyebrow light>Est. January 1997 · Bangladesh</Eyebrow>
-                            </Reveal>
-                            <Reveal delay={100}>
-                                <h1 className="mt-8 font-serif text-[3.25rem] leading-[0.98] font-medium tracking-[-0.02em] sm:text-7xl lg:text-[5.75rem]">
-                                    Different colleges.
-                                    <br />
-                                    <span className="bg-gradient-to-r from-[#F1DFB0] via-[#C9A55C] to-[#E8D5A3] bg-clip-text font-normal text-transparent italic">One intake.</span>
-                                    <br />
-                                    A lifetime of brotherhood.
-                                </h1>
-                            </Reveal>
-                            <Reveal delay={200}>
-                                <p className="mt-8 max-w-xl text-base leading-relaxed text-[#F7F3EA]/60 sm:text-lg">
-                                    In 1997, 642 cadets entered ten cadet colleges across Bangladesh. Today they command forces, lead hospitals, represent the nation abroad and build global enterprises — bound by a single covenant.
-                                </p>
-                            </Reveal>
-                            <Reveal delay={300}>
-                                <div className="mt-10 flex flex-wrap items-center gap-4">
-                                    <Link
-                                        href="/register-alumni"
-                                        className="group inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-[#E8D5A3] to-[#C9A55C] px-7 py-4 text-sm font-semibold text-[#0B1220] shadow-[0_10px_40px_-10px_rgba(201,165,92,0.6)] transition-all duration-300 hover:shadow-[0_14px_50px_-10px_rgba(201,165,92,0.8)]"
-                                    >
-                                        Apply for membership
-                                        <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                                    </Link>
-                                    <a
-                                        href="#directory"
-                                        className="inline-flex items-center gap-3 rounded-full border border-[#F7F3EA]/15 px-7 py-4 text-sm font-medium text-[#F7F3EA] transition-all duration-300 hover:border-[#F7F3EA]/35 hover:bg-white/[0.03]"
-                                    >
-                                        Explore the roll
-                                    </a>
-                                </div>
-                            </Reveal>
+                    <div className="mx-auto w-full max-w-[1320px] px-5 pt-40 pb-14 sm:px-8 lg:px-10 lg:pb-16">
+                        <Reveal>
+                            <Eyebrow light>Est. January 1997 · Bangladesh</Eyebrow>
+                        </Reveal>
+                        <Reveal delay={100}>
+                            <h1 className="mt-7 max-w-4xl font-serif text-[3.25rem] leading-[0.98] font-medium tracking-[-0.02em] sm:text-7xl lg:text-[6rem]">
+                                Different colleges.
+                                <br />
+                                <span className="font-normal text-[#E8D5A3] italic">One intake.</span>
+                            </h1>
+                        </Reveal>
+                        <Reveal delay={200}>
+                            <p className="mt-7 max-w-lg text-base leading-relaxed text-[#F7F3EA]/75 sm:text-lg">
+                                642 cadets. Ten colleges. A lifetime of brotherhood that began on the parade grounds of 1997.
+                            </p>
+                        </Reveal>
+                        <Reveal delay={300}>
+                            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5">
+                                <Link
+                                    href="/register-alumni"
+                                    className="group inline-flex items-center gap-3 rounded-full bg-[#F7F3EA] px-7 py-4 text-sm font-semibold text-[#0B1220] transition-all duration-300 hover:bg-white"
+                                >
+                                    Apply for membership
+                                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                                </Link>
+                                <ExploreLink href="#about" light>Explore our story</ExploreLink>
+                            </div>
+                        </Reveal>
 
-                            <Reveal delay={400}>
-                                <dl className="mt-16 grid max-w-xl grid-cols-3 divide-x divide-[#F7F3EA]/10 border-t border-[#F7F3EA]/10 pt-8">
+                        <Reveal delay={400}>
+                            <div className="mt-20 flex flex-col gap-6 border-t border-[#F7F3EA]/15 pt-6 sm:flex-row sm:items-end sm:justify-between">
+                                <dl className="flex gap-10 sm:gap-14">
                                     {[
                                         { v: '10', l: 'Colleges' },
                                         { v: '642', l: 'Cadets' },
                                         { v: '34', l: 'Nations' },
-                                    ].map((s, i) => (
-                                        <div key={s.l} className={i === 0 ? 'pr-6' : 'px-6'}>
-                                            <dt className="sr-only">{s.l}</dt>
-                                            <dd className="font-serif text-4xl font-medium text-[#F7F3EA] sm:text-5xl">{s.v}</dd>
-                                            <dd className="mt-2 text-[11px] font-medium uppercase tracking-[0.24em] text-[#F7F3EA]/45">{s.l}</dd>
+                                    ].map((st) => (
+                                        <div key={st.l}>
+                                            <dd className="font-serif text-4xl font-medium sm:text-5xl">{st.v}</dd>
+                                            <dt className="mt-1 text-[11px] font-medium tracking-[0.24em] text-[#F7F3EA]/55 uppercase">{st.l}</dt>
                                         </div>
                                     ))}
                                 </dl>
-                            </Reveal>
-                        </div>
-
-                        <div className="relative hidden lg:col-span-5 lg:block">
-                            <Reveal delay={250}>
-                                <div className="relative mx-auto aspect-square w-full max-w-[460px]">
-                                    <div className="absolute inset-[12%] rounded-full bg-[radial-gradient(circle,rgba(201,165,92,0.14),transparent_70%)] blur-2xl" />
-                                    <Crest className="relative h-full w-full animate-[spin_160s_linear_infinite] motion-reduce:animate-none" />
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="h-[46%] w-[46%] rounded-full border border-[#C9A55C]/20 bg-[#070B14]/40 backdrop-blur-[2px]" />
-                                    </div>
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                        <span className="bg-gradient-to-b from-[#F1DFB0] to-[#9A7B3F] bg-clip-text font-serif text-[7rem] leading-none font-medium text-transparent">97</span>
-                                        <span className="mt-1 text-[10px] tracking-[0.5em] text-[#D9BF85]/80">MCMXCVII</span>
-                                    </div>
-                                </div>
-                            </Reveal>
-                            <Reveal delay={450}>
-                                <figure className="absolute -bottom-6 -left-6 max-w-[280px] rounded-2xl border border-[#F7F3EA]/10 bg-white/[0.04] p-6 backdrop-blur-xl">
-                                    <blockquote className="font-serif text-lg leading-snug text-[#F7F3EA]/85 italic">
-                                        “The mud of the obstacle course washes away; the honour of our intake endures.”
-                                    </blockquote>
-                                    <figcaption className="mt-3 text-[10px] uppercase tracking-[0.24em] text-[#D9BF85]/70">Founding Charter</figcaption>
-                                </figure>
-                            </Reveal>
-                        </div>
-                    </div>
-
-                    {/* College marquee */}
-                    <div className="relative border-t border-[#F7F3EA]/[0.07] py-6">
-                        <div className="flex overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
-                            <div className="flex shrink-0 animate-[marquee_60s_linear_infinite] items-center gap-12 pr-12 motion-reduce:animate-none">
-                                {[...CADET_COLLEGES_DATA, ...CADET_COLLEGES_DATA].map((c, i) => (
-                                    <span key={i} className="flex shrink-0 items-center gap-12 font-serif text-lg whitespace-nowrap text-[#F7F3EA]/40 italic">
-                                        {c.name}
-                                        <span className="h-1 w-1 rounded-full bg-[#C9A55C]/60" />
-                                    </span>
-                                ))}
+                                <span className="text-[11px] tracking-[0.18em] text-[#F7F3EA]/40 uppercase">Mirzapur Cadet College, by night</span>
                             </div>
-                        </div>
+                        </Reveal>
                     </div>
-                    <style>{`@keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }`}</style>
                 </section>
 
                 {/* ================================================================ */}
-                {/* ABOUT — story                                                    */}
+                {/* ABOUT — text + photo mosaic                                      */}
                 {/* ================================================================ */}
-                <section id="about" className="scroll-mt-20 py-28 lg:py-40">
+                <section id="about" className="scroll-mt-20 bg-white py-24 lg:py-32">
                     <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
-                        <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-20">
+                        <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-16">
                             <div className="lg:col-span-5">
-                                <Reveal className="lg:sticky lg:top-32">
+                                <Reveal>
                                     <Eyebrow index="01">Our Story</Eyebrow>
-                                    <h2 className="mt-6 font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] text-[#0B1220] lg:text-[4rem]">
+                                    <h2 className="mt-6 font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] text-[#0B1220] lg:text-[3.75rem]">
                                         Bound by a <em className="font-normal text-[#9A7B3F]">shared</em> beginning.
                                     </h2>
-                                    <div className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-[#0B1220]/10">
+                                    <p className="mt-7 text-[17px] leading-[1.75] text-[#4A4F5C]">
+                                        In January 1997, 642 adolescents walked through the gates of ten cadet colleges. Reveille at 0530, ten-mile runs and drill-square inspections turned strangers into brothers and sisters.
+                                    </p>
+                                    <p className="mt-4 text-[17px] leading-[1.75] text-[#4A4F5C]">
+                                        Today we lead across continents — and remain exactly who we were.
+                                    </p>
+                                    <blockquote className="mt-9 border-l-2 border-[#C9A55C] pl-5 font-serif text-xl leading-snug text-[#0B1220] italic">
+                                        “No rank outside this room supersedes that of a brother who stood the same cold morning muster beside you.”
+                                    </blockquote>
+                                    <dl className="mt-10 grid grid-cols-4 gap-4 border-t border-[#0B1220]/10 pt-6">
                                         {[
                                             { v: '1997', l: 'Induction' },
                                             { v: '2003', l: 'Passing out' },
-                                            { v: '27+', l: 'Years united' },
-                                            { v: '100%', l: 'Audited aid' },
-                                        ].map((s) => (
-                                            <div key={s.l} className="bg-[#FAF7F0] p-6">
-                                                <div className="font-serif text-3xl font-medium text-[#0B1220]">{s.v}</div>
-                                                <div className="mt-1 text-[11px] uppercase tracking-[0.2em] text-[#0B1220]/45">{s.l}</div>
+                                            { v: '27+', l: 'Years' },
+                                            { v: '100%', l: 'Audited' },
+                                        ].map((st) => (
+                                            <div key={st.l}>
+                                                <dd className="font-serif text-2xl font-medium text-[#0B1220]">{st.v}</dd>
+                                                <dt className="mt-0.5 text-[10.5px] tracking-[0.18em] text-[#0B1220]/45 uppercase">{st.l}</dt>
                                             </div>
+                                        ))}
+                                    </dl>
+                                </Reveal>
+                            </div>
+
+                            <div className="lg:col-span-7">
+                                <Reveal delay={100}>
+                                    <div className="grid h-[520px] grid-cols-5 grid-rows-2 gap-1.5 sm:h-[600px]">
+                                        {[
+                                            { src: '/images/campus/cadets-in-class.jpg', alt: 'Cadets in a classroom', caption: 'Prep hour', cls: 'col-span-3 row-span-2' },
+                                            { src: '/images/campus/flag-raising.jpg', alt: 'Flag raising ceremony', caption: 'Morning colours', cls: 'col-span-2' },
+                                            { src: '/images/campus/athletes-contingent.jpg', alt: 'Athletes contingent on parade', caption: 'Inter-house athletics', cls: 'col-span-2' },
+                                        ].map((ph) => (
+                                            <figure key={ph.src} className={`group relative overflow-hidden bg-[#0B1220] ${ph.cls}`}>
+                                                <img src={ph.src} alt={ph.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105" />
+                                                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-5 pt-10 pb-4 text-[13px] font-medium text-white">
+                                                    {ph.caption}
+                                                </figcaption>
+                                            </figure>
                                         ))}
                                     </div>
                                 </Reveal>
                             </div>
-
-                            <div className="space-y-10 lg:col-span-7">
-                                <Reveal>
-                                    <p className="font-serif text-2xl leading-[1.5] text-[#0B1220] sm:text-[1.75rem] first-letter:float-left first-letter:mr-3 first-letter:font-serif first-letter:text-[5.5rem] first-letter:leading-[0.8] first-letter:text-[#9A7B3F]">
-                                        In January 1997, 642 adolescents arrived at the iron gates of ten cadet colleges. Stripped of privilege and comfort, we were issued box-pleated uniforms, metal chests and roll numbers that would stay etched into our souls.
-                                    </p>
-                                </Reveal>
-                                <Reveal delay={80}>
-                                    <p className="text-[17px] leading-[1.8] text-[#4A4F5C]">
-                                        Under the chill of 0530 reveille and the echo of bugles, through ten-mile cross-country runs and drill-square inspections, boys and girls were tempered into citizens of unyielding character. We shared quarter-master inspections, clandestine night preps, and the pride of carrying our houses to championship glory.
-                                    </p>
-                                </Reveal>
-                                <Reveal delay={120}>
-                                    <p className="text-[17px] leading-[1.8] text-[#4A4F5C]">
-                                        Twenty-seven years later, our titles carry responsibility across continents. Yet within this fraternity we remain exactly who we were — cadets standing shoulder to shoulder, bound by an oath that distance and circumstance can never dissolve.
-                                    </p>
-                                </Reveal>
-                                <Reveal delay={160}>
-                                    <figure className="relative overflow-hidden rounded-3xl bg-[#0B1220] p-10 text-[#F7F3EA] sm:p-12">
-                                        <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(201,165,92,0.25),transparent_65%)]" />
-                                        <span className="font-serif text-7xl leading-none text-[#C9A55C]/60">“</span>
-                                        <blockquote className="-mt-6 font-serif text-2xl leading-snug italic sm:text-3xl">
-                                            No rank outside this room supersedes that of a brother who stood the same cold morning muster beside you in 1997.
-                                        </blockquote>
-                                        <figcaption className="mt-8 flex items-center gap-3 text-[11px] uppercase tracking-[0.24em] text-[#D9BF85]/80">
-                                            <span className="h-px w-8 bg-[#D9BF85]/50" /> The Cadre Covenant
-                                        </figcaption>
-                                    </figure>
-                                </Reveal>
-                            </div>
                         </div>
                     </div>
                 </section>
 
                 {/* ================================================================ */}
-                {/* COLLEGES                                                         */}
+                {/* COLLEGES — featured banner + photo tiles                         */}
                 {/* ================================================================ */}
-                <section className="relative isolate overflow-hidden bg-[#0B1220] py-28 text-[#F7F3EA] lg:py-36">
-                    <div className="pointer-events-none absolute inset-0 -z-10">
-                        <div className="absolute -top-40 left-[-10%] h-[640px] w-[640px] rounded-full bg-[radial-gradient(circle,rgba(201,165,92,0.13),transparent_62%)]" />
-                        <div className="absolute right-[-15%] bottom-[-25%] h-[720px] w-[720px] rounded-full bg-[radial-gradient(circle,rgba(123,17,19,0.22),transparent_65%)]" />
-                        <div className="absolute inset-0 bg-[radial-gradient(rgba(247,243,234,0.06)_1px,transparent_1px)] [background-size:28px_28px] [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]" />
-                    </div>
-
-                    <div className="mx-auto max-w-[1320px] space-y-14 px-5 sm:px-8 lg:px-10">
-                        <SectionHeading
-                            light
-                            index="02"
-                            eyebrow="The Ten Pillars"
-                            title={<>Ten colleges. <em className="font-normal text-[#D9BF85]">Equal voice.</em></>}
-                            intro="Founded on uncompromised parity — every constituent college holds an equal seat in the Central Secretariat."
-                            action={
-                                <dl className="flex gap-8 sm:gap-10">
-                                    {[
-                                        { v: '10', l: 'Colleges' },
-                                        { v: '642', l: 'Cadets' },
-                                        { v: '1958', l: 'Oldest' },
-                                    ].map((st) => (
-                                        <div key={st.l}>
-                                            <dd className="font-serif text-4xl font-medium text-[#F7F3EA]">{st.v}</dd>
-                                            <dt className="mt-1 text-[10.5px] tracking-[0.2em] text-[#F7F3EA]/40 uppercase">{st.l}</dt>
-                                        </div>
-                                    ))}
-                                </dl>
-                            }
-                        />
-
+                <section className="bg-[#F4F2EE] py-24 lg:py-32">
+                    <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
                         <Reveal>
-                            <div className="-mx-5 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
-                                <div className="flex w-max gap-1.5 rounded-full border border-[#F7F3EA]/10 bg-white/[0.03] p-1.5 backdrop-blur">
-                                    {REGIONS.map((tab) => {
-                                        const count = tab === 'All' ? mergedColleges.length : mergedColleges.filter((c) => c.region === tab).length;
-                                        const active = selectedRegion === tab;
-                                        return (
-                                            <button
-                                                key={tab}
-                                                type="button"
-                                                onClick={() => setSelectedRegion(tab)}
-                                                className={`flex items-center gap-2 rounded-full px-4 py-2 text-[13px] font-medium whitespace-nowrap transition-all duration-300 ${
-                                                    active ? 'bg-gradient-to-r from-[#E8D5A3] to-[#C9A55C] text-[#0B1220] shadow-[0_6px_20px_-8px_rgba(201,165,92,0.7)]' : 'text-[#F7F3EA]/60 hover:bg-white/[0.04] hover:text-[#F7F3EA]'
-                                                }`}
-                                            >
-                                                {tab === 'All' ? 'All' : tab}
-                                                <span className={`rounded-full px-1.5 text-[10.5px] tabular-nums ${active ? 'bg-[#0B1220]/10' : 'bg-white/[0.06] text-[#F7F3EA]/45'}`}>{count}</span>
-                                            </button>
-                                        );
-                                    })}
+                            <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+                                <div className="max-w-2xl">
+                                    <Eyebrow index="02">The Ten Pillars</Eyebrow>
+                                    <h2 className="mt-6 font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] text-[#0B1220] lg:text-[3.75rem]">
+                                        Ten colleges. <em className="font-normal text-[#9A7B3F]">Equal voice.</em>
+                                    </h2>
+                                    <p className="mt-5 max-w-xl text-[16px] leading-relaxed text-[#4A4F5C]">
+                                        Every constituent college holds an equal seat in the Central Secretariat.
+                                    </p>
+                                </div>
+                                <div className="-mx-5 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
+                                    <div className="flex w-max items-center gap-6 border-b border-[#0B1220]/10">
+                                        {REGIONS.map((tab) => {
+                                            const active = selectedRegion === tab;
+                                            return (
+                                                <button
+                                                    key={tab}
+                                                    type="button"
+                                                    onClick={() => setSelectedRegion(tab)}
+                                                    className={`relative -mb-px border-b-2 pb-3 text-[14px] whitespace-nowrap transition-colors duration-300 ${
+                                                        active ? 'border-[#0B1220] font-medium text-[#0B1220]' : 'border-transparent text-[#0B1220]/45 hover:text-[#0B1220]'
+                                                    }`}
+                                                >
+                                                    {tab === 'All' ? 'All' : tab === 'Girls Colleges' ? 'Girls’' : tab}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                             </div>
                         </Reveal>
 
                         {activeCollege && (
-                            <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-8">
-                                {/* Featured college */}
-                                <div ref={featureRef} className="scroll-mt-24 lg:col-span-5">
-                                    <div className="rounded-[2rem] bg-gradient-to-b from-[#C9A55C]/45 via-[#C9A55C]/10 to-white/[0.04] p-px lg:sticky lg:top-28">
-                                        <div className="relative overflow-hidden rounded-[calc(2rem-1px)] bg-[#0E1628]/95 p-7 backdrop-blur-xl sm:p-9">
-                                            <div className="pointer-events-none absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(201,165,92,0.22),transparent_65%)]" />
+                            <div className="mt-12 space-y-1.5">
+                                {/* Featured banner */}
+                                <div ref={featureRef} className="relative isolate scroll-mt-24 overflow-hidden bg-[#0B1220] text-[#F7F3EA]">
+                                    <div key={activeCollege.short_name} className="animate-in duration-700 fade-in">
+                                        {CAMPUS_PHOTOS[activeCollege.short_name] ? (
+                                            <img
+                                                src={CAMPUS_PHOTOS[activeCollege.short_name]}
+                                                alt={`${activeCollege.name} campus`}
+                                                className="absolute inset-0 -z-10 h-full w-full animate-[heroZoom_9s_ease-out_forwards] object-cover motion-reduce:animate-none"
+                                            />
+                                        ) : (
+                                            <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_75%_30%,rgba(201,165,92,0.25),transparent_55%)]" />
+                                        )}
+                                    </div>
+                                    <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#070B14]/95 via-[#070B14]/45 to-[#070B14]/10" />
+                                    <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#070B14]/70 to-transparent" />
 
-                                            <div className="relative flex items-center justify-between text-[11px] tracking-[0.2em] uppercase">
-                                                <span className="text-[#D9BF85]">
-                                                    <span className="font-serif text-base tracking-normal normal-case italic">{String(CADET_COLLEGES_DATA.findIndex((c) => c.short_name === activeCollege.short_name) + 1).padStart(2, '0')}</span>
-                                                    <span className="text-[#F7F3EA]/30"> / {CADET_COLLEGES_DATA.length}</span>
-                                                </span>
-                                                <span className="rounded-full border border-[#F7F3EA]/10 px-3 py-1 text-[#F7F3EA]/55">Est. {activeCollege.established}</span>
-                                            </div>
+                                    <div className="flex min-h-[520px] flex-col justify-between p-6 sm:p-10 lg:min-h-[560px] lg:p-12">
+                                        <div className="flex items-start justify-between text-[11px] tracking-[0.2em] uppercase">
+                                            <span className="text-[#E8D5A3]">
+                                                <span className="font-serif text-lg tracking-normal normal-case italic">{String(CADET_COLLEGES_DATA.findIndex((c) => c.short_name === activeCollege.short_name) + 1).padStart(2, '0')}</span>
+                                                <span className="text-[#F7F3EA]/45"> / {CADET_COLLEGES_DATA.length}</span>
+                                            </span>
+                                            <span className="text-[#F7F3EA]/70">Est. {activeCollege.established}</span>
+                                        </div>
 
-                                            <div key={activeCollege.short_name} className="relative animate-in duration-500 fade-in slide-in-from-bottom-2">
-                                                <div className="group mt-8 flex justify-center">
-                                                    <CollegeEmblem logo={activeCollege.logo_url} code={activeCollege.short_name} name={activeCollege.name} size={148} />
-                                                </div>
-                                                <div className="mt-8 text-center">
-                                                    <h3 className="font-serif text-[2rem] leading-[1.1] font-medium sm:text-[2.35rem]">{activeCollege.name}</h3>
-                                                    <p className="mt-2 font-serif text-lg text-[#D9BF85] italic">{activeCollege.tagline}</p>
-                                                </div>
-
-                                                <dl className="mt-9 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-[#F7F3EA]/[0.07]">
-                                                    {[
-                                                        { k: 'Location', v: activeCollege.location },
-                                                        { k: 'Region', v: activeCollege.region },
-                                                        { k: 'Established', v: String(activeCollege.established) },
-                                                        { k: 'Intake ’97', v: activeCollege.cohort },
-                                                    ].map((d) => (
-                                                        <div key={d.k} className="bg-[#0E1628] p-4">
-                                                            <dt className="text-[10.5px] tracking-[0.2em] text-[#F7F3EA]/40 uppercase">{d.k}</dt>
-                                                            <dd className="mt-1 text-[14px] font-medium text-[#F7F3EA]/90">{d.v}</dd>
-                                                        </div>
-                                                    ))}
-                                                </dl>
-
-                                                <div className="mt-6">
-                                                    <div className="text-[10.5px] tracking-[0.2em] text-[#F7F3EA]/40 uppercase">Houses</div>
-                                                    <div className="mt-3 flex flex-wrap gap-2">
-                                                        {activeCollege.houses
-                                                            .replace(/\s*Houses?$/, '')
-                                                            .split(',')
-                                                            .map((h) => h.trim())
-                                                            .filter(Boolean)
-                                                            .map((h) => (
-                                                                <span key={h} className="rounded-full border border-[#C9A55C]/25 bg-[#C9A55C]/[0.06] px-3 py-1 text-[12.5px] text-[#E8D5A3]">
-                                                                    {h}
-                                                                </span>
-                                                            ))}
+                                        <div key={activeCollege.short_name + '-info'} className="grid animate-in grid-cols-1 items-end gap-8 duration-500 fade-in slide-in-from-bottom-3 lg:grid-cols-12">
+                                            <div className="lg:col-span-7">
+                                                <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-5">
+                                                    <CollegeEmblem logo={activeCollege.logo_url} code={activeCollege.short_name} name={activeCollege.name} size={84} />
+                                                    <div>
+                                                        <h3 className="font-serif text-[2.1rem] leading-[1.05] font-medium sm:text-5xl">{activeCollege.name}</h3>
+                                                        <p className="mt-2 font-serif text-lg text-[#E8D5A3] italic">{activeCollege.tagline}</p>
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <div className="relative mt-9 flex items-center justify-between border-t border-[#F7F3EA]/[0.08] pt-6">
-                                                <div className="flex gap-2">
-                                                    <button type="button" aria-label="Previous college" onClick={() => stepCollege(-1)} className="flex h-11 w-11 items-center justify-center rounded-full border border-[#F7F3EA]/15 text-[#F7F3EA]/70 transition-all hover:border-[#C9A55C]/60 hover:text-[#E8D5A3]">
-                                                        <ArrowRight className="h-4 w-4 rotate-180" />
-                                                    </button>
-                                                    <button type="button" aria-label="Next college" onClick={() => stepCollege(1)} className="flex h-11 w-11 items-center justify-center rounded-full border border-[#F7F3EA]/15 text-[#F7F3EA]/70 transition-all hover:border-[#C9A55C]/60 hover:text-[#E8D5A3]">
-                                                        <ArrowRight className="h-4 w-4" />
-                                                    </button>
+                                            <div className="lg:col-span-5">
+                                                <dl className="grid grid-cols-3 gap-4 border-t border-[#F7F3EA]/20 pt-5">
+                                                    {[
+                                                        { k: 'Location', v: activeCollege.location },
+                                                        { k: 'Region', v: activeCollege.region },
+                                                        { k: 'Intake ’97', v: activeCollege.cohort },
+                                                    ].map((d) => (
+                                                        <div key={d.k}>
+                                                            <dt className="text-[10.5px] tracking-[0.2em] text-[#F7F3EA]/50 uppercase">{d.k}</dt>
+                                                            <dd className="mt-1 text-[14px] font-medium">{d.v}</dd>
+                                                        </div>
+                                                    ))}
+                                                </dl>
+                                                <div className="mt-5 flex flex-wrap gap-2">
+                                                    {activeCollege.houses
+                                                        .replace(/\s*Houses?$/, '')
+                                                        .split(',')
+                                                        .map((h) => h.trim())
+                                                        .filter(Boolean)
+                                                        .map((h) => (
+                                                            <span key={h} className="rounded-full border border-[#F7F3EA]/25 bg-white/10 px-3 py-1 text-[12.5px] backdrop-blur-sm">
+                                                                {h}
+                                                            </span>
+                                                        ))}
                                                 </div>
-                                                {activeCollege.website ? (
-                                                    <a href={activeCollege.website} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[13px] text-[#E8D5A3] hover:text-[#F1DFB0]">
-                                                        Official website <ArrowUpRight className="h-3.5 w-3.5" />
-                                                    </a>
-                                                ) : (
-                                                    <span className="text-[12px] text-[#F7F3EA]/35">
-                                                        {activeIndex + 1} of {filteredColleges.length}
-                                                        {selectedRegion !== 'All' && ` · ${selectedRegion}`}
-                                                    </span>
-                                                )}
+                                                <div className="mt-7 flex items-center justify-between">
+                                                    <div className="flex gap-2">
+                                                        <button type="button" aria-label="Previous college" onClick={() => stepCollege(-1)} className="flex h-11 w-11 items-center justify-center rounded-full border border-[#F7F3EA]/30 backdrop-blur-sm transition-colors hover:bg-white hover:text-[#0B1220]">
+                                                            <ArrowRight className="h-4 w-4 rotate-180" />
+                                                        </button>
+                                                        <button type="button" aria-label="Next college" onClick={() => stepCollege(1)} className="flex h-11 w-11 items-center justify-center rounded-full border border-[#F7F3EA]/30 backdrop-blur-sm transition-colors hover:bg-white hover:text-[#0B1220]">
+                                                            <ArrowRight className="h-4 w-4" />
+                                                        </button>
+                                                    </div>
+                                                    {activeCollege.website && (
+                                                        <ExploreLink href={activeCollege.website} light>Official website</ExploreLink>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* College tiles */}
-                                <div className="lg:col-span-7">
-                                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-5 lg:grid-cols-2 xl:grid-cols-5">
-                                        {filteredColleges.map((col, i) => {
-                                            const active = col.short_name === activeCollege.short_name;
-                                            return (
-                                                <Reveal key={col.short_name} delay={(i % 4) * 60} className="h-full">
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => selectCollege(col.short_name, true)}
-                                                        aria-pressed={active}
-                                                        className={`group relative flex h-full w-full flex-col items-center rounded-2xl border px-3 pt-6 pb-5 text-center transition-all duration-300 hover:-translate-y-1 ${
-                                                            active
-                                                                ? 'border-[#C9A55C]/60 bg-[#C9A55C]/[0.08] shadow-[0_20px_40px_-24px_rgba(201,165,92,0.6)]'
-                                                                : 'border-[#F7F3EA]/[0.07] bg-white/[0.02] hover:border-[#F7F3EA]/20 hover:bg-white/[0.05]'
-                                                        }`}
-                                                    >
-                                                        {active && <span className="absolute top-3 right-3 h-1.5 w-1.5 rounded-full bg-[#E8D5A3] shadow-[0_0_10px_2px_rgba(232,213,163,0.6)]" />}
-                                                        <CollegeEmblem logo={col.logo_url} code={col.short_name} name={col.name} size={68} />
-                                                        <div className={`mt-4 text-[13.5px] leading-snug font-medium ${active ? 'text-[#F7F3EA]' : 'text-[#F7F3EA]/80'}`}>
-                                                            {col.name.replace(/ Cadet College$/, '')}
-                                                        </div>
-                                                        <div className="mt-1 text-[11px] tracking-[0.14em] text-[#F7F3EA]/35 uppercase">Est. {col.established}</div>
-                                                    </button>
-                                                </Reveal>
-                                            );
-                                        })}
-                                    </div>
-                                    <p className="mt-6 flex items-center gap-2 text-[12.5px] text-[#F7F3EA]/35">
-                                        <MapPin className="h-3.5 w-3.5" /> Select a college to view its houses, region and 1997 cohort.
-                                    </p>
+                                {/* Photo tiles */}
+                                <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3 lg:grid-cols-5">
+                                    {filteredColleges.map((col) => {
+                                        const active = col.short_name === activeCollege.short_name;
+                                        const photo = CAMPUS_PHOTOS[col.short_name];
+                                        return (
+                                            <button
+                                                key={col.short_name}
+                                                type="button"
+                                                onClick={() => selectCollege(col.short_name, true)}
+                                                aria-pressed={active}
+                                                className="group relative isolate aspect-[4/3] overflow-hidden bg-[#0B1220] text-left text-white"
+                                            >
+                                                {photo ? (
+                                                    <img src={photo} alt="" loading="lazy" className="absolute inset-0 -z-10 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
+                                                ) : (
+                                                    <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_70%_25%,rgba(201,165,92,0.3),transparent_60%)]" />
+                                                )}
+                                                <div className={`absolute inset-0 -z-10 transition-colors duration-500 ${active ? 'bg-gradient-to-t from-black/80 via-black/20 to-transparent' : 'bg-gradient-to-t from-black/80 via-black/40 to-black/25 group-hover:via-black/20 group-hover:to-transparent'}`} />
+                                                <div className={`absolute inset-0 transition-all duration-300 ${active ? 'ring-[3px] ring-[#C9A55C] ring-inset' : ''}`} />
+                                                <div className="absolute inset-x-0 bottom-0 flex items-center gap-2.5 p-3 sm:p-4">
+                                                    <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-white/50">
+                                                        {col.logo_url ? (
+                                                            <img src={col.logo_url} alt="" className="h-full w-full object-contain p-0.5" />
+                                                        ) : (
+                                                            <span className="font-serif text-[10px] text-[#0B1220]">{col.short_name}</span>
+                                                        )}
+                                                    </span>
+                                                    <span className="min-w-0">
+                                                        <span className="block truncate text-[13.5px] leading-tight font-semibold">{col.name.replace(/ Cadet College$/, '')}</span>
+                                                        <span className="block text-[11px] text-white/65">Est. {col.established}</span>
+                                                    </span>
+                                                </div>
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         )}
@@ -845,6 +806,33 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                 ))}
                             </ol>
                         </div>
+                    </div>
+                </section>
+
+                {/* ================================================================ */}
+                {/* CAMPUS LIFE — horizontal photo strip                             */}
+                {/* ================================================================ */}
+                <section className="bg-[#FAF7F0] pb-24 lg:pb-32">
+                    <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
+                        <Reveal>
+                            <div className="flex items-end justify-between gap-6">
+                                <h3 className="flex items-center gap-4 font-serif text-3xl font-medium text-[#0B1220] sm:text-4xl">
+                                    Life on campus <ArrowRight className="h-6 w-6 text-[#9A7B3F]" strokeWidth={1.25} />
+                                </h3>
+                                <span className="hidden text-[13px] text-[#0B1220]/45 sm:block">Scroll to explore</span>
+                            </div>
+                        </Reveal>
+                    </div>
+                    <div className="mt-8 flex snap-x snap-mandatory gap-1.5 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:px-8 lg:px-[max(2.5rem,calc((100vw_-_1320px)/2_+_2.5rem))]">
+                        {CAMPUS_LIFE.map((ph) => (
+                            <figure key={ph.src} className="group relative w-[78vw] shrink-0 snap-start overflow-hidden bg-[#0B1220] sm:w-[420px]">
+                                <img src={ph.src} alt={ph.title} loading="lazy" className="aspect-[4/5] h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105" />
+                                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-6 pt-16 pb-5 text-white">
+                                    <span className="block text-[11px] tracking-[0.2em] text-white/60 uppercase">{ph.place}</span>
+                                    <span className="mt-1 block font-serif text-2xl">{ph.title}</span>
+                                </figcaption>
+                            </figure>
+                        ))}
                     </div>
                 </section>
 
@@ -1198,8 +1186,9 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                 {/* ================================================================ */}
                 <section id="reunion" className="relative isolate scroll-mt-20 overflow-hidden bg-[#070B14] py-28 text-[#F7F3EA] lg:py-40">
                     <div className="pointer-events-none absolute inset-0 -z-10">
-                        <div className="absolute top-1/2 left-1/2 h-[900px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(201,165,92,0.16),transparent_60%)]" />
-                        <Crest className="absolute top-1/2 left-1/2 h-[1100px] w-[1100px] -translate-x-1/2 -translate-y-1/2 opacity-[0.07]" />
+                        <img src="/images/campus/sunset-rcc.jpg" alt="" loading="lazy" className="h-full w-full object-cover" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#070B14]/95 via-[#070B14]/75 to-[#070B14]/40" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#070B14]/70 to-transparent" />
                     </div>
                     <div className="mx-auto max-w-[1320px] px-5 sm:px-8 lg:px-10">
                         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12">
@@ -1367,7 +1356,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                 <div className="flex items-center gap-3">
                                     <span className="flex h-12 w-12 items-center justify-center rounded-full border border-[#C9A55C]/50"><span className="font-serif text-xl text-[#E8D5A3]">97</span></span>
                                     <div>
-                                        <div className="font-serif text-2xl">Intake<span className="text-[#C9A55C]">97</span></div>
+                                        <div className="font-serif text-2xl">ccIntake<span className="text-[#C9A55C]">97</span></div>
                                         <div className="text-[10px] tracking-[0.3em] text-[#F7F3EA]/40 uppercase">Cadet College Alumni Association</div>
                                     </div>
                                 </div>
@@ -1401,8 +1390,24 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                             </div>
                         </div>
 
-                        <div className="pointer-events-none py-10 text-center font-serif text-[18vw] leading-none font-medium tracking-[-0.04em] text-[#F7F3EA]/[0.04] select-none lg:text-[14rem]">
-                            Intake 97
+                        <details className="group border-b border-[#F7F3EA]/[0.08] py-6 text-[12px] text-[#F7F3EA]/45">
+                            <summary className="cursor-pointer list-none transition-colors hover:text-[#F7F3EA]/70">
+                                Campus photographs via Wikimedia Commons <span className="ml-1 inline-block transition-transform group-open:rotate-90">›</span>
+                            </summary>
+                            <ul className="mt-4 grid grid-cols-1 gap-x-8 gap-y-1.5 sm:grid-cols-2 lg:grid-cols-3">
+                                {PHOTO_CREDITS.map((c) => (
+                                    <li key={c.file}>
+                                        <a href={`https://commons.wikimedia.org/wiki/Special:Search?search=${encodeURIComponent(c.file)}`} target="_blank" rel="noreferrer" className="hover:text-[#F7F3EA]/80">
+                                            “{c.file}”
+                                        </a>{' '}
+                                        — {c.author} · {c.license}
+                                    </li>
+                                ))}
+                            </ul>
+                        </details>
+
+                        <div className="pointer-events-none py-10 text-center font-serif text-[15vw] leading-none font-medium tracking-[-0.04em] text-[#F7F3EA]/[0.04] select-none lg:text-[12rem]">
+                            ccIntake97
                         </div>
 
                         <div className="flex flex-col items-center justify-between gap-4 text-[12px] text-[#F7F3EA]/35 sm:flex-row">
