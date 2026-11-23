@@ -24,11 +24,22 @@ class College extends Model
         'display_order',
     ];
 
+    protected $appends = ['logo_url'];
+
     protected $casts = [
         'is_participating' => 'boolean',
         'established_year' => 'integer',
         'display_order' => 'integer',
     ];
+
+    /**
+     * Public URL of the uploaded crest, relative to the site root so it works
+     * regardless of which host the site is served from.
+     */
+    public function getLogoUrlAttribute(): ?string
+    {
+        return $this->logo_path ? '/storage/'.ltrim($this->logo_path, '/') : null;
+    }
 
     public function members(): HasMany
     {

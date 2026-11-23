@@ -9,6 +9,7 @@ use App\Models\EventCategory;
 use App\Models\Industry;
 use App\Models\SystemSetting;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -33,7 +34,8 @@ class ReferenceDataSeeder extends Seeder
         ];
 
         foreach ($colleges as $c) {
-            College::updateOrCreate(['slug' => $c['slug']], $c);
+            $college = College::updateOrCreate(['slug' => $c['slug']], $c);
+            $this->seedCollegeLogo($college);
         }
 
         // 2. Industries
@@ -218,5 +220,29 @@ class ReferenceDataSeeder extends Seeder
         foreach ($settings as $s) {
             SystemSetting::set($s['key'], $s['value'], $s['group']);
         }
+    }
+
+    /**
+     * Install the bundled crest (database/seeders/assets/college-logos/{CODE}.png)
+     * onto the public disk, unless an admin has already uploaded one.
+     */
+    private function seedCollegeLogo(College $college): void
+    {
+        if ($college->logo_path || ! $college->short_name) {
+            return;
+        }
+
+        $source = database_path('seeders/assets/college-logos/'.strtoupper($college->short_name).'.png');
+        if (! is_file($source)) {
+            return;
+        }
+
+        $target = 'college-logos/'.strtoupper($college->short_name).'.png';
+        $disk = Storage::disk('public');
+        if (! $disk->exists($target)) {
+            $disk->put($target, file_get_contents($source));
+        }
+
+        $college->update(['logo_path' => $target]);
     }
 }

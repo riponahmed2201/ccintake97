@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\College;
-use App\Models\Industry;
 use App\Models\Member;
 use App\Models\MemberPrivacySetting;
 use App\Models\MemberProfile;
@@ -24,16 +23,16 @@ class RegistrationController extends Controller
     public function create(): Response
     {
         $colleges = College::where('is_participating', true)->orderBy('display_order')->get(['id', 'name', 'short_name']);
-        $industries = Industry::orderBy('name')->get(['id', 'name']);
 
         return Inertia::render('auth/register-alumni', [
             'colleges' => $colleges,
-            'industries' => $industries,
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
+        // Registration collects only the essentials; professional details,
+        // location and references are completed later from the member profile.
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
@@ -45,7 +44,7 @@ class RegistrationController extends Controller
             'organization' => 'nullable|string|max:150',
             'industry_id' => 'nullable|exists:industries,id',
             'city' => 'nullable|string|max:100',
-            'country_code' => 'required|string|max:5',
+            'country_code' => 'nullable|string|max:5',
             'reference_name' => 'nullable|string|max:150',
             'reference_phone' => 'nullable|string|max:50',
         ]);
@@ -83,7 +82,7 @@ class RegistrationController extends Controller
                 'industry_id' => $validated['industry_id'] ?? null,
                 'city' => $validated['city'] ?? null,
                 'country_code' => $validated['country_code'] ?? 'BD',
-                'profile_completion' => 40,
+                'profile_completion' => 30,
             ]);
 
             // 4. Default privacy settings

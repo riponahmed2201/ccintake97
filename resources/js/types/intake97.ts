@@ -8,6 +8,7 @@ export interface College {
     location?: string;
     description?: string;
     logo_path?: string;
+    logo_url?: string | null;
     cover_image_path?: string;
     is_participating: boolean;
     display_order: number;

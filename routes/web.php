@@ -92,6 +92,8 @@ Route::middleware(['auth', 'role:super_admin|association_admin|membership_manage
         Route::post('/colleges', [Admin\CollegeController::class, 'store'])->name('colleges.store');
         Route::put('/colleges/{id}', [Admin\CollegeController::class, 'update'])->name('colleges.update');
         Route::post('/colleges/{id}/toggle', [Admin\CollegeController::class, 'toggleParticipation'])->name('colleges.toggle');
+        Route::post('/colleges/{id}/logo', [Admin\CollegeController::class, 'uploadLogo'])->name('colleges.logo');
+        Route::delete('/colleges/{id}/logo', [Admin\CollegeController::class, 'removeLogo'])->name('colleges.logo.remove');
 
         // Leadership & Committees
         Route::get('/committees', [Admin\CommitteeController::class, 'index'])->name('committees.index');

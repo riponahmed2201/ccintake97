@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,7 +13,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { GraduationCap, Plus, ExternalLink, Edit2, CheckCircle2, XCircle } from 'lucide-react';
+import { Plus, ExternalLink, Edit2, ImagePlus, Trash2 } from 'lucide-react';
 import type { College } from '@/types';
 
 interface CollegesIndexProps {
@@ -30,9 +30,35 @@ export default function CollegesIndex({ colleges }: CollegesIndexProps) {
     const [formYear, setFormYear] = useState('');
     const [formLocation, setFormLocation] = useState('');
     const [formDescription, setFormDescription] = useState('');
+    const [logoUploading, setLogoUploading] = useState(false);
+    const [logoError, setLogoError] = useState<string | null>(null);
+    const logoInput = useRef<HTMLInputElement>(null);
+
+    // Keep the dialog in sync with fresh props after a logo upload/removal.
+    const editing = editCollege ? colleges.find((c) => c.id === editCollege.id) ?? editCollege : null;
+
+    const handleLogoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        e.target.value = '';
+        if (!file || !editing) return;
+        setLogoError(null);
+        setLogoUploading(true);
+        router.post(`/admin/colleges/${editing.id}/logo`, { logo: file }, {
+            forceFormData: true,
+            preserveScroll: true,
+            onError: (errs) => setLogoError(errs.logo || 'Upload failed.'),
+            onFinish: () => setLogoUploading(false),
+        });
+    };
+
+    const handleLogoRemove = () => {
+        if (!editing) return;
+        router.delete(`/admin/colleges/${editing.id}/logo`, { preserveScroll: true });
+    };
 
     const openEdit = (c: College) => {
         setEditCollege(c);
+        setLogoError(null);
         setFormName(c.name);
         setFormShortName(c.short_name || '');
         setFormWebsite(c.website || '');
@@ -135,8 +161,14 @@ export default function CollegesIndex({ colleges }: CollegesIndexProps) {
                             {colleges.map((c) => (
                                 <TableRow key={c.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
                                     <TableCell>
-                                        <div className="font-semibold text-xs text-slate-900 dark:text-white flex items-center gap-2">
-                                            <GraduationCap className="size-4 text-emerald-600" />
+                                        <div className="font-semibold text-xs text-slate-900 dark:text-white flex items-center gap-2.5">
+                                            <span className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-amber-300/60 bg-white">
+                                                {c.logo_url ? (
+                                                    <img src={c.logo_url} alt="" className="size-full object-contain p-0.5" />
+                                                ) : (
+                                                    <span className="text-[9px] font-bold text-slate-400">{c.short_name || '—'}</span>
+                                                )}
+                                            </span>
                                             {c.name}
                                         </div>
                                         {c.website && (
@@ -241,6 +273,31 @@ export default function CollegesIndex({ colleges }: CollegesIndexProps) {
                     <DialogHeader>
                         <DialogTitle className="text-sm font-semibold">Edit College Details</DialogTitle>
                     </DialogHeader>
+                    <div className="flex items-center gap-4 rounded-lg border border-dashed border-slate-200 p-3 dark:border-slate-700">
+                        <span className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-amber-300/70 bg-white">
+                            {editing?.logo_url ? (
+                                <img src={editing.logo_url} alt="" className="size-full object-contain p-1" />
+                            ) : (
+                                <span className="text-xs font-bold text-slate-400">{editing?.short_name || 'Logo'}</span>
+                            )}
+                        </span>
+                        <div className="flex-1 space-y-1.5 text-xs">
+                            <div className="font-semibold">College logo / crest</div>
+                            <div className="text-[11px] text-slate-500">PNG, JPG or WebP · max 2 MB · square, transparent background works best</div>
+                            <div className="flex gap-2 pt-0.5">
+                                <input ref={logoInput} type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={handleLogoSelect} />
+                                <Button type="button" size="sm" variant="outline" className="h-7 text-[11px]" disabled={logoUploading} onClick={() => logoInput.current?.click()}>
+                                    <ImagePlus className="size-3.5 mr-1" /> {logoUploading ? 'Uploading…' : editing?.logo_url ? 'Replace' : 'Upload'}
+                                </Button>
+                                {editing?.logo_url && (
+                                    <Button type="button" size="sm" variant="ghost" className="h-7 text-[11px] text-red-600 hover:text-red-700" onClick={handleLogoRemove}>
+                                        <Trash2 className="size-3.5 mr-1" /> Remove
+                                    </Button>
+                                )}
+                            </div>
+                            {logoError && <div className="text-[11px] text-red-600">{logoError}</div>}
+                        </div>
+                    </div>
                     <form onSubmit={handleUpdateSubmit} className="space-y-3 py-2 text-xs">
                         <div>
                             <label className="font-semibold block mb-1">College Name</label>

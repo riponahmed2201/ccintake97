@@ -90,6 +90,34 @@ class Intake97AlumniSystemTest extends TestCase
         $this->assertStringStartsWith('APP97-', $application->application_no);
     }
 
+    public function test_alumni_registration_succeeds_with_only_essential_fields(): void
+    {
+        $mcc = College::where('short_name', 'MCC')->first();
+
+        $response = $this->post('/register-alumni', [
+            'name' => 'Navid Huq',
+            'email' => 'navid.97@example.com',
+            'password' => 'SecurePass97!',
+            'password_confirmation' => 'SecurePass97!',
+            'college_id' => $mcc->id,
+            'college_roll_no' => '721',
+        ]);
+
+        $response->assertRedirect('/member/dashboard');
+
+        $member = User::where('email', 'navid.97@example.com')->first()->member;
+        $this->assertSame('pending', $member->membership_status);
+        $this->assertDatabaseHas('member_profiles', [
+            'member_id' => $member->id,
+            'country_code' => 'BD',
+        ]);
+        $this->assertDatabaseHas('membership_applications', [
+            'member_id' => $member->id,
+            'declared_roll_no' => '721',
+            'status' => 'submitted',
+        ]);
+    }
+
     public function test_admin_can_approve_application_and_assign_sequenced_member_code(): void
     {
         // Setup admin user

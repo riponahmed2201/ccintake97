@@ -16,8 +16,9 @@ class HomeController extends Controller
 {
     public function index(): Response
     {
-        $participatingColleges = College::where('is_participating', true)
-            ->withCount('members')
+        // All colleges are listed on the homepage (with their crests); the
+        // participation flag only drives the headline metric.
+        $colleges = College::withCount('members')
             ->orderBy('display_order')
             ->get();
 
@@ -47,12 +48,12 @@ class HomeController extends Controller
         $metrics = [
             'total_members' => Member::count(),
             'verified_members' => Member::where('verification_status', 'verified')->count(),
-            'total_colleges' => $participatingColleges->count(),
+            'total_colleges' => $colleges->where('is_participating', true)->count(),
             'intake_year' => 1997,
         ];
 
         return Inertia::render('welcome', [
-            'colleges' => $participatingColleges,
+            'colleges' => $colleges,
             'events' => $featuredEvents,
             'articles' => $latestArticles,
             'committee' => $executiveCommittee,

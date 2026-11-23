@@ -7,6 +7,7 @@ use App\Models\AuditLog;
 use App\Models\College;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -76,5 +77,41 @@ class CollegeController extends Controller
         AuditLog::log('college.toggled_participation', 'colleges', $college->id, ['is_participating' => $previous], ['is_participating' => ! $previous]);
 
         return back()->with('success', "Participation status updated for {$college->name}.");
+    }
+
+    public function uploadLogo(Request $request, int $id): RedirectResponse
+    {
+        $college = College::findOrFail($id);
+
+        $request->validate([
+            // SVG intentionally excluded: it can carry script when served from our origin.
+            'logo' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048',
+        ]);
+
+        $previous = $college->logo_path;
+        $path = $request->file('logo')->store('college-logos', 'public');
+        $college->update(['logo_path' => $path]);
+
+        if ($previous && $previous !== $path) {
+            Storage::disk('public')->delete($previous);
+        }
+
+        AuditLog::log('college.logo_updated', 'colleges', $college->id, ['logo_path' => $previous], ['logo_path' => $path]);
+
+        return back()->with('success', "Logo updated for {$college->name}.");
+    }
+
+    public function removeLogo(int $id): RedirectResponse
+    {
+        $college = College::findOrFail($id);
+        $previous = $college->logo_path;
+
+        if ($previous) {
+            Storage::disk('public')->delete($previous);
+            $college->update(['logo_path' => null]);
+            AuditLog::log('college.logo_removed', 'colleges', $college->id, ['logo_path' => $previous], ['logo_path' => null]);
+        }
+
+        return back()->with('success', "Logo removed for {$college->name}.");
     }
 }
