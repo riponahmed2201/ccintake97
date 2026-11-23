@@ -418,13 +418,13 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                             </span>
                         </Link>
 
-                        <nav className="hidden items-center gap-8 xl:flex">
+                        <nav className="hidden items-center gap-9 xl:flex">
                             {NAV_LINKS.map((l) => (
                                 <a
                                     key={l.href}
                                     href={l.href}
-                                    className={`relative text-[13px] font-medium tracking-wide transition-colors duration-300 after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-[#C9A55C] after:transition-all after:duration-300 hover:after:w-full ${
-                                        solidHeader ? 'text-[#0B1220]/70 hover:text-[#0B1220]' : 'text-[#F7F3EA]/70 hover:text-[#F7F3EA]'
+                                    className={`relative font-nav text-[16px] font-medium transition-colors duration-300 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-[#C9A55C] after:transition-all after:duration-300 hover:after:w-full ${
+                                        solidHeader ? 'text-[#0B1220] hover:text-[#7A5E28]' : 'text-white hover:text-[#E8D5A3]'
                                     }`}
                                 >
                                     {l.label}
@@ -435,7 +435,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                         <div className="flex items-center gap-2 sm:gap-3">
                             <a
                                 href="#reunion"
-                                className={`hidden items-center gap-2 rounded-full border px-4 py-2 text-[12px] font-medium tracking-wide transition-all duration-300 lg:inline-flex ${
+                                className={`hidden items-center gap-2 rounded-full border px-4 py-2 font-nav text-[15px] font-medium transition-all duration-300 lg:inline-flex ${
                                     solidHeader ? 'border-[#9A7B3F]/40 text-[#7A5E28] hover:bg-[#9A7B3F]/10' : 'border-[#D9BF85]/40 text-[#E8D5A3] hover:bg-white/5'
                                 }`}
                             >
@@ -445,7 +445,7 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                             {auth?.user ? (
                                 <Link
                                     href="/dashboard"
-                                    className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[13px] font-medium transition-all duration-300 ${solidHeader ? 'bg-[#0B1220] text-[#F7F3EA] hover:bg-[#1A2438]' : 'bg-[#F7F3EA] text-[#0B1220] hover:bg-white'}`}
+                                    className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-nav text-[15px] font-medium transition-all duration-300 ${solidHeader ? 'bg-[#0B1220] text-[#F7F3EA] hover:bg-[#1A2438]' : 'bg-[#F7F3EA] text-[#0B1220] hover:bg-white'}`}
                                 >
                                     Member Portal <ArrowRight className="h-3.5 w-3.5" />
                                 </Link>
@@ -453,13 +453,13 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                                 <>
                                     <Link
                                         href="/login"
-                                        className={`hidden px-3 py-2 text-[13px] font-medium transition-colors sm:inline-block ${solidHeader ? 'text-[#0B1220]/75 hover:text-[#0B1220]' : 'text-[#F7F3EA]/75 hover:text-[#F7F3EA]'}`}
+                                        className={`hidden px-3 py-2 font-nav text-[15px] font-medium transition-colors sm:inline-block ${solidHeader ? 'text-[#0B1220] hover:text-[#7A5E28]' : 'text-white hover:text-[#E8D5A3]'}`}
                                     >
                                         Sign in
                                     </Link>
                                     <Link
                                         href="/register-alumni"
-                                        className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[13px] font-medium transition-all duration-300 ${solidHeader ? 'bg-[#0B1220] text-[#F7F3EA] hover:bg-[#1A2438]' : 'bg-[#F7F3EA] text-[#0B1220] hover:bg-white'}`}
+                                        className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-nav text-[15px] font-medium transition-all duration-300 ${solidHeader ? 'bg-[#0B1220] text-[#F7F3EA] hover:bg-[#1A2438]' : 'bg-[#F7F3EA] text-[#0B1220] hover:bg-white'}`}
                                     >
                                         Join
                                     </Link>
@@ -479,12 +479,12 @@ export default function Welcome({ colleges = [], articles = [], committee, busin
                     {mobileMenuOpen && (
                         <div className="border-t border-[#0B1220]/[0.06] bg-[#FAF7F0] px-5 pt-2 pb-6 xl:hidden">
                             {NAV_LINKS.map((l) => (
-                                <a key={l.href} href={l.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-between border-b border-[#0B1220]/[0.06] py-3.5 font-serif text-xl text-[#0B1220]">
+                                <a key={l.href} href={l.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-between border-b border-[#0B1220]/[0.06] py-3.5 font-nav text-[18px] font-medium text-[#0B1220]">
                                     {l.label}
                                     <ArrowRight className="h-4 w-4 text-[#9A7B3F]" />
                                 </a>
                             ))}
-                            <a href="#reunion" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-between py-3.5 font-serif text-xl text-[#7A5E28]">
+                            <a href="#reunion" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-between py-3.5 font-nav text-[18px] font-medium text-[#7A5E28]">
                                 Grand Reunion 2027
                                 <ArrowRight className="h-4 w-4" />
                             </a>
