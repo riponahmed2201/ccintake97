@@ -8,8 +8,12 @@ use Illuminate\Support\Facades\Route;
 // Public Portal
 Route::get('/', [Public\HomeController::class, 'index'])->name('home');
 Route::get('/directory', [Public\DirectoryController::class, 'index'])->name('directory.public');
+Route::get('/news/{slug}', [Public\ArticleController::class, 'show'])->name('news.show');
 Route::get('/register-alumni', [Public\RegistrationController::class, 'create'])->name('register.alumni');
 Route::post('/register-alumni', [Public\RegistrationController::class, 'store'])->name('register.alumni.store');
+Route::post('/contact', [Public\ContactController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('contact.store');
 
 // Smart Dashboard Redirection
 Route::middleware(['auth'])->get('/dashboard', function () {

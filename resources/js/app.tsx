@@ -15,6 +15,7 @@ void createInertiaApp({
             case name === 'welcome':
             case name === 'auth/register-alumni':
             case name.startsWith('directory/'):
+            case name.startsWith('news/'):
                 return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
@@ -34,7 +35,7 @@ void createInertiaApp({
         );
     },
     progress: {
-        color: '#4B5563',
+        color: '#C9A55C',
     },
 });
 

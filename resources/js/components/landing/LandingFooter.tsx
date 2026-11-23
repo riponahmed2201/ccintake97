@@ -1,0 +1,76 @@
+import { Link } from '@inertiajs/react';
+import { ArrowUpRight } from 'lucide-react';
+import BrandMark from '@/components/brand-mark';
+import { PHOTO_CREDITS } from '@/components/landing/constants';
+
+export function LandingFooter() {
+    return (
+                        <footer className="relative overflow-hidden bg-brand-ink-deep text-[#F7F3EA]">
+                            <div className="mx-auto max-w-[1440px] px-5 pt-24 pb-10 sm:px-8 lg:px-10">
+                                <div className="grid grid-cols-1 gap-12 border-b border-[#F7F3EA]/[0.08] pb-16 md:grid-cols-12">
+                                    <div className="md:col-span-5">
+                                        <div className="flex items-center gap-3">
+                                            <BrandMark className="h-16 w-auto shrink-0" />
+                                            <div>
+                                                <div className="font-brand text-2xl font-semibold">ccIntake<span className="text-[#C9A55C] [font-variant-numeric:lining-nums]">97</span></div>
+                                                <div className="text-[10px] tracking-[0.3em] text-[#F7F3EA]/40 uppercase">Cadet College Alumni Association</div>
+                                            </div>
+                                        </div>
+                                        <p className="mt-8 max-w-sm text-[14px] leading-relaxed text-[#F7F3EA]/50">
+                                            The central association uniting the officers, physicians, engineers, diplomats and leaders who entered the cadet colleges of Bangladesh in 1997.
+                                        </p>
+                                        <Link href="/register-alumni" className="mt-8 inline-flex items-center gap-2 text-[14px] text-[#E8D5A3] hover:text-[#F1DFB0]">
+                                            Apply for membership <ArrowUpRight className="h-4 w-4" />
+                                        </Link>
+                                    </div>
+                                    {[
+                                        { h: 'Association', links: [['#about', 'About'], ['#colleges', 'Colleges'], ['/directory', 'Directory'], ['#committee', 'Committee']] },
+                                        { h: 'Activities', links: [['#welfare', 'Welfare & Trust'], ['#news', 'News & ventures'], ['#constitution', 'Charter'], ['#reunion', 'Reunion 2027']] },
+                                    ].map((col) => (
+                                        <div key={col.h} className="md:col-span-2">
+                                            <h4 className="text-[11px] tracking-[0.24em] text-[#D9BF85]/80 uppercase">{col.h}</h4>
+                                            <ul className="mt-6 space-y-3 text-[14px]">
+                                                {col.links.map(([href, label]) => (
+                                                    <li key={href}><a href={href} className="text-[#F7F3EA]/60 transition-colors hover:text-[#F7F3EA]">{label}</a></li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    ))}
+                                    <div className="md:col-span-3">
+                                        <h4 className="text-[11px] tracking-[0.24em] text-[#D9BF85]/80 uppercase">Portal</h4>
+                                        <ul className="mt-6 space-y-3 text-[14px]">
+                                            <li><Link href="/login" className="text-[#F7F3EA]/60 transition-colors hover:text-[#F7F3EA]">Member sign in</Link></li>
+                                            <li><Link href="/register-alumni" className="text-[#F7F3EA]/60 transition-colors hover:text-[#F7F3EA]">Apply for membership</Link></li>
+                                            <li><a href="#contact" className="text-[#F7F3EA]/60 transition-colors hover:text-[#F7F3EA]">Contact secretariat</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+        
+                                <details className="group border-b border-[#F7F3EA]/[0.08] py-6 text-[12px] text-[#F7F3EA]/45">
+                                    <summary className="cursor-pointer list-none transition-colors hover:text-[#F7F3EA]/70">
+                                        Campus photographs via Wikimedia Commons <span className="ml-1 inline-block transition-transform group-open:rotate-90">›</span>
+                                    </summary>
+                                    <ul className="mt-4 grid grid-cols-1 gap-x-8 gap-y-1.5 sm:grid-cols-2 lg:grid-cols-3">
+                                        {PHOTO_CREDITS.map((c) => (
+                                            <li key={c.file}>
+                                                <a href={`https://commons.wikimedia.org/wiki/Special:Search?search=${encodeURIComponent(c.file)}`} target="_blank" rel="noreferrer" className="hover:text-[#F7F3EA]/80">
+                                                    “{c.file}”
+                                                </a>{' '}
+                                                — {c.author} · {c.license}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </details>
+        
+                                <div className="pointer-events-none py-10 text-center font-brand text-[15vw] leading-none font-medium tracking-[-0.04em] text-[#F7F3EA]/[0.04] select-none lg:text-[12rem]">
+                                    ccIntake97
+                                </div>
+        
+                                <div className="flex flex-col items-center justify-between gap-4 text-[12px] text-[#F7F3EA]/35 sm:flex-row">
+                                    <span>© {new Date().getFullYear()} INTAKE97.COM · All rights reserved</span>
+                                    <span className="tracking-[0.3em] uppercase">Fidelitas et Disciplina</span>
+                                </div>
+                            </div>
+                        </footer>
+    );
+}

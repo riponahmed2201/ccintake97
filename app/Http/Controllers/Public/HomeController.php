@@ -25,6 +25,7 @@ class HomeController extends Controller
 
         $featuredEvents = Event::with('category')
             ->where('status', 'published')
+            ->where('visibility', 'public')
             ->where('starts_on', '>=', now()->toDateString())
             ->orderBy('starts_on')
             ->limit(3)
