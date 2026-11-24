@@ -37,7 +37,17 @@ export function Reveal({ children, className = '', delay = 0 }: { children: Reac
     );
 }
 
-export function SectionHeading({ index, eyebrow, title, intro, light = false, align = 'left', action }: {
+export function SectionHeading({
+    index,
+    eyebrow,
+    title,
+    intro,
+    light = false,
+    align = 'left',
+    action,
+    titleTag: TitleTag = 'h2',
+    reveal = true,
+}: {
     index?: string;
     eyebrow?: string;
     title: React.ReactNode;
@@ -45,19 +55,30 @@ export function SectionHeading({ index, eyebrow, title, intro, light = false, al
     light?: boolean;
     align?: 'left' | 'center';
     action?: React.ReactNode;
+    titleTag?: 'h1' | 'h2';
+    reveal?: boolean;
 }) {
     const centered = align === 'center';
-    return (
-        <Reveal className={`flex flex-col gap-8 ${centered ? 'items-center text-center' : 'md:flex-row md:items-end md:justify-between'}`}>
-            <div className={`max-w-3xl space-y-5 ${centered ? 'flex flex-col items-center' : ''}`}>
+    const shell = `flex flex-col gap-8 ${centered ? 'items-center text-center' : 'md:flex-row md:items-end md:justify-between'}`;
+    const content = (
+        <>
+            <div className={`max-w-3xl space-y-5 ${centered ? 'flex flex-col items-center' : 'min-w-0'}`}>
                 {(index || eyebrow) && (
-                    <p className={`text-[11px] font-medium tracking-[0.28em] uppercase ${light ? 'text-[#E8D5A3]/70' : 'text-[#9A7B3F]'}`}>
+                    <p
+                        className={`text-[11px] font-medium uppercase ${light ? 'text-[#E8D5A3]/70' : 'text-[#9A7B3F]'} ${
+                            centered ? 'tracking-[0.28em]' : 'tracking-[0.22em] sm:tracking-[0.28em]'
+                        }`}
+                    >
                         {[index, eyebrow].filter(Boolean).join(' · ')}
                     </p>
                 )}
-                <h2 className={`font-serif text-4xl leading-[1.05] font-medium tracking-[-0.01em] sm:text-5xl lg:text-[3.5rem] ${light ? 'text-[#F7F3EA]' : 'text-[#0B1220]'}`}>
+                <TitleTag
+                    className={`font-serif text-4xl leading-[1.05] font-medium tracking-[-0.01em] sm:text-5xl lg:text-[3.5rem] ${
+                        light ? 'text-[#F7F3EA]' : 'text-[#0B1220]'
+                    }`}
+                >
                     {title}
-                </h2>
+                </TitleTag>
                 {intro && (
                     <p className={`max-w-2xl text-[15px] leading-relaxed sm:text-base ${light ? 'text-[#F7F3EA]/60' : 'text-[#4A4F5C]'}`}>
                         {intro}
@@ -65,8 +86,14 @@ export function SectionHeading({ index, eyebrow, title, intro, light = false, al
                 )}
             </div>
             {action && <div className="shrink-0">{action}</div>}
-        </Reveal>
+        </>
     );
+
+    if (!reveal) {
+        return <div className={shell}>{content}</div>;
+    }
+
+    return <Reveal className={shell}>{content}</Reveal>;
 }
 
 export function GhostLink({ href, children, light = false, internal = false }: { href: string; children: React.ReactNode; light?: boolean; internal?: boolean }) {

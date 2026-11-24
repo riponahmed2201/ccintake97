@@ -40,7 +40,6 @@ export function LandingDirectory({
         
                             <div className={LANDING_CONTAINER}>
                                 <SectionHeading
-                                    index="05"
                                     eyebrow="Batch directory"
                                     light
                                     title={

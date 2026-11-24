@@ -85,11 +85,10 @@ export const SECTORS = [
 ];
 
 export const TIMELINE_MILESTONES = [
-    { year: '1997', title: 'Induction & Reveille', tagline: 'January 1997', description: '500 adolescents pass through the iron gates — issued khakis, footlockers and roll numbers that would stay with them for life.' },
-    { year: '1999', title: 'The Crucible', tagline: 'Inter-Cadet Championships', description: 'Ten-mile cross-country, firing ranges, debates and fierce house rivalries cement an unbreakable fraternal trust.' },
-    { year: '2003', title: 'Passing Out', tagline: 'Commissioning & Universities', description: 'The final salute. Cadets step out to BMA, Sandhurst, BUET, Dhaka Medical, IBA and leading universities abroad.' },
-    { year: '2010–22', title: 'Global Ascent', tagline: 'Command, Boardrooms, Embassies', description: 'Alumni rise to command ranks, chief executive offices, diplomatic missions and surgical fellowships across 34 nations.' },
-    { year: '2027', title: 'The 30-Year Jubilee', tagline: 'Winter 2027 · Dhaka', description: 'Thirty years since the first muster call — the landmark gathering of batchmates, families and revered faculty.' },
+    { year: '1997', title: 'Induction', tagline: 'Class 7 · ten colleges', description: 'Cadets enter Faujdarhat, Jhenaidah, Mirzapur, Rajshahi, Sylhet, Rangpur, Barishal, Pabna, Mymensingh Girls’ and Cumilla — known ever after by college, house and roll.' },
+    { year: '~2003', title: 'Passing out', tagline: 'About six years on', description: 'Most of the intake complete HSC and leave the colleges around 2003, after the years from Class 7 to Class 12.' },
+    { year: 'Now', title: 'The association', tagline: 'Directory & verification', description: 'ccIntake97 keeps a verified roll so batchmates can find one another, and a place for welfare alongside the reunion.' },
+    { year: '2027', title: 'Reunion', tagline: 'Planned · Dhaka', description: 'Thirty years after induction — a gathering of batchmates, families and faculty, planned for 2027 in Dhaka.' },
 ];
 
 export const SAMPLE_VERIFIED_MEMBERS = [

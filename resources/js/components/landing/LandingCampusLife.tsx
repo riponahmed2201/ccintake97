@@ -2,19 +2,18 @@ import { LANDING_BLEED, LANDING_CONTAINER, LANDING_SCROLL_TRACK, LANDING_SECTION
 import { SectionHeading } from '@/components/landing/primitives';
 import { CAMPUS_LIFE } from '@/components/landing/constants';
 
-export function LandingCampusLife() {
+export function LandingCampusLife({ className = '' }: { className?: string }) {
     return (
-        <section className={`${LANDING_SECTION} bg-[#FAF7F0]`}>
+        <section className={`${LANDING_SECTION} bg-[#FAF7F0] ${className}`.trim()}>
             <div className={LANDING_CONTAINER}>
                 <SectionHeading
-                    index="04"
                     eyebrow="On the grounds"
                     title={
                         <>
                             Life on <em className="font-normal text-[#9A7B3F]">campus.</em>
                         </>
                     }
-                    intro="Scroll to explore moments from parade grounds, classrooms and inter-house championships."
+                    intro="Photographs of the colleges today — parade grounds, classrooms and inter-house championships — not the 1997 batch itself."
                 />
             </div>
             <div className={`${LANDING_SCROLL_TRACK} gap-1.5 pb-2 ${LANDING_SECTION_BODY} ${LANDING_BLEED}`}>

@@ -125,7 +125,7 @@ export function LandingHero({
                         <PrimaryCta as="button" variant="cream" onClick={openSignup}>
                             Apply for membership
                         </PrimaryCta>
-                        <ExploreLink href="#about" light>
+                        <ExploreLink href="/about" light internal={false}>
                             Explore our story
                         </ExploreLink>
                     </div>

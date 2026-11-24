@@ -7,7 +7,6 @@ export function LandingSectors() {
         <section id="sectors" className={`bg-white ${LANDING_SECTION}`}>
             <div className={LANDING_CONTAINER}>
                 <SectionHeading
-                    index="06"
                     eyebrow="Where we lead"
                     title={
                         <>

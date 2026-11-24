@@ -17,7 +17,6 @@ export function LandingNews({
                             <span id="businesses" className="sr-only" />
                             <div className={LANDING_CONTAINER}>
                                 <SectionHeading
-                                    index="07"
                                     eyebrow="Community"
                                     title={<>News &amp; <em className="font-normal text-[#9A7B3F]">ventures.</em></>}
                                     intro={
@@ -27,7 +26,7 @@ export function LandingNews({
                                     }
                                     action={
                                         articles.length === 0 ? (
-                                            <ExploreLink href="#contact" internal>
+                                            <ExploreLink href="/contact" internal={false}>
                                                 Share a story
                                             </ExploreLink>
                                         ) : (

@@ -6,27 +6,28 @@ import { LANDING_CONTAINER } from '@/components/landing/layout';
 import { NAV_LINKS } from '@/components/landing/nav-links';
 import { useSignupDialog } from '@/contexts/signup-dialog-context';
 
-function resolveHref(href: string, variant: 'hero' | 'solid') {
-    if (variant === 'solid' && href.startsWith('#')) {
-        return `/${href}`;
-    }
-    return href;
-}
-
 export function SiteHeader({
     variant = 'hero',
-    activeNav = null,
+    surface = 'cream',
     scrolled: scrolledProp,
     mobileMenuOpen: menuOpenProp,
     onMobileMenuOpenChange,
 }: {
     variant?: 'hero' | 'solid';
+    surface?: 'cream' | 'white';
     activeNav?: string | null;
     scrolled?: boolean;
     mobileMenuOpen?: boolean;
     onMobileMenuOpenChange?: (open: boolean) => void;
 }) {
-    const { auth } = usePage().props as { auth?: { user?: unknown } };
+    const page = usePage();
+    const { auth } = page.props as { auth?: { user?: unknown } };
+    const path = page.url.split('?')[0].replace(/\/$/, '') || '/';
+    const linkActive = (href: string) => {
+        const target = href.split('?')[0].replace(/\/$/, '') || '/';
+        if (target === '/') return path === '/';
+        return path === target || path.startsWith(`${target}/`);
+    };
     const [internalMenuOpen, setInternalMenuOpen] = useState(false);
     const [internalScrolled, setInternalScrolled] = useState(false);
 
@@ -72,7 +73,9 @@ export function SiteHeader({
                       ? 'border-b border-brand-navy/[0.06] bg-brand-cream/85 shadow-[0_1px_30px_-12px_rgba(11,18,32,0.18)] backdrop-blur-xl'
                       : 'border-b border-transparent bg-transparent'
               }`
-            : 'sticky top-0 z-50 border-b border-brand-navy/[0.06] bg-brand-cream/90 backdrop-blur-xl';
+            : `sticky top-0 z-50 border-b border-brand-navy/[0.06] backdrop-blur-xl ${
+                  surface === 'white' ? 'bg-white/95' : 'bg-brand-cream/90'
+              }`;
 
     const closeMobile = () => setMobileMenuOpen(false);
     const { openSignup } = useSignupDialog();
@@ -115,26 +118,22 @@ export function SiteHeader({
 
                 <nav className="hidden items-center gap-9 xl:flex" aria-label="Primary">
                     {NAV_LINKS.map((l) => {
-                        const isActive = activeNav != null && l.spyId === activeNav;
-                        const href = resolveHref(l.href, variant);
+                        const isActive = linkActive(l.href);
+                        const linkClass = `relative font-nav text-[16px] font-medium transition-colors duration-300 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full ${
+                            isActive ? 'after:w-full' : 'after:w-0'
+                        } ${
+                            solidHeader
+                                ? isActive
+                                  ? 'text-brand-gold-muted hover:text-brand-gold-muted'
+                                  : 'text-brand-navy hover:text-brand-gold-muted'
+                                : isActive
+                                  ? 'text-[#E8D5A3]'
+                                  : 'text-white hover:text-[#E8D5A3]'
+                        }`;
                         return (
-                            <a
-                                key={l.href}
-                                href={href}
-                                className={`relative font-nav text-[16px] font-medium transition-colors duration-300 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:bg-brand-gold after:transition-all after:duration-300 hover:after:w-full ${
-                                    isActive ? 'after:w-full' : 'after:w-0'
-                                } ${
-                                    solidHeader
-                                        ? isActive
-                                          ? 'text-brand-gold-muted hover:text-brand-gold-muted'
-                                          : 'text-brand-navy hover:text-brand-gold-muted'
-                                        : isActive
-                                          ? 'text-[#E8D5A3]'
-                                          : 'text-white hover:text-[#E8D5A3]'
-                                }`}
-                            >
+                            <Link key={l.href} href={l.href} aria-current={isActive ? 'page' : undefined} className={linkClass}>
                                 {l.label}
-                            </a>
+                            </Link>
                         );
                     })}
                 </nav>
@@ -209,18 +208,21 @@ export function SiteHeader({
             {mobileMenuOpen && (
                 <div
                     id="site-mobile-menu"
-                    className="border-t border-brand-navy/[0.06] bg-brand-cream px-5 pt-2 pb-6 xl:hidden"
+                    className={`border-t border-brand-navy/[0.06] px-5 pt-2 pb-6 xl:hidden ${surface === 'white' ? 'bg-white' : 'bg-brand-cream'}`}
                 >
                     {NAV_LINKS.map((l) => (
-                        <a
+                        <Link
                             key={l.href}
-                            href={resolveHref(l.href, variant)}
+                            href={l.href}
+                            aria-current={linkActive(l.href) ? 'page' : undefined}
                             onClick={closeMobile}
-                            className="flex items-center justify-between border-b border-brand-navy/[0.06] py-3.5 font-nav text-[18px] font-medium text-brand-navy"
+                            className={`flex items-center justify-between border-b border-brand-navy/[0.06] py-3.5 font-nav text-[18px] font-medium ${
+                                linkActive(l.href) ? 'text-brand-gold-muted' : 'text-brand-navy'
+                            }`}
                         >
                             {l.label}
                             <ArrowRight className="h-4 w-4 text-brand-gold-muted" />
-                        </a>
+                        </Link>
                     ))}
                     {variant === 'hero' && (
                         <a

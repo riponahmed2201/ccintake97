@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { ArrowLeft, ArrowRight, ChevronDown, Lock, MapPin, Search, ShieldCheck, Users, X } from 'lucide-react';
+import { PrimaryCta } from '@/components/landing/cta';
+import { CAMPUS_PHOTOS } from '@/components/landing/constants';
+import { LANDING_CONTAINER } from '@/components/landing/layout';
+import { SectionHeading } from '@/components/landing/primitives';
 import PublicSiteHeader from '@/components/public-site-header';
 
 interface PublicMember {
@@ -39,7 +43,11 @@ const FIELDS = [
     { value: 'city', label: 'City' },
 ] as const;
 
+const inputBase =
+    'h-12 w-full rounded-xl border border-[#0B1220]/10 bg-[#FAF7F0] text-[15px] text-[#0B1220] transition-colors placeholder:text-[#0B1220]/35 focus:border-[#9A7B3F] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#C9A55C]/15';
+
 export default function PublicDirectory({ members, colleges, filters, total }: Props) {
+    const { auth } = usePage().props as { auth?: { user?: unknown } };
     const [search, setSearch] = useState(filters.search ?? '');
     const [field, setField] = useState<Props['filters']['field']>(filters.field ?? 'name');
     const collegeId = filters.college_id;
@@ -56,74 +64,87 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
     const activeCollege = colleges.find((c) => c.id === collegeId);
     const hasFilters = !!(filters.search || collegeId);
 
+  const profileHref = (m: PublicMember) =>
+        auth?.user ? `/member/directory/${m.id}` : `/login`;
+
     return (
         <>
             <Head title="Public Directory — ccIntake97" />
-            <div className="min-h-screen bg-[#FAF7F0] text-[#0B1220] antialiased selection:bg-[#C9A55C] selection:text-[#0B1220]">
+            <div className="min-h-screen bg-[#F4F2EE] font-sans text-[#0B1220] antialiased selection:bg-[#C9A55C] selection:text-[#0B1220]">
                 <PublicSiteHeader active="Directory" />
 
-                {/* Hero band */}
                 <section className="relative isolate overflow-hidden bg-[#0B1220] text-[#F7F3EA]">
                     <div className="pointer-events-none absolute inset-0 -z-10">
-                        <img src="/images/campus/playground-mcc.jpg" alt="" className="h-full w-full object-cover opacity-30" />
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#0B1220] via-[#0B1220]/85 to-[#0B1220]/50" />
+                        <img src="/images/campus/rcc.jpg" alt="" className="h-full w-full object-cover opacity-25" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#070B14] via-[#0B1220]/90 to-[#0B1220]/70" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1220] via-transparent to-[#0B1220]/40" />
                     </div>
-                    <div className="mx-auto max-w-[1440px] px-5 pt-14 pb-28 sm:px-8 lg:px-10 lg:pt-20 lg:pb-32">
-                        <Link href="/" className="inline-flex items-center gap-2 text-[14px] text-[#F7F3EA]/60 hover:text-[#F7F3EA]">
-                            <ArrowLeft className="h-4 w-4" /> Home
-                        </Link>
-                        <div className="mt-8 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-                            <div>
-                                <div className="flex items-center gap-3 text-[11px] font-medium tracking-[0.28em] text-[#D9BF85] uppercase">
-                                    <span className="h-px w-8 bg-[#D9BF85]/50" /> The Cadet Roll
-                                </div>
-                                <h1 className="mt-5 text-5xl leading-[1.02] font-medium tracking-[-0.015em] sm:text-6xl">
-                                    Public <span className="font-normal text-[#E8D5A3]">directory.</span>
-                                </h1>
-                                <p className="mt-4 max-w-xl text-[17px] text-[#F7F3EA]/65">Verified members of the 1997 intake, across all ten cadet colleges.</p>
-                            </div>
-                            <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.05] px-6 py-4 backdrop-blur">
-                                <Users className="h-6 w-6 text-[#C9A55C]" strokeWidth={1.5} />
+                    <div className={`${LANDING_CONTAINER} pb-28 pt-24 sm:pt-28 lg:pb-32`}>
+                        <div className="flex flex-col justify-between gap-10 lg:flex-row lg:items-end">
+                            <SectionHeading
+                                reveal={false}
+                                titleTag="h1"
+                                light
+                                eyebrow="Batch directory"
+                                title={
+                                    <>
+                                        Meet verified <em className="font-normal text-[#E8D5A3]">batchmates.</em>
+                                    </>
+                                }
+                                intro="INTAKE 1997 alumni across ten cadet colleges. Only details members mark as public appear here."
+                            />
+                            <dl className="flex gap-10 rounded-2xl border border-white/10 bg-white/[0.06] px-8 py-6 backdrop-blur-md">
                                 <div>
-                                    <div className="text-3xl font-semibold tabular-nums">{total}</div>
-                                    <div className="text-[12px] tracking-[0.18em] text-[#F7F3EA]/50 uppercase">Verified members</div>
+                                    <dd className="font-serif text-4xl font-medium tabular-nums">{total}</dd>
+                                    <dt className="mt-1 text-[10.5px] tracking-[0.2em] text-[#F7F3EA]/50 uppercase">Verified</dt>
                                 </div>
-                            </div>
+                                <div>
+                                    <dd className="font-serif text-4xl font-medium tabular-nums">{colleges.length}</dd>
+                                    <dt className="mt-1 text-[10.5px] tracking-[0.2em] text-[#F7F3EA]/50 uppercase">Colleges</dt>
+                                </div>
+                            </dl>
                         </div>
                     </div>
                 </section>
 
-                <main className="mx-auto max-w-[1440px] px-5 pb-24 sm:px-8 lg:px-10">
-                    {/* Search panel — overlaps the hero band */}
-                    <div className="relative -mt-16 rounded-3xl bg-white p-4 shadow-[0_30px_60px_-30px_rgba(11,18,32,0.35)] ring-1 ring-[#0B1220]/[0.05] sm:p-6">
+                <main className={`${LANDING_CONTAINER} pb-24`}>
+                    <div className="relative -mt-14 rounded-[1.75rem] bg-white p-5 shadow-[0_32px_64px_-32px_rgba(11,18,32,0.28)] ring-1 ring-[#0B1220]/[0.06] sm:p-6">
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
                                 visit({ search: search.trim() });
                             }}
-                            className="flex flex-col gap-2 sm:flex-row"
+                            className="flex flex-col gap-3 lg:flex-row lg:items-center"
                         >
-                            <div className="relative sm:w-44">
+                            <div className="relative lg:w-44">
                                 <select
                                     value={field}
                                     onChange={(e) => setField(e.target.value as Props['filters']['field'])}
                                     aria-label="Search by"
-                                    className="h-13 w-full appearance-none rounded-xl border border-[#0B1220]/10 bg-[#FAF7F0] py-3.5 pr-10 pl-4 text-[15px] font-medium text-[#0B1220] focus:border-[#9A7B3F] focus:ring-4 focus:ring-[#C9A55C]/15 focus:outline-none"
+                                    className={`${inputBase} appearance-none py-0 pr-10 pl-4 font-medium`}
                                 >
                                     {FIELDS.map((f) => (
-                                        <option key={f.value} value={f.value}>{f.label}</option>
+                                        <option key={f.value} value={f.value}>
+                                            {f.label}
+                                        </option>
                                     ))}
                                 </select>
                                 <ChevronDown className="pointer-events-none absolute top-1/2 right-3.5 h-4 w-4 -translate-y-1/2 text-[#0B1220]/40" />
                             </div>
-                            <div className="relative flex-1">
+                            <div className="relative min-w-0 flex-1">
                                 <Search className="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[#0B1220]/35" />
                                 <input
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
-                                    placeholder={field === 'name' ? 'Type a name to search' : field === 'profession' ? 'e.g. surgeon, Bangladesh Army, Google' : 'e.g. Dhaka, London, Toronto'}
+                                    placeholder={
+                                        field === 'name'
+                                            ? 'Search by name'
+                                            : field === 'profession'
+                                              ? 'Title, employer, or sector'
+                                              : 'City or region'
+                                    }
                                     aria-label="Search term"
-                                    className="w-full rounded-xl border border-[#0B1220]/10 bg-[#FAF7F0] py-3.5 pr-10 pl-11 text-[15px] placeholder:text-[#0B1220]/35 focus:border-[#9A7B3F] focus:bg-white focus:ring-4 focus:ring-[#C9A55C]/15 focus:outline-none"
+                                    className={`${inputBase} pl-11 pr-10`}
                                 />
                                 {search && (
                                     <button
@@ -133,22 +154,27 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                             setSearch('');
                                             visit({ search: '' });
                                         }}
-                                        className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1 text-[#0B1220]/40 hover:bg-[#0B1220]/5 hover:text-[#0B1220]"
+                                        className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1.5 text-[#0B1220]/40 hover:bg-[#0B1220]/5"
                                     >
                                         <X className="h-4 w-4" />
                                     </button>
                                 )}
                             </div>
-                            <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0B1220] px-7 py-3.5 text-[15px] font-medium text-white hover:bg-[#1A2438]">
+                            <button
+                                type="submit"
+                                className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-[#0B1220] px-8 text-[15px] font-medium text-white transition-colors hover:bg-[#1A2438]"
+                            >
                                 Search <ArrowRight className="h-4 w-4" />
                             </button>
                         </form>
 
-                        <div className="mt-5 flex items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">
+                        <div className="mt-5 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                             <button
                                 type="button"
                                 onClick={() => visit({ college_id: null })}
-                                className={`shrink-0 rounded-full px-4 py-2 text-[14px] font-medium transition-colors ${!collegeId ? 'bg-[#0B1220] text-white' : 'bg-[#FAF7F0] text-[#0B1220]/70 hover:text-[#0B1220]'}`}
+                                className={`shrink-0 rounded-full px-4 py-2 text-[13px] font-medium transition-colors ${
+                                    !collegeId ? 'bg-[#0B1220] text-white' : 'bg-[#F4F2EE] text-[#0B1220]/70 hover:text-[#0B1220]'
+                                }`}
                             >
                                 All colleges
                             </button>
@@ -160,12 +186,16 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                         type="button"
                                         title={c.name}
                                         onClick={() => visit({ college_id: active ? null : c.id })}
-                                        className={`flex shrink-0 items-center gap-2 rounded-full py-1.5 pr-4 pl-1.5 text-[14px] font-medium transition-colors ${
-                                            active ? 'bg-[#0B1220] text-white' : 'bg-[#FAF7F0] text-[#0B1220]/70 hover:text-[#0B1220]'
+                                        className={`flex shrink-0 items-center gap-2 rounded-full py-1.5 pr-4 pl-1.5 text-[13px] font-medium transition-all ${
+                                            active ? 'bg-[#0B1220] text-white shadow-md' : 'bg-[#F4F2EE] text-[#0B1220]/70 hover:bg-[#FAF7F0]'
                                         }`}
                                     >
-                                        <span className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-white">
-                                            {c.logo_url ? <img src={c.logo_url} alt="" className="h-full w-full object-contain p-0.5" /> : <span className="text-[9px]">{c.short_name}</span>}
+                                        <span className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-[#0B1220]/10">
+                                            {c.logo_url ? (
+                                                <img src={c.logo_url} alt="" className="h-full w-full object-contain p-0.5" />
+                                            ) : (
+                                                <span className="text-[9px] font-semibold">{c.short_name}</span>
+                                            )}
                                         </span>
                                         {c.short_name}
                                     </button>
@@ -174,17 +204,28 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                         </div>
                     </div>
 
-                    {/* Result meta */}
                     <div className="mt-10 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
                         <p className="text-[15px] text-[#4A4F5C]">
-                            {members.total === 0 ? 'No members found' : (
+                            {members.total === 0 ? (
+                                'No members match your filters'
+                            ) : (
                                 <>
                                     Showing <span className="font-semibold text-[#0B1220]">{members.from}–{members.to}</span> of{' '}
-                                    <span className="font-semibold text-[#0B1220]">{members.total}</span> members
+                                    <span className="font-semibold text-[#0B1220]">{members.total}</span>
                                 </>
                             )}
-                            {activeCollege && <> from <span className="font-semibold text-[#0B1220]">{activeCollege.name}</span></>}
-                            {filters.search && <> matching “<span className="font-semibold text-[#0B1220]">{filters.search}</span>”</>}
+                            {activeCollege && (
+                                <>
+                                    {' '}
+                                    from <span className="font-semibold text-[#0B1220]">{activeCollege.short_name}</span>
+                                </>
+                            )}
+                            {filters.search && (
+                                <>
+                                    {' '}
+                                    · “<span className="font-semibold text-[#0B1220]">{filters.search}</span>”
+                                </>
+                            )}
                         </p>
                         {hasFilters && (
                             <button
@@ -200,77 +241,135 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                         )}
                     </div>
 
-                    {/* Grid */}
                     {members.data.length > 0 ? (
-                        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-                            {members.data.map((m) => (
-                                <Link
-                                    key={m.id}
-                                    href={`/member/directory/${m.id}`}
-                                    className="group flex flex-col items-center rounded-2xl bg-white px-4 pt-7 pb-5 text-center ring-1 ring-[#0B1220]/[0.05] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_-28px_rgba(11,18,32,0.4)]"
-                                >
-                                    <div className="relative">
-                                        <div className="h-24 w-24 overflow-hidden rounded-full ring-4 ring-[#FAF7F0] transition-all duration-300 group-hover:ring-[#C9A55C]/40">
-                                            {m.photo_url ? (
-                                                <img src={m.photo_url} alt={m.name} loading="lazy" className="h-full w-full object-cover" />
-                                            ) : (
-                                                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#1E2A42] to-[#0B1220] text-2xl font-semibold text-[#E8D5A3]">{m.initials}</div>
+                        <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                            {members.data.map((m) => {
+                                const code = m.college?.short_name ?? '';
+                                const campusBg = code ? CAMPUS_PHOTOS[code] : undefined;
+                                const subtitle = [m.designation, m.organization].filter(Boolean).join(' · ');
+                                return (
+                                    <li key={m.id}>
+                                        <Link
+                                            href={profileHref(m)}
+                                            className="group relative isolate flex min-h-[320px] flex-col overflow-hidden rounded-3xl bg-[#121B2E] text-[#F7F3EA] ring-1 ring-[#0B1220]/10 transition-all duration-300 hover:-translate-y-1 hover:ring-[#C9A55C]/35 hover:shadow-[0_28px_56px_-24px_rgba(11,18,32,0.55)]"
+                                        >
+                                            {campusBg && (
+                                                <img
+                                                    src={campusBg}
+                                                    alt=""
+                                                    loading="lazy"
+                                                    className="absolute inset-0 -z-20 h-full w-full object-cover opacity-40 transition-transform duration-[1000ms] group-hover:scale-105"
+                                                />
                                             )}
-                                        </div>
-                                        {m.college?.logo_url && (
-                                            <img src={m.college.logo_url} alt={m.college.name} title={m.college.name} className="absolute -right-1 bottom-0 h-8 w-8 rounded-full bg-white object-contain p-0.5 ring-2 ring-white" />
-                                        )}
-                                    </div>
-                                    <div className="mt-4 flex items-center gap-1 text-[16px] leading-snug font-semibold">
-                                        <span className="line-clamp-2">{m.name}</span>
-                                        <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-emerald-600" aria-label="Verified" />
-                                    </div>
-                                    <div className="mt-1 line-clamp-1 min-h-[1.25rem] text-[13px] text-[#4A4F5C]">
-                                        {[m.designation, m.organization].filter(Boolean).join(', ') || `${m.college?.short_name ?? 'Cadet College'} ’97`}
-                                    </div>
-                                    {m.city && (
-                                        <div className="mt-1 flex items-center gap-1 text-[12px] text-[#0B1220]/45">
-                                            <MapPin className="h-3 w-3" /> {m.city}
-                                        </div>
-                                    )}
-                                    <span className="mt-4 inline-flex items-center gap-1 text-[13px] font-medium text-[#7A5E28] group-hover:gap-2">
-                                        View profile <ArrowRight className="h-3.5 w-3.5 transition-all" />
-                                    </span>
-                                </Link>
-                            ))}
-                        </div>
+                                            <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#0B1220]/50 via-[#0B1220]/75 to-[#0B1220]" />
+
+                                            <div className="flex items-center justify-between p-4">
+                                                <span className="flex items-center gap-2 rounded-full bg-white/10 py-1 pr-3 pl-1 text-[11px] font-medium backdrop-blur-sm">
+                                                    <span className="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-white">
+                                                        {m.college?.logo_url ? (
+                                                            <img src={m.college.logo_url} alt="" className="h-full w-full object-contain p-0.5" />
+                                                        ) : (
+                                                            <span className="text-[8px] text-[#0B1220]">{code || 'CC'}</span>
+                                                        )}
+                                                    </span>
+                                                    {code ? `${code} ’97` : 'INTAKE 97'}
+                                                </span>
+                                                <ShieldCheck className="h-4 w-4 text-[#C9A55C]" aria-label="Verified member" />
+                                            </div>
+
+                                            <div className="flex flex-1 flex-col items-center justify-center px-4">
+                                                <div className="rounded-full bg-gradient-to-b from-[#F3E3B5] to-[#9A7B3F] p-[3px] shadow-lg transition-transform duration-500 group-hover:scale-105">
+                                                    {m.photo_url ? (
+                                                        <img src={m.photo_url} alt="" className="h-24 w-24 rounded-full object-cover" />
+                                                    ) : (
+                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[#0B1220] text-2xl font-semibold text-[#E8D5A3]">
+                                                            {m.initials}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <h2 className="mt-5 text-center text-lg leading-snug font-semibold text-white">{m.name}</h2>
+                                                <p className="mt-1 line-clamp-2 min-h-[2.5rem] max-w-[16rem] text-center text-[13px] leading-snug text-[#F7F3EA]/70">
+                                                    {subtitle || m.college?.name}
+                                                </p>
+                                                {m.city && (
+                                                    <p className="mt-2 flex items-center gap-1 text-[12px] text-[#E8D5A3]/80">
+                                                        <MapPin className="h-3 w-3" aria-hidden />
+                                                        {m.city}
+                                                        {m.country_code && m.country_code !== 'BD' ? ` · ${m.country_code}` : ''}
+                                                    </p>
+                                                )}
+                                            </div>
+
+                                            <div className="border-t border-white/10 px-4 py-3 text-center text-[12px] font-medium text-[#E8D5A3]/90 group-hover:text-[#E8D5A3]">
+                                                {auth?.user ? (
+                                                    <span className="inline-flex items-center justify-center gap-1">
+                                                        View profile <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                                                    </span>
+                                                ) : (
+                                                    <span className="inline-flex items-center justify-center gap-1">
+                                                        Sign in for full profile <ArrowRight className="h-3.5 w-3.5" />
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </Link>
+                                    </li>
+                                );
+                            })}
+                        </ul>
                     ) : (
-                        <div className="mt-6 flex flex-col items-center rounded-3xl bg-white px-6 py-20 text-center ring-1 ring-[#0B1220]/[0.05]">
-                            <Search className="h-8 w-8 text-[#C9A55C]" strokeWidth={1.5} />
-                            <h2 className="mt-5 text-2xl font-semibold">No batchmates match that search</h2>
-                            <p className="mt-2 max-w-md text-[15px] text-[#4A4F5C]">
-                                Try a different spelling or college. Members who keep their profession or city private won’t appear in those searches.
+                        <div className="mt-8 flex flex-col items-center rounded-3xl bg-white px-6 py-20 text-center ring-1 ring-[#0B1220]/[0.06]">
+                            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#C9A55C]/15">
+                                <Users className="h-7 w-7 text-[#9A7B3F]" strokeWidth={1.5} />
+                            </div>
+                            <h2 className="mt-6 font-serif text-2xl font-medium text-[#0B1220]">No batchmates match that search</h2>
+                            <p className="mt-3 max-w-md text-[15px] leading-relaxed text-[#4A4F5C]">
+                                Try another spelling, college, or search field. Profession and city only appear when a member sets them to public.
                             </p>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setSearch('');
+                                    router.get('/directory');
+                                }}
+                                className="mt-8 text-[14px] font-medium text-[#7A5E28] underline decoration-[#9A7B3F]/40 underline-offset-4"
+                            >
+                                Reset directory
+                            </button>
                         </div>
                     )}
 
-                    {/* Pagination */}
                     {members.last_page > 1 && (
-                        <nav className="mt-12 flex items-center justify-between gap-4 rounded-2xl bg-white px-5 py-4 ring-1 ring-[#0B1220]/[0.05]" aria-label="Pagination">
+                        <nav
+                            className="mt-12 flex flex-col items-center justify-between gap-4 rounded-2xl bg-white px-5 py-5 ring-1 ring-[#0B1220]/[0.06] sm:flex-row"
+                            aria-label="Pagination"
+                        >
                             <span className="text-[14px] text-[#4A4F5C]">
                                 Page <span className="font-semibold text-[#0B1220]">{members.current_page}</span> of {members.last_page}
                             </span>
                             <div className="flex gap-2">
                                 {members.prev_page_url ? (
-                                    <Link href={members.prev_page_url} preserveScroll className="inline-flex items-center gap-1.5 rounded-full border border-[#0B1220]/15 px-4 py-2 text-[14px] font-medium hover:border-[#0B1220]">
+                                    <Link
+                                        href={members.prev_page_url}
+                                        preserveScroll
+                                        className="inline-flex items-center gap-1.5 rounded-full border border-[#0B1220]/15 px-5 py-2.5 text-[14px] font-medium transition-colors hover:border-[#0B1220]"
+                                    >
                                         <ArrowLeft className="h-4 w-4" /> Previous
                                     </Link>
                                 ) : (
-                                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[#0B1220]/10 px-4 py-2 text-[14px] text-[#0B1220]/30">
+                                    <span className="inline-flex items-center gap-1.5 rounded-full border border-[#0B1220]/8 px-5 py-2.5 text-[14px] text-[#0B1220]/30">
                                         <ArrowLeft className="h-4 w-4" /> Previous
                                     </span>
                                 )}
                                 {members.next_page_url ? (
-                                    <Link href={members.next_page_url} preserveScroll className="inline-flex items-center gap-1.5 rounded-full bg-[#0B1220] px-4 py-2 text-[14px] font-medium text-white hover:bg-[#1A2438]">
+                                    <Link
+                                        href={members.next_page_url}
+                                        preserveScroll
+                                        className="inline-flex items-center gap-1.5 rounded-full bg-[#0B1220] px-5 py-2.5 text-[14px] font-medium text-white hover:bg-[#1A2438]"
+                                    >
                                         Next <ArrowRight className="h-4 w-4" />
                                     </Link>
                                 ) : (
-                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#0B1220]/10 px-4 py-2 text-[14px] text-[#0B1220]/30">
+                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#0B1220]/10 px-5 py-2.5 text-[14px] text-[#0B1220]/30">
                                         Next <ArrowRight className="h-4 w-4" />
                                     </span>
                                 )}
@@ -278,31 +377,30 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                         </nav>
                     )}
 
-                    {/* Privacy + CTA */}
-                    <div className="mt-16 grid grid-cols-1 gap-3 md:grid-cols-2">
-                        <div className="flex items-start gap-4 rounded-2xl bg-white p-6 ring-1 ring-[#0B1220]/[0.05]">
-                            <Lock className="mt-0.5 h-5 w-5 shrink-0 text-[#9A7B3F]" />
+                    <div className="mt-16 grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div className="flex items-start gap-4 rounded-2xl bg-white p-6 ring-1 ring-[#0B1220]/[0.06]">
+                            <Lock className="mt-0.5 h-5 w-5 shrink-0 text-[#9A7B3F]" aria-hidden />
                             <div>
-                                <div className="text-[16px] font-semibold">Privacy first</div>
-                                <p className="mt-1 text-[14px] leading-relaxed text-[#4A4F5C]">
-                                    Only details members choose to make public appear here. Phone, email and WhatsApp are visible to verified batchmates only.
+                                <div className="font-semibold">Privacy first</div>
+                                <p className="mt-2 text-[14px] leading-relaxed text-[#4A4F5C]">
+                                    Email, phone and WhatsApp stay inside the verified member portal. This page shows only what alumni choose to make public.
                                 </p>
                             </div>
                         </div>
-                        <div className="flex flex-col justify-between gap-4 rounded-2xl bg-gradient-to-r from-[#C9A55C] to-[#E8D5A3] p-6 sm:flex-row sm:items-center">
+                        <div className="flex flex-col justify-between gap-5 rounded-2xl bg-gradient-to-br from-[#E8D5A3] via-[#C9A55C] to-[#B8924A] p-6 sm:flex-row sm:items-center">
                             <div>
-                                <div className="text-[16px] font-semibold">Not on the roll yet?</div>
-                                <p className="mt-1 text-[14px] text-[#0B1220]/70">Join to appear here and reach every batchmate.</p>
+                                <div className="font-semibold text-[#0B1220]">Not on the roll yet?</div>
+                                <p className="mt-1 text-[14px] text-[#0B1220]/75">Create your account and complete verification to be listed.</p>
                             </div>
-                            <Link href="/register-alumni" className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#0B1220] px-5 py-3 text-[14px] font-medium text-white hover:bg-[#1A2438]">
-                                Apply now <ArrowRight className="h-4 w-4" />
-                            </Link>
+                            <PrimaryCta as="link" href="/?signup=1" variant="navy" className="shrink-0 !px-6 !py-3 text-[14px]">
+                                Apply now
+                            </PrimaryCta>
                         </div>
                     </div>
                 </main>
 
                 <footer className="border-t border-[#0B1220]/[0.06] bg-white">
-                    <div className="mx-auto flex max-w-[1440px] flex-col items-center justify-between gap-3 px-5 py-8 text-[13px] text-[#0B1220]/45 sm:flex-row sm:px-8 lg:px-10">
+                    <div className={`${LANDING_CONTAINER} flex flex-col items-center justify-between gap-3 py-8 text-[13px] text-[#0B1220]/45 sm:flex-row`}>
                         <span>© {new Date().getFullYear()} ccIntake97 · Cadet College Alumni Association</span>
                         <span className="tracking-[0.28em] uppercase">Fidelitas et Disciplina</span>
                     </div>

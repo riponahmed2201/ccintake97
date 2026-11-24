@@ -19,7 +19,7 @@ export function LandingWelfare() {
                                         Medical lifelines, protected futures for the children of fallen batchmates, and privileges shared among our own.
                                     </p>
                                     <div className="mt-8">
-                                        <ExploreLink href="#contact" light>Support the Trust</ExploreLink>
+                                        <ExploreLink href="/contact" light internal={false}>Support the Trust</ExploreLink>
                                     </div>
                                 </Reveal>
         

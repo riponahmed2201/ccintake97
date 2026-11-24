@@ -1,5 +1,6 @@
 import { LANDING_CONTAINER, LANDING_GRID_GAP, LANDING_SECTION } from '@/components/landing/layout';
 import { Reveal, SectionHeading } from '@/components/landing/primitives';
+import { cn } from '@/lib/utils';
 
 const MOSAIC = [
     { src: '/images/campus/cadets-in-class.jpg', alt: 'Cadets in a classroom', caption: 'Prep hour', cls: 'col-span-3 row-span-2' },
@@ -7,44 +8,50 @@ const MOSAIC = [
     { src: '/images/campus/athletes-contingent.jpg', alt: 'Athletes contingent on parade', caption: 'Inter-house athletics', cls: 'col-span-2' },
 ];
 
-export function LandingAbout() {
+export function LandingAbout({ omitHeading = false, className }: { omitHeading?: boolean; className?: string }) {
     return (
-        <section id="about" className={`${LANDING_SECTION} bg-white`}>
+        <section
+            id={omitHeading ? undefined : 'about'}
+            className={cn(LANDING_SECTION, 'bg-white', omitHeading && 'scroll-mt-0', className)}
+        >
             <div className={LANDING_CONTAINER}>
                 <div className={`grid grid-cols-1 items-start lg:grid-cols-12 ${LANDING_GRID_GAP}`}>
                     <div className="lg:col-span-5">
-                        <SectionHeading
-                            index="01"
-                            eyebrow="Our story"
-                            title={
-                                <>
-                                    Bound by a <em className="font-normal text-[#9A7B3F]">shared</em> beginning.
-                                </>
-                            }
-                        />
+                        {!omitHeading && (
+                            <SectionHeading
+                                eyebrow="Our story"
+                                title={
+                                    <>
+                                        Bound by a <em className="font-normal text-[#9A7B3F]">shared</em> beginning.
+                                    </>
+                                }
+                            />
+                        )}
                         <Reveal delay={100}>
-                            <p className="mt-8 text-[17px] leading-[1.75] text-[#4A4F5C]">
-                                In January 1997, 500 adolescents walked through the gates of ten cadet colleges. Reveille at 0530, ten-mile runs and drill-square inspections turned strangers into brothers and sisters.
+                            <p className={cn('text-[17px] leading-[1.75] text-[#4A4F5C]', omitHeading ? 'mt-0' : 'mt-8')}>
+                                They arrived as Class 7 cadets: reveille, drill, prep and house life at Faujdarhat, Jhenaidah, Mirzapur, Rajshahi, Sylhet, Rangpur, Barishal, Pabna, Mymensingh Girls&apos; and Cumilla. Most passed out around 2003.
                             </p>
                             <p className="mt-4 text-[17px] leading-[1.75] text-[#4A4F5C]">
-                                Today we lead across continents — and remain exactly who we were.
+                                ccIntake97 is their association — a verified directory, a way to find batchmates, and a home for welfare and the reunion planned for 2027.
                             </p>
                             <blockquote className="mt-9 border-l-2 border-[#C9A55C] pl-5 font-serif text-xl leading-snug text-[#0B1220] italic">
                                 “No rank outside this room supersedes that of a brother who stood the same cold morning muster beside you.”
                             </blockquote>
-                            <dl className="mt-10 grid grid-cols-4 gap-4 border-t border-[#0B1220]/10 pt-6">
-                                {[
-                                    { v: '1997', l: 'Induction' },
-                                    { v: '2003', l: 'Passing out' },
-                                    { v: '27+', l: 'Years' },
-                                    { v: '10', l: 'Colleges' },
-                                ].map((st) => (
-                                    <div key={st.l}>
-                                        <dd className="font-serif text-2xl font-medium text-[#0B1220]">{st.v}</dd>
-                                        <dt className="mt-0.5 text-[10.5px] tracking-[0.18em] text-[#0B1220]/45 uppercase">{st.l}</dt>
-                                    </div>
-                                ))}
-                            </dl>
+                            {!omitHeading && (
+                                <dl className="mt-10 grid grid-cols-4 gap-4 border-t border-[#0B1220]/10 pt-6">
+                                    {[
+                                        { v: '1997', l: 'Induction' },
+                                        { v: '~2003', l: 'Passing out' },
+                                        { v: 'Class 7', l: 'Entry' },
+                                        { v: '10', l: 'Colleges' },
+                                    ].map((st) => (
+                                        <div key={st.l}>
+                                            <dd className="font-serif text-2xl font-medium text-[#0B1220]">{st.v}</dd>
+                                            <dt className="mt-0.5 text-[10.5px] tracking-[0.18em] text-[#0B1220]/45 uppercase">{st.l}</dt>
+                                        </div>
+                                    ))}
+                                </dl>
+                            )}
                         </Reveal>
                     </div>
 

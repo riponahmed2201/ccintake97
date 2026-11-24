@@ -25,8 +25,8 @@ export function LandingFooter() {
                                         </Link>
                                     </div>
                                     {[
-                                        { h: 'Association', links: [['#about', 'About'], ['#colleges', 'Colleges'], ['/directory', 'Directory'], ['#committee', 'Committee']] },
-                                        { h: 'Activities', links: [['#welfare', 'Welfare & Trust'], ['#news', 'News & ventures'], ['#constitution', 'Charter'], ['#reunion', 'Reunion 2027']] },
+                                        { h: 'Association', links: [['/about', 'About'], ['/colleges', 'Colleges'], ['/directory', 'Directory'], ['/committee', 'Committee']] },
+                                        { h: 'Activities', links: [['/welfare', 'Welfare & Trust'], ['/#news', 'News & ventures'], ['/#constitution', 'Charter'], ['/#reunion', 'Reunion 2027']] },
                                     ].map((col) => (
                                         <div key={col.h} className="md:col-span-2">
                                             <h4 className="text-[11px] tracking-[0.24em] text-[#D9BF85]/80 uppercase">{col.h}</h4>
@@ -42,7 +42,7 @@ export function LandingFooter() {
                                         <ul className="mt-6 space-y-3 text-[14px]">
                                             <li><Link href="/login" className="text-[#F7F3EA]/60 transition-colors hover:text-[#F7F3EA]">Member sign in</Link></li>
                                             <li><Link href="/?signup=1" className="inline-flex min-h-10 items-center text-[#F7F3EA]/60 transition-colors hover:text-[#F7F3EA]">Apply for membership</Link></li>
-                                            <li><a href="#contact" className="text-[#F7F3EA]/60 transition-colors hover:text-[#F7F3EA]">Contact secretariat</a></li>
+                                            <li><Link href="/contact" className="text-[#F7F3EA]/60 transition-colors hover:text-[#F7F3EA]">Contact secretariat</Link></li>
                                         </ul>
                                     </div>
                                 </div>

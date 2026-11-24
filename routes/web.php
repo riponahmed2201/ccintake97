@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Route;
 
 // Public Portal
 Route::get('/', [Public\HomeController::class, 'index'])->name('home');
+Route::get('/about', [Public\MarketingPageController::class, 'about'])->name('about');
+Route::get('/colleges', [Public\MarketingPageController::class, 'colleges'])->name('colleges');
+Route::get('/committee', [Public\MarketingPageController::class, 'committee'])->name('committee');
+Route::get('/welfare', [Public\MarketingPageController::class, 'welfare'])->name('welfare');
+Route::get('/contact', [Public\MarketingPageController::class, 'contact'])->name('contact');
 Route::get('/directory', [Public\DirectoryController::class, 'index'])->name('directory.public');
 Route::get('/news/{slug}', [Public\ArticleController::class, 'show'])->name('news.show');
 Route::get('/register-alumni', [Public\RegistrationController::class, 'create'])->name('register.alumni');
