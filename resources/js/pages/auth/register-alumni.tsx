@@ -1,86 +1,93 @@
 import { Head, Link } from '@inertiajs/react';
-import BrandMark from '@/components/brand-mark';
 import { AlumniSignupForm } from '@/components/auth/alumni-signup-form';
-import { ArrowLeft, Lock } from 'lucide-react';
+import BrandMark from '@/components/brand-mark';
+import { ShieldCheck, UserRound, BadgeCheck } from 'lucide-react';
 
 const STEPS = [
-    { title: 'Sign up', text: 'Name, email and a secure password.' },
-    { title: 'Your profile', text: 'College, roll number, career and contact details.' },
-    { title: 'Verification', text: 'Confirmed by your college batch representative.' },
+    { icon: UserRound, title: 'Create your account', text: 'Name, email and a password. That is all for now.' },
+    { icon: BadgeCheck, title: 'Complete your profile', text: 'College, roll number and contact details after you sign in.' },
+    { icon: ShieldCheck, title: 'Get verified', text: 'A college batch representative confirms you are on the roll.' },
 ];
 
 export default function RegisterAlumni() {
     return (
         <>
-            <Head title="Apply for Membership — ccIntake97" />
+            <Head title="Apply for membership" />
 
-            <div className="min-h-screen bg-[#F5F1E8] font-sans text-[#0B1220] antialiased selection:bg-[#C9A55C] selection:text-[#0B1220] lg:grid lg:grid-cols-[5fr_7fr]">
-                <aside className="relative isolate overflow-hidden bg-[#070B14] text-[#F7F3EA] lg:sticky lg:top-0 lg:h-screen">
-                    <div className="pointer-events-none absolute inset-0 -z-10">
-                        <div className="absolute -top-48 -right-48 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(201,165,92,0.18),transparent_62%)]" />
-                        <div className="absolute -bottom-56 -left-48 h-[560px] w-[560px] rounded-full bg-[radial-gradient(circle,rgba(123,17,19,0.22),transparent_65%)]" />
-                    </div>
+            <div className="relative min-h-svh bg-[#F3F6F5] text-[#0B1220]">
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_80%_0%,rgba(201,165,92,0.16),transparent_42%)]" />
+                <div className="relative grid min-h-svh lg:grid-cols-[1.15fr_0.85fr]">
+                    <aside className="relative hidden overflow-hidden bg-[#07111F] text-[#F7F3EA] lg:flex lg:flex-col lg:justify-between">
+                        <div
+                            className="pointer-events-none absolute inset-0 opacity-70"
+                            style={{
+                                backgroundImage:
+                                    'linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px)',
+                                backgroundSize: '56px 56px',
+                            }}
+                        />
+                        <div className="pointer-events-none absolute -right-24 bottom-0 h-[420px] w-[420px] rounded-full bg-[#C9A55C]/10 blur-3xl" />
 
-                    <div className="flex h-full flex-col px-6 py-7 sm:px-10 lg:px-14 lg:py-12">
-                        <div className="flex items-center justify-between">
-                            <Link href="/" className="flex items-center gap-3">
-                                <BrandMark className="h-11 w-auto shrink-0" />
-                                <span className="font-brand text-xl font-semibold tracking-[0.02em]">
-                                    ccIntake<span className="text-[#C9A55C] [font-variant-numeric:lining-nums]">97</span>
+                        <div className="relative z-10 px-12 pt-10 xl:px-16">
+                            <Link href="/" className="inline-flex items-center gap-3">
+                                <BrandMark className="h-14 w-auto" />
+                                <span>
+                                    <span className="block font-brand text-[22px] font-semibold">
+                                        ccIntake<span className="text-[#C9A55C]">97</span>
+                                    </span>
+                                    <span className="text-[11px] text-[#F7F3EA]/55">Cadet College Alumni</span>
                                 </span>
                             </Link>
-                            <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] text-[#F7F3EA]/50 transition-colors hover:text-[#F7F3EA]">
-                                <ArrowLeft className="h-3.5 w-3.5" /> Back
-                            </Link>
                         </div>
 
-                        <div className="flex flex-1 flex-col justify-center py-12 lg:py-0">
-                            <p className="text-[11px] font-medium tracking-[0.28em] text-[#D9BF85] uppercase">Class of 1997</p>
-                            <h1 className="mt-5 font-serif text-[2.6rem] leading-[1.04] font-medium tracking-[-0.015em] sm:text-5xl lg:text-[3.75rem]">
-                                Take your place
-                                <br />
-                                <span className="bg-gradient-to-r from-[#F1DFB0] via-[#C9A55C] to-[#E8D5A3] bg-clip-text font-normal text-transparent">on the roll.</span>
-                            </h1>
-                            <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-[#F7F3EA]/50">
-                                For cadets who entered a Bangladesh Cadet College in 1997.
+                        <div className="relative z-10 px-12 xl:px-16">
+                            <p className="inline-flex items-center gap-2 rounded-full bg-[#C9A55C]/15 px-3 py-1 text-[12px] font-medium text-[#E8D5A3]">
+                                <span className="h-1.5 w-1.5 rounded-full bg-[#E8D5A3]" />
+                                Class of 1997
                             </p>
-
-                            <ol className="mt-14 hidden max-w-sm lg:block">
-                                {STEPS.map((s, i) => (
-                                    <li key={s.title} className="relative flex gap-4 pb-7 last:pb-0">
-                                        {i < STEPS.length - 1 && <span className="absolute top-7 left-[11px] h-[calc(100%-1.75rem)] w-px bg-[#F7F3EA]/10" />}
-                                        <span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-medium ${i === 0 ? 'bg-[#C9A55C] text-[#0B1220]' : 'border border-[#F7F3EA]/15 text-[#F7F3EA]/45'}`}>
-                                            {i + 1}
-                                        </span>
-                                        <div>
-                                            <div className={`text-[14px] font-medium ${i === 0 ? 'text-[#F7F3EA]' : 'text-[#F7F3EA]/65'}`}>{s.title}</div>
-                                            <div className="mt-0.5 text-[13px] text-[#F7F3EA]/40">{s.text}</div>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ol>
+                            <h1 className="mt-6 max-w-xl font-serif text-5xl leading-[1.05] font-medium tracking-[-0.02em] xl:text-6xl">
+                                Take your place
+                                <span className="mt-1 block text-[#E8D5A3]">on the roll.</span>
+                            </h1>
+                            <p className="mt-5 max-w-md text-[16px] leading-relaxed text-[#F7F3EA]/65">
+                                For cadets who entered one of the ten cadet colleges in 1997.
+                            </p>
                         </div>
 
-                        <p className="hidden text-[11px] tracking-[0.3em] text-[#F7F3EA]/25 uppercase lg:block">Fidelitas et Disciplina</p>
-                    </div>
-                </aside>
+                        <ol className="relative z-10 space-y-3 px-12 pb-12 xl:px-16">
+                            {STEPS.map((step) => (
+                                <li key={step.title} className="flex max-w-md items-start gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-sm">
+                                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#C9A55C]/15 text-[#E8D5A3]">
+                                        <step.icon className="h-5 w-5" />
+                                    </span>
+                                    <span>
+                                        <span className="block text-[15px] font-semibold">{step.title}</span>
+                                        <span className="mt-0.5 block text-[13px] leading-snug text-[#F7F3EA]/55">{step.text}</span>
+                                    </span>
+                                </li>
+                            ))}
+                        </ol>
+                    </aside>
 
-                <main className="flex items-center justify-center px-3 py-10 sm:px-6 lg:min-h-screen lg:py-16">
-                    <div className="w-full max-w-[500px]">
-                        <div className="mb-8 text-center lg:text-left">
-                            <h2 className="font-serif text-[2.25rem] leading-tight font-medium text-[#0B1220]">Create your account</h2>
+                    <main className="relative flex items-center justify-center px-5 py-10 sm:px-8">
+                        <div className="w-full max-w-[460px] overflow-hidden rounded-3xl bg-white shadow-[0_30px_80px_-36px_rgba(7,17,31,0.45)] ring-1 ring-[#0B1220]/[0.06]">
+                            <div className="h-1 bg-gradient-to-r from-[#E8D5A3] via-[#C9A55C] to-[#9A7B3F]" />
+                            <div className="px-7 py-8 sm:px-9 sm:py-10">
+                                <Link href="/" className="inline-flex items-center gap-2.5 lg:hidden">
+                                    <BrandMark className="h-11 w-auto" />
+                                    <span className="font-brand text-lg font-semibold">
+                                        ccIntake<span className="text-[#9A7B3F]">97</span>
+                                    </span>
+                                </Link>
+                                <h2 className="mt-6 text-[28px] leading-tight font-semibold tracking-[-0.02em] lg:mt-0">Create your account</h2>
+                                <p className="mt-1.5 text-[15px] text-[#4A4F5C]">Name, email and password. College details come next.</p>
+                                <div className="mt-7 border-t border-[#0B1220]/[0.06] pt-7">
+                                    <AlumniSignupForm />
+                                </div>
+                            </div>
                         </div>
-
-                        <div className="space-y-4 rounded-[1.75rem] bg-white px-4 py-6 shadow-[0_40px_80px_-48px_rgba(11,18,32,0.35)] ring-1 ring-[#0B1220]/[0.05] sm:px-5 sm:py-7">
-                            <AlumniSignupForm />
-                        </div>
-
-                        <p className="mt-6 flex items-center justify-center gap-2 text-[12px] text-[#0B1220]/40">
-                            <Lock className="h-3 w-3" />
-                            Your details are private and visible only to verified batchmates.
-                        </p>
-                    </div>
-                </main>
+                    </main>
+                </div>
             </div>
         </>
     );

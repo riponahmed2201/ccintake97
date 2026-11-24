@@ -3,7 +3,7 @@ import { Link, useForm } from '@inertiajs/react';
 import { ArrowRight, Eye, EyeOff } from 'lucide-react';
 
 const inputBase =
-    'h-12 w-full rounded-xl border bg-[#FCFBF8] px-3.5 text-[15px] text-[#0B1220] transition-all duration-200 placeholder:text-[#0B1220]/30 focus:bg-white focus:outline-none focus:ring-4';
+    'h-12 w-full rounded-xl border bg-white px-3.5 text-[15px] text-[#0B1220] transition-all duration-200 placeholder:text-[#0B1220]/35 focus:outline-none focus:ring-4';
 const inputOk = 'border-[#0B1220]/10 hover:border-[#0B1220]/20 focus:border-[#9A7B3F] focus:ring-[#C9A55C]/15';
 const inputErr = 'border-red-300 bg-red-50/40 focus:border-red-500 focus:ring-red-500/10';
 
@@ -157,7 +157,7 @@ export function AlumniSignupForm({
             <button
                 type="submit"
                 disabled={processing}
-                className="group mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#0B1220] text-[15px] font-medium text-[#F7F3EA] transition-all hover:bg-[#1A2438] disabled:opacity-70"
+                className="group mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#0B1220] text-[15px] font-medium text-white transition-all hover:bg-[#1A2438] disabled:opacity-70"
             >
                 {processing ? (
                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#E8D5A3]/30 border-t-[#E8D5A3]" />
@@ -169,13 +169,11 @@ export function AlumniSignupForm({
                 )}
             </button>
 
-            <p className="text-center text-[12px] leading-relaxed text-[#0B1220]/45">
-                Add college, roll number and career details from{' '}
-                <Link href="/register-alumni" className="underline decoration-[#9A7B3F]/40">
-                    the full registration page
-                </Link>{' '}
-                if you prefer.
-            </p>
+            {compact && (
+                <p className="text-center text-[12px] leading-relaxed text-[#0B1220]/45">
+                    College and roll number can be added after you sign in.
+                </p>
+            )}
         </form>
     );
 }

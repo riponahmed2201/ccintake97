@@ -55,7 +55,7 @@ export default function MemberLayout({ children, title, breadcrumbs = [] }: Memb
     const currentPath = window.location.pathname;
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex">
+        <div className="flex min-h-screen bg-[#F4F6F8] text-slate-900 dark:bg-[#070B14] dark:text-slate-100">
             {/* Mobile Overlay */}
             {sidebarOpen && (
                 <div
@@ -66,26 +66,26 @@ export default function MemberLayout({ children, title, breadcrumbs = [] }: Memb
 
             {/* Sidebar */}
             <aside
-                className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col transition-transform duration-200 ease-in-out md:translate-x-0 ${
+                className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#07111F] border-r border-white/10 text-white flex flex-col transition-transform duration-200 ease-in-out md:translate-x-0 ${
                     sidebarOpen ? 'translate-x-0' : '-translate-x-full'
                 }`}
             >
                 {/* Brand */}
-                <div className="h-16 px-6 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+                <div className="h-16 px-6 flex items-center justify-between border-b border-white/10">
                     <Link href="/member/dashboard" className="flex items-center gap-3">
                         <BrandMark className="h-10 w-auto shrink-0" />
                         <div>
-                            <div className="font-brand text-lg leading-tight font-semibold text-slate-900 dark:text-white">
+                            <div className="font-brand text-lg leading-tight font-semibold text-white">
                                 ccIntake97
                             </div>
-                            <div className="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold tracking-wider">
+                            <div className="text-[10px] text-[#E8D5A3] font-semibold tracking-wider">
                                 ALUMNI PORTAL
                             </div>
                         </div>
                     </Link>
                     <button
                         onClick={() => setSidebarOpen(false)}
-                        className="p-1 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-white md:hidden"
+                        className="p-1 rounded-md text-white/50 hover:text-white md:hidden"
                     >
                         <X className="size-5" />
                     </button>
@@ -93,22 +93,22 @@ export default function MemberLayout({ children, title, breadcrumbs = [] }: Memb
 
                 {/* Member ID preview widget in sidebar */}
                 {auth?.member && (
-                    <div className="mx-3 mt-3 p-3 bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-slate-800 dark:to-indigo-950/40 rounded-xl border border-indigo-100 dark:border-indigo-900/50">
-                        <div className="text-[10px] font-semibold tracking-wider text-indigo-600 dark:text-indigo-400 uppercase">
+                    <div className="mx-3 mt-3 p-3 rounded-xl border border-white/10 bg-white/5">
+                        <div className="text-[10px] font-semibold tracking-wider text-[#E8D5A3] uppercase">
                             Cadet Affiliation
                         </div>
-                        <div className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate mt-0.5">
-                            {auth.member.college?.short_name || auth.member.college?.name}
+                        <div className="text-xs font-bold text-white truncate mt-0.5">
+                            {auth.member.college?.short_name || auth.member.college?.name || 'College not set'}
                         </div>
-                        <div className="flex items-center justify-between mt-2 pt-2 border-t border-indigo-100 dark:border-slate-700/50 text-[11px]">
-                            <span className="text-slate-500 font-mono text-[10px]">
+                        <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/10 text-[11px]">
+                            <span className="text-white/50 font-mono text-[10px]">
                                 {auth.member.member_code || 'Pending ID'}
                             </span>
                             <span
                                 className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${
                                     auth.member.verification_status === 'verified'
-                                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
-                                        : 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'
+                                        ? 'bg-emerald-400/15 text-emerald-200'
+                                        : 'bg-[#C9A55C]/20 text-[#E8D5A3]'
                                 }`}
                             >
                                 {auth.member.verification_status}
@@ -128,8 +128,8 @@ export default function MemberLayout({ children, title, breadcrumbs = [] }: Memb
                                 href={item.href}
                                 className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                                     isActive
-                                        ? 'bg-indigo-600 text-white font-semibold shadow-sm'
-                                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white'
+                                        ? 'bg-[#C9A55C] text-[#07111F] font-semibold shadow-sm'
+                                        : 'text-white/70 hover:bg-white/10 hover:text-white'
                                 }`}
                             >
                                 <Icon className="size-4 shrink-0" />
@@ -140,7 +140,7 @@ export default function MemberLayout({ children, title, breadcrumbs = [] }: Memb
                 </div>
 
                 {/* Footer Switcher */}
-                <div className="p-3 border-t border-slate-100 dark:border-slate-800 space-y-1.5">
+                <div className="p-3 border-t border-white/10 space-y-1.5">
                     {isStaff && (
                         <Link
                             href="/admin/dashboard"
@@ -157,7 +157,7 @@ export default function MemberLayout({ children, title, breadcrumbs = [] }: Memb
                         href="/logout"
                         method="post"
                         as="button"
-                        className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
+                        className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium text-rose-300 hover:bg-white/10 transition-colors"
                     >
                         <LogOut className="size-3.5" />
                         Log out
@@ -168,15 +168,15 @@ export default function MemberLayout({ children, title, breadcrumbs = [] }: Memb
             {/* Main Area */}
             <div className="flex-1 flex flex-col md:pl-64 min-w-0">
                 {/* Header */}
-                <header className="sticky top-0 z-30 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 flex items-center justify-between">
+                <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 sm:px-6 dark:border-white/10 dark:bg-[#0B1220]">
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setSidebarOpen(true)}
-                            className="p-2 rounded-md text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 md:hidden"
+                            className="rounded-md p-2 text-slate-500 hover:bg-slate-100 md:hidden dark:text-white/70 dark:hover:bg-white/10"
                         >
                             <Menu className="size-5" />
                         </button>
-                        <div className="flex items-center text-xs text-slate-500 dark:text-slate-400 gap-1.5 overflow-hidden">
+                        <div className="flex items-center gap-1.5 overflow-hidden text-xs text-slate-500 dark:text-white/50">
                             <Link href="/member/dashboard" className="hover:text-slate-900 dark:hover:text-white">
                                 Portal
                             </Link>
@@ -188,7 +188,7 @@ export default function MemberLayout({ children, title, breadcrumbs = [] }: Memb
                                             {b.title}
                                         </Link>
                                     ) : (
-                                        <span className="font-semibold text-slate-900 dark:text-white truncate">
+                                        <span className="truncate font-semibold text-slate-900 dark:text-white">
                                             {b.title}
                                         </span>
                                     )}
@@ -200,15 +200,15 @@ export default function MemberLayout({ children, title, breadcrumbs = [] }: Memb
                     <div className="flex items-center gap-3">
                         <Link
                             href="/member/notifications"
-                            className="p-2 rounded-full text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 transition-colors relative"
+                            className="relative rounded-full p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white"
                         >
                             <Bell className="size-4" />
                         </Link>
                         <Link href="/member/profile" className="flex items-center gap-2.5 pl-2">
-                            <div className="size-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-sm ring-2 ring-indigo-500/20">
+                            <div className="flex size-8 items-center justify-center rounded-full bg-[#07111F] text-xs font-bold text-[#E8D5A3] shadow-sm ring-2 ring-[#C9A55C]/30">
                                 {auth?.name?.charAt(0) || 'M'}
                             </div>
-                            <span className="hidden sm:inline text-xs font-semibold text-slate-800 dark:text-slate-200">
+                            <span className="hidden text-xs font-semibold text-slate-800 sm:inline dark:text-white">
                                 {auth?.name}
                             </span>
                         </Link>

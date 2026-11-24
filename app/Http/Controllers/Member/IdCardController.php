@@ -19,7 +19,7 @@ class IdCardController extends Controller
             'type' => 'INTAKE97_ALUMNI_ID',
             'member_code' => $member->member_code,
             'name' => $user->name,
-            'college' => $member->college->name,
+            'college' => $member->college?->name,
             'verification' => $member->verification_status,
             'token' => sha1($member->id . '-' . $member->created_at),
         ];

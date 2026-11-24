@@ -18,7 +18,7 @@ class DashboardController extends Controller
     public function index(Request $request): Response
     {
         $user = $request->user();
-        $member = $user->member ? $user->member->load(['college', 'profile.industry', 'privacySettings']) : null;
+        $member = $user->member ? $user->member->load(['user', 'college', 'profile.industry', 'privacySettings']) : null;
 
         $upcomingEvents = Event::with('category')
             ->where('status', 'published')
@@ -47,10 +47,12 @@ class DashboardController extends Controller
             ->where('status', 'pending')
             ->count() : 0;
 
+        $featuredScope = $member && $member->college_id ? 'college' : 'batch';
+
         $featuredBatchmates = $member ? Member::with(['user', 'college', 'profile.industry'])
             ->where('id', '!=', $member->id)
             ->where('verification_status', 'verified')
-            ->where('college_id', $member->college_id)
+            ->when($featuredScope === 'college', fn ($query) => $query->where('college_id', $member->college_id))
             ->limit(4)
             ->get() : collect();
 
@@ -67,6 +69,7 @@ class DashboardController extends Controller
             'connectionsCount' => $connectionsCount,
             'pendingRequestsCount' => $pendingRequestsCount,
             'featuredBatchmates' => $featuredBatchmates,
+            'featuredScope' => $featuredScope,
             'unreadNotificationsCount' => $unreadNotificationsCount,
         ]);
     }

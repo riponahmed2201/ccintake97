@@ -17,6 +17,8 @@ void createInertiaApp({
             case name.startsWith('directory/'):
             case name.startsWith('public/'):
             case name.startsWith('news/'):
+            case name.startsWith('member/'):
+            case name.startsWith('admin/'):
                 return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
