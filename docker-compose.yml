@@ -1,0 +1,41 @@
+# Laravel only. MySQL stays on the machine, outside this file.
+# Host network lets the container use DB_HOST=127.0.0.1 from .env.
+
+services:
+  app:
+    build: .
+    image: ccintake97-app
+    network_mode: host
+    env_file:
+      - .env
+    environment:
+      SERVER_NAME: ":${APP_PORT:-8000}"
+    volumes:
+      - app-storage:/app/storage
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1:${APP_PORT:-8000}/up')===false?1:0);"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  queue:
+    build: .
+    image: ccintake97-app
+    network_mode: host
+    command: ["php", "artisan", "queue:work", "--sleep=3", "--tries=3", "--max-time=3600"]
+    env_file:
+      - .env
+    environment:
+      RUN_MIGRATIONS: "false"
+      SERVER_NAME: ":${APP_PORT:-8000}"
+    volumes:
+      - app-storage:/app/storage
+    depends_on:
+      app:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  app-storage:
