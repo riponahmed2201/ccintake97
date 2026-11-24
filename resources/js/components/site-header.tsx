@@ -4,6 +4,7 @@ import { ArrowRight, Menu, X } from 'lucide-react';
 import BrandMark from '@/components/brand-mark';
 import { LANDING_CONTAINER } from '@/components/landing/layout';
 import { NAV_LINKS } from '@/components/landing/nav-links';
+import { useSignupDialog } from '@/contexts/signup-dialog-context';
 
 function resolveHref(href: string, variant: 'hero' | 'solid') {
     if (variant === 'solid' && href.startsWith('#')) {
@@ -74,6 +75,16 @@ export function SiteHeader({
             : 'sticky top-0 z-50 border-b border-brand-navy/[0.06] bg-brand-cream/90 backdrop-blur-xl';
 
     const closeMobile = () => setMobileMenuOpen(false);
+    const { openSignup } = useSignupDialog();
+
+    const openApply = () => {
+        closeMobile();
+        if (variant === 'hero') {
+            openSignup();
+        } else {
+            window.location.href = '/register-alumni';
+        }
+    };
 
     return (
         <header className={headerShell}>
@@ -165,8 +176,9 @@ export function SiteHeader({
                             >
                                 Sign in
                             </Link>
-                            <Link
-                                href="/register-alumni"
+                            <button
+                                type="button"
+                                onClick={openApply}
                                 className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-nav text-[15px] font-medium transition-all duration-300 ${
                                     solidHeader || variant === 'solid'
                                         ? 'bg-brand-navy text-brand-cream-text hover:bg-[#1A2438]'
@@ -174,7 +186,7 @@ export function SiteHeader({
                                 }`}
                             >
                                 Join
-                            </Link>
+                            </button>
                         </>
                     )}
                     <button
@@ -224,9 +236,9 @@ export function SiteHeader({
                         <Link href="/login" onClick={closeMobile} className="rounded-full border border-brand-navy/15 py-3 text-center text-sm font-medium">
                             Sign in
                         </Link>
-                        <Link href="/register-alumni" onClick={closeMobile} className="rounded-full bg-brand-navy py-3 text-center text-sm font-medium text-brand-cream-text">
+                        <button type="button" onClick={openApply} className="rounded-full bg-brand-navy py-3 text-center text-sm font-medium text-brand-cream-text">
                             Apply
-                        </Link>
+                        </button>
                     </div>
                 </div>
             )}

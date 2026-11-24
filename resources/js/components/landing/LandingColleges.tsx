@@ -2,7 +2,9 @@ import type { RefObject } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { LANDING_CONTAINER, LANDING_SECTION, LANDING_SECTION_BODY } from '@/components/landing/layout';
 import { CADET_COLLEGES_DATA, CAMPUS_PHOTOS, REGIONS } from '@/components/landing/constants';
+import { PrimaryCta } from '@/components/landing/cta';
 import { CollegeEmblem, ExploreLink, Reveal } from '@/components/landing/primitives';
+import { useSignupDialog } from '@/contexts/signup-dialog-context';
 import type { MergedCollege } from '@/components/landing/types';
 
 export function LandingColleges({
@@ -22,6 +24,8 @@ export function LandingColleges({
     selectCollege: (code: string, scroll?: boolean) => void;
     stepCollege: (dir: 1 | -1) => void;
 }) {
+    const { openSignup } = useSignupDialog();
+
     return (
                         <section id="colleges" className={`${LANDING_SECTION} bg-[#F4F2EE]`}>
                             <div className={LANDING_CONTAINER}>
@@ -35,8 +39,8 @@ export function LandingColleges({
                                                 Every constituent college holds an equal seat in the Central Secretariat.
                                             </p>
                                         </div>
-                                        <div className="-mx-5 overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
-                                            <div className="flex w-max items-center gap-6 border-b border-[#0B1220]/10">
+                                        <div className="-mx-5 snap-x snap-mandatory overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
+                                            <div className="flex w-max min-w-full items-center gap-6 border-b border-[#0B1220]/10">
                                                 {REGIONS.map((tab) => {
                                                     const active = selectedRegion === tab;
                                                     return (
@@ -66,7 +70,7 @@ export function LandingColleges({
                                                     <img
                                                         src={CAMPUS_PHOTOS[activeCollege.short_name]}
                                                         alt={`${activeCollege.name} campus`}
-                                                        className="absolute inset-0 -z-10 h-full w-full animate-[heroZoom_9s_ease-out_forwards] object-cover motion-reduce:animate-none"
+                                                        className="absolute inset-0 -z-10 h-full w-full animate-[heroZoom_9s_ease-out_forwards] object-cover motion-reduce:animate-none transition-opacity duration-700"
                                                     />
                                                 ) : (
                                                     <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_75%_30%,rgba(201,165,92,0.25),transparent_55%)]" />
@@ -148,7 +152,7 @@ export function LandingColleges({
                                                         type="button"
                                                         onClick={() => selectCollege(col.short_name, true)}
                                                         aria-pressed={active}
-                                                        className="group relative isolate aspect-[4/3] overflow-hidden bg-[#0B1220] text-left text-white"
+                                                        className="group relative isolate aspect-[4/3] overflow-hidden bg-[#0B1220] text-left text-white transition-transform duration-300 hover:-translate-y-0.5"
                                                     >
                                                         {photo ? (
                                                             <img src={photo} alt="" loading="lazy" className="absolute inset-0 -z-10 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />
@@ -176,6 +180,14 @@ export function LandingColleges({
                                         </div>
                                     </div>
                                 )}
+
+                                <Reveal delay={200}>
+                                    <div className="mt-14 flex justify-center">
+                                        <PrimaryCta as="button" onClick={openSignup}>
+                                            Apply for membership
+                                        </PrimaryCta>
+                                    </div>
+                                </Reveal>
                             </div>
                         </section>
     );

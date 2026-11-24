@@ -16,7 +16,6 @@ export function LandingSectors() {
                     }
                     intro="Illustrative counts drawn from verified profiles — the batch spans defense, medicine, technology, diplomacy, finance, and law on six continents."
                 />
-                <p className="mt-4 text-[13px] text-[#4A4F5C]/80">Counts shown are representative samples for storytelling, not live database totals.</p>
                 <div className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 ${LANDING_SECTION_BODY}`}>
                     {SECTORS.map((s, i) => {
                         const Icon = s.icon;
@@ -38,6 +37,9 @@ export function LandingSectors() {
                         );
                     })}
                 </div>
+                <p className="mt-8 text-center text-[12px] text-[#4A4F5C]/70">
+                    Counts shown are representative samples for storytelling, not live database totals.
+                </p>
             </div>
         </section>
     );

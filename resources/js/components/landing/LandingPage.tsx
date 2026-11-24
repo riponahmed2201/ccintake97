@@ -17,6 +17,7 @@ import { LandingNews } from '@/components/landing/LandingNews';
 import { LandingReunion } from '@/components/landing/LandingReunion';
 import { LandingContact } from '@/components/landing/LandingContact';
 import { LandingFooter } from '@/components/landing/LandingFooter';
+import { SignupDialogProvider } from '@/contexts/signup-dialog-context';
 
 const DEFAULT_METRICS = {
     total_members: 500,
@@ -38,6 +39,7 @@ export function LandingPage({
     const activeNav = useScrollSpy(SCROLL_SPY_SECTIONS);
 
     return (
+        <SignupDialogProvider>
         <div className="min-h-screen bg-brand-cream font-sans text-brand-navy antialiased selection:bg-brand-gold selection:text-brand-navy">
             <a
                 href="#main-content"
@@ -100,5 +102,6 @@ export function LandingPage({
             </main>
             <LandingFooter />
         </div>
+        </SignupDialogProvider>
     );
 }

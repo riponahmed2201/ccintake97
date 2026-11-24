@@ -1,7 +1,7 @@
 import { ArrowRight, Check, Mail, MapPin, Phone } from 'lucide-react';
 import { LANDING_CONTAINER, LANDING_GRID_GAP, LANDING_SECTION } from '@/components/landing/layout';
 import { Reveal } from '@/components/landing/primitives';
-import { CONTACT_INPUT_CLASS, CONTACT_LABEL_CLASS } from '@/hooks/use-landing-page';
+import { CONTACT_LABEL_CLASS } from '@/hooks/use-landing-page';
 import type { Dispatch, FormEvent, SetStateAction } from 'react';
 
 export function LandingContact({
@@ -15,8 +15,9 @@ export function LandingContact({
     setContactForm: Dispatch<SetStateAction<{ name: string; email: string; subject: string; message: string }>>;
     handleContactSubmit: (e: FormEvent) => void;
 }) {
-    const inputCls = CONTACT_INPUT_CLASS;
     const labelCls = CONTACT_LABEL_CLASS;
+    const inputCls =
+        'h-12 w-full rounded-xl border border-[#0B1220]/10 bg-white px-3.5 text-[15px] text-[#0B1220] transition-colors placeholder:text-[#0B1220]/35 focus:border-[#9A7B3F] focus:outline-none focus:ring-4 focus:ring-[#C9A55C]/15';
     return (
                         <section id="contact" className={`bg-white ${LANDING_SECTION}`}>
                             <div className={LANDING_CONTAINER}>

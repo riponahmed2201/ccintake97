@@ -56,7 +56,7 @@ export function LandingCommittee({ committee, mergedColleges }: { committee: Com
                                                 {/* Featured: President */}
                                                 {lead && (
                                                     <Reveal className="lg:col-span-5">
-                                                        <article className="group relative isolate flex h-full min-h-[520px] flex-col justify-end overflow-hidden rounded-3xl bg-[#0B1220] text-white">
+                                                        <article className="group relative isolate flex h-full min-h-[520px] flex-col justify-end overflow-hidden rounded-3xl bg-[#0B1220] text-white ring-2 ring-[#C9A55C]/35 shadow-[0_32px_64px_-32px_rgba(11,18,32,0.55)]">
                                                             {lead.avatar ? (
                                                                 <img src={lead.avatar} alt={lead.name} className="absolute inset-0 -z-20 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105" />
                                                             ) : (

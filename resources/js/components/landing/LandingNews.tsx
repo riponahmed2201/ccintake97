@@ -20,7 +20,22 @@ export function LandingNews({
                                     index="07"
                                     eyebrow="Community"
                                     title={<>News &amp; <em className="font-normal text-[#9A7B3F]">ventures.</em></>}
-                                    action={<ExploreLink href="#news" internal>All dispatches</ExploreLink>}
+                                    intro={
+                                        articles.length === 0
+                                            ? 'Sample dispatches below until the editorial desk publishes live updates. Contact the Council to share news.'
+                                            : undefined
+                                    }
+                                    action={
+                                        articles.length === 0 ? (
+                                            <ExploreLink href="#contact" internal>
+                                                Share a story
+                                            </ExploreLink>
+                                        ) : (
+                                            <ExploreLink href="#news" internal>
+                                                All dispatches
+                                            </ExploreLink>
+                                        )
+                                    }
                                 />
         
                                 {(() => {

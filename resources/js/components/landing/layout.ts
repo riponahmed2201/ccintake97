@@ -20,3 +20,7 @@ export const LANDING_SUBSECTION = 'mt-16 lg:mt-20';
 
 /** Hero: clear fixed header + comfortable bottom breathing room. */
 export const LANDING_HERO_INNER = 'pt-[7.5rem] pb-20 sm:pt-36 sm:pb-24 lg:pt-40 lg:pb-28';
+
+/** Horizontal scroll track — snap, hide scrollbar, use with LANDING_BLEED. */
+export const LANDING_SCROLL_TRACK =
+    'flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden';

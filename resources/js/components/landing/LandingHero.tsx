@@ -1,7 +1,7 @@
-import { Link } from '@inertiajs/react';
-import { ArrowRight } from 'lucide-react';
+import { PrimaryCta } from '@/components/landing/cta';
 import { LANDING_CONTAINER, LANDING_HERO_INNER } from '@/components/landing/layout';
 import { ExploreLink, Reveal } from '@/components/landing/primitives';
+import { useSignupDialog } from '@/contexts/signup-dialog-context';
 import { HERO_INTERVAL, HERO_SLIDES } from '@/components/landing/constants';
 import type { MergedCollege, WelcomeMetrics } from '@/components/landing/types';
 
@@ -81,6 +81,9 @@ export function LandingHero({
     heroPaused: boolean;
     setHeroPaused: (v: boolean) => void;
 }) {
+    const { openSignup } = useSignupDialog();
+    const verifiedLabel = metrics.verified_members > 0 ? String(metrics.verified_members) : '—';
+
     return (
         <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-brand-ink-deep text-brand-cream-text">
             {HERO_SLIDES.map((sl, i) => {
@@ -106,7 +109,7 @@ export function LandingHero({
 
             <div className={`${LANDING_CONTAINER} ${LANDING_HERO_INNER}`}>
                 <Reveal>
-                    <h2 className="max-w-4xl font-serif text-[3.25rem] leading-[0.98] font-medium tracking-[-0.02em] sm:text-7xl lg:text-[6rem]">
+                    <h2 className="max-w-4xl font-serif text-[2.75rem] leading-[0.98] font-medium tracking-[-0.02em] sm:text-6xl lg:text-[6rem]">
                         Different colleges.
                         <br />
                         <span className="font-normal text-[#E8D5A3]">One intake.</span>
@@ -119,13 +122,9 @@ export function LandingHero({
                 </Reveal>
                 <Reveal delay={300}>
                     <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5">
-                        <Link
-                            href="/register-alumni"
-                            className="group inline-flex items-center gap-3 rounded-full bg-brand-cream-text px-7 py-4 text-sm font-semibold text-brand-navy transition-all duration-300 hover:bg-white"
-                        >
+                        <PrimaryCta as="button" variant="cream" onClick={openSignup}>
                             Apply for membership
-                            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-                        </Link>
+                        </PrimaryCta>
                         <ExploreLink href="#about" light>
                             Explore our story
                         </ExploreLink>
@@ -137,10 +136,10 @@ export function LandingHero({
                         <dl className="flex gap-10 sm:gap-14">
                             {[
                                 { v: String(metrics.total_colleges), l: 'Colleges' },
-                                { v: String(metrics.verified_members), l: 'Verified' },
+                                { v: verifiedLabel, l: 'Verified', title: metrics.verified_members > 0 ? undefined : 'Updates as members verify' },
                                 { v: String(metrics.intake_year), l: 'Intake' },
                             ].map((st) => (
-                                <div key={st.l}>
+                                <div key={st.l} title={st.title}>
                                     <dd className="font-serif text-4xl font-medium sm:text-5xl">{st.v}</dd>
                                     <dt className="mt-1 text-[11px] font-medium tracking-[0.24em] text-brand-cream-text/55 uppercase">{st.l}</dt>
                                 </div>

@@ -20,7 +20,7 @@ export function LandingFooter() {
                                         <p className="mt-8 max-w-sm text-[14px] leading-relaxed text-[#F7F3EA]/50">
                                             The central association uniting the officers, physicians, engineers, diplomats and leaders who entered the cadet colleges of Bangladesh in 1997.
                                         </p>
-                                        <Link href="/register-alumni" className="mt-8 inline-flex items-center gap-2 text-[14px] text-[#E8D5A3] hover:text-[#F1DFB0]">
+                                        <Link href="/?signup=1" className="mt-8 inline-flex min-h-11 items-center gap-2 py-2 text-[14px] text-[#E8D5A3] hover:text-[#F1DFB0]">
                                             Apply for membership <ArrowUpRight className="h-4 w-4" />
                                         </Link>
                                     </div>
@@ -41,14 +41,14 @@ export function LandingFooter() {
                                         <h4 className="text-[11px] tracking-[0.24em] text-[#D9BF85]/80 uppercase">Portal</h4>
                                         <ul className="mt-6 space-y-3 text-[14px]">
                                             <li><Link href="/login" className="text-[#F7F3EA]/60 transition-colors hover:text-[#F7F3EA]">Member sign in</Link></li>
-                                            <li><Link href="/register-alumni" className="text-[#F7F3EA]/60 transition-colors hover:text-[#F7F3EA]">Apply for membership</Link></li>
+                                            <li><Link href="/?signup=1" className="inline-flex min-h-10 items-center text-[#F7F3EA]/60 transition-colors hover:text-[#F7F3EA]">Apply for membership</Link></li>
                                             <li><a href="#contact" className="text-[#F7F3EA]/60 transition-colors hover:text-[#F7F3EA]">Contact secretariat</a></li>
                                         </ul>
                                     </div>
                                 </div>
         
-                                <details className="group border-b border-[#F7F3EA]/[0.08] py-6 text-[12px] text-[#F7F3EA]/45">
-                                    <summary className="cursor-pointer list-none transition-colors hover:text-[#F7F3EA]/70">
+                                <details className="group border-b border-[#F7F3EA]/[0.08] py-4 text-[12px] text-[#F7F3EA]/45 sm:py-6">
+                                    <summary className="cursor-pointer list-none py-3 transition-colors hover:text-[#F7F3EA]/70 sm:py-2">
                                         Campus photographs via Wikimedia Commons <span className="ml-1 inline-block transition-transform group-open:rotate-90">›</span>
                                     </summary>
                                     <ul className="mt-4 grid grid-cols-1 gap-x-8 gap-y-1.5 sm:grid-cols-2 lg:grid-cols-3">

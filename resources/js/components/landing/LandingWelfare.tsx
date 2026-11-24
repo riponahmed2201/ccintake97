@@ -28,7 +28,7 @@ export function LandingWelfare() {
                                         const Icon = w.icon;
                                         return (
                                             <Reveal key={w.title} delay={i * 80} className="h-full">
-                                                <div className="h-full bg-white/[0.08] p-5 backdrop-blur-md sm:p-6">
+                                                <div className="flex h-full min-h-[11rem] flex-col justify-between bg-white/[0.08] p-5 backdrop-blur-md sm:min-h-[12.5rem] sm:p-6">
                                                     <Icon className="h-5 w-5 text-[#E8D5A3]" strokeWidth={1.5} />
                                                     <div className="mt-5 font-serif text-4xl font-medium sm:text-[2.75rem]">{w.figure}</div>
                                                     <div className="mt-2 text-[14px] font-medium">{w.title}</div>
