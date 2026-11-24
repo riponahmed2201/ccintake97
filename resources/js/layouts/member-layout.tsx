@@ -26,9 +26,10 @@ interface MemberLayoutProps {
     children: React.ReactNode;
     title?: string;
     breadcrumbs?: { title: string; href?: string }[];
+    fluid?: boolean;
 }
 
-export default function MemberLayout({ children, title, breadcrumbs = [] }: MemberLayoutProps) {
+export default function MemberLayout({ children, title, breadcrumbs = [], fluid = false }: MemberLayoutProps) {
     const page = usePage();
     const auth = (page.props as any).auth?.user as AuthUser | undefined;
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -216,7 +217,7 @@ export default function MemberLayout({ children, title, breadcrumbs = [] }: Memb
                 </header>
 
                 {/* Page Content */}
-                <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+                <main className={fluid ? 'w-full flex-1' : 'mx-auto w-full max-w-7xl flex-1 p-4 sm:p-6 lg:p-8'}>
                     {children}
                 </main>
             </div>
