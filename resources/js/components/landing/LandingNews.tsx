@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { ArrowUpRight } from 'lucide-react';
 import { FALLBACK_ARTICLES, FALLBACK_BUSINESSES, NEWS_FALLBACK_PHOTOS } from '@/components/landing/constants';
+import { LANDING_CONTAINER, LANDING_GRID_GAP, LANDING_SECTION, LANDING_SECTION_BODY } from '@/components/landing/layout';
 import { ExploreLink, SectionHeading, Reveal } from '@/components/landing/primitives';
 import type { Article, Business } from '@/types/intake97';
 
@@ -12,9 +13,9 @@ export function LandingNews({
     businesses?: Business[];
 }) {
     return (
-                        <section id="news" className="scroll-mt-20 bg-[#F4F2EE] py-24 lg:py-32">
+                        <section id="news" className={`${LANDING_SECTION} bg-[#F4F2EE]`}>
                             <span id="businesses" className="sr-only" />
-                            <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
+                            <div className={LANDING_CONTAINER}>
                                 <SectionHeading
                                     index="07"
                                     eyebrow="Community"
@@ -42,7 +43,7 @@ export function LandingNews({
                                         : FALLBACK_BUSINESSES.map((b) => ({ key: b.lead, ...b }));
         
                                     return (
-                                        <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
+                                        <div className={`grid grid-cols-1 lg:grid-cols-12 ${LANDING_SECTION_BODY} ${LANDING_GRID_GAP}`}>
                                             <div className="lg:col-span-7">
                                                 {lead && (
                                                     <Reveal>

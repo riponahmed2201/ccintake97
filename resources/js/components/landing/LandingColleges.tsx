@@ -1,5 +1,6 @@
 import type { RefObject } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { LANDING_CONTAINER, LANDING_SECTION, LANDING_SECTION_BODY } from '@/components/landing/layout';
 import { CADET_COLLEGES_DATA, CAMPUS_PHOTOS, REGIONS } from '@/components/landing/constants';
 import { CollegeEmblem, ExploreLink, Reveal } from '@/components/landing/primitives';
 import type { MergedCollege } from '@/components/landing/types';
@@ -22,8 +23,8 @@ export function LandingColleges({
     stepCollege: (dir: 1 | -1) => void;
 }) {
     return (
-                        <section id="colleges" className="scroll-mt-20 bg-[#F4F2EE] py-24 lg:py-32">
-                            <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
+                        <section id="colleges" className={`${LANDING_SECTION} bg-[#F4F2EE]`}>
+                            <div className={LANDING_CONTAINER}>
                                 <Reveal>
                                     <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
                                         <div className="max-w-2xl">
@@ -57,7 +58,7 @@ export function LandingColleges({
                                 </Reveal>
         
                                 {activeCollege && (
-                                    <div className="-mx-5 mt-12 space-y-1.5 px-1.5 sm:-mx-8 lg:-mx-[max(2.5rem,calc((100vw_-_1440px)/2_+_2.5rem))]">
+                                    <div className={`${LANDING_SECTION_BODY} -mx-5 space-y-1.5 px-1.5 sm:-mx-8 lg:-mx-[max(2.5rem,calc((100vw_-_1440px)/2_+_2.5rem))]`}>
                                         {/* Featured banner */}
                                         <div ref={featureRef} className="relative isolate scroll-mt-24 overflow-hidden bg-[#0B1220] text-[#F7F3EA]">
                                             <div key={activeCollege.short_name} className="animate-in duration-700 fade-in">

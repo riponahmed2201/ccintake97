@@ -1,13 +1,14 @@
 import { Award, Calendar, Landmark } from 'lucide-react';
 import { CHARTER_ARTICLES, CAMPUS_PHOTOS, FALLBACK_COMMITTEE } from '@/components/landing/constants';
+import { LANDING_CONTAINER, LANDING_SECTION, LANDING_SECTION_BODY, LANDING_SUBSECTION } from '@/components/landing/layout';
 import { ExploreLink, Reveal, initialsOf } from '@/components/landing/primitives';
 import type { MergedCollege } from '@/components/landing/types';
 import type { Committee } from '@/types/intake97';
 
 export function LandingCommittee({ committee, mergedColleges }: { committee: Committee | null; mergedColleges: MergedCollege[] }) {
     return (
-                        <section id="committee" className="scroll-mt-20 bg-[#F4F2EE] py-24 lg:py-32">
-                            <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
+                        <section id="committee" className={`${LANDING_SECTION} bg-[#F4F2EE]`}>
+                            <div className={LANDING_CONTAINER}>
                                 {(() => {
                                     const people = (committee?.members && committee.members.length > 0
                                         ? committee.members.map((cm) => ({
@@ -51,7 +52,7 @@ export function LandingCommittee({ committee, mergedColleges }: { committee: Com
                                                 </div>
                                             </Reveal>
         
-                                            <div className="mt-12 grid grid-cols-1 gap-4 lg:grid-cols-12">
+                                            <div className={`grid grid-cols-1 gap-4 lg:grid-cols-12 ${LANDING_SECTION_BODY}`}>
                                                 {/* Featured: President */}
                                                 {lead && (
                                                     <Reveal className="lg:col-span-5">
@@ -140,7 +141,7 @@ export function LandingCommittee({ committee, mergedColleges }: { committee: Com
                                 })()}
         
                                 {/* Charter */}
-                                <div id="constitution" className="mt-24 scroll-mt-24">
+                                <div id="constitution" className={`scroll-mt-24 ${LANDING_SUBSECTION}`}>
                                     <Reveal>
                                         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
                                             <div>
@@ -149,7 +150,7 @@ export function LandingCommittee({ committee, mergedColleges }: { committee: Com
                                             <ExploreLink href="/login" internal={false}>Download full charter</ExploreLink>
                                         </div>
                                     </Reveal>
-                                    <ol className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                                    <ol className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 ${LANDING_SECTION_BODY}`}>
                                         {CHARTER_ARTICLES.map((c, i) => (
                                             <Reveal key={c.numeral} delay={i * 70} className="h-full">
                                                 <li className="h-full rounded-3xl bg-white p-7 ring-1 ring-[#0B1220]/[0.05]">

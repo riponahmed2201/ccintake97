@@ -1,4 +1,5 @@
 import { ArrowRight, Check, Mail, MapPin, Phone } from 'lucide-react';
+import { LANDING_CONTAINER, LANDING_GRID_GAP, LANDING_SECTION } from '@/components/landing/layout';
 import { Reveal } from '@/components/landing/primitives';
 import { CONTACT_INPUT_CLASS, CONTACT_LABEL_CLASS } from '@/hooks/use-landing-page';
 import type { Dispatch, FormEvent, SetStateAction } from 'react';
@@ -17,9 +18,9 @@ export function LandingContact({
     const inputCls = CONTACT_INPUT_CLASS;
     const labelCls = CONTACT_LABEL_CLASS;
     return (
-                        <section id="contact" className="scroll-mt-20 bg-white py-20 lg:py-28">
-                            <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
-                                <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-20">
+                        <section id="contact" className={`bg-white ${LANDING_SECTION}`}>
+                            <div className={LANDING_CONTAINER}>
+                                <div className={`grid grid-cols-1 lg:grid-cols-12 ${LANDING_GRID_GAP}`}>
                                     <div className="lg:col-span-5">
                                         <Reveal>
                                             <h2 className="font-serif text-5xl leading-[1.02] font-medium text-[#0B1220] lg:text-[3.25rem]">

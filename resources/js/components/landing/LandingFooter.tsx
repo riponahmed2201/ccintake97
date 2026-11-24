@@ -1,13 +1,14 @@
 import { Link } from '@inertiajs/react';
 import { ArrowUpRight } from 'lucide-react';
 import BrandMark from '@/components/brand-mark';
+import { LANDING_CONTAINER } from '@/components/landing/layout';
 import { PHOTO_CREDITS } from '@/components/landing/constants';
 
 export function LandingFooter() {
     return (
                         <footer className="relative overflow-hidden bg-brand-ink-deep text-[#F7F3EA]">
-                            <div className="mx-auto max-w-[1440px] px-5 pt-24 pb-10 sm:px-8 lg:px-10">
-                                <div className="grid grid-cols-1 gap-12 border-b border-[#F7F3EA]/[0.08] pb-16 md:grid-cols-12">
+                            <div className={`${LANDING_CONTAINER} pt-20 pb-10 sm:pt-24 lg:pt-28`}>
+                                <div className={`grid grid-cols-1 gap-12 border-b border-[#F7F3EA]/[0.08] pb-12 md:grid-cols-12 lg:pb-16`}>
                                     <div className="md:col-span-5">
                                         <div className="flex items-center gap-3">
                                             <BrandMark className="h-16 w-auto shrink-0" />

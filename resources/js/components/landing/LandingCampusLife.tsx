@@ -1,11 +1,12 @@
 import { ArrowRight } from 'lucide-react';
 import { Reveal } from '@/components/landing/primitives';
+import { LANDING_BLEED, LANDING_CONTAINER, LANDING_SECTION, LANDING_SECTION_BODY } from '@/components/landing/layout';
 import { CAMPUS_LIFE } from '@/components/landing/constants';
 
 export function LandingCampusLife() {
     return (
-                        <section className="bg-[#FAF7F0] pb-24 lg:pb-32">
-                            <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
+                        <section className={`${LANDING_SECTION} bg-[#FAF7F0]`}>
+                            <div className={LANDING_CONTAINER}>
                                 <Reveal>
                                     <div className="flex items-end justify-between gap-6">
                                         <h3 className="flex items-center gap-4 font-serif text-3xl font-medium text-[#0B1220] sm:text-4xl">
@@ -15,7 +16,7 @@ export function LandingCampusLife() {
                                     </div>
                                 </Reveal>
                             </div>
-                            <div className="mt-8 flex snap-x snap-mandatory gap-1.5 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:px-8 lg:px-[max(2.5rem,calc((100vw_-_1440px)/2_+_2.5rem))]">
+                            <div className={`flex snap-x snap-mandatory gap-1.5 overflow-x-auto pb-2 [scrollbar-width:none] ${LANDING_SECTION_BODY} ${LANDING_BLEED}`}>
                                 {CAMPUS_LIFE.map((ph) => (
                                     <figure key={ph.src} className="group relative w-[78vw] shrink-0 snap-start overflow-hidden bg-[#0B1220] sm:w-[420px]">
                                         <img src={ph.src} alt={ph.title} loading="lazy" className="aspect-[4/5] h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105" />

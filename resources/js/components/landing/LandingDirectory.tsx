@@ -1,6 +1,7 @@
 import { Link, router, usePage } from '@inertiajs/react';
 import { ArrowRight, Lock, MapPin, Search, ShieldCheck, Users } from 'lucide-react';
 import { CAMPUS_PHOTOS, SAMPLE_VERIFIED_MEMBERS } from '@/components/landing/constants';
+import { LANDING_BLEED, LANDING_CONTAINER, LANDING_SECTION, LANDING_SECTION_BODY } from '@/components/landing/layout';
 import { ExploreLink, Reveal } from '@/components/landing/primitives';
 import type { DirectoryPreviewMember, MergedCollege, WelcomeMetrics } from '@/components/landing/types';
 import type { FormEvent, RefObject } from 'react';
@@ -31,12 +32,12 @@ export function LandingDirectory({
     const { auth } = usePage().props as { auth?: { user?: unknown } };
 
     return (
-                        <section id="directory" className="relative isolate scroll-mt-20 overflow-hidden bg-[#0B1220] py-24 text-[#F7F3EA] lg:py-32">
+                        <section id="directory" className={`relative isolate overflow-hidden bg-[#0B1220] text-[#F7F3EA] ${LANDING_SECTION}`}>
                             <div className="pointer-events-none absolute inset-0 -z-10">
                                 <div className="absolute -top-48 left-1/2 h-[640px] w-[1100px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(201,165,92,0.13),transparent_62%)]" />
                             </div>
         
-                            <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
+                            <div className={LANDING_CONTAINER}>
                                 <Reveal>
                                     <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
                                         <div className="max-w-2xl">
@@ -70,7 +71,7 @@ export function LandingDirectory({
                                 onFocus={() => setSpotlightPaused(true)}
                                 onBlur={() => setSpotlightPaused(false)}
                                 onTouchStart={() => setSpotlightPaused(true)}
-                                className="mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-5 pb-4 [scrollbar-width:none] sm:px-8 lg:px-[max(2.5rem,calc((100vw_-_1440px)/2_+_2.5rem))] [&::-webkit-scrollbar]:hidden"
+                                className={`flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${LANDING_SECTION_BODY} ${LANDING_BLEED}`}
                             >
                                 {(directoryPreview.length >= 4
                                     ? directoryPreview.map((d) => ({
@@ -162,7 +163,7 @@ export function LandingDirectory({
                             </div>
         
                             {/* Search strip */}
-                            <div className="mx-auto mt-14 max-w-[1440px] px-5 sm:px-8 lg:px-10">
+                            <div className={`${LANDING_CONTAINER} ${LANDING_SECTION_BODY}`}>
                                 <Reveal>
                                     <div className="flex flex-col gap-6 border-t border-white/10 pt-10 lg:flex-row lg:items-center lg:justify-between">
                                         <form

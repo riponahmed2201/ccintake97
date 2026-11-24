@@ -1,13 +1,14 @@
+import { LANDING_CONTAINER, LANDING_SECTION, LANDING_SECTION_BODY } from '@/components/landing/layout';
 import { Reveal, SectionHeading } from '@/components/landing/primitives';
 import { TIMELINE_MILESTONES } from '@/components/landing/constants';
 
 export function LandingTimeline() {
     return (
-                        <section className="py-28 lg:py-36">
-                            <div className="mx-auto max-w-[1440px] space-y-20 px-5 sm:px-8 lg:px-10">
+                        <section className={LANDING_SECTION}>
+                            <div className={LANDING_CONTAINER}>
                                 <SectionHeading index="03" eyebrow="Since 1997" title={<>The crucible <em className="font-normal text-[#9A7B3F]">&amp; beyond.</em></>} align="center" intro="From adolescents on the obstacle course to leaders shaping industries on six continents." />
         
-                                <div className="relative">
+                                <div className={`relative ${LANDING_SECTION_BODY}`}>
                                     <div className="absolute top-[30px] right-0 left-0 hidden h-px bg-gradient-to-r from-transparent via-[#9A7B3F]/40 to-transparent md:block" />
                                     <ol className="grid grid-cols-1 gap-12 md:grid-cols-5 md:gap-8">
                                         {TIMELINE_MILESTONES.map((m, i) => (

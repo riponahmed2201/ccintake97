@@ -1,10 +1,11 @@
+import { LANDING_CONTAINER, LANDING_GRID_GAP, LANDING_SECTION } from '@/components/landing/layout';
 import { Reveal } from '@/components/landing/primitives';
 
 export function LandingAbout() {
     return (
-                        <section id="about" className="scroll-mt-20 bg-white py-24 lg:py-32">
-                            <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
-                                <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-16">
+                        <section id="about" className={`${LANDING_SECTION} bg-white`}>
+                            <div className={LANDING_CONTAINER}>
+                                <div className={`grid grid-cols-1 items-center lg:grid-cols-12 ${LANDING_GRID_GAP}`}>
                                     <div className="lg:col-span-5">
                                         <Reveal>
                                             <h2 className="font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] text-[#0B1220] lg:text-[3.75rem]">

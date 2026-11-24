@@ -1,17 +1,18 @@
 import { Link } from '@inertiajs/react';
 import { ArrowRight, Calendar, Check, MapPin, QrCode } from 'lucide-react';
+import { LANDING_CONTAINER, LANDING_GRID_GAP, LANDING_SECTION } from '@/components/landing/layout';
 import { Reveal } from '@/components/landing/primitives';
 
 export function LandingReunion() {
     return (
-        <section id="reunion" className="relative isolate scroll-mt-20 overflow-hidden bg-[#070B14] py-24 text-[#F7F3EA] lg:py-32">
+        <section id="reunion" className={`relative isolate overflow-hidden bg-[#070B14] text-[#F7F3EA] ${LANDING_SECTION}`}>
             <div className="pointer-events-none absolute inset-0 -z-10">
                 <img src="/images/campus/reunion-parade-rcc.jpg" alt="" loading="lazy" className="h-full w-full object-cover object-[center_35%]" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#070B14]/95 via-[#070B14]/75 to-[#070B14]/40" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#070B14]/70 to-transparent" />
             </div>
-            <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
-                <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-12">
+            <div className={LANDING_CONTAINER}>
+                <div className={`grid grid-cols-1 items-center lg:grid-cols-12 ${LANDING_GRID_GAP}`}>
                     <div className="lg:col-span-7">
                         <Reveal delay={100}>
                             <h2 className="font-serif text-6xl leading-[0.95] font-medium tracking-[-0.02em] sm:text-7xl lg:text-[6.5rem]">

@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { ArrowRight } from 'lucide-react';
+import { LANDING_CONTAINER, LANDING_HERO_INNER } from '@/components/landing/layout';
 import { ExploreLink, Reveal } from '@/components/landing/primitives';
 import { HERO_INTERVAL, HERO_SLIDES } from '@/components/landing/constants';
 import type { MergedCollege, WelcomeMetrics } from '@/components/landing/types';
@@ -103,7 +104,7 @@ export function LandingHero({
             <div className="absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-brand-ink-deep/60 to-transparent" />
             <div className="absolute inset-0 -z-10 bg-gradient-to-r from-brand-ink-deep/75 via-brand-ink-deep/20 to-transparent" />
 
-            <div className="mx-auto w-full max-w-[1440px] px-5 pt-40 pb-14 sm:px-8 lg:px-10 lg:pb-16">
+            <div className={`${LANDING_CONTAINER} ${LANDING_HERO_INNER}`}>
                 <Reveal>
                     <h2 className="max-w-4xl font-serif text-[3.25rem] leading-[0.98] font-medium tracking-[-0.02em] sm:text-7xl lg:text-[6rem]">
                         Different colleges.
@@ -132,7 +133,7 @@ export function LandingHero({
                 </Reveal>
 
                 <Reveal delay={400}>
-                    <div className="mt-20 flex flex-col gap-6 border-t border-brand-cream-text/15 pt-6 sm:flex-row sm:items-end sm:justify-between">
+                    <div className="mt-16 flex flex-col gap-6 border-t border-brand-cream-text/15 pt-8 sm:mt-20 sm:flex-row sm:items-end sm:justify-between lg:pt-10">
                         <dl className="flex gap-10 sm:gap-14">
                             {[
                                 { v: String(metrics.total_colleges), l: 'Colleges' },

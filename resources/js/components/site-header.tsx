@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import { ArrowRight, Menu, X } from 'lucide-react';
 import BrandMark from '@/components/brand-mark';
+import { LANDING_CONTAINER } from '@/components/landing/layout';
 import { NAV_LINKS } from '@/components/landing/nav-links';
 
 function resolveHref(href: string, variant: 'hero' | 'solid') {
@@ -76,7 +77,7 @@ export function SiteHeader({
 
     return (
         <header className={headerShell}>
-            <div className="mx-auto flex h-[76px] max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-10">
+            <div className={`flex h-[76px] items-center justify-between ${LANDING_CONTAINER}`}>
                 <Link href="/" className="group flex shrink-0 items-center gap-3">
                     <BrandMark
                         className={`h-12 w-auto shrink-0 transition-transform duration-500 group-hover:-translate-y-0.5 ${

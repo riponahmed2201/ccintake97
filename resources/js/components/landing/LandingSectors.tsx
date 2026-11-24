@@ -1,10 +1,11 @@
+import { LANDING_CONTAINER, LANDING_SECTION, LANDING_SECTION_BODY } from '@/components/landing/layout';
 import { Reveal, SectionHeading } from '@/components/landing/primitives';
 import { SECTORS } from '@/components/landing/constants';
 
 export function LandingSectors() {
     return (
-        <section id="sectors" className="scroll-mt-20 bg-white py-24 lg:py-32">
-            <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
+        <section id="sectors" className={`bg-white ${LANDING_SECTION}`}>
+            <div className={LANDING_CONTAINER}>
                 <SectionHeading
                     index="06"
                     eyebrow="Where we lead"
@@ -16,7 +17,7 @@ export function LandingSectors() {
                     intro="Illustrative counts drawn from verified profiles — the batch spans defense, medicine, technology, diplomacy, finance, and law on six continents."
                 />
                 <p className="mt-4 text-[13px] text-[#4A4F5C]/80">Counts shown are representative samples for storytelling, not live database totals.</p>
-                <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 ${LANDING_SECTION_BODY}`}>
                     {SECTORS.map((s, i) => {
                         const Icon = s.icon;
                         return (

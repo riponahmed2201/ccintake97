@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { ArrowRight, Calendar, MapPin } from 'lucide-react';
+import { LANDING_CONTAINER, LANDING_SECTION, LANDING_SECTION_BODY } from '@/components/landing/layout';
 import { Reveal, SectionHeading } from '@/components/landing/primitives';
 import type { Event } from '@/types/intake97';
 
@@ -13,8 +14,8 @@ export function LandingEvents({ events }: { events: Event[] }) {
     if (events.length === 0) return null;
 
     return (
-        <section id="events" className="scroll-mt-20 border-y border-brand-navy/[0.06] bg-brand-cream py-20 lg:py-28">
-            <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
+        <section id="events" className={`border-y border-brand-navy/[0.06] bg-brand-cream ${LANDING_SECTION}`}>
+            <div className={LANDING_CONTAINER}>
                 <SectionHeading
                     eyebrow="On the calendar"
                     title={
@@ -24,7 +25,7 @@ export function LandingEvents({ events }: { events: Event[] }) {
                     }
                     intro="Public events open to verified batchmates and guests — reunions, conclaves, and chapter musters."
                 />
-                <ul className="mt-12 divide-y divide-brand-navy/10">
+                <ul className={`divide-y divide-brand-navy/10 ${LANDING_SECTION_BODY}`}>
                     {events.map((ev, i) => (
                         <Reveal key={ev.id} delay={i * 50}>
                             <li className="flex flex-col gap-4 py-7 sm:flex-row sm:items-center sm:justify-between">
