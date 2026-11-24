@@ -19,6 +19,8 @@ class Member extends Model
         'college_id',
         'college_roll_no',
         'intake_year',
+        'house_name',
+        'house_color',
         'membership_status',
         'verification_status',
         'approved_at',
