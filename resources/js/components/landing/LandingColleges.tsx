@@ -62,9 +62,9 @@ export function LandingColleges({
                                 </Reveal>
         
                                 {activeCollege && (
-                                    <div className={`${LANDING_SECTION_BODY} -mx-5 space-y-1.5 px-1.5 sm:-mx-8 lg:-mx-[max(2.5rem,calc((100vw_-_1440px)/2_+_2.5rem))]`}>
+                                    <div className={`${LANDING_SECTION_BODY} space-y-4`}>
                                         {/* Featured banner */}
-                                        <div ref={featureRef} className="relative isolate scroll-mt-24 overflow-hidden bg-[#0B1220] text-[#F7F3EA]">
+                                        <div ref={featureRef} className="relative isolate scroll-mt-24 overflow-hidden rounded-3xl bg-[#091324] text-[#F8F5EE] shadow-[0_32px_64px_-28px_rgba(9,19,36,0.45)] ring-1 ring-[#C8A252]/25">
                                             <div key={activeCollege.short_name} className="animate-in duration-700 fade-in">
                                                 {CAMPUS_PHOTOS[activeCollege.short_name] ? (
                                                     <img
@@ -73,13 +73,13 @@ export function LandingColleges({
                                                         className="absolute inset-0 -z-10 h-full w-full animate-[heroZoom_9s_ease-out_forwards] object-cover motion-reduce:animate-none transition-opacity duration-700"
                                                     />
                                                 ) : (
-                                                    <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_75%_30%,rgba(201,165,92,0.25),transparent_55%)]" />
+                                                    <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_75%_30%,rgba(200,162,82,0.25),transparent_55%)]" />
                                                 )}
                                             </div>
-                                            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#070B14]/95 via-[#070B14]/45 to-[#070B14]/10" />
-                                            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#070B14]/70 to-transparent" />
+                                            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#060B15]/95 via-[#060B15]/50 to-[#060B15]/15" />
+                                            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#060B15]/75 to-transparent" />
         
-                                            <div className="flex min-h-[520px] flex-col justify-between p-6 sm:p-10 lg:min-h-[640px] lg:px-[max(2.5rem,calc((100vw_-_1440px)/2_+_2.5rem))] lg:py-12">
+                                            <div className="flex min-h-[500px] flex-col justify-between p-6 sm:p-10 lg:min-h-[600px] lg:p-12">
                                                 <div className="flex items-start justify-between text-[11px] tracking-[0.2em] uppercase">
                                                     <span className="text-[#E8D5A3]">
                                                         <span className="font-serif text-lg tracking-normal normal-case italic">{String(CADET_COLLEGES_DATA.findIndex((c) => c.short_name === activeCollege.short_name) + 1).padStart(2, '0')}</span>
@@ -142,7 +142,7 @@ export function LandingColleges({
                                         </div>
         
                                         {/* Photo tiles */}
-                                        <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3 lg:grid-cols-5">
+                                        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
                                             {filteredColleges.map((col) => {
                                                 const active = col.short_name === activeCollege.short_name;
                                                 const photo = CAMPUS_PHOTOS[col.short_name];
@@ -152,7 +152,7 @@ export function LandingColleges({
                                                         type="button"
                                                         onClick={() => selectCollege(col.short_name, true)}
                                                         aria-pressed={active}
-                                                        className="group relative isolate aspect-[4/3] overflow-hidden bg-[#0B1220] text-left text-white transition-transform duration-300 hover:-translate-y-0.5"
+                                                        className="group relative isolate aspect-[4/3] overflow-hidden rounded-2xl bg-[#091324] text-left text-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                                                     >
                                                         {photo ? (
                                                             <img src={photo} alt="" loading="lazy" className="absolute inset-0 -z-10 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />

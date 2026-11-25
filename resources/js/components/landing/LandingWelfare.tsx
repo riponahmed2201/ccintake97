@@ -23,16 +23,16 @@ export function LandingWelfare() {
                                     </div>
                                 </Reveal>
         
-                                <div className={`grid grid-cols-2 gap-1.5 lg:grid-cols-4 ${LANDING_SECTION_BODY}`}>
+                                <div className={`grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4 ${LANDING_SECTION_BODY}`}>
                                     {WELFARE_PILLARS.map((w, i) => {
                                         const Icon = w.icon;
                                         return (
                                             <Reveal key={w.title} delay={i * 80} className="h-full">
-                                                <div className="flex h-full min-h-[11rem] flex-col justify-between bg-white/[0.08] p-5 backdrop-blur-md sm:min-h-[12.5rem] sm:p-6">
+                                                <div className="flex h-full min-h-[11.5rem] flex-col justify-between rounded-2xl border border-white/15 bg-white/[0.07] p-5 backdrop-blur-md transition-all duration-300 hover:border-[#E8D5A3]/45 hover:bg-white/[0.11] sm:min-h-[13rem] sm:p-6">
                                                     <Icon className="h-5 w-5 text-[#E8D5A3]" strokeWidth={1.5} />
-                                                    <div className="mt-5 font-serif text-4xl font-medium sm:text-[2.75rem]">{w.figure}</div>
-                                                    <div className="mt-2 text-[14px] font-medium">{w.title}</div>
-                                                    <div className="mt-0.5 text-[12px] tracking-[0.14em] text-[#F7F3EA]/50 uppercase">{w.label}</div>
+                                                    <div className="mt-5 font-serif text-4xl font-semibold text-white sm:text-[2.75rem]">{w.figure}</div>
+                                                    <div className="mt-2 text-[14.5px] font-medium text-[#F8F5EE]">{w.title}</div>
+                                                    <div className="mt-0.5 text-[11.5px] tracking-[0.14em] text-[#E8D5A3]/70 uppercase">{w.label}</div>
                                                 </div>
                                             </Reveal>
                                         );

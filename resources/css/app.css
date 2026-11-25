@@ -8,13 +8,12 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-    /* Site-wide typeface is Barlow (HATIL-style). `font-serif` is kept as an
-       alias so existing headings switch over without touching every file. */
+    /* Editorial serif for prestigious display headings + Barlow for crisp modern UI. */
     --font-sans:
         'Barlow', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
         'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --font-serif:
-        'Barlow', ui-sans-serif, system-ui, sans-serif;
+        'Cormorant Garamond', Georgia, 'Times New Roman', serif;
     --font-nav:
         'Barlow', ui-sans-serif, system-ui, sans-serif;
     /* Brand wordmark only — matches the outlined lettering in the crest logo. */
@@ -68,12 +67,12 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 
-    --color-brand-navy: #0b1220;
-    --color-brand-cream: #faf7f0;
-    --color-brand-gold: #c9a55c;
-    --color-brand-gold-muted: #9a7b3f;
-    --color-brand-ink-deep: #070b14;
-    --color-brand-cream-text: #f7f3ea;
+    --color-brand-navy: #091324;
+    --color-brand-cream: #faf8f3;
+    --color-brand-gold: #c8a252;
+    --color-brand-gold-muted: #8e6b28;
+    --color-brand-ink-deep: #060b15;
+    --color-brand-cream-text: #f8f5ee;
 }
 
 :root {
@@ -154,11 +153,6 @@
 
     body {
         @apply bg-background text-foreground;
-    }
-
-    /* Headline accent words stay upright in the sans typeface. */
-    :is(h1, h2, h3) :is(em, .italic) {
-        font-style: normal;
     }
 }
 

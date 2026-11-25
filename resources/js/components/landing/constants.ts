@@ -104,6 +104,7 @@ export const SAMPLE_VERIFIED_MEMBERS = [
 
 export const FALLBACK_COMMITTEE = [
     { title: 'President', name: 'Brig. Gen. (Retd.) K. M. Tanvir', college: 'JCC ’97', role: 'Strategic Advisor & Trustee' },
+    { title: 'Vice President', name: 'Cdre. Shafiqul Islam, BN', college: 'CCC ’97', role: 'Maritime & Strategic Command' },
     { title: 'General Secretary', name: 'Barrister Navid Huq', college: 'MCC ’97', role: 'Supreme Court Appellate Division' },
     { title: 'Treasurer & Trust', name: 'Kazi Farhan Ahmed, FCA', college: 'FCC ’97', role: 'Partner, Institutional Audits' },
     { title: 'Welfare Director', name: 'Dr. Nusrat Ahmed, FRCS', college: 'MGCC ’97', role: 'Royal College Fellow, Surgeon' },

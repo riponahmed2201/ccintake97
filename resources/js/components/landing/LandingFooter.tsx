@@ -5,7 +5,7 @@ import { LANDING_CONTAINER } from '@/components/landing/layout';
 
 export function LandingFooter() {
     return (
-        <footer className="relative overflow-hidden bg-brand-ink-deep text-[#F7F3EA]">
+        <footer className="relative overflow-hidden border-t border-[#C8A252]/20 bg-brand-ink-deep text-[#F8F5EE]">
             <div className={`${LANDING_CONTAINER} pt-20 pb-10 sm:pt-24 lg:pt-28`}>
                 <div className="grid grid-cols-1 gap-12 border-b border-[#F7F3EA]/[0.08] pb-12 md:grid-cols-12 lg:pb-16">
                     <div className="md:col-span-5">
@@ -50,8 +50,9 @@ export function LandingFooter() {
                     </div>
                 </div>
 
-                <div className="pt-8 text-[12px] text-[#F7F3EA]/35">
-                    © {new Date().getFullYear()} INTAKE97.COM · All rights reserved
+                <div className="flex flex-col items-start justify-between gap-3 pt-8 text-[12px] text-[#F8F5EE]/40 sm:flex-row sm:items-center">
+                    <span>© {new Date().getFullYear()} INTAKE97.COM · All rights reserved</span>
+                    <span className="tracking-[0.22em] text-[#C8A252]/65 uppercase">Fidelitas et Disciplina · Class of 1997</span>
                 </div>
             </div>
         </footer>

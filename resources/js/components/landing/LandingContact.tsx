@@ -65,7 +65,7 @@ export function LandingContact({
         
                                     <div className="lg:col-span-7">
                                         <Reveal delay={100}>
-                                            <div className="bg-[#F4F2EE] p-7 sm:p-10">
+                                            <div className="rounded-3xl bg-[#FAF8F3] p-7 ring-1 ring-[#091324]/[0.07] shadow-[0_24px_48px_-32px_rgba(9,19,36,0.2)] sm:p-10">
                                                 {contactSubmitted ? (
                                                     <div className="flex min-h-[360px] flex-col items-center justify-center text-center">
                                                         <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[#C9A55C]/15"><Check className="h-7 w-7 text-[#9A7B3F]" /></span>

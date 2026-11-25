@@ -103,21 +103,27 @@ export function LandingHero({
                     </div>
                 );
             })}
-            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-brand-ink-deep via-brand-ink-deep/40 to-brand-ink-deep/5" />
-            <div className="absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-brand-ink-deep/60 to-transparent" />
-            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-brand-ink-deep/75 via-brand-ink-deep/20 to-transparent" />
+            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-brand-ink-deep via-brand-ink-deep/50 to-brand-ink-deep/15" />
+            <div className="absolute inset-x-0 top-0 -z-10 h-44 bg-gradient-to-b from-brand-ink-deep/70 to-transparent" />
+            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-brand-ink-deep/85 via-brand-ink-deep/35 to-transparent" />
 
             <div className={`${LANDING_CONTAINER} ${LANDING_HERO_INNER}`}>
                 <Reveal>
-                    <h2 className="max-w-4xl font-serif text-[2.75rem] leading-[0.98] font-medium tracking-[-0.02em] sm:text-6xl lg:text-[6rem]">
+                    <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-[#E8D5A3]/30 bg-white/[0.06] px-4 py-1.5 backdrop-blur-md">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#E8D5A3]" />
+                        <span className="text-[11px] font-medium tracking-[0.26em] text-[#E8D5A3] uppercase">
+                            Est. 1997 · Bangladesh Cadet Colleges
+                        </span>
+                    </div>
+                    <h1 className="max-w-4xl font-serif text-[3rem] leading-[0.98] font-semibold tracking-[-0.02em] sm:text-6xl lg:text-[6.25rem]">
                         Different colleges.
                         <br />
-                        <span className="font-normal text-[#E8D5A3]">One intake.</span>
-                    </h2>
+                        <em className="font-normal italic text-[#E8D5A3]">One intake.</em>
+                    </h1>
                 </Reveal>
                 <Reveal delay={200}>
-                    <p className="mt-7 max-w-lg text-base leading-relaxed text-brand-cream-text/75 sm:text-lg">
-                        500 cadets. Ten colleges. A lifetime of brotherhood that began on the parade grounds of {metrics.intake_year}.
+                    <p className="mt-7 max-w-xl text-base leading-relaxed text-brand-cream-text/80 sm:text-lg">
+                        500 cadets across ten colleges — united since {metrics.intake_year} in service, leadership, and a lifetime of brotherhood.
                     </p>
                 </Reveal>
                 <Reveal delay={300}>
@@ -132,16 +138,16 @@ export function LandingHero({
                 </Reveal>
 
                 <Reveal delay={400}>
-                    <div className="mt-16 flex flex-col gap-6 border-t border-brand-cream-text/15 pt-8 sm:mt-20 sm:flex-row sm:items-end sm:justify-between lg:pt-10">
-                        <dl className="flex gap-10 sm:gap-14">
+                    <div className="mt-16 flex flex-col gap-6 border-t border-[#E8D5A3]/20 pt-8 sm:mt-20 sm:flex-row sm:items-end sm:justify-between lg:pt-10">
+                        <dl className="flex gap-10 sm:gap-16">
                             {[
                                 { v: String(metrics.total_colleges), l: 'Colleges' },
                                 { v: verifiedLabel, l: 'Verified', title: metrics.verified_members > 0 ? undefined : 'Updates as members verify' },
                                 { v: String(metrics.intake_year), l: 'Intake' },
                             ].map((st) => (
                                 <div key={st.l} title={st.title}>
-                                    <dd className="font-serif text-4xl font-medium sm:text-5xl">{st.v}</dd>
-                                    <dt className="mt-1 text-[11px] font-medium tracking-[0.24em] text-brand-cream-text/55 uppercase">{st.l}</dt>
+                                    <dd className="font-serif text-4xl font-semibold text-white sm:text-5xl">{st.v}</dd>
+                                    <dt className="mt-1.5 text-[11px] font-medium tracking-[0.24em] text-[#E8D5A3]/75 uppercase">{st.l}</dt>
                                 </div>
                             ))}
                         </dl>

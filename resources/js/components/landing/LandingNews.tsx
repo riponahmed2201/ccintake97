@@ -18,12 +18,8 @@ export function LandingNews({
                             <div className={LANDING_CONTAINER}>
                                 <SectionHeading
                                     eyebrow="Community"
-                                    title={<>News &amp; <em className="font-normal text-[#9A7B3F]">ventures.</em></>}
-                                    intro={
-                                        articles.length === 0
-                                            ? 'Sample dispatches below until the editorial desk publishes live updates. Contact the Council to share news.'
-                                            : undefined
-                                    }
+                                    title={<>News &amp; <em className="font-normal text-[#8E6B28]">ventures.</em></>}
+                                    intro="Official dispatches from the Central Secretariat and commercial enterprises led by 1997 batchmates."
                                     action={
                                         articles.length === 0 ? (
                                             <ExploreLink href="/contact" internal={false}>
@@ -62,14 +58,14 @@ export function LandingNews({
                                                 {lead && (
                                                     <Reveal>
                                                         <Link href={lead.href} className="group block">
-                                                            <div className="aspect-[16/10] overflow-hidden bg-[#0B1220]">
+                                                            <div className="aspect-[16/10] overflow-hidden rounded-2xl bg-[#091324] ring-1 ring-[#091324]/10 shadow-sm">
                                                                 <img src={lead.image} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105" />
                                                             </div>
                                                             <div className="mt-6 flex items-center gap-3 text-[11px] tracking-[0.18em] uppercase">
-                                                                <span className="text-[#9A7B3F]">{lead.cat}</span>
-                                                                <span className="text-[#0B1220]/35">{lead.date}</span>
+                                                                <span className="font-semibold text-[#8E6B28]">{lead.cat}</span>
+                                                                <span className="text-[#091324]/40">{lead.date}</span>
                                                             </div>
-                                                            <h3 className="mt-3 font-serif text-3xl leading-[1.15] text-[#0B1220] sm:text-[2.25rem]">{lead.title}</h3>
+                                                            <h3 className="mt-3 font-serif text-3xl leading-[1.15] font-medium text-[#091324] transition-colors group-hover:text-[#8E6B28] sm:text-[2.25rem]">{lead.title}</h3>
                                                             <p className="mt-3 line-clamp-2 max-w-2xl text-[15px] leading-relaxed text-[#4A4F5C]">{lead.excerpt}</p>
                                                         </Link>
                                                     </Reveal>
@@ -79,7 +75,7 @@ export function LandingNews({
                                                         {rest.slice(0, 2).map((a, i) => (
                                                             <Reveal key={a.key} delay={i * 80}>
                                                                 <Link href={a.href} className="group flex gap-4">
-                                                                    <div className="h-24 w-28 shrink-0 overflow-hidden bg-[#0B1220]">
+                                                                    <div className="h-24 w-28 shrink-0 overflow-hidden rounded-xl bg-[#091324] ring-1 ring-[#091324]/10">
                                                                         <img src={a.image} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
                                                                     </div>
                                                                     <div className="min-w-0">
