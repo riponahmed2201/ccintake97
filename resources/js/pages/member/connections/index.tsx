@@ -1,18 +1,57 @@
 import React from 'react';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import MemberLayout from '@/layouts/member-layout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { UserCheck, UserPlus, X, Check, Trash2, GraduationCap, ArrowRight } from 'lucide-react';
-import type { Member } from '@/types';
+import { UserCheck, UserPlus, X, Check, Users, Search } from 'lucide-react';
+import type { AuthUser, Member } from '@/types';
+
+interface ConnectionRecord {
+    id: number;
+    requester?: Member;
+    addressee?: Member;
+}
 
 interface ConnectionsIndexProps {
-    connections: any[];
-    incoming: any[];
-    outgoing: any[];
+    connections: ConnectionRecord[];
+    incoming: ConnectionRecord[];
+    outgoing: ConnectionRecord[];
     suggestions: Member[];
+}
+
+function PeerAvatar({ member }: { member?: Member }) {
+    const avatarPath = member?.user?.avatar_path;
+    const initial = member?.user?.name?.charAt(0) || 'A';
+
+    return (
+        <div className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#F1F6FF] text-[14px] font-semibold text-[#1B84FF] ring-1 ring-[#1B84FF]/15">
+            {avatarPath ? (
+                <img src={`/storage/${avatarPath}`} alt={member?.user?.name || 'Alumnus'} className="size-full object-cover" />
+            ) : (
+                initial
+            )}
+        </div>
+    );
+}
+
+function EmptyState({ message, actionHref, actionLabel }: { message: string; actionHref?: string; actionLabel?: string }) {
+    return (
+        <div className="col-span-full flex flex-col items-center justify-center rounded-xl border border-[#F1F1F4] bg-[#FCFCFC] px-6 py-12 text-center">
+            <div className="mb-3 flex size-11 items-center justify-center rounded-full bg-[#F1F6FF] text-[#1B84FF]">
+                <Users className="size-5" />
+            </div>
+            <p className="max-w-md text-[13px] text-[#78829D]">{message}</p>
+            {actionHref && actionLabel && (
+                <Link
+                    href={actionHref}
+                    className="mt-4 inline-flex h-9 items-center gap-1.5 rounded-lg bg-[#1B84FF] px-4 text-[12.5px] font-semibold text-white transition-colors hover:bg-[#006AE6]"
+                >
+                    <Search className="size-3.5" />
+                    {actionLabel}
+                </Link>
+            )}
+        </div>
+    );
 }
 
 export default function ConnectionsIndex({
@@ -21,99 +60,137 @@ export default function ConnectionsIndex({
     outgoing,
     suggestions,
 }: ConnectionsIndexProps) {
+    const page = usePage();
+    const authUserId = (page.props as { auth?: { user?: AuthUser } }).auth?.user?.id;
+
     const handleAccept = (id: number) => {
-        router.put(`/member/connections/${id}/accept`);
+        router.put(`/member/connections/${id}/accept`, {}, { preserveScroll: true });
     };
 
     const handleReject = (id: number) => {
-        router.put(`/member/connections/${id}/reject`);
+        router.put(`/member/connections/${id}/reject`, {}, { preserveScroll: true });
     };
 
-    const handleRemove = (id: number) => {
-        if (confirm('Disconnect from this alumnus?')) {
-            router.delete(`/member/connections/${id}`);
+    const handleRemove = (id: number, label = 'Disconnect from this alumnus?') => {
+        if (confirm(label)) {
+            router.delete(`/member/connections/${id}`, { preserveScroll: true });
         }
     };
 
     const handleConnect = (memberId: number) => {
-        router.post(`/member/connections/${memberId}/send`);
+        router.post(`/member/connections/${memberId}/send`, {}, { preserveScroll: true });
     };
 
     return (
         <MemberLayout
-            title="My Alumni Network & Connections"
+            title="My Connections"
             breadcrumbs={[{ title: 'My Connections' }]}
         >
             <Head title="My Connections - INTAKE97.COM" />
 
-            <div className="space-y-6">
-                <div>
-                    <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-                        Alumni Peer Network
-                    </h1>
-                    <p className="text-xs text-slate-500 mt-1">
-                        Connect, network, and collaborate with 1997 intake Cadet College batchmates.
-                    </p>
+            <div className="w-full space-y-6">
+                {/* Page Header */}
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <h1 className="text-[22px] font-semibold tracking-tight text-[#071437]">
+                            Alumni Peer Network
+                        </h1>
+                        <p className="mt-1 text-[13px] text-[#78829D]">
+                            Connect, network, and collaborate with 1997 intake Cadet College batchmates.
+                        </p>
+                    </div>
+                    <Link
+                        href="/member/directory"
+                        className="inline-flex h-9 items-center gap-1.5 self-start rounded-lg border border-[#DBDFE9] bg-white px-3.5 text-[12.5px] font-semibold text-[#4B5675] transition-colors hover:bg-[#F9F9F9] hover:text-[#071437] sm:self-auto"
+                    >
+                        <Search className="size-3.5 text-[#78829D]" />
+                        Browse Directory
+                    </Link>
                 </div>
 
-                <Tabs defaultValue="active" className="space-y-4">
-                    <TabsList className="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
-                        <TabsTrigger value="active" className="text-xs">
-                            Active Connections ({connections.length})
+                <Tabs defaultValue="active" className="space-y-5">
+                    <TabsList className="h-auto w-full flex-wrap justify-start gap-1 rounded-xl border border-[#F1F1F4] !bg-[#FCFCFC] p-1.5 sm:w-auto">
+                        <TabsTrigger
+                            value="active"
+                            className="rounded-lg px-3.5 py-2 text-[12.5px] font-semibold text-[#78829D] data-[state=active]:!bg-white data-[state=active]:!text-[#1B84FF] data-[state=active]:shadow-[0_2px_6px_rgba(7,20,55,0.06)]"
+                        >
+                            Active ({connections.length})
                         </TabsTrigger>
-                        <TabsTrigger value="incoming" className="text-xs">
-                            Incoming Requests ({incoming.length})
+                        <TabsTrigger
+                            value="incoming"
+                            className="rounded-lg px-3.5 py-2 text-[12.5px] font-semibold text-[#78829D] data-[state=active]:!bg-white data-[state=active]:!text-[#1B84FF] data-[state=active]:shadow-[0_2px_6px_rgba(7,20,55,0.06)]"
+                        >
+                            Incoming ({incoming.length})
                         </TabsTrigger>
-                        <TabsTrigger value="outgoing" className="text-xs">
-                            Sent Requests ({outgoing.length})
+                        <TabsTrigger
+                            value="outgoing"
+                            className="rounded-lg px-3.5 py-2 text-[12.5px] font-semibold text-[#78829D] data-[state=active]:!bg-white data-[state=active]:!text-[#1B84FF] data-[state=active]:shadow-[0_2px_6px_rgba(7,20,55,0.06)]"
+                        >
+                            Sent ({outgoing.length})
                         </TabsTrigger>
-                        <TabsTrigger value="suggestions" className="text-xs">
-                            Suggested Batchmates ({suggestions.length})
+                        <TabsTrigger
+                            value="suggestions"
+                            className="rounded-lg px-3.5 py-2 text-[12.5px] font-semibold text-[#78829D] data-[state=active]:!bg-white data-[state=active]:!text-[#1B84FF] data-[state=active]:shadow-[0_2px_6px_rgba(7,20,55,0.06)]"
+                        >
+                            Suggested ({suggestions.length})
                         </TabsTrigger>
                     </TabsList>
 
                     {/* Active Connections */}
                     <TabsContent value="active">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {connections.length === 0 ? (
-                                <Card className="col-span-full p-8 text-center text-xs text-slate-400">
-                                    You have not established any peer connections yet. Explore suggested batchmates to grow your network!
-                                </Card>
+                                <EmptyState
+                                    message="You have not established any peer connections yet. Explore the alumni directory or suggested batchmates to grow your network."
+                                    actionHref="/member/directory"
+                                    actionLabel="Find Batchmates"
+                                />
                             ) : (
                                 connections.map((c) => {
-                                    // Identify peer alumnus (other side of connection)
-                                    const peer = c.requester?.user?.id === (window as any)?.__auth_id ? c.addressee : c.requester;
+                                    const peer = c.requester?.user?.id === authUserId ? c.addressee : c.requester;
                                     return (
-                                        <Card key={c.id} className="p-4 flex flex-col justify-between">
-                                            <div className="flex items-center gap-3">
-                                                <div className="size-11 rounded-xl bg-indigo-600 text-white font-bold text-sm flex items-center justify-center shrink-0">
-                                                    {peer?.user?.name?.charAt(0)}
-                                                </div>
+                                        <div
+                                            key={c.id}
+                                            className="flex flex-col justify-between rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] transition-colors hover:border-[#DBDFE9]"
+                                        >
+                                            <div className="flex items-center gap-3.5">
+                                                <PeerAvatar member={peer} />
                                                 <div className="min-w-0">
-                                                    <div className="font-bold text-xs text-slate-900 dark:text-white truncate">
+                                                    <Link
+                                                        href={`/member/directory/${peer?.id}`}
+                                                        className="block truncate text-[14px] font-semibold text-[#071437] hover:text-[#1B84FF]"
+                                                    >
                                                         {peer?.user?.name}
+                                                    </Link>
+                                                    <div className="truncate text-[12px] text-[#78829D]">
+                                                        {peer?.college?.name || 'Intake 1997'}
                                                     </div>
-                                                    <div className="text-[11px] text-slate-500 truncate">
-                                                        {peer?.college?.name}
-                                                    </div>
+                                                    {peer?.profile?.designation && (
+                                                        <div className="mt-0.5 truncate text-[11.5px] text-[#99A1B7]">
+                                                            {peer.profile.designation}
+                                                            {peer.profile.organization ? ` · ${peer.profile.organization}` : ''}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
 
-                                            <div className="pt-3 mt-3 border-t flex items-center justify-between text-xs">
+                                            <div className="mt-4 flex items-center justify-between border-t border-[#F1F1F4] pt-3 text-[12.5px]">
                                                 <Link
                                                     href={`/member/directory/${peer?.id}`}
-                                                    className="font-semibold text-indigo-600 hover:underline"
+                                                    className="inline-flex items-center gap-1 font-semibold text-[#1B84FF] hover:text-[#006AE6]"
                                                 >
+                                                    <UserCheck className="size-3.5" />
                                                     View Profile
                                                 </Link>
                                                 <button
+                                                    type="button"
                                                     onClick={() => handleRemove(c.id)}
-                                                    className="text-slate-400 hover:text-rose-500 text-[11px]"
+                                                    className="cursor-pointer text-[12px] font-medium text-[#99A1B7] transition-colors hover:text-[#F8285A]"
                                                 >
                                                     Remove
                                                 </button>
                                             </div>
-                                        </Card>
+                                        </div>
                                     );
                                 })
                             )}
@@ -122,46 +199,50 @@ export default function ConnectionsIndex({
 
                     {/* Incoming Requests */}
                     <TabsContent value="incoming">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             {incoming.length === 0 ? (
-                                <Card className="col-span-full p-8 text-center text-xs text-slate-400">
-                                    No incoming connection requests waiting for your review.
-                                </Card>
+                                <EmptyState message="No incoming connection requests waiting for your review." />
                             ) : (
                                 incoming.map((req) => (
-                                    <Card key={req.id} className="p-4 flex items-center justify-between">
-                                        <div className="flex items-center gap-3 min-w-0">
-                                            <div className="size-11 rounded-xl bg-indigo-600 text-white font-bold text-sm flex items-center justify-center shrink-0">
-                                                {req.requester?.user?.name?.charAt(0)}
-                                            </div>
+                                    <div
+                                        key={req.id}
+                                        className="flex flex-col justify-between gap-4 rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:flex-row sm:items-center"
+                                    >
+                                        <div className="flex min-w-0 items-center gap-3.5">
+                                            <PeerAvatar member={req.requester} />
                                             <div className="min-w-0">
-                                                <div className="font-bold text-xs text-slate-900 dark:text-white truncate">
+                                                <Link
+                                                    href={`/member/directory/${req.requester?.id}`}
+                                                    className="block truncate text-[14px] font-semibold text-[#071437] hover:text-[#1B84FF]"
+                                                >
                                                     {req.requester?.user?.name}
-                                                </div>
-                                                <div className="text-[11px] text-slate-500 truncate">
-                                                    {req.requester?.college?.name}
+                                                </Link>
+                                                <div className="truncate text-[12px] text-[#78829D]">
+                                                    {req.requester?.college?.name || 'Intake 1997'}
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center gap-1.5 shrink-0">
+                                        <div className="flex shrink-0 items-center gap-2">
                                             <Button
+                                                type="button"
                                                 size="sm"
                                                 onClick={() => handleAccept(req.id)}
-                                                className="bg-emerald-600 hover:bg-emerald-700 text-xs px-2.5 h-8"
+                                                className="h-8.5 rounded-lg bg-[#17C653] px-3 text-[12px] font-semibold text-white hover:bg-[#13a845]"
                                             >
-                                                <Check className="size-3.5 mr-1" /> Accept
+                                                <Check className="mr-1 size-3.5" /> Accept
                                             </Button>
                                             <Button
+                                                type="button"
                                                 size="sm"
                                                 variant="outline"
                                                 onClick={() => handleReject(req.id)}
-                                                className="text-xs px-2.5 h-8 text-rose-600"
+                                                className="h-8.5 rounded-lg border-[#DBDFE9] !bg-white px-2.5 text-[12px] font-semibold text-[#F8285A] hover:!bg-[#FFEEF3]"
                                             >
                                                 <X className="size-3.5" />
                                             </Button>
                                         </div>
-                                    </Card>
+                                    </div>
                                 ))
                             )}
                         </div>
@@ -169,35 +250,38 @@ export default function ConnectionsIndex({
 
                     {/* Outgoing Requests */}
                     <TabsContent value="outgoing">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             {outgoing.length === 0 ? (
-                                <Card className="col-span-full p-8 text-center text-xs text-slate-400">
-                                    No pending sent requests.
-                                </Card>
+                                <EmptyState message="No pending sent requests." />
                             ) : (
                                 outgoing.map((req) => (
-                                    <Card key={req.id} className="p-4 flex items-center justify-between">
-                                        <div className="flex items-center gap-3 min-w-0">
-                                            <div className="size-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-indigo-600 font-bold text-sm flex items-center justify-center shrink-0">
-                                                {req.addressee?.user?.name?.charAt(0)}
-                                            </div>
+                                    <div
+                                        key={req.id}
+                                        className="flex flex-col justify-between gap-4 rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:flex-row sm:items-center"
+                                    >
+                                        <div className="flex min-w-0 items-center gap-3.5">
+                                            <PeerAvatar member={req.addressee} />
                                             <div className="min-w-0">
-                                                <div className="font-bold text-xs text-slate-900 dark:text-white truncate">
+                                                <Link
+                                                    href={`/member/directory/${req.addressee?.id}`}
+                                                    className="block truncate text-[14px] font-semibold text-[#071437] hover:text-[#1B84FF]"
+                                                >
                                                     {req.addressee?.user?.name}
-                                                </div>
-                                                <div className="text-[11px] text-slate-500 truncate">
-                                                    {req.addressee?.college?.name}
+                                                </Link>
+                                                <div className="truncate text-[12px] text-[#78829D]">
+                                                    {req.addressee?.college?.name || 'Intake 1997'}
                                                 </div>
                                             </div>
                                         </div>
 
                                         <button
-                                            onClick={() => handleRemove(req.id)}
-                                            className="text-xs text-slate-400 hover:text-rose-500 font-medium"
+                                            type="button"
+                                            onClick={() => handleRemove(req.id, 'Cancel this connection request?')}
+                                            className="cursor-pointer self-start text-[12px] font-semibold text-[#78829D] transition-colors hover:text-[#F8285A] sm:self-auto"
                                         >
                                             Cancel Request
                                         </button>
-                                    </Card>
+                                    </div>
                                 ))
                             )}
                         </div>
@@ -205,40 +289,53 @@ export default function ConnectionsIndex({
 
                     {/* Suggested Batchmates */}
                     <TabsContent value="suggestions">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {suggestions.map((m) => (
-                                <Card key={m.id} className="p-4 flex flex-col justify-between">
-                                    <div className="space-y-2">
-                                        <div className="flex items-center gap-3">
-                                            <div className="size-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-indigo-600 font-bold text-sm flex items-center justify-center shrink-0">
-                                                {m.user?.name?.charAt(0)}
-                                            </div>
-                                            <div className="min-w-0">
-                                                <Link href={`/member/directory/${m.id}`} className="font-bold text-xs text-slate-900 dark:text-white hover:underline block truncate">
-                                                    {m.user?.name}
-                                                </Link>
-                                                <div className="text-[11px] text-slate-500 truncate">
-                                                    {m.college?.name}
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                            {suggestions.length === 0 ? (
+                                <EmptyState
+                                    message="No college batchmate suggestions available right now. Check the full directory to connect with alumni across all colleges."
+                                    actionHref="/member/directory"
+                                    actionLabel="Browse Directory"
+                                />
+                            ) : (
+                                suggestions.map((m) => (
+                                    <div
+                                        key={m.id}
+                                        className="flex flex-col justify-between rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] transition-colors hover:border-[#DBDFE9]"
+                                    >
+                                        <div className="space-y-2.5">
+                                            <div className="flex items-center gap-3.5">
+                                                <PeerAvatar member={m} />
+                                                <div className="min-w-0">
+                                                    <Link
+                                                        href={`/member/directory/${m.id}`}
+                                                        className="block truncate text-[14px] font-semibold text-[#071437] hover:text-[#1B84FF]"
+                                                    >
+                                                        {m.user?.name}
+                                                    </Link>
+                                                    <div className="truncate text-[12px] text-[#78829D]">
+                                                        {m.college?.name || 'Intake 1997'}
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div className="line-clamp-1 text-[12px] text-[#4B5675]">
+                                                {m.profile?.designation ? m.profile.designation : '1997 Alumnus'}
+                                                {m.profile?.organization ? ` at ${m.profile.organization}` : ''}
+                                            </div>
                                         </div>
-                                        <div className="text-[11px] text-slate-600 line-clamp-1">
-                                            {m.profile?.designation ? `${m.profile.designation}` : '1997 Alumnus'}
-                                            {m.profile?.organization ? ` at ${m.profile.organization}` : ''}
-                                        </div>
-                                    </div>
 
-                                    <div className="pt-3 mt-3 border-t flex justify-end">
-                                        <Button
-                                            size="sm"
-                                            onClick={() => handleConnect(m.id)}
-                                            className="bg-indigo-600 hover:bg-indigo-700 text-xs h-7 px-3"
-                                        >
-                                            <UserPlus className="size-3 mr-1" /> Connect
-                                        </Button>
+                                        <div className="mt-4 flex justify-end border-t border-[#F1F1F4] pt-3">
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                onClick={() => handleConnect(m.id)}
+                                                className="h-8.5 rounded-lg bg-[#1B84FF] px-3.5 text-[12px] font-semibold text-white hover:bg-[#006AE6]"
+                                            >
+                                                <UserPlus className="mr-1.5 size-3.5" /> Connect
+                                            </Button>
+                                        </div>
                                     </div>
-                                </Card>
-                            ))}
+                                ))
+                            )}
                         </div>
                     </TabsContent>
                 </Tabs>

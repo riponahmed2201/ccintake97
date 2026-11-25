@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import MemberLayout from '@/layouts/member-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Camera, Check, ChevronLeft, ChevronRight, Save } from 'lucide-react';
+import { ArrowLeft, Camera, Check, ChevronLeft, ChevronRight, ExternalLink, Pencil, Plus, QrCode, Save, X } from 'lucide-react';
 import type { College, Member } from '@/types';
 
 interface ProfileEditProps {
@@ -108,38 +108,69 @@ function FieldSelect({
 }
 
 const STEPS = [
+    { key: 'basic', label: 'Basic Info', title: 'Basic & personal information', hint: 'Update your photo, contact details, and family information.' },
     { key: 'college', label: 'College', title: 'College information', hint: 'Pick the college. Do not type a passing-out year beside it.' },
-    { key: 'personal', label: 'Personal', title: 'Personal information', hint: 'Spouse, spouse career, and children can be left blank.' },
     { key: 'address', label: 'Address', title: 'Address information', hint: 'Where you can be reached at home.' },
     { key: 'career', label: 'Career', title: 'Professional information', hint: 'Job type is a fixed list. Office address sits with the occupation.' },
     { key: 'more', label: 'More', title: 'Additional information', hint: 'Links and remarks can be left blank.' },
 ] as const;
 
 const STEP_FIELDS: Record<string, number> = {
-    college_id: 0,
-    college_roll_no: 0,
-    intake_year: 0,
-    house_name: 0,
-    house_color: 0,
-    cadet_name: 1,
-    name: 1,
-    phone: 1,
-    blood_group: 1,
-    spouse_name: 1,
-    spouse_occupation: 1,
-    spouse_job_location: 1,
-    children_names: 1,
+    photo: 0,
+    cadet_name: 0,
+    name: 0,
+    phone: 0,
+    blood_group: 0,
+    spouse_name: 0,
+    spouse_occupation: 0,
+    spouse_job_location: 0,
+    children_names: 0,
+    college_id: 1,
+    college_roll_no: 1,
+    intake_year: 1,
+    house_name: 1,
+    house_color: 1,
     address: 2,
+    city: 2,
+    country_code: 2,
+    present_address_line: 2,
+    present_area: 2,
+    present_postal_code: 2,
+    same_as_present_address: 2,
+    permanent_address_line: 2,
+    permanent_area: 2,
+    permanent_city: 2,
+    permanent_postal_code: 2,
+    permanent_country_code: 2,
     job_type: 3,
     designation: 3,
     organization: 3,
     office_address: 3,
     office_phone: 3,
-    photo: 4,
     facebook_url: 4,
     linkedin_url: 4,
     remarks: 4,
 };
+
+const COUNTRIES = [
+    { value: 'BD', label: 'Bangladesh' },
+    { value: 'US', label: 'United States' },
+    { value: 'GB', label: 'United Kingdom' },
+    { value: 'CA', label: 'Canada' },
+    { value: 'AU', label: 'Australia' },
+    { value: 'AE', label: 'United Arab Emirates' },
+    { value: 'SA', label: 'Saudi Arabia' },
+    { value: 'SG', label: 'Singapore' },
+    { value: 'MY', label: 'Malaysia' },
+    { value: 'DE', label: 'Germany' },
+    { value: 'JP', label: 'Japan' },
+    { value: 'OT', label: 'Other' },
+];
+
+function countryLabel(code?: string) {
+    if (!code) return undefined;
+    return COUNTRIES.find((c) => c.value === code)?.label || code;
+}
 
 function Section({ title, hint, children }: { title: string; hint: string; children: React.ReactNode }) {
     return (
@@ -153,9 +184,21 @@ function Section({ title, hint, children }: { title: string; hint: string; child
     );
 }
 
+function InfoRow({ label, value }: { label: string; value?: React.ReactNode }) {
+    return (
+        <div className="flex flex-col gap-0.5 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+            <dt className="text-[12.5px] font-medium text-[#78829D]">{label}</dt>
+            <dd className="text-[13px] font-semibold text-[#071437] sm:text-right">{value || <span className="font-normal text-[#99A1B7]">Not set</span>}</dd>
+        </div>
+    );
+}
+
 export default function ProfileEdit({ member, colleges, houses, houseColors, bloodGroups, jobTypes, photoUrl }: ProfileEditProps) {
     const storedChildren = member.profile?.children_names ?? [];
+    const [editing, setEditing] = useState(false);
+    const [overviewTab, setOverviewTab] = useState<'basic' | 'college' | 'career' | 'address' | 'privacy'>('basic');
     const [saved, setSaved] = useState(false);
+    const [privacySaved, setPrivacySaved] = useState(false);
     const [step, setStep] = useState(0);
     const [stepNotice, setStepNotice] = useState<string | null>(null);
     const [preview, setPreview] = useState<string | null>(photoUrl || null);
@@ -170,8 +213,19 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
         spouse_name: member.profile?.spouse_name || '',
         spouse_occupation: member.profile?.spouse_occupation || '',
         spouse_job_location: member.profile?.spouse_job_location || '',
-        children_names: [storedChildren[0] || '', storedChildren[1] || '', storedChildren[2] || ''],
+        children_names: storedChildren.length > 0 ? storedChildren : [''],
         address: member.profile?.address || '',
+        present_address_line: member.profile?.present_address_line || '',
+        present_area: member.profile?.present_area || '',
+        city: member.profile?.city || '',
+        present_postal_code: member.profile?.present_postal_code || '',
+        country_code: member.profile?.country_code || 'BD',
+        same_as_present_address: Boolean(member.profile?.same_as_present_address),
+        permanent_address_line: member.profile?.permanent_address_line || '',
+        permanent_area: member.profile?.permanent_area || '',
+        permanent_city: member.profile?.permanent_city || '',
+        permanent_postal_code: member.profile?.permanent_postal_code || '',
+        permanent_country_code: member.profile?.permanent_country_code || 'BD',
         college_id: member.college_id ? String(member.college_id) : '',
         college_roll_no: member.college_roll_no || '',
         intake_year: member.intake_year ? String(member.intake_year) : '1997',
@@ -207,10 +261,10 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
     });
 
     const firstIncomplete = () => {
-        if (!form.data.college_id || !form.data.college_roll_no.trim() || !form.data.intake_year) {
+        if (!form.data.name.trim() || !form.data.phone.trim()) {
             return 0;
         }
-        if (!form.data.name.trim() || !form.data.phone.trim()) {
+        if (!form.data.college_id || !form.data.college_roll_no.trim() || !form.data.intake_year) {
             return 1;
         }
 
@@ -218,14 +272,6 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
     };
 
     const goTo = (target: number) => {
-        if (target > step) {
-            const blocked = firstIncomplete();
-            if (blocked !== null && blocked < target) {
-                setStep(blocked);
-                setStepNotice('Fill the required fields on this step before continuing.');
-                return;
-            }
-        }
         setStepNotice(null);
         setStep(target);
     };
@@ -266,7 +312,15 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
 
     const savePrivacy = (event: React.FormEvent) => {
         event.preventDefault();
-        router.put('/member/privacy', { settings: privacySettings }, { preserveScroll: true });
+        setPrivacySaved(false);
+        router.put(
+            '/member/privacy',
+            { settings: privacySettings },
+            {
+                preserveScroll: true,
+                onSuccess: () => setPrivacySaved(true),
+            }
+        );
     };
 
     const savePhoto = () => {
@@ -301,19 +355,321 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
         <MemberLayout title="My Alumni Profile" breadcrumbs={[{ title: 'My Profile' }]}>
             <Head title="My Profile - INTAKE 97 Alumni" />
 
+            {!editing ? (
+                <div className="w-full space-y-6">
+                    {/* Profile Overview Header Card */}
+                    <div className="flex flex-col justify-between gap-5 rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:flex-row sm:items-center sm:p-6">
+                        <div className="flex items-center gap-4">
+                            <div className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#F1F6FF] text-[20px] font-semibold text-[#1B84FF] ring-2 ring-[#F1F1F4] sm:size-20">
+                                {preview ? (
+                                    <img src={preview} alt={member.user?.name || 'Profile'} className="size-full object-cover" />
+                                ) : (
+                                    member.user?.name?.charAt(0) || 'C'
+                                )}
+                            </div>
+                            <div className="min-w-0 space-y-1">
+                                <div className="flex flex-wrap items-center gap-2">
+                                    <h1 className="truncate text-[20px] font-bold tracking-tight text-[#071437]">
+                                        {member.user?.name}
+                                    </h1>
+                                    <span
+                                        className={`inline-flex rounded-md px-2.5 py-0.5 text-[11px] font-semibold capitalize ${
+                                            member.verification_status === 'verified'
+                                                ? 'bg-[#EAFFF1] text-[#17C653]'
+                                                : 'bg-[#FFF8DD] text-[#B45309]'
+                                        }`}
+                                    >
+                                        {member.verification_status?.replace('_', ' ') || 'Unverified'}
+                                    </span>
+                                </div>
+                                <div className="text-[13px] font-medium text-[#4B5675]">
+                                    {member.college?.name || 'College not selected'} · Intake {member.intake_year || '1997'}
+                                </div>
+                                <div className="flex flex-wrap items-center gap-3 text-[12px] text-[#78829D]">
+                                    {member.profile?.cadet_name && <span>Cadet {member.profile.cadet_name}</span>}
+                                    {member.college_roll_no && <span>Roll #{member.college_roll_no}</span>}
+                                    {member.member_code && <span className="font-mono font-semibold text-[#1B84FF]">ID · {member.member_code}</span>}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-2.5">
+                            <Link
+                                href="/member/id-card"
+                                className="inline-flex h-9.5 items-center gap-1.5 rounded-lg border border-[#DBDFE9] bg-white px-4 text-[12.5px] font-semibold text-[#4B5675] transition-colors hover:bg-[#F9F9F9] hover:text-[#071437]"
+                            >
+                                <QrCode className="size-3.5 text-[#78829D]" />
+                                Digital ID
+                            </Link>
+                            <Button
+                                type="button"
+                                onClick={() => {
+                                    const tabToStep: Record<string, number> = { basic: 0, college: 1, career: 3, address: 2, privacy: 0 };
+                                    setStep(tabToStep[overviewTab] ?? 0);
+                                    setSaved(false);
+                                    setEditing(true);
+                                }}
+                                className="h-9.5 rounded-lg bg-[#1B84FF] px-4 text-[12.5px] font-semibold text-white hover:bg-[#006AE6]"
+                            >
+                                <Pencil className="mr-1.5 size-3.5" />
+                                Edit Profile
+                            </Button>
+                        </div>
+                    </div>
+
+                    {/* Overview Details Tabs (Metronic Demo 1 Underline Tabs) */}
+                    <div className="space-y-5">
+                        <div
+                            role="tablist"
+                            className="flex w-full items-center gap-6 overflow-x-auto border-b border-[#F1F1F4] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                        >
+                            {[
+                                { value: 'basic' as const, label: 'Basic & Personal Info' },
+                                { value: 'college' as const, label: 'College & Cadet Details' },
+                                { value: 'career' as const, label: 'Professional' },
+                                { value: 'address' as const, label: 'Address, Links & Remarks' },
+                                { value: 'privacy' as const, label: 'Privacy' },
+                            ].map((tab) => {
+                                const active = overviewTab === tab.value;
+                                return (
+                                    <button
+                                        key={tab.value}
+                                        type="button"
+                                        role="tab"
+                                        aria-selected={active}
+                                        onClick={() => setOverviewTab(tab.value)}
+                                        className={`flex-none cursor-pointer border-b-2 px-1 pt-1.5 pb-3 text-[13px] transition-colors duration-200 outline-none focus:outline-none ${
+                                            active
+                                                ? 'border-[#1B84FF] font-semibold text-[#1B84FF]'
+                                                : 'border-transparent font-medium text-[#78829D] hover:text-[#071437]'
+                                        }`}
+                                    >
+                                        {tab.label}
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        {overviewTab === 'basic' && (
+                            <section className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-6">
+                                <h2 className="border-b border-[#F1F1F4] pb-3.5 text-[15px] font-semibold text-[#071437]">
+                                    Basic &amp; Personal Information
+                                </h2>
+                                <dl className="mt-2 divide-y divide-[#F1F1F4]">
+                                    <InfoRow label="Full name" value={member.user?.name} />
+                                    <InfoRow label="Cadet name" value={member.profile?.cadet_name} />
+                                    <InfoRow label="Mobile number" value={member.user?.phone} />
+                                    <InfoRow label="Email address" value={member.user?.email} />
+                                    <InfoRow label="Blood group" value={member.profile?.blood_group} />
+                                    <InfoRow label="Spouse name" value={member.profile?.spouse_name} />
+                                    <InfoRow label="Spouse occupation" value={member.profile?.spouse_occupation} />
+                                    <InfoRow label="Spouse job location" value={member.profile?.spouse_job_location} />
+                                    <InfoRow
+                                        label="Children names"
+                                        value={storedChildren.length > 0 ? storedChildren.join(', ') : undefined}
+                                    />
+                                </dl>
+                            </section>
+                        )}
+
+                        {overviewTab === 'college' && (
+                            <section className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-6">
+                                <h2 className="border-b border-[#F1F1F4] pb-3.5 text-[15px] font-semibold text-[#071437]">
+                                    College &amp; Cadet Details
+                                </h2>
+                                <dl className="mt-2 divide-y divide-[#F1F1F4]">
+                                    <InfoRow label="College name" value={member.college?.name} />
+                                    <InfoRow label="Cadet number" value={member.college_roll_no} />
+                                    <InfoRow label="Intake number" value={member.intake_year ? String(member.intake_year) : '1997'} />
+                                    <InfoRow label="House name" value={member.house_name} />
+                                    <InfoRow
+                                        label="House color"
+                                        value={
+                                            member.house_color ? (
+                                                <span className="inline-flex items-center gap-2">
+                                                    <span className={`size-2.5 rounded-full ${HOUSE_SWATCH[member.house_color] ?? 'bg-slate-300'}`} />
+                                                    {member.house_color}
+                                                </span>
+                                            ) : undefined
+                                        }
+                                    />
+                                </dl>
+                            </section>
+                        )}
+
+                        {overviewTab === 'career' && (
+                            <section className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-6">
+                                <h2 className="border-b border-[#F1F1F4] pb-3.5 text-[15px] font-semibold text-[#071437]">
+                                    Professional Information
+                                </h2>
+                                <dl className="mt-2 divide-y divide-[#F1F1F4]">
+                                    <InfoRow label="Job type" value={member.profile?.job_type} />
+                                    <InfoRow label="Designation" value={member.profile?.designation} />
+                                    <InfoRow label="Organization" value={member.profile?.organization} />
+                                    <InfoRow label="Office address" value={member.profile?.office_address} />
+                                    <InfoRow label="Office phone" value={member.profile?.office_phone} />
+                                </dl>
+                            </section>
+                        )}
+
+                        {overviewTab === 'address' && (
+                            <section className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-6">
+                                <h2 className="border-b border-[#F1F1F4] pb-3.5 text-[15px] font-semibold text-[#071437]">
+                                    Address, Links &amp; Remarks
+                                </h2>
+                                <div className="mt-4 space-y-5">
+                                    <div>
+                                        <div className="mb-1 text-[12px] font-semibold tracking-wide text-[#99A1B7] uppercase">
+                                            Present Address
+                                        </div>
+                                        <dl className="divide-y divide-[#F1F1F4]">
+                                            <InfoRow label="House / Road / Street" value={member.profile?.present_address_line || member.profile?.address} />
+                                            <InfoRow label="Area / Thana" value={member.profile?.present_area} />
+                                            <InfoRow label="City / District" value={member.profile?.city} />
+                                            <InfoRow label="Postal / ZIP code" value={member.profile?.present_postal_code} />
+                                            <InfoRow label="Country" value={countryLabel(member.profile?.country_code)} />
+                                        </dl>
+                                    </div>
+
+                                    <div className="border-t border-[#F1F1F4] pt-4">
+                                        <div className="mb-1 text-[12px] font-semibold tracking-wide text-[#99A1B7] uppercase">
+                                            Permanent Address
+                                        </div>
+                                        {member.profile?.same_as_present_address ? (
+                                            <p className="py-2 text-[13px] font-medium text-[#4B5675]">Same as present address</p>
+                                        ) : (
+                                            <dl className="divide-y divide-[#F1F1F4]">
+                                                <InfoRow label="House / Road / Village" value={member.profile?.permanent_address_line} />
+                                                <InfoRow label="Area / Thana" value={member.profile?.permanent_area} />
+                                                <InfoRow label="City / District" value={member.profile?.permanent_city} />
+                                                <InfoRow label="Postal / ZIP code" value={member.profile?.permanent_postal_code} />
+                                                <InfoRow label="Country" value={countryLabel(member.profile?.permanent_country_code)} />
+                                            </dl>
+                                        )}
+                                    </div>
+
+                                    <div className="border-t border-[#F1F1F4] pt-4">
+                                        <div className="mb-1 text-[12px] font-semibold tracking-wide text-[#99A1B7] uppercase">
+                                            Social Links &amp; Remarks
+                                        </div>
+                                        <dl className="divide-y divide-[#F1F1F4]">
+                                            <InfoRow
+                                                label="Facebook profile"
+                                                value={
+                                                    member.profile?.facebook_url ? (
+                                                        <a
+                                                            href={member.profile.facebook_url}
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                            className="inline-flex items-center gap-1 text-[#1B84FF] hover:underline"
+                                                        >
+                                                            View Profile <ExternalLink className="size-3" />
+                                                        </a>
+                                                    ) : undefined
+                                                }
+                                            />
+                                            <InfoRow
+                                                label="LinkedIn profile"
+                                                value={
+                                                    member.profile?.linkedin_url ? (
+                                                        <a
+                                                            href={member.profile.linkedin_url}
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                            className="inline-flex items-center gap-1 text-[#1B84FF] hover:underline"
+                                                        >
+                                                            View Profile <ExternalLink className="size-3" />
+                                                        </a>
+                                                    ) : undefined
+                                                }
+                                            />
+                                            <InfoRow label="Additional remarks" value={member.profile?.remarks} />
+                                        </dl>
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+
+                        {overviewTab === 'privacy' && (
+                            <form onSubmit={savePrivacy}>
+                                <section className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-6">
+                                    <div className="flex flex-col gap-2 border-b border-[#F1F1F4] pb-4 sm:flex-row sm:items-center sm:justify-between">
+                                        <div>
+                                            <h2 className="text-[15px] font-semibold text-[#071437]">Who can see these details</h2>
+                                            <p className="mt-0.5 text-[12.5px] text-[#78829D]">
+                                                Choose who can see organization, designation, and LinkedIn in the alumni directory.
+                                            </p>
+                                        </div>
+                                        {privacySaved && (
+                                            <span className="inline-flex items-center gap-1.5 self-start rounded-lg bg-[#EAFFF1] px-3 py-1 text-[12px] font-semibold text-[#17C653] sm:self-auto">
+                                                <Check className="size-3.5" /> Privacy saved
+                                            </span>
+                                        )}
+                                    </div>
+                                    <div className="mt-2 divide-y divide-[#F1F1F4]">
+                                        {[
+                                            { key: 'organization', label: 'Organization' },
+                                            { key: 'designation', label: 'Designation' },
+                                            { key: 'linkedin', label: 'LinkedIn' },
+                                        ].map((item) => (
+                                            <div key={item.key} className="flex flex-col gap-2 py-3.5 sm:flex-row sm:items-center sm:justify-between">
+                                                <span className="text-[13.5px] font-medium text-[#071437]">{item.label}</span>
+                                                <FieldSelect
+                                                    className="sm:w-56"
+                                                    value={privacySettings[item.key] || 'verified_members'}
+                                                    placeholder="Who can see this"
+                                                    onChange={(visibility) => {
+                                                        setPrivacySaved(false);
+                                                        setPrivacySettings({ ...privacySettings, [item.key]: visibility });
+                                                    }}
+                                                    options={[
+                                                        { value: 'verified_members', label: 'Verified members' },
+                                                        { value: 'connections', label: 'Connections only' },
+                                                        { value: 'private', label: 'Only me and admin' },
+                                                    ]}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="mt-4 flex justify-end">
+                                        <Button
+                                            type="submit"
+                                            className="h-9.5 rounded-lg bg-[#1B84FF] px-4 text-[12.5px] font-semibold text-white hover:bg-[#006AE6]"
+                                        >
+                                            <Save className="mr-1.5 size-3.5" />
+                                            Save privacy
+                                        </Button>
+                                    </div>
+                                </section>
+                            </form>
+                        )}
+                    </div>
+                </div>
+            ) : (
             <div className="w-full space-y-6">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 className="text-[22px] font-semibold tracking-tight text-[#071437]">My Alumni Profile</h1>
+                        <h1 className="text-[22px] font-semibold tracking-tight text-[#071437]">Edit Alumni Profile</h1>
                         <p className="mt-1 max-w-xl text-[13px] text-[#78829D]">
                             Move across the steps below. College is a fixed list, and intake number is the year you entered.
                         </p>
                     </div>
-                    {saved && (
-                        <span className="inline-flex items-center gap-1.5 rounded-lg bg-[#EAFFF1] px-3 py-1.5 text-[12.5px] font-semibold text-[#17C653]">
-                            <Check className="size-3.5" /> Profile saved
-                        </span>
-                    )}
+                    <div className="flex flex-wrap items-center gap-2.5">
+                        {saved && (
+                            <span className="inline-flex items-center gap-1.5 rounded-lg bg-[#EAFFF1] px-3 py-1.5 text-[12.5px] font-semibold text-[#17C653]">
+                                <Check className="size-3.5" /> Profile saved
+                            </span>
+                        )}
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => setEditing(false)}
+                            className="h-9.5 rounded-lg border-[#DBDFE9] !bg-white px-4 text-[12.5px] font-semibold text-[#4B5675] hover:!bg-[#F9F9F9] hover:text-[#071437]"
+                        >
+                            <ArrowLeft className="mr-1.5 size-3.5 text-[#78829D]" />
+                            Back to Overview
+                        </Button>
+                    </div>
                 </div>
 
                 {/* Horizontal Metronic Stepper */}
@@ -423,6 +779,103 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                             </div>
                         </div>
 
+                        <div>
+                            <Label required>Full name</Label>
+                            <Input required value={form.data.name} onChange={(event) => form.setData('name', event.target.value)} className={fieldClass} placeholder="Enter your full name" />
+                            <ErrorText message={form.errors.name} />
+                        </div>
+                        <div>
+                            <Label optional>Cadet name</Label>
+                            <Input value={form.data.cadet_name} onChange={(event) => form.setData('cadet_name', event.target.value)} className={fieldClass} placeholder="Enter name used at college" />
+                            <ErrorText message={form.errors.cadet_name} />
+                        </div>
+                        <div>
+                            <Label required>Mobile number</Label>
+                            <Input required type="tel" value={form.data.phone} onChange={(event) => form.setData('phone', event.target.value)} className={fieldClass} placeholder="Enter mobile number (e.g. +880...)" />
+                            <ErrorText message={form.errors.phone} />
+                        </div>
+                        <div>
+                            <Label>Email address</Label>
+                            <Input disabled value={member.user?.email || ''} className={`${fieldClass} text-slate-500`} />
+                        </div>
+                        <div>
+                            <Label optional>Blood group</Label>
+                            <FieldSelect
+                                value={form.data.blood_group}
+                                placeholder="Select blood group"
+                                clearable
+                                onChange={(group) => form.setData('blood_group', group)}
+                                options={bloodGroups.map((group) => ({ value: group, label: group }))}
+                            />
+                            <ErrorText message={form.errors.blood_group} />
+                        </div>
+                        <div>
+                            <Label optional>Spouse name</Label>
+                            <Input value={form.data.spouse_name} onChange={(event) => form.setData('spouse_name', event.target.value)} className={fieldClass} placeholder="Enter spouse name" />
+                        </div>
+                        <div>
+                            <Label optional>Spouse occupation</Label>
+                            <Input value={form.data.spouse_occupation} onChange={(event) => form.setData('spouse_occupation', event.target.value)} className={fieldClass} placeholder="Enter spouse occupation" />
+                        </div>
+                        <div>
+                            <Label optional>Spouse job location</Label>
+                            <Input value={form.data.spouse_job_location} onChange={(event) => form.setData('spouse_job_location', event.target.value)} className={fieldClass} placeholder="Enter spouse job location" />
+                        </div>
+                        <div className="sm:col-span-2">
+                            <div className="mb-1.5 flex items-center justify-between">
+                                <Label optional>Children names</Label>
+                                {form.data.children_names.length < 10 && (
+                                    <button
+                                        type="button"
+                                        onClick={() => form.setData('children_names', [...form.data.children_names, ''])}
+                                        className="inline-flex cursor-pointer items-center gap-1 text-[12px] font-semibold text-[#1B84FF] hover:text-[#006AE6]"
+                                    >
+                                        <Plus className="size-3.5" /> Add child
+                                    </button>
+                                )}
+                            </div>
+                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                {form.data.children_names.map((child, index) => (
+                                    <div key={index} className="flex items-center gap-2">
+                                        <Input
+                                            value={child}
+                                            onChange={(event) => {
+                                                const value = event.target.value;
+                                                form.setData((current) => {
+                                                    const next = [...current.children_names];
+                                                    next[index] = value;
+                                                    return { ...current, children_names: next };
+                                                });
+                                            }}
+                                            className={fieldClass}
+                                            placeholder={`Enter child ${index + 1} name`}
+                                        />
+                                        {form.data.children_names.length > 1 && (
+                                            <button
+                                                type="button"
+                                                aria-label={`Remove child ${index + 1}`}
+                                                onClick={() =>
+                                                    form.setData(
+                                                        'children_names',
+                                                        form.data.children_names.filter((_, i) => i !== index)
+                                                    )
+                                                }
+                                                className="flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-md border border-[#DBDFE9] bg-white text-[#99A1B7] transition-colors hover:border-[#F8285A]/40 hover:bg-[#FFEEF3] hover:text-[#F8285A]"
+                                            >
+                                                <X className="size-4" />
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </Section>
+                )}
+
+                {step === 1 && (
+                <Section title={STEPS[1].title} hint={STEPS[1].hint}>
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div className="sm:col-span-2">
                             <Label required>College name</Label>
                             <FieldSelect
@@ -438,12 +891,12 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                         </div>
                         <div>
                             <Label required>Cadet number</Label>
-                            <Input required value={form.data.college_roll_no} onChange={(event) => form.setData('college_roll_no', event.target.value)} className={fieldClass} placeholder="Roll number" />
+                            <Input required value={form.data.college_roll_no} onChange={(event) => form.setData('college_roll_no', event.target.value)} className={fieldClass} placeholder="Enter cadet roll number" />
                             <ErrorText message={form.errors.college_roll_no} />
                         </div>
                         <div>
                             <Label required>Intake number</Label>
-                            <Input required type="number" min={1950} max={2035} value={form.data.intake_year} onChange={(event) => form.setData('intake_year', event.target.value)} className={fieldClass} placeholder="1997" />
+                            <Input required type="number" min={1950} max={2035} value={form.data.intake_year} onChange={(event) => form.setData('intake_year', event.target.value)} className={fieldClass} placeholder="Enter intake year (e.g. 1997)" />
                             <ErrorText message={form.errors.intake_year} />
                         </div>
                         <div>
@@ -481,87 +934,137 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                 </Section>
                 )}
 
-                {step === 1 && (
-                <Section title={STEPS[1].title} hint={STEPS[1].hint}>
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div>
-                            <Label optional>Cadet name</Label>
-                            <Input value={form.data.cadet_name} onChange={(event) => form.setData('cadet_name', event.target.value)} className={fieldClass} placeholder="Name used at college" />
-                            <ErrorText message={form.errors.cadet_name} />
-                        </div>
-                        <div>
-                            <Label required>Full name</Label>
-                            <Input required value={form.data.name} onChange={(event) => form.setData('name', event.target.value)} className={fieldClass} />
-                            <ErrorText message={form.errors.name} />
-                        </div>
-                        <div>
-                            <Label required>Mobile number</Label>
-                            <Input required type="tel" value={form.data.phone} onChange={(event) => form.setData('phone', event.target.value)} className={fieldClass} placeholder="+880..." />
-                            <ErrorText message={form.errors.phone} />
-                        </div>
-                        <div>
-                            <Label>Email address</Label>
-                            <Input disabled value={member.user?.email || ''} className={`${fieldClass} text-slate-500`} />
-                        </div>
-                        <div>
-                            <Label optional>Blood group</Label>
-                            <FieldSelect
-                                value={form.data.blood_group}
-                                placeholder="Select blood group"
-                                clearable
-                                onChange={(group) => form.setData('blood_group', group)}
-                                options={bloodGroups.map((group) => ({ value: group, label: group }))}
-                            />
-                            <ErrorText message={form.errors.blood_group} />
-                        </div>
-                        <div>
-                            <Label optional>Spouse name</Label>
-                            <Input value={form.data.spouse_name} onChange={(event) => form.setData('spouse_name', event.target.value)} className={fieldClass} />
-                        </div>
-                        <div>
-                            <Label optional>Spouse occupation</Label>
-                            <Input value={form.data.spouse_occupation} onChange={(event) => form.setData('spouse_occupation', event.target.value)} className={fieldClass} />
-                        </div>
-                        <div>
-                            <Label optional>Spouse job location</Label>
-                            <Input value={form.data.spouse_job_location} onChange={(event) => form.setData('spouse_job_location', event.target.value)} className={fieldClass} />
-                        </div>
-                        <div className="sm:col-span-2">
-                            <Label optional>Children names</Label>
-                            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                                {form.data.children_names.map((child, index) => (
-                                    <Input
-                                        key={index}
-                                        value={child}
-                                        onChange={(event) => {
-                                            const value = event.target.value;
-                                            form.setData((current) => {
-                                                const next = [...current.children_names];
-                                                next[index] = value;
-                                                return { ...current, children_names: next };
-                                            });
-                                        }}
-                                        className={fieldClass}
-                                        placeholder={`${index + 1}.`}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </Section>
-                )}
-
                 {step === 2 && (
                 <Section title={STEPS[2].title} hint={STEPS[2].hint}>
-                    <Label optional>Home address</Label>
-                    <textarea
-                        rows={3}
-                        value={form.data.address}
-                        onChange={(event) => form.setData('address', event.target.value)}
-                        className={`${fieldClass} h-auto py-2`}
-                        placeholder="House, road, area, city"
-                    />
-                    <ErrorText message={form.errors.address} />
+                    <div className="space-y-6">
+                        {/* Present Address */}
+                        <div>
+                            <div className="mb-3 text-[13px] font-semibold text-[#071437]">Present Address</div>
+                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <div className="sm:col-span-2">
+                                    <Label optional>House / Road / Street</Label>
+                                    <Input
+                                        value={form.data.present_address_line}
+                                        onChange={(event) => form.setData('present_address_line', event.target.value)}
+                                        className={fieldClass}
+                                        placeholder="Enter house, flat, road, or street"
+                                    />
+                                    <ErrorText message={form.errors.present_address_line} />
+                                </div>
+                                <div>
+                                    <Label optional>Area / Thana / Upazila</Label>
+                                    <Input
+                                        value={form.data.present_area}
+                                        onChange={(event) => form.setData('present_area', event.target.value)}
+                                        className={fieldClass}
+                                        placeholder="Enter area, thana, or upazila"
+                                    />
+                                    <ErrorText message={form.errors.present_area} />
+                                </div>
+                                <div>
+                                    <Label optional>City / District</Label>
+                                    <Input
+                                        value={form.data.city}
+                                        onChange={(event) => form.setData('city', event.target.value)}
+                                        className={fieldClass}
+                                        placeholder="Enter city or district"
+                                    />
+                                    <ErrorText message={form.errors.city} />
+                                </div>
+                                <div>
+                                    <Label optional>Postal / ZIP code</Label>
+                                    <Input
+                                        value={form.data.present_postal_code}
+                                        onChange={(event) => form.setData('present_postal_code', event.target.value)}
+                                        className={fieldClass}
+                                        placeholder="Enter postal or ZIP code"
+                                    />
+                                    <ErrorText message={form.errors.present_postal_code} />
+                                </div>
+                                <div>
+                                    <Label optional>Country</Label>
+                                    <FieldSelect
+                                        value={form.data.country_code}
+                                        placeholder="Select country"
+                                        onChange={(code) => form.setData('country_code', code)}
+                                        options={COUNTRIES}
+                                    />
+                                    <ErrorText message={form.errors.country_code} />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Permanent Address */}
+                        <div className="border-t border-[#F1F1F4] pt-5">
+                            <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                                <div className="text-[13px] font-semibold text-[#071437]">Permanent Address</div>
+                                <label className="inline-flex cursor-pointer items-center gap-2 text-[12.5px] font-medium text-[#4B5675]">
+                                    <input
+                                        type="checkbox"
+                                        checked={form.data.same_as_present_address}
+                                        onChange={(event) => form.setData('same_as_present_address', event.target.checked)}
+                                        className="size-4 rounded border-[#DBDFE9] text-[#1B84FF] focus:ring-[#1B84FF]"
+                                    />
+                                    <span>Same as present address</span>
+                                </label>
+                            </div>
+
+                            {!form.data.same_as_present_address && (
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                    <div className="sm:col-span-2">
+                                        <Label optional>House / Road / Village</Label>
+                                        <Input
+                                            value={form.data.permanent_address_line}
+                                            onChange={(event) => form.setData('permanent_address_line', event.target.value)}
+                                            className={fieldClass}
+                                            placeholder="Enter house, road, or village"
+                                        />
+                                        <ErrorText message={form.errors.permanent_address_line} />
+                                    </div>
+                                    <div>
+                                        <Label optional>Area / Thana / Upazila</Label>
+                                        <Input
+                                            value={form.data.permanent_area}
+                                            onChange={(event) => form.setData('permanent_area', event.target.value)}
+                                            className={fieldClass}
+                                            placeholder="Enter area, thana, or upazila"
+                                        />
+                                        <ErrorText message={form.errors.permanent_area} />
+                                    </div>
+                                    <div>
+                                        <Label optional>City / District</Label>
+                                        <Input
+                                            value={form.data.permanent_city}
+                                            onChange={(event) => form.setData('permanent_city', event.target.value)}
+                                            className={fieldClass}
+                                            placeholder="Enter city or district"
+                                        />
+                                        <ErrorText message={form.errors.permanent_city} />
+                                    </div>
+                                    <div>
+                                        <Label optional>Postal / ZIP code</Label>
+                                        <Input
+                                            value={form.data.permanent_postal_code}
+                                            onChange={(event) => form.setData('permanent_postal_code', event.target.value)}
+                                            className={fieldClass}
+                                            placeholder="Enter postal or ZIP code"
+                                        />
+                                        <ErrorText message={form.errors.permanent_postal_code} />
+                                    </div>
+                                    <div>
+                                        <Label optional>Country</Label>
+                                        <FieldSelect
+                                            value={form.data.permanent_country_code}
+                                            placeholder="Select country"
+                                            onChange={(code) => form.setData('permanent_country_code', code)}
+                                            options={COUNTRIES}
+                                        />
+                                        <ErrorText message={form.errors.permanent_country_code} />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </Section>
                 )}
 
@@ -581,12 +1084,12 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                         </div>
                         <div>
                             <Label optional>Designation</Label>
-                            <Input value={form.data.designation} onChange={(event) => form.setData('designation', event.target.value)} className={fieldClass} placeholder="Current post" />
+                            <Input value={form.data.designation} onChange={(event) => form.setData('designation', event.target.value)} className={fieldClass} placeholder="Enter current designation" />
                             <ErrorText message={form.errors.designation} />
                         </div>
                         <div className="sm:col-span-2">
                             <Label optional>Organization / institution</Label>
-                            <Input value={form.data.organization} onChange={(event) => form.setData('organization', event.target.value)} className={fieldClass} />
+                            <Input value={form.data.organization} onChange={(event) => form.setData('organization', event.target.value)} className={fieldClass} placeholder="Enter organization or institution name" />
                             <ErrorText message={form.errors.organization} />
                         </div>
                         <div className="sm:col-span-2">
@@ -596,12 +1099,13 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                                 value={form.data.office_address}
                                 onChange={(event) => form.setData('office_address', event.target.value)}
                                 className={`${fieldClass} h-auto py-2`}
+                                placeholder="Enter office address"
                             />
                             <ErrorText message={form.errors.office_address} />
                         </div>
                         <div>
                             <Label optional>Office contact number</Label>
-                            <Input type="tel" value={form.data.office_phone} onChange={(event) => form.setData('office_phone', event.target.value)} className={fieldClass} />
+                            <Input type="tel" value={form.data.office_phone} onChange={(event) => form.setData('office_phone', event.target.value)} className={fieldClass} placeholder="Enter office contact number" />
                             <ErrorText message={form.errors.office_phone} />
                         </div>
                     </div>
@@ -613,12 +1117,12 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
                             <Label optional>Facebook profile</Label>
-                            <Input type="url" value={form.data.facebook_url} onChange={(event) => form.setData('facebook_url', event.target.value)} className={fieldClass} placeholder="https://facebook.com/..." />
+                            <Input type="url" value={form.data.facebook_url} onChange={(event) => form.setData('facebook_url', event.target.value)} className={fieldClass} placeholder="Enter Facebook URL (https://facebook.com/...)" />
                             <ErrorText message={form.errors.facebook_url} />
                         </div>
                         <div>
                             <Label optional>LinkedIn profile</Label>
-                            <Input type="url" value={form.data.linkedin_url} onChange={(event) => form.setData('linkedin_url', event.target.value)} className={fieldClass} placeholder="https://linkedin.com/in/..." />
+                            <Input type="url" value={form.data.linkedin_url} onChange={(event) => form.setData('linkedin_url', event.target.value)} className={fieldClass} placeholder="Enter LinkedIn URL (https://linkedin.com/in/...)" />
                             <ErrorText message={form.errors.linkedin_url} />
                         </div>
                         <div className="sm:col-span-2">
@@ -628,6 +1132,7 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                                 value={form.data.remarks}
                                 onChange={(event) => form.setData('remarks', event.target.value)}
                                 className={`${fieldClass} h-auto py-2`}
+                                placeholder="Enter any additional remarks or notes"
                             />
                             <ErrorText message={form.errors.remarks} />
                         </div>
@@ -660,46 +1165,9 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                     )}
                 </div>
                 </form>
-
-                {step === 4 && (
-                <form onSubmit={savePrivacy}>
-                <section className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-6">
-                    <div className="border-b border-[#F1F1F4] pb-4">
-                        <h2 className="text-[15px] font-semibold text-[#071437]">Who can see these details</h2>
-                        <p className="mt-0.5 text-[12.5px] text-[#78829D]">Choose who can see organization, designation, and LinkedIn.</p>
-                    </div>
-                    <div className="mt-2 divide-y divide-[#F1F1F4]">
-                        {[
-                            { key: 'organization', label: 'Organization' },
-                            { key: 'designation', label: 'Designation' },
-                            { key: 'linkedin', label: 'LinkedIn' },
-                        ].map((item) => (
-                            <div key={item.key} className="flex flex-col gap-2 py-3.5 sm:flex-row sm:items-center sm:justify-between">
-                                <span className="text-[13.5px] font-medium text-[#071437]">{item.label}</span>
-                                <FieldSelect
-                                    className="sm:w-56"
-                                    value={privacySettings[item.key] || 'verified_members'}
-                                    placeholder="Who can see this"
-                                    onChange={(visibility) => setPrivacySettings({ ...privacySettings, [item.key]: visibility })}
-                                    options={[
-                                        { value: 'verified_members', label: 'Verified members' },
-                                        { value: 'connections', label: 'Connections only' },
-                                        { value: 'private', label: 'Only me and admin' },
-                                    ]}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                    <div className="mt-4 flex justify-end">
-                        <Button type="submit" variant="outline" className="rounded-lg border-[#DBDFE9] bg-white text-[13px] font-semibold text-[#4B5675] hover:bg-[#F9F9F9] hover:text-[#071437]">
-                            Save privacy
-                        </Button>
-                    </div>
-                </section>
-                </form>
-                )}
                 </div>
             </div>
+            )}
         </MemberLayout>
     );
 }

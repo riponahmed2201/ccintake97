@@ -1,8 +1,6 @@
 import React from 'react';
 import { Head, router } from '@inertiajs/react';
 import MemberLayout from '@/layouts/member-layout';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Bell, CheckCheck, Check } from 'lucide-react';
 
@@ -16,86 +14,106 @@ interface NotificationsIndexProps {
 }
 
 export default function MemberNotificationsIndex({ notifications }: NotificationsIndexProps) {
+    const unreadCount = notifications.data.filter((n) => !n.read_at).length;
+
     const handleMarkAsRead = (id: string) => {
-        router.put(`/member/notifications/${id}/read`);
+        router.put(`/member/notifications/${id}/read`, {}, { preserveScroll: true });
     };
 
     const handleMarkAllRead = () => {
-        router.post('/member/notifications/read-all');
+        router.post('/member/notifications/read-all', {}, { preserveScroll: true });
     };
 
     return (
         <MemberLayout
-            title="My Notifications"
+            title="Notifications"
             breadcrumbs={[{ title: 'Notifications' }]}
         >
             <Head title="Notifications - INTAKE97.COM" />
 
-            <div className="max-w-3xl mx-auto space-y-6">
-                <div className="flex items-center justify-between">
+            <div className="w-full space-y-6">
+                {/* Page Header */}
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                        <h1 className="text-[22px] font-semibold tracking-tight text-[#071437]">
                             Notification Center
                         </h1>
-                        <p className="text-xs text-slate-500 mt-1">
+                        <p className="mt-1 text-[13px] text-[#78829D]">
                             Membership verification notices, event registration alerts, and connection updates.
                         </p>
                     </div>
 
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleMarkAllRead}
-                        className="text-xs font-semibold gap-1.5"
-                    >
-                        <CheckCheck className="size-3.5" /> Mark All as Read
-                    </Button>
+                    {unreadCount > 0 && (
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={handleMarkAllRead}
+                            className="h-9 gap-1.5 self-start rounded-lg border-[#DBDFE9] !bg-white px-3.5 text-[12.5px] font-semibold text-[#4B5675] shadow-none hover:!bg-[#F9F9F9] hover:text-[#071437] sm:self-auto"
+                        >
+                            <CheckCheck className="size-3.5 text-[#1B84FF]" /> Mark All as Read
+                        </Button>
+                    )}
                 </div>
 
+                {/* Notifications List */}
                 <div className="space-y-3">
                     {notifications.data.length === 0 ? (
-                        <Card className="p-12 text-center text-xs text-slate-400">
-                            You have no notifications.
-                        </Card>
+                        <div className="flex flex-col items-center justify-center rounded-xl border border-[#F1F1F4] bg-[#FCFCFC] px-6 py-12 text-center">
+                            <div className="mb-3 flex size-11 items-center justify-center rounded-full bg-[#F1F6FF] text-[#1B84FF]">
+                                <Bell className="size-5" />
+                            </div>
+                            <p className="text-[13.5px] font-semibold text-[#071437]">You&apos;re all caught up</p>
+                            <p className="mt-1 max-w-md text-[12.5px] text-[#78829D]">
+                                You have no notifications right now.
+                            </p>
+                        </div>
                     ) : (
                         notifications.data.map((n) => {
                             const data = typeof n.data === 'string' ? JSON.parse(n.data) : n.data;
                             const isRead = !!n.read_at;
                             return (
-                                <Card
+                                <div
                                     key={n.id}
-                                    className={`p-4 transition-colors flex items-center justify-between ${
+                                    className={`flex items-center justify-between gap-4 rounded-xl border p-4.5 transition-colors sm:p-5 ${
                                         !isRead
-                                            ? 'border-indigo-200 dark:border-indigo-900 bg-indigo-50/20 dark:bg-slate-900'
-                                            : ''
+                                            ? 'border-[#1B84FF]/25 bg-[#F8FBFF]'
+                                            : 'border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.02)]'
                                     }`}
                                 >
-                                    <div className="space-y-1 text-xs">
-                                        <div className="flex items-center gap-2">
-                                            <Badge variant="outline" className="text-[10px] uppercase font-semibold">
+                                    <div className="min-w-0 space-y-1.5">
+                                        <div className="flex flex-wrap items-center gap-2">
+                                            {!isRead && <span className="size-2 rounded-full bg-[#1B84FF]" />}
+                                            <span className="inline-flex rounded-md bg-[#F1F6FF] px-2 py-0.5 text-[10.5px] font-semibold tracking-wide text-[#1B84FF] uppercase">
                                                 {n.category || 'Notification'}
-                                            </Badge>
-                                            <span className="text-[10px] text-slate-400">
-                                                {new Date(n.created_at).toLocaleString()}
+                                            </span>
+                                            <span className="text-[11.5px] text-[#99A1B7]">
+                                                {new Date(n.created_at).toLocaleString('en-US', {
+                                                    month: 'short',
+                                                    day: 'numeric',
+                                                    year: 'numeric',
+                                                    hour: 'numeric',
+                                                    minute: '2-digit',
+                                                })}
                                             </span>
                                         </div>
-                                        <p className="text-slate-800 dark:text-slate-200 font-medium">
+                                        <p className={`text-[13.5px] leading-relaxed ${!isRead ? 'font-semibold text-[#071437]' : 'font-medium text-[#4B5675]'}`}>
                                             {data?.message || 'New association alert received.'}
                                         </p>
                                     </div>
 
                                     {!isRead && (
                                         <Button
+                                            type="button"
                                             size="sm"
-                                            variant="ghost"
+                                            variant="outline"
                                             onClick={() => handleMarkAsRead(n.id)}
-                                            className="text-xs text-indigo-600 hover:text-indigo-700"
+                                            className="h-8.5 shrink-0 rounded-lg border-[#DBDFE9] !bg-white px-2.5 text-[12px] font-semibold text-[#1B84FF] hover:!bg-[#F1F6FF]"
                                             title="Mark as read"
                                         >
-                                            <Check className="size-4" />
+                                            <Check className="mr-1 size-3.5" /> Read
                                         </Button>
                                     )}
-                                </Card>
+                                </div>
                             );
                         })
                     )}

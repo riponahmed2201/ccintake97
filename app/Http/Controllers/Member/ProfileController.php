@@ -44,7 +44,9 @@ class ProfileController extends Controller
 
         foreach ([
             'cadet_name', 'phone', 'blood_group', 'spouse_name', 'spouse_occupation', 'spouse_job_location',
-            'address', 'house_name', 'house_color', 'job_type', 'organization', 'designation',
+            'address', 'city', 'country_code', 'present_address_line', 'present_area', 'present_postal_code',
+            'permanent_address_line', 'permanent_area', 'permanent_city', 'permanent_postal_code', 'permanent_country_code',
+            'house_name', 'house_color', 'job_type', 'organization', 'designation',
             'office_address', 'office_phone', 'facebook_url', 'linkedin_url', 'remarks', 'college_roll_no',
         ] as $field) {
             if ($request->input($field) === '') {
@@ -60,9 +62,20 @@ class ProfileController extends Controller
             'spouse_name' => 'nullable|string|max:255',
             'spouse_occupation' => 'nullable|string|max:255',
             'spouse_job_location' => 'nullable|string|max:255',
-            'children_names' => 'nullable|array|max:3',
+            'children_names' => 'nullable|array|max:10',
             'children_names.*' => 'nullable|string|max:255',
             'address' => 'nullable|string|max:500',
+            'city' => 'nullable|string|max:150',
+            'country_code' => 'nullable|string|max:5',
+            'present_address_line' => 'nullable|string|max:255',
+            'present_area' => 'nullable|string|max:150',
+            'present_postal_code' => 'nullable|string|max:30',
+            'same_as_present_address' => 'nullable|boolean',
+            'permanent_address_line' => 'nullable|string|max:255',
+            'permanent_area' => 'nullable|string|max:150',
+            'permanent_city' => 'nullable|string|max:150',
+            'permanent_postal_code' => 'nullable|string|max:30',
+            'permanent_country_code' => 'nullable|string|max:5',
             'college_id' => 'required|exists:colleges,id',
             'college_roll_no' => 'required|string|max:50',
             'intake_year' => 'required|integer|min:1950|max:2035',
@@ -107,6 +120,16 @@ class ProfileController extends Controller
                 'house_color' => $validated['house_color'],
             ]);
 
+            $sameAsPresent = (bool) ($validated['same_as_present_address'] ?? false);
+            $presentParts = array_filter([
+                $validated['present_address_line'] ?? null,
+                $validated['present_area'] ?? null,
+                $validated['city'] ?? null,
+                $validated['present_postal_code'] ?? null,
+            ]);
+            $formattedPresent = $presentParts !== [] ? implode(', ', $presentParts) : ($validated['address'] ?? null);
+            $countryCode = $validated['country_code'] ?? $member->profile?->country_code ?: 'BD';
+
             $profileData = [
                 'cadet_name' => $validated['cadet_name'],
                 'blood_group' => $validated['blood_group'],
@@ -114,8 +137,18 @@ class ProfileController extends Controller
                 'spouse_occupation' => $validated['spouse_occupation'],
                 'spouse_job_location' => $validated['spouse_job_location'],
                 'children_names' => $children === [] ? null : $children,
-                'address' => $validated['address'],
-                'country_code' => $member->profile?->country_code ?: 'BD',
+                'address' => $formattedPresent,
+                'city' => $validated['city'] ?? null,
+                'country_code' => $countryCode,
+                'present_address_line' => $validated['present_address_line'] ?? null,
+                'present_area' => $validated['present_area'] ?? null,
+                'present_postal_code' => $validated['present_postal_code'] ?? null,
+                'same_as_present_address' => $sameAsPresent,
+                'permanent_address_line' => $sameAsPresent ? ($validated['present_address_line'] ?? null) : ($validated['permanent_address_line'] ?? null),
+                'permanent_area' => $sameAsPresent ? ($validated['present_area'] ?? null) : ($validated['permanent_area'] ?? null),
+                'permanent_city' => $sameAsPresent ? ($validated['city'] ?? null) : ($validated['permanent_city'] ?? null),
+                'permanent_postal_code' => $sameAsPresent ? ($validated['present_postal_code'] ?? null) : ($validated['permanent_postal_code'] ?? null),
+                'permanent_country_code' => $sameAsPresent ? $countryCode : ($validated['permanent_country_code'] ?? 'BD'),
                 'job_type' => $validated['job_type'],
                 'organization' => $validated['organization'],
                 'designation' => $validated['designation'],

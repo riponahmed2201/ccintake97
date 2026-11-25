@@ -16,6 +16,15 @@ class MemberProfile extends Model
         'city',
         'country_code',
         'address',
+        'present_address_line',
+        'present_area',
+        'present_postal_code',
+        'same_as_present_address',
+        'permanent_address_line',
+        'permanent_area',
+        'permanent_city',
+        'permanent_postal_code',
+        'permanent_country_code',
         'gender',
         'date_of_birth',
         'blood_group',
@@ -43,6 +52,7 @@ class MemberProfile extends Model
 
     protected $casts = [
         'date_of_birth' => 'date',
+        'same_as_present_address' => 'boolean',
         'children_names' => 'array',
         'skills' => 'array',
         'education' => 'array',

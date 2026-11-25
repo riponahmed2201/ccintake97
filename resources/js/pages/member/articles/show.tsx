@@ -1,9 +1,7 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
 import MemberLayout from '@/layouts/member-layout';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Calendar, User, Newspaper } from 'lucide-react';
+import { ArrowLeft, Calendar, User } from 'lucide-react';
 import type { Article } from '@/types';
 
 interface ArticleShowProps {
@@ -21,42 +19,49 @@ export default function MemberArticleShow({ article }: ArticleShowProps) {
         >
             <Head title={`${article.title} - INTAKE97.COM`} />
 
-            <div className="max-w-3xl mx-auto space-y-6">
-                <Link
-                    href="/member/articles"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900"
-                >
-                    <ArrowLeft className="size-4" />
-                    Back to Articles
-                </Link>
+            <div className="w-full space-y-5">
+                <div>
+                    <Link
+                        href="/member/articles"
+                        className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-[#78829D] transition-colors hover:text-[#1B84FF]"
+                    >
+                        <ArrowLeft className="size-4" />
+                        Back to News &amp; Notices
+                    </Link>
+                </div>
 
-                <Card className="p-6 sm:p-8 space-y-6">
-                    <div className="space-y-3 border-b pb-6">
-                        <Badge variant="outline" className="text-xs font-semibold text-indigo-600">
-                            {article.category?.name}
-                        </Badge>
-                        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+                <article className="rounded-xl border border-[#F1F1F4] bg-white p-6 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-8">
+                    <div className="space-y-3 border-b border-[#F1F1F4] pb-6">
+                        <span className="inline-flex rounded-md bg-[#F1F6FF] px-2.5 py-0.5 text-[11px] font-semibold text-[#1B84FF]">
+                            {article.category?.name || 'Notice'}
+                        </span>
+
+                        <h1 className="text-[24px] leading-tight font-bold tracking-tight text-[#071437] sm:text-[28px]">
                             {article.title}
                         </h1>
-                        <div className="flex items-center gap-4 text-xs text-slate-500 pt-1">
-                            <span className="flex items-center gap-1.5">
-                                <Calendar className="size-3.5" />
-                                {new Date(article.published_at || article.created_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
+
+                        <div className="flex flex-wrap items-center gap-4 pt-1 text-[12.5px] text-[#78829D]">
+                            <span className="inline-flex items-center gap-1.5">
+                                <Calendar className="size-3.5 text-[#99A1B7]" />
+                                {new Date(article.published_at || article.created_at).toLocaleDateString('en-US', {
+                                    month: 'long',
+                                    day: 'numeric',
+                                    year: 'numeric',
+                                })}
                             </span>
-                            <span>·</span>
-                            <span className="flex items-center gap-1.5">
-                                <User className="size-3.5" />
+                            <span className="text-[#DBDFE9]">·</span>
+                            <span className="inline-flex items-center gap-1.5">
+                                <User className="size-3.5 text-[#99A1B7]" />
                                 {article.author?.name || 'Association Secretariat'}
                             </span>
                         </div>
                     </div>
 
-                    {/* Article Body */}
                     <div
-                        className="prose dark:prose-invert max-w-none text-sm text-slate-800 dark:text-slate-200 leading-relaxed"
+                        className="prose mt-6 max-w-4xl text-[14px] leading-relaxed text-[#4B5675] prose-headings:text-[#071437] prose-a:text-[#1B84FF]"
                         dangerouslySetInnerHTML={{ __html: article.body }}
                     />
-                </Card>
+                </article>
             </div>
         </MemberLayout>
     );

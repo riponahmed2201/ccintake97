@@ -20,7 +20,7 @@ class ConnectionController extends Controller
         }
 
         // Active connections
-        $connections = MemberConnection::with(['requester.user', 'requester.college', 'addressee.user', 'addressee.college'])
+        $connections = MemberConnection::with(['requester.user', 'requester.college', 'requester.profile', 'addressee.user', 'addressee.college', 'addressee.profile'])
             ->where(function ($q) use ($member) {
                 $q->where('requester_id', $member->id)->orWhere('addressee_id', $member->id);
             })

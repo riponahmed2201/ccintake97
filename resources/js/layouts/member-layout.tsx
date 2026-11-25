@@ -25,6 +25,7 @@ import {
     Search,
     ChevronDown,
     KeyRound,
+    AlertCircle,
 } from 'lucide-react';
 import {
     DropdownMenu,
@@ -138,21 +139,6 @@ export default function MemberLayout({ children, title, breadcrumbs = [], fluid 
                         {collapsed ? <ChevronsRight className="size-3.5" /> : <ChevronsLeft className="size-3.5" />}
                     </button>
                 </div>
-
-                {/* Member Cadet Info (Clean Minimal Card, No Badges) */}
-                {auth?.member && !collapsed && (
-                    <div className="mx-4 mt-4 rounded-xl border border-[#F1F1F4] bg-[#FCFCFC] px-3.5 py-3">
-                        <div className="text-[10.5px] font-semibold tracking-[0.08em] text-[#99A1B7] uppercase">
-                            {auth.member.college?.short_name || 'Intake 1997'}
-                        </div>
-                        <div className="mt-0.5 truncate text-[13px] font-semibold text-[#071437]">
-                            {auth.member.college?.name || 'Complete college profile'}
-                        </div>
-                        <div className="mt-1 font-mono text-[11px] text-[#78829D]">
-                            {auth.member.member_code ? `ID · ${auth.member.member_code}` : 'Class of 1997'}
-                        </div>
-                    </div>
-                )}
 
                 {/* Metronic Demo 1 Categorized Navigation */}
                 <nav className="flex-1 space-y-5 overflow-y-auto px-3.5 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -383,6 +369,25 @@ export default function MemberLayout({ children, title, breadcrumbs = [], fluid 
                         </DropdownMenu>
                     </div>
                 </header>
+
+                {/* Incomplete College Profile Alert */}
+                {auth?.member && !auth.member.college_id && currentPath !== '/member/profile' && (
+                    <div className="flex flex-col justify-between gap-2 border-b border-[#F1F1F4] bg-[#FFFBEB] px-4 py-2.5 sm:flex-row sm:items-center sm:px-7">
+                        <div className="flex items-center gap-2 text-[12.5px] font-medium text-[#92400E]">
+                            <AlertCircle className="size-4 shrink-0 text-[#D97706]" />
+                            <span>
+                                Complete your college profile to unlock alumni directory access and membership verification.
+                            </span>
+                        </div>
+                        <Link
+                            href="/member/profile"
+                            className="inline-flex shrink-0 items-center gap-1 self-start rounded-md bg-[#1B84FF] px-3 py-1 text-[12px] font-semibold text-white transition-colors hover:bg-[#006AE6] sm:self-auto"
+                        >
+                            Complete Profile
+                            <ChevronRight className="size-3.5" />
+                        </Link>
+                    </div>
+                )}
 
                 {/* Page Content (Fluid Full-Width White Container) */}
                 <main className={fluid ? 'w-full flex-1 bg-white' : 'w-full flex-1 bg-white p-4 sm:p-6 lg:p-7'}>

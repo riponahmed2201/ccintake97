@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import MemberLayout from '@/layouts/member-layout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -12,7 +10,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { Briefcase, Plus, ExternalLink, Globe, MapPin, CheckCircle2, Clock } from 'lucide-react';
+import { Briefcase, Plus, ExternalLink, MapPin } from 'lucide-react';
 import type { Business, BusinessCategory, Industry } from '@/types';
 
 interface BusinessesIndexProps {
@@ -27,6 +25,9 @@ interface BusinessesIndexProps {
     industries: Industry[];
 }
 
+const fieldClass =
+    'h-10 w-full rounded-md border !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!bg-white focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:!text-[#071437]';
+
 export default function MemberBusinessesIndex({
     businesses,
     myBusiness,
@@ -38,130 +39,163 @@ export default function MemberBusinessesIndex({
     const [categoryId, setCategoryId] = useState(categories[0]?.id ? String(categories[0].id) : '');
     const [industryId, setIndustryId] = useState(industries[0]?.id ? String(industries[0].id) : '');
     const [website, setWebsite] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
     const [city, setCity] = useState('');
     const [description, setDescription] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        router.post('/member/businesses', {
-            name,
-            category_id: parseInt(categoryId),
-            industry_id: parseInt(industryId),
-            website,
-            email,
-            phone,
-            city,
-            description,
-        }, {
-            onSuccess: () => setCreateOpen(false),
-        });
+        router.post(
+            '/member/businesses',
+            {
+                name,
+                category_id: parseInt(categoryId),
+                industry_id: parseInt(industryId),
+                website,
+                city,
+                description,
+            },
+            {
+                preserveScroll: true,
+                onSuccess: () => setCreateOpen(false),
+            }
+        );
     };
 
     return (
         <MemberLayout
-            title="Business Network & Enterprise Directory"
+            title="Business Network"
             breadcrumbs={[{ title: 'Business Network' }]}
         >
             <Head title="Business Network - INTAKE97.COM" />
 
-            <div className="space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="w-full space-y-6">
+                {/* Page Header */}
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-                            Alumni Commercial & Business Network
+                        <h1 className="text-[22px] font-semibold tracking-tight text-[#071437]">
+                            Alumni Business Network
                         </h1>
-                        <p className="text-xs text-slate-500 mt-1">
+                        <p className="mt-1 text-[13px] text-[#78829D]">
                             Discover alumni-owned enterprises, patronize batchmate businesses, and promote your own services.
                         </p>
                     </div>
 
-                    {!myBusiness ? (
+                    {!myBusiness && (
                         <Button
-                            size="sm"
+                            type="button"
                             onClick={() => setCreateOpen(true)}
-                            className="bg-indigo-600 hover:bg-indigo-700 text-xs font-semibold"
+                            className="h-9 self-start rounded-lg bg-[#1B84FF] px-4 text-[12.5px] font-semibold text-white hover:bg-[#006AE6] sm:self-auto"
                         >
-                            <Plus className="size-3.5 mr-1" /> Submit My Business
+                            <Plus className="mr-1.5 size-3.5" /> Submit My Business
                         </Button>
-                    ) : (
-                        <Badge variant="outline" className="text-xs p-2 flex items-center gap-2">
-                            <Briefcase className="size-3.5 text-indigo-600" />
-                            My Business: <strong>{myBusiness.name}</strong> ({myBusiness.status})
-                        </Badge>
                     )}
                 </div>
 
-                {/* My Business Card (if submitted) */}
+                {/* My Business Status Card */}
                 {myBusiness && (
-                    <Card className="p-4 border-indigo-200 dark:border-indigo-900 bg-indigo-50/20 dark:bg-slate-900">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-                            <div className="space-y-1">
-                                <div className="flex items-center gap-2">
-                                    <span className="font-bold text-slate-900 dark:text-white text-sm">{myBusiness.name}</span>
-                                    <Badge className={`text-[10px] capitalize ${myBusiness.status === 'approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
-                                        {myBusiness.status}
-                                    </Badge>
-                                </div>
-                                <p className="text-slate-500 line-clamp-1">{myBusiness.description}</p>
+                    <div className="flex flex-col justify-between gap-3 rounded-xl border border-[#1B84FF]/20 bg-[#F8FBFF] p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.02)] sm:flex-row sm:items-center">
+                        <div className="min-w-0 space-y-1">
+                            <div className="flex flex-wrap items-center gap-2">
+                                <Briefcase className="size-4 text-[#1B84FF]" />
+                                <span className="text-[14.5px] font-semibold text-[#071437]">
+                                    {myBusiness.name}
+                                </span>
+                                <span
+                                    className={`inline-flex rounded-md px-2 py-0.5 text-[11px] font-semibold capitalize ${
+                                        myBusiness.status === 'approved'
+                                            ? 'bg-[#EAFFF1] text-[#17C653]'
+                                            : 'bg-[#FFF8DD] text-[#B45309]'
+                                    }`}
+                                >
+                                    {myBusiness.status}
+                                </span>
                             </div>
-                            <div className="text-[11px] text-slate-400">
-                                {myBusiness.status === 'pending' ? 'Awaiting administrative verification' : 'Verified and active in alumni directory'}
-                            </div>
+                            <p className="line-clamp-1 text-[12.5px] text-[#78829D]">
+                                {myBusiness.description}
+                            </p>
                         </div>
-                    </Card>
+                        <div className="shrink-0 text-[12px] font-medium text-[#78829D]">
+                            {myBusiness.status === 'pending'
+                                ? 'Awaiting administrative verification'
+                                : 'Active in alumni directory'}
+                        </div>
+                    </div>
                 )}
 
                 {/* Business Directory Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     {businesses.data.length === 0 ? (
-                        <Card className="col-span-full p-12 text-center text-xs text-slate-400">
-                            No verified businesses in directory yet.
-                        </Card>
+                        <div className="col-span-full flex flex-col items-center justify-center rounded-xl border border-[#F1F1F4] bg-[#FCFCFC] px-6 py-12 text-center">
+                            <div className="mb-3 flex size-11 items-center justify-center rounded-full bg-[#F1F6FF] text-[#1B84FF]">
+                                <Briefcase className="size-5" />
+                            </div>
+                            <p className="text-[13.5px] font-semibold text-[#071437]">No businesses listed yet</p>
+                            <p className="mt-1 max-w-md text-[12.5px] text-[#78829D]">
+                                No verified alumni businesses are in the directory yet. Be the first to list your enterprise.
+                            </p>
+                        </div>
                     ) : (
                         businesses.data.map((biz) => (
-                            <Card key={biz.id} className="p-5 flex flex-col justify-between hover:border-indigo-300 transition-all">
+                            <div
+                                key={biz.id}
+                                className="flex flex-col justify-between rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] transition-colors hover:border-[#DBDFE9]"
+                            >
                                 <div className="space-y-3">
                                     <div className="flex items-start justify-between gap-2">
-                                        <div className="space-y-0.5">
-                                            <div className="font-bold text-sm text-slate-900 dark:text-white">
+                                        <div className="min-w-0 space-y-0.5">
+                                            <div className="truncate text-[15px] font-semibold text-[#071437]">
                                                 {biz.name}
                                             </div>
-                                            <div className="text-[11px] text-indigo-600 font-medium">
-                                                {biz.industry?.name}
+                                            <div className="truncate text-[12px] font-medium text-[#1B84FF]">
+                                                {biz.industry?.name || 'Enterprise'}
                                             </div>
                                         </div>
-                                        <Badge variant="outline" className="text-[10px]">
-                                            {biz.category?.name}
-                                        </Badge>
+                                        <span className="shrink-0 rounded-md bg-[#F1F6FF] px-2 py-0.5 text-[11px] font-semibold text-[#1B84FF]">
+                                            {biz.category?.name || 'Business'}
+                                        </span>
                                     </div>
 
-                                    <p className="text-xs text-slate-500 line-clamp-3 leading-relaxed">
+                                    <p className="line-clamp-3 text-[12.5px] leading-relaxed text-[#78829D]">
                                         {biz.description}
                                     </p>
 
-                                    <div className="space-y-1 text-xs text-slate-600 dark:text-slate-400 pt-1 border-t">
-                                        <div>Owner: <strong>{biz.owner?.user?.name}</strong> ({biz.owner?.college?.short_name || biz.owner?.college?.name})</div>
-                                        {biz.city && <div>Location: {biz.city}, {biz.country_code}</div>}
+                                    <div className="space-y-1 border-t border-[#F1F1F4] pt-2.5 text-[12px] text-[#4B5675]">
+                                        <div>
+                                            Owner:{' '}
+                                            <strong className="font-semibold text-[#071437]">
+                                                {biz.owner?.user?.name}
+                                            </strong>{' '}
+                                            <span className="text-[#78829D]">
+                                                ({biz.owner?.college?.short_name || biz.owner?.college?.name})
+                                            </span>
+                                        </div>
+                                        {biz.city && (
+                                            <div className="flex items-center gap-1.5 text-[#78829D]">
+                                                <MapPin className="size-3.5 text-[#99A1B7]" />
+                                                <span>
+                                                    {biz.city}
+                                                    {biz.country_code ? `, ${biz.country_code}` : ''}
+                                                </span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
-                                <div className="pt-3 mt-3 border-t flex justify-end">
+                                <div className="mt-4 flex justify-end border-t border-[#F1F1F4] pt-3.5">
                                     {biz.website ? (
                                         <a
                                             href={biz.website}
                                             target="_blank"
                                             rel="noreferrer"
-                                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:underline"
+                                            className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-[#1B84FF] hover:text-[#006AE6]"
                                         >
-                                            Visit Website <ExternalLink className="size-3" />
+                                            Visit Website <ExternalLink className="size-3.5" />
                                         </a>
                                     ) : (
-                                        <span className="text-[11px] text-slate-400">Direct inquiries via profile</span>
+                                        <span className="text-[12px] text-[#99A1B7]">Direct inquiries via profile</span>
                                     )}
                                 </div>
-                            </Card>
+                            </div>
                         ))
                     )}
                 </div>
@@ -169,65 +203,97 @@ export default function MemberBusinessesIndex({
 
             {/* Submit Business Dialog */}
             <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-                <DialogContent>
+                <DialogContent className="border-[#F1F1F4] !bg-white !text-[#071437] sm:max-w-lg">
                     <DialogHeader>
-                        <DialogTitle className="text-sm font-semibold">List Your Business in Directory</DialogTitle>
+                        <DialogTitle className="text-[16px] font-semibold text-[#071437]">
+                            List Your Business in Directory
+                        </DialogTitle>
                     </DialogHeader>
-                    <form onSubmit={handleSubmit} className="space-y-3 py-2 text-xs">
+                    <form onSubmit={handleSubmit} className="space-y-4 pt-2">
                         <div>
-                            <label className="font-semibold block mb-1">Company / Business Name *</label>
-                            <Input required value={name} onChange={(e) => setName(e.target.value)} />
+                            <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                Company / Business Name <span className="text-[#F8285A]">*</span>
+                            </label>
+                            <Input required value={name} onChange={(e) => setName(e.target.value)} className={fieldClass} />
                         </div>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                             <div>
-                                <label className="font-semibold block mb-1">Business Category *</label>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Business Category <span className="text-[#F8285A]">*</span>
+                                </label>
                                 <select
                                     value={categoryId}
                                     onChange={(e) => setCategoryId(e.target.value)}
-                                    className="w-full text-xs rounded-md border p-2 bg-white dark:bg-slate-900"
+                                    className={fieldClass}
                                 >
                                     {categories.map((c) => (
-                                        <option key={c.id} value={c.id}>{c.name}</option>
+                                        <option key={c.id} value={c.id}>
+                                            {c.name}
+                                        </option>
                                     ))}
                                 </select>
                             </div>
                             <div>
-                                <label className="font-semibold block mb-1">Industry Sector *</label>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Industry Sector <span className="text-[#F8285A]">*</span>
+                                </label>
                                 <select
                                     value={industryId}
                                     onChange={(e) => setIndustryId(e.target.value)}
-                                    className="w-full text-xs rounded-md border p-2 bg-white dark:bg-slate-900"
+                                    className={fieldClass}
                                 >
                                     {industries.map((i) => (
-                                        <option key={i.id} value={i.id}>{i.name}</option>
+                                        <option key={i.id} value={i.id}>
+                                            {i.name}
+                                        </option>
                                     ))}
                                 </select>
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                             <div>
-                                <label className="font-semibold block mb-1">Official Website</label>
-                                <Input placeholder="https://..." value={website} onChange={(e) => setWebsite(e.target.value)} />
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Official Website
+                                    <span className="ml-1.5 font-normal text-[#99A1B7]">(Optional)</span>
+                                </label>
+                                <Input placeholder="https://..." value={website} onChange={(e) => setWebsite(e.target.value)} className={fieldClass} />
                             </div>
                             <div>
-                                <label className="font-semibold block mb-1">City of Operation</label>
-                                <Input placeholder="Dhaka, London..." value={city} onChange={(e) => setCity(e.target.value)} />
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    City of Operation
+                                    <span className="ml-1.5 font-normal text-[#99A1B7]">(Optional)</span>
+                                </label>
+                                <Input placeholder="Dhaka, London..." value={city} onChange={(e) => setCity(e.target.value)} className={fieldClass} />
                             </div>
                         </div>
                         <div>
-                            <label className="font-semibold block mb-1">Business Description & Services *</label>
+                            <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                Business Description &amp; Services <span className="text-[#F8285A]">*</span>
+                            </label>
                             <textarea
                                 required
                                 rows={3}
-                                className="w-full text-xs rounded-md border p-2 bg-white dark:bg-slate-900"
+                                className={`${fieldClass} h-auto py-2.5`}
                                 placeholder="Describe your products, consulting services, or enterprise solutions..."
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                             />
                         </div>
-                        <DialogFooter>
-                            <Button type="button" variant="outline" size="sm" onClick={() => setCreateOpen(false)}>Cancel</Button>
-                            <Button type="submit" size="sm" className="bg-indigo-600 hover:bg-indigo-700">Submit for Approval</Button>
+                        <DialogFooter className="pt-2">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setCreateOpen(false)}
+                                className="h-9 rounded-lg border-[#DBDFE9] !bg-white px-4 text-[12.5px] font-semibold text-[#4B5675] hover:!bg-[#F9F9F9]"
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                className="h-9 rounded-lg bg-[#1B84FF] px-4 text-[12.5px] font-semibold text-white hover:bg-[#006AE6]"
+                            >
+                                Submit for Approval
+                            </Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>

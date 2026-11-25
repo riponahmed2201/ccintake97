@@ -36,6 +36,15 @@ export interface MemberProfile {
     city?: string;
     country_code: string;
     address?: string;
+    present_address_line?: string;
+    present_area?: string;
+    present_postal_code?: string;
+    same_as_present_address?: boolean;
+    permanent_address_line?: string;
+    permanent_area?: string;
+    permanent_city?: string;
+    permanent_postal_code?: string;
+    permanent_country_code?: string;
     gender?: string;
     date_of_birth?: string;
     blood_group?: string;

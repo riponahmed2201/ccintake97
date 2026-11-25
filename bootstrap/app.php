@@ -37,11 +37,17 @@ return Application::configure(basePath: dirname(__DIR__))
         );
 
         $exceptions->respond(function (Response $response, \Throwable $exception, Request $request) {
-            if ($response->getStatusCode() === 403 && ! $request->is('api/*') && ! $request->expectsJson()) {
-                return Inertia::render('errors/forbidden', [
-                    'status' => 403,
-                    'message' => $exception->getMessage() ?: 'You do not have permission to view this page.',
-                ])->toResponse($request)->setStatusCode(403);
+            $status = $response->getStatusCode();
+
+            if (in_array($status, [403, 404, 500], true) && ! $request->is('api/*') && ! $request->expectsJson()) {
+                if ($status === 500 && app()->hasDebugModeEnabled()) {
+                    return $response;
+                }
+
+                return Inertia::render('errors/status', [
+                    'status' => $status,
+                    'message' => $status === 403 ? ($exception->getMessage() ?: null) : null,
+                ])->toResponse($request)->setStatusCode($status);
             }
 
             return $response;

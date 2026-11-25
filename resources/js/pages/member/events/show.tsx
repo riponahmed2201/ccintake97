@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import MemberLayout from '@/layouts/member-layout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -12,8 +10,7 @@ import {
     QrCode,
     CheckCircle2,
     Users,
-    Clock,
-    AlertCircle,
+    FileText,
 } from 'lucide-react';
 import type { Event, EventRegistration } from '@/types';
 
@@ -21,6 +18,9 @@ interface EventShowProps {
     event: Event;
     myRegistration: EventRegistration | null;
 }
+
+const fieldClass =
+    'h-10 w-full rounded-md border !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!bg-white focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:!text-[#071437]';
 
 export default function MemberEventShow({ event, myRegistration }: EventShowProps) {
     const [guestCount, setGuestCount] = useState(0);
@@ -45,17 +45,21 @@ export default function MemberEventShow({ event, myRegistration }: EventShowProp
 
     const handleRegisterSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        router.post(`/member/events/${event.id}/register`, {
-            guest_count: guestCount,
-            special_requirements: specialReq,
-            guests,
-        });
+        router.post(
+            `/member/events/${event.id}/register`,
+            {
+                guest_count: guestCount,
+                special_requirements: specialReq,
+                guests,
+            },
+            { preserveScroll: true }
+        );
     };
 
     const handleCancelRegistration = () => {
         if (!myRegistration) return;
         if (confirm('Are you sure you want to cancel your event registration?')) {
-            router.delete(`/member/events/${myRegistration.id}/cancel`);
+            router.delete(`/member/events/${myRegistration.id}/cancel`, { preserveScroll: true });
         }
     };
 
@@ -63,209 +67,242 @@ export default function MemberEventShow({ event, myRegistration }: EventShowProp
         <MemberLayout
             title={event.title}
             breadcrumbs={[
-                { title: 'Events', href: '/member/events' },
+                { title: 'Reunions & Events', href: '/member/events' },
                 { title: event.title },
             ]}
         >
             <Head title={`${event.title} - INTAKE 97 Alumni Event`} />
 
-            <div className="max-w-4xl mx-auto space-y-6">
-                <Link
-                    href="/member/events"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900"
-                >
-                    <ArrowLeft className="size-4" />
-                    Back to Events
-                </Link>
+            <div className="w-full space-y-6">
+                <div>
+                    <Link
+                        href="/member/events"
+                        className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-[#78829D] transition-colors hover:text-[#1B84FF]"
+                    >
+                        <ArrowLeft className="size-4" />
+                        Back to Events
+                    </Link>
+                </div>
 
-                {/* Event Hero */}
-                <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border space-y-4">
+                {/* Event Header Card */}
+                <div className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-6">
                     <div className="flex flex-wrap items-center gap-2">
-                        <Badge variant="outline" className="text-xs font-semibold text-indigo-600">
-                            {event.category?.name}
-                        </Badge>
-                        <Badge className="bg-emerald-100 text-emerald-800 text-xs capitalize">
+                        <span className="inline-flex rounded-md bg-[#F1F6FF] px-2.5 py-0.5 text-[11px] font-semibold text-[#1B84FF]">
+                            {event.category?.name || 'Event'}
+                        </span>
+                        <span className="inline-flex rounded-md bg-[#EAFFF1] px-2.5 py-0.5 text-[11px] font-semibold text-[#17C653] capitalize">
                             {event.status}
-                        </Badge>
-                        {Number(event.registration_fee) > 0 ? (
-                            <Badge variant="outline" className="text-xs font-bold">
-                                Registration Fee: BDT {event.registration_fee}
-                            </Badge>
-                        ) : (
-                            <Badge variant="outline" className="text-xs font-bold text-emerald-600">
-                                Complimentary Event
-                            </Badge>
-                        )}
+                        </span>
+                        <span className="inline-flex rounded-md border border-[#F1F1F4] bg-[#FCFCFC] px-2.5 py-0.5 text-[11px] font-semibold text-[#071437]">
+                            {Number(event.registration_fee) > 0 ? `Fee: BDT ${event.registration_fee}` : 'Complimentary Event'}
+                        </span>
                     </div>
 
-                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+                    <h1 className="mt-3 text-[22px] font-semibold tracking-tight text-[#071437]">
                         {event.title}
                     </h1>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-600 dark:text-slate-400">
+                    <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2.5 text-[13px] text-[#4B5675]">
                         <div className="flex items-center gap-2">
-                            <Calendar className="size-4 text-purple-600 shrink-0" />
+                            <Calendar className="size-4 shrink-0 text-[#1B84FF]" />
                             <span>
-                                {new Date(event.starts_on).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
-                                {event.start_time && ` at ${event.start_time}`}
+                                {new Date(event.starts_on).toLocaleDateString('en-US', {
+                                    weekday: 'long',
+                                    month: 'long',
+                                    day: 'numeric',
+                                    year: 'numeric',
+                                })}
+                                {event.start_time ? ` at ${event.start_time}` : ''}
                             </span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <MapPin className="size-4 text-slate-400 shrink-0" />
-                            <span>{event.venue} {event.address ? `(${event.address})` : ''}</span>
+                            <MapPin className="size-4 shrink-0 text-[#99A1B7]" />
+                            <span>
+                                {event.venue}
+                                {event.address ? ` (${event.address})` : ''}
+                            </span>
                         </div>
                     </div>
                 </div>
 
-                {/* Registration Status or Form */}
-                {myRegistration ? (
-                    <Card className="border-emerald-300 dark:border-emerald-900 bg-emerald-50/20 dark:bg-slate-900 overflow-hidden">
-                        <CardHeader className="bg-emerald-100/60 dark:bg-emerald-950/40 p-4 border-b">
-                            <div className="flex items-center justify-between">
-                                <CardTitle className="text-sm font-bold text-emerald-900 dark:text-emerald-200 flex items-center gap-2">
-                                    <CheckCircle2 className="size-4.5 text-emerald-600" />
-                                    Confirmed Attendance Pass
-                                </CardTitle>
-                                <Badge className="bg-emerald-600 text-white font-mono text-[10px]">
-                                    CONFIRMED
-                                </Badge>
+                {/* Main Content Grid */}
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+                    {/* Left: Registration Pass or RSVP Form */}
+                    <div className={event.description ? 'lg:col-span-7' : 'lg:col-span-12'}>
+                        {myRegistration ? (
+                            <div className="overflow-hidden rounded-xl border border-[#17C653]/30 bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                                <div className="flex items-center justify-between border-b border-[#EAFFF1] bg-[#F4FFF8] px-5 py-4 sm:px-6">
+                                    <div className="flex items-center gap-2 text-[14.5px] font-semibold text-[#071437]">
+                                        <CheckCircle2 className="size-4.5 text-[#17C653]" />
+                                        Confirmed Attendance Pass
+                                    </div>
+                                    <span className="rounded-md bg-[#17C653] px-2.5 py-0.5 font-mono text-[10.5px] font-semibold text-white">
+                                        CONFIRMED
+                                    </span>
+                                </div>
+
+                                <div className="p-5 sm:p-6">
+                                    <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
+                                        <div className="space-y-2 text-[13px]">
+                                            <div className="text-[11.5px] font-medium text-[#99A1B7]">
+                                                Pass Token Reference
+                                            </div>
+                                            <div className="font-mono text-[15px] font-bold text-[#071437]">
+                                                {myRegistration.qr_token}
+                                            </div>
+                                            <div className="pt-1 text-[#4B5675]">
+                                                Registered Guests:{' '}
+                                                <strong className="text-[#071437]">
+                                                    {myRegistration.guest_count} additional guest(s)
+                                                </strong>
+                                            </div>
+                                            {myRegistration.guests && myRegistration.guests.length > 0 && (
+                                                <div className="text-[12px] text-[#78829D]">
+                                                    Guest Names: {myRegistration.guests.map((g) => g.name).join(', ')}
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className="flex flex-col items-center rounded-xl border border-[#F1F1F4] bg-[#FCFCFC] p-3.5 text-[#071437]">
+                                            <QrCode className="size-24 text-[#071437]" strokeWidth={1.5} />
+                                            <span className="mt-1.5 font-mono text-[10px] font-semibold tracking-wider text-[#78829D]">
+                                                GATE CHECK-IN
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-6 flex justify-end border-t border-[#F1F1F4] pt-4">
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={handleCancelRegistration}
+                                            className="h-9 rounded-lg border-[#DBDFE9] !bg-white px-3.5 text-[12.5px] font-semibold text-[#F8285A] hover:!bg-[#FFEEF3]"
+                                        >
+                                            Cancel Registration
+                                        </Button>
+                                    </div>
+                                </div>
                             </div>
-                        </CardHeader>
-                        <CardContent className="p-6">
-                            <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-                                <div className="space-y-2 text-xs">
-                                    <div className="text-slate-500 text-[11px]">Pass Token Reference:</div>
-                                    <div className="font-mono text-sm font-bold text-slate-900 dark:text-white">
-                                        {myRegistration.qr_token}
-                                    </div>
-                                    <div className="text-slate-700 dark:text-slate-300 pt-1">
-                                        Registered Guests: <strong>{myRegistration.guest_count} additional guest(s)</strong>
-                                    </div>
-                                    {myRegistration.guests && myRegistration.guests.length > 0 && (
-                                        <div className="text-[11px] text-slate-500">
-                                            Guest Names: {myRegistration.guests.map(g => g.name).join(', ')}
+                        ) : (
+                            <div className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-6">
+                                <div className="flex items-center gap-2 border-b border-[#F1F1F4] pb-4 text-[15px] font-semibold text-[#071437]">
+                                    <Users className="size-4 text-[#1B84FF]" />
+                                    RSVP &amp; Register for Event
+                                </div>
+
+                                <form onSubmit={handleRegisterSubmit} className="mt-5 space-y-4">
+                                    {event.allows_guests && (
+                                        <div className="space-y-4">
+                                            <div>
+                                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                                    Additional Guests (Spouse / Children)
+                                                </label>
+                                                <select
+                                                    value={guestCount}
+                                                    onChange={(e) => handleGuestCountChange(parseInt(e.target.value))}
+                                                    className={`${fieldClass} sm:w-56`}
+                                                >
+                                                    <option value={0}>Just Myself (0 Guests)</option>
+                                                    {Array.from({ length: event.max_guests_per_registration || 2 }, (_, i) => (
+                                                        <option key={i + 1} value={i + 1}>
+                                                            +{i + 1} Guest{i > 0 ? 's' : ''}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+
+                                            {guests.map((g, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className="grid grid-cols-1 gap-3 rounded-xl border border-[#F1F1F4] bg-[#FCFCFC] p-4 sm:grid-cols-3"
+                                                >
+                                                    <div>
+                                                        <label className="mb-1.5 block text-[12px] font-semibold text-[#071437]">
+                                                            Guest {idx + 1} Full Name <span className="text-[#F8285A]">*</span>
+                                                        </label>
+                                                        <Input
+                                                            required
+                                                            placeholder="Guest full name"
+                                                            value={g.name}
+                                                            onChange={(e) => handleGuestFieldChange(idx, 'name', e.target.value)}
+                                                            className={fieldClass}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="mb-1.5 block text-[12px] font-semibold text-[#071437]">
+                                                            Relationship
+                                                        </label>
+                                                        <select
+                                                            value={g.relationship}
+                                                            onChange={(e) => handleGuestFieldChange(idx, 'relationship', e.target.value)}
+                                                            className={fieldClass}
+                                                        >
+                                                            <option value="spouse">Spouse</option>
+                                                            <option value="child">Child</option>
+                                                            <option value="other">Other</option>
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label className="mb-1.5 block text-[12px] font-semibold text-[#071437]">
+                                                            Age Group
+                                                        </label>
+                                                        <select
+                                                            value={g.age_group}
+                                                            onChange={(e) => handleGuestFieldChange(idx, 'age_group', e.target.value)}
+                                                            className={fieldClass}
+                                                        >
+                                                            <option value="adult">Adult</option>
+                                                            <option value="child">Child</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
                                     )}
-                                </div>
 
-                                {/* QR Visualization */}
-                                <div className="p-3 bg-white text-slate-900 rounded-2xl shadow-sm border flex flex-col items-center">
-                                    <QrCode className="size-24" />
-                                    <span className="text-[9px] font-mono mt-1 text-slate-500">GATE CHECK-IN</span>
-                                </div>
-                            </div>
-
-                            <div className="pt-4 mt-4 border-t flex justify-end">
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    onClick={handleCancelRegistration}
-                                    className="text-xs text-rose-600 hover:text-rose-700 hover:bg-rose-50"
-                                >
-                                    Cancel Registration
-                                </Button>
-                            </div>
-                        </CardContent>
-                    </Card>
-                ) : (
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                                <Users className="size-4 text-indigo-600" />
-                                RSVP & Register for Event
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <form onSubmit={handleRegisterSubmit} className="space-y-4 text-xs">
-                                {event.allows_guests && (
-                                    <div className="space-y-3">
-                                        <div>
-                                            <label className="font-semibold block mb-1">
-                                                Additional Guests (Spouse / Children)
-                                            </label>
-                                            <select
-                                                value={guestCount}
-                                                onChange={(e) => handleGuestCountChange(parseInt(e.target.value))}
-                                                className="w-full sm:w-48 text-xs rounded-md border p-2 bg-white dark:bg-slate-900"
-                                            >
-                                                <option value={0}>Just Myself (0 Guests)</option>
-                                                {Array.from({ length: event.max_guests_per_registration || 2 }, (_, i) => (
-                                                    <option key={i + 1} value={i + 1}>+{i + 1} Guest{i > 0 ? 's' : ''}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-
-                                        {guests.map((g, idx) => (
-                                            <div key={idx} className="p-3 rounded-lg border bg-slate-50/50 dark:bg-slate-800/20 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                                <div>
-                                                    <label className="font-semibold block mb-1">Guest {idx + 1} Full Name *</label>
-                                                    <Input
-                                                        required
-                                                        placeholder="Guest full name"
-                                                        value={g.name}
-                                                        onChange={(e) => handleGuestFieldChange(idx, 'name', e.target.value)}
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className="font-semibold block mb-1">Relationship</label>
-                                                    <select
-                                                        value={g.relationship}
-                                                        onChange={(e) => handleGuestFieldChange(idx, 'relationship', e.target.value)}
-                                                        className="w-full text-xs rounded-md border p-2 bg-white dark:bg-slate-900"
-                                                    >
-                                                        <option value="spouse">Spouse</option>
-                                                        <option value="child">Child</option>
-                                                        <option value="other">Other</option>
-                                                    </select>
-                                                </div>
-                                                <div>
-                                                    <label className="font-semibold block mb-1">Age Group</label>
-                                                    <select
-                                                        value={g.age_group}
-                                                        onChange={(e) => handleGuestFieldChange(idx, 'age_group', e.target.value)}
-                                                        className="w-full text-xs rounded-md border p-2 bg-white dark:bg-slate-900"
-                                                    >
-                                                        <option value="adult">Adult</option>
-                                                        <option value="child">Child</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        ))}
+                                    <div>
+                                        <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                            Dietary / Special Requirements
+                                            <span className="ml-1.5 font-normal text-[#99A1B7]">(Optional)</span>
+                                        </label>
+                                        <textarea
+                                            rows={3}
+                                            placeholder="Any dietary restrictions, medical conditions, or accessibility assistance..."
+                                            value={specialReq}
+                                            onChange={(e) => setSpecialReq(e.target.value)}
+                                            className={`${fieldClass} h-auto py-2.5`}
+                                        />
                                     </div>
-                                )}
 
-                                <div>
-                                    <label className="font-semibold block mb-1">Dietary / Special Requirements</label>
-                                    <textarea
-                                        rows={2}
-                                        placeholder="Any dietary restrictions, medical conditions or accessibility assistance..."
-                                        value={specialReq}
-                                        onChange={(e) => setSpecialReq(e.target.value)}
-                                        className="w-full text-xs rounded-md border p-2.5 bg-white dark:bg-slate-900"
-                                    />
+                                    <div className="flex justify-end pt-2">
+                                        <Button
+                                            type="submit"
+                                            className="h-10 rounded-lg bg-[#1B84FF] px-5 text-[13px] font-semibold text-white hover:bg-[#006AE6]"
+                                        >
+                                            Confirm My Registration
+                                        </Button>
+                                    </div>
+                                </form>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Right: Event Program & Details */}
+                    {event.description && (
+                        <div className="lg:col-span-5">
+                            <div className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-6">
+                                <div className="flex items-center gap-2 border-b border-[#F1F1F4] pb-4 text-[15px] font-semibold text-[#071437]">
+                                    <FileText className="size-4 text-[#1B84FF]" />
+                                    Event Program &amp; Details
                                 </div>
-
-                                <div className="flex justify-end pt-2">
-                                    <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-xs font-semibold">
-                                        Confirm My Registration
-                                    </Button>
+                                <div className="mt-4 text-[13px] leading-relaxed whitespace-pre-wrap text-[#4B5675]">
+                                    {event.description}
                                 </div>
-                            </form>
-                        </CardContent>
-                    </Card>
-                )}
-
-                {/* Event Description */}
-                {event.description && (
-                    <Card>
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-semibold">Event Program & Details</CardTitle>
-                        </CardHeader>
-                        <CardContent className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
-                            {event.description}
-                        </CardContent>
-                    </Card>
-                )}
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
         </MemberLayout>
     );
