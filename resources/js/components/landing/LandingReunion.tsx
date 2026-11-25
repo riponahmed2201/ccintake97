@@ -32,7 +32,7 @@ export function LandingReunion() {
     const countdown = useReunionCountdown();
 
     return (
-        <section id="reunion" className={`relative isolate overflow-hidden bg-[#070B14] text-[#F7F3EA] ${LANDING_SECTION}`}>
+        <section id="reunion" className={`relative isolate overflow-hidden bg-brand-ink-deep text-brand-cream-text ${LANDING_SECTION}`}>
             <div className="pointer-events-none absolute inset-0 -z-10">
                 <img
                     src="/images/campus/reunion-parade-rcc.jpg"
@@ -51,7 +51,7 @@ export function LandingReunion() {
                             light
                             title={
                                 <>
-                                    Grand Reunion <em className="font-normal text-[#E8D5A3]">2027.</em>
+                                    Grand Reunion <em className="font-normal text-brand-gold-bright">2027.</em>
                                 </>
                             }
                             intro="Three decades of unbroken brotherhood. All 500 batchmates, our families and our revered faculty — together in Dhaka for a historic national assembly."
@@ -110,7 +110,7 @@ export function LandingReunion() {
                                         ))}
                                     </ul>
                                     <div className="mt-10">
-                                        <PrimaryCta as="button" variant="gold" className="w-full" onClick={openSignup}>
+                                        <PrimaryCta as="button" variant="navy" className="w-full" onClick={openSignup}>
                                             Reserve your seat
                                         </PrimaryCta>
                                     </div>

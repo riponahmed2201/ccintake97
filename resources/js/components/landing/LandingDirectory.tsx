@@ -33,24 +33,19 @@ export function LandingDirectory({
     const usingSamples = directoryPreview.length < 4;
 
     return (
-                        <section id="directory" className={`relative isolate overflow-hidden bg-[#0B1220] text-[#F7F3EA] ${LANDING_SECTION}`}>
-                            <div className="pointer-events-none absolute inset-0 -z-10">
-                                <div className="absolute -top-48 left-1/2 h-[640px] w-[1100px] -translate-x-1/2 rounded-full bg-[radial-gradient(ellipse,rgba(201,165,92,0.13),transparent_62%)]" />
-                            </div>
-        
+                        <section id="directory" className={`relative isolate overflow-hidden bg-white text-brand-navy ${LANDING_SECTION}`}>
                             <div className={LANDING_CONTAINER}>
                                 <SectionHeading
                                     eyebrow="Batch directory"
-                                    light
                                     title={
                                         <>
-                                            Meet the <em className="font-normal text-[#E8D5A3]">batch.</em>
+                                            Meet the <em className="font-normal text-brand-gold-muted">batch.</em>
                                         </>
                                     }
                                     intro="Generals, surgeons, diplomats and founders — still the same cadets who stood the 0530 muster together."
                                     action={
                                         <div className="flex flex-wrap items-center gap-4">
-                                            <ExploreLink href="/directory" light internal={false}>
+                                            <ExploreLink href="/directory" internal={false}>
                                                 Open directory
                                             </ExploreLink>
                                             <div className="flex gap-2" role="group" aria-label="Scroll spotlight">
@@ -58,7 +53,7 @@ export function LandingDirectory({
                                                     type="button"
                                                     aria-label="Previous profile"
                                                     onClick={() => scrollSpotlight(-1)}
-                                                    className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 transition-colors hover:bg-white hover:text-[#0B1220]"
+                                                    className="flex h-12 w-12 items-center justify-center rounded-full border border-brand-navy/15 text-brand-navy transition-colors hover:bg-brand-navy hover:text-brand-cream-text"
                                                 >
                                                     <ArrowRight className="h-4 w-4 rotate-180" />
                                                 </button>
@@ -66,7 +61,7 @@ export function LandingDirectory({
                                                     type="button"
                                                     aria-label="Next profile"
                                                     onClick={() => scrollSpotlight(1)}
-                                                    className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 transition-colors hover:bg-white hover:text-[#0B1220]"
+                                                    className="flex h-12 w-12 items-center justify-center rounded-full border border-brand-navy/15 text-brand-navy transition-colors hover:bg-brand-navy hover:text-brand-cream-text"
                                                 >
                                                     <ArrowRight className="h-4 w-4" />
                                                 </button>
@@ -117,7 +112,7 @@ export function LandingDirectory({
                                             key={m.key}
                                             href={m.href}
                                             data-card
-                                            className="group relative isolate flex h-[420px] w-[78vw] shrink-0 snap-start flex-col overflow-hidden rounded-3xl bg-[#121B2E] sm:w-[300px]"
+                                            className="group relative isolate flex h-[420px] w-[78vw] shrink-0 snap-start flex-col overflow-hidden rounded-xl bg-brand-navy text-brand-cream-text ring-1 ring-brand-navy/10 sm:w-[300px]"
                                         >
                                             {bg && (
                                                 <img src={bg} alt="" loading="lazy" className="absolute inset-0 -z-20 h-full w-full object-cover opacity-45 transition-transform duration-[1200ms] ease-out group-hover:scale-110" />
@@ -166,7 +161,7 @@ export function LandingDirectory({
                                 <Link
                                     href="/directory"
                                     data-card
-                                    className="group flex h-[420px] w-[78vw] shrink-0 snap-start flex-col justify-between rounded-3xl bg-gradient-to-br from-[#E8D5A3] to-[#B8924A] p-7 text-[#0B1220] sm:w-[300px]"
+                                    className="group flex h-[420px] w-[78vw] shrink-0 snap-start flex-col justify-between rounded-xl border border-brand-navy/10 bg-brand-cream p-7 text-brand-navy sm:w-[300px]"
                                 >
                                     <Users className="h-8 w-8" strokeWidth={1.5} />
                                     <div>
@@ -182,10 +177,10 @@ export function LandingDirectory({
                             {/* Search strip */}
                             <div className={`${LANDING_CONTAINER} ${LANDING_SECTION_BODY}`}>
                                 <Reveal>
-                                    <div className="flex flex-col gap-6 border-t border-white/10 pt-10 lg:flex-row lg:items-center lg:justify-between">
+                                    <div className="flex flex-col gap-6 border-t border-brand-navy/10 pt-10 lg:flex-row lg:items-center lg:justify-between">
                                         <form
                                             onSubmit={submitDirectorySearch}
-                                            className="flex w-full items-center gap-2 rounded-full bg-white p-1.5 pl-5 lg:max-w-xl"
+                                            className="flex w-full items-center gap-2 rounded-full border border-brand-navy/10 bg-brand-cream p-1.5 pl-5 lg:max-w-xl"
                                         >
                                             <Search className="h-5 w-5 shrink-0 text-[#0B1220]/40" />
                                             <input
@@ -201,7 +196,7 @@ export function LandingDirectory({
                                             </button>
                                         </form>
                                         <div className="flex items-center gap-4">
-                                            <span className="hidden text-[13px] text-[#F7F3EA]/45 sm:block">Browse by college</span>
+                                            <span className="hidden text-[13px] text-brand-navy/50 sm:block">Browse by college</span>
                                             <div className="flex -space-x-2">
                                                 {mergedColleges.map((c) => (
                                                     <button
@@ -218,7 +213,7 @@ export function LandingDirectory({
                                             </div>
                                         </div>
                                     </div>
-                                    <p className="mt-6 flex items-center gap-2 text-[13px] text-[#F7F3EA]/40">
+                                    <p className="mt-6 flex items-center gap-2 text-[13px] text-brand-navy/50">
                                         <Lock className="h-3.5 w-3.5" /> Phone, email and WhatsApp are visible only to verified batchmates.
                                     </p>
                                 </Reveal>

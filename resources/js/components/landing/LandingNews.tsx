@@ -13,7 +13,7 @@ export function LandingNews({
     businesses?: Business[];
 }) {
     return (
-                        <section id="news" className={`${LANDING_SECTION} bg-[#F4F2EE]`}>
+                        <section id="news" className={`${LANDING_SECTION} bg-brand-cream`}>
                             <span id="businesses" className="sr-only" />
                             <div className={LANDING_CONTAINER}>
                                 <SectionHeading
@@ -58,7 +58,7 @@ export function LandingNews({
                                                 {lead && (
                                                     <Reveal>
                                                         <Link href={lead.href} className="group block">
-                                                            <div className="aspect-[16/10] overflow-hidden rounded-2xl bg-[#091324] ring-1 ring-[#091324]/10 shadow-sm">
+                                                            <div className="aspect-[16/10] overflow-hidden rounded-xl bg-brand-navy ring-1 ring-brand-navy/10">
                                                                 <img src={lead.image} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105" />
                                                             </div>
                                                             <div className="mt-6 flex items-center gap-3 text-[11px] tracking-[0.18em] uppercase">

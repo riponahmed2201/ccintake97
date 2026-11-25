@@ -65,7 +65,7 @@ export function SectionHeading({
             <div className={`max-w-3xl space-y-5 ${centered ? 'flex flex-col items-center' : 'min-w-0'}`}>
                 {(index || eyebrow) && (
                     <p
-                        className={`text-[11px] font-medium uppercase ${light ? 'text-[#E8D5A3]/70' : 'text-[#9A7B3F]'} ${
+                        className={`text-[11px] font-medium uppercase ${light ? 'text-brand-gold-bright/80' : 'text-brand-gold-muted'} ${
                             centered ? 'tracking-[0.28em]' : 'tracking-[0.22em] sm:tracking-[0.28em]'
                         }`}
                     >

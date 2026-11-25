@@ -27,7 +27,7 @@ export function LandingColleges({
     const { openSignup } = useSignupDialog();
 
     return (
-                        <section id="colleges" className={`${LANDING_SECTION} bg-[#F4F2EE]`}>
+                        <section id="colleges" className={`${LANDING_SECTION} bg-brand-cream`}>
                             <div className={LANDING_CONTAINER}>
                                 <Reveal>
                                     <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
@@ -64,7 +64,7 @@ export function LandingColleges({
                                 {activeCollege && (
                                     <div className={`${LANDING_SECTION_BODY} space-y-4`}>
                                         {/* Featured banner */}
-                                        <div ref={featureRef} className="relative isolate scroll-mt-24 overflow-hidden rounded-3xl bg-[#091324] text-[#F8F5EE] shadow-[0_32px_64px_-28px_rgba(9,19,36,0.45)] ring-1 ring-[#C8A252]/25">
+                                        <div ref={featureRef} className="relative isolate scroll-mt-24 overflow-hidden rounded-xl bg-brand-navy text-brand-cream-text ring-1 ring-brand-gold/30">
                                             <div key={activeCollege.short_name} className="animate-in duration-700 fade-in">
                                                 {CAMPUS_PHOTOS[activeCollege.short_name] ? (
                                                     <img
@@ -152,7 +152,7 @@ export function LandingColleges({
                                                         type="button"
                                                         onClick={() => selectCollege(col.short_name, true)}
                                                         aria-pressed={active}
-                                                        className="group relative isolate aspect-[4/3] overflow-hidden rounded-2xl bg-[#091324] text-left text-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                                                        className="group relative isolate aspect-[4/3] overflow-hidden rounded-xl bg-brand-navy text-left text-white ring-1 ring-brand-navy/10"
                                                     >
                                                         {photo ? (
                                                             <img src={photo} alt="" loading="lazy" className="absolute inset-0 -z-10 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110" />

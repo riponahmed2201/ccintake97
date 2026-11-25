@@ -4,7 +4,7 @@ import { CAMPUS_LIFE } from '@/components/landing/constants';
 
 export function LandingCampusLife({ className = '' }: { className?: string }) {
     return (
-        <section className={`${LANDING_SECTION} bg-[#FAF8F3] ${className}`.trim()}>
+        <section className={`${LANDING_SECTION} bg-brand-cream ${className}`.trim()}>
             <div className={LANDING_CONTAINER}>
                 <SectionHeading
                     eyebrow="On the grounds"
@@ -18,7 +18,7 @@ export function LandingCampusLife({ className = '' }: { className?: string }) {
             </div>
             <div className={`${LANDING_SCROLL_TRACK} gap-4 pb-2 ${LANDING_SECTION_BODY} ${LANDING_BLEED}`}>
                 {CAMPUS_LIFE.map((ph) => (
-                    <figure key={ph.src} className="group relative w-[78vw] shrink-0 snap-start overflow-hidden rounded-2xl bg-[#091324] ring-1 ring-[#091324]/10 shadow-sm sm:w-[400px]">
+                    <figure key={ph.src} className="group relative w-[78vw] shrink-0 snap-start overflow-hidden rounded-xl bg-brand-navy ring-1 ring-brand-navy/10 sm:w-[400px]">
                         <img
                             src={ph.src}
                             alt={ph.title}

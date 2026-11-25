@@ -4,7 +4,7 @@ import { SECTORS } from '@/components/landing/constants';
 
 export function LandingSectors() {
     return (
-        <section id="sectors" className={`bg-white ${LANDING_SECTION}`}>
+        <section id="sectors" className={`bg-brand-cream ${LANDING_SECTION}`}>
             <div className={LANDING_CONTAINER}>
                 <SectionHeading
                     eyebrow="Where we lead"
@@ -20,7 +20,7 @@ export function LandingSectors() {
                         const Icon = s.icon;
                         return (
                             <Reveal key={s.title} delay={i * 60} className="h-full">
-                                <article className="group flex h-full flex-col rounded-2xl bg-[#FAF8F3] p-7 ring-1 ring-brand-navy/[0.06] transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:ring-[#C8A252]/45 hover:shadow-[0_24px_48px_-28px_rgba(9,19,36,0.22)]">
+                                <article className="group flex h-full flex-col rounded-xl border border-brand-navy/10 bg-white p-7">
                                     <div className="flex items-start justify-between gap-4">
                                         <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#091324] text-[#E8D5A3] transition-colors group-hover:bg-[#8E6B28] group-hover:text-white">
                                             <Icon className="h-5 w-5" strokeWidth={1.6} />

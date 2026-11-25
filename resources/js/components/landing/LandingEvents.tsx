@@ -14,7 +14,7 @@ export function LandingEvents({ events }: { events: Event[] }) {
     if (events.length === 0) return null;
 
     return (
-        <section id="events" className={`border-y border-brand-navy/[0.06] bg-brand-cream ${LANDING_SECTION}`}>
+        <section id="events" className={`border-y border-brand-navy/[0.06] bg-white ${LANDING_SECTION}`}>
             <div className={LANDING_CONTAINER}>
                 <SectionHeading
                     eyebrow="On the calendar"

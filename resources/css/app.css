@@ -67,12 +67,13 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 
-    --color-brand-navy: #091324;
-    --color-brand-cream: #faf8f3;
-    --color-brand-gold: #c8a252;
-    --color-brand-gold-muted: #8e6b28;
-    --color-brand-ink-deep: #060b15;
-    --color-brand-cream-text: #f8f5ee;
+    --color-brand-navy: #101a2c;
+    --color-brand-cream: #f6f3ec;
+    --color-brand-gold: #a6854e;
+    --color-brand-gold-bright: #e4d2b0;
+    --color-brand-gold-muted: #6f5428;
+    --color-brand-ink-deep: #071018;
+    --color-brand-cream-text: #f6f3ec;
 }
 
 :root {

@@ -34,7 +34,7 @@ export function LandingAbout({ omitHeading = false, className }: { omitHeading?:
                             <p className="mt-4 text-[17px] leading-[1.75] text-[#4A4F5C]">
                                 ccIntake97 is their association — a verified directory, a way to find batchmates, and a home for welfare and the reunion planned for 2027.
                             </p>
-                            <blockquote className="mt-9 rounded-r-2xl border-l-2 border-[#C8A252] bg-[#FAF8F3] py-5 pr-6 pl-6 font-serif text-xl leading-snug text-[#091324] italic">
+                            <blockquote className="mt-9 border-l border-brand-gold bg-brand-cream py-5 pr-6 pl-6 font-serif text-xl leading-snug text-brand-navy italic">
                                 “No rank outside this room supersedes that of a brother who stood the same cold morning muster beside you.”
                                 <footer className="mt-2.5 font-sans text-[11px] font-medium tracking-[0.2em] text-[#8E6B28] uppercase not-italic">
                                     — Central Council Founding Charter
@@ -62,7 +62,7 @@ export function LandingAbout({ omitHeading = false, className }: { omitHeading?:
                         <Reveal delay={100}>
                             <div className="grid h-[520px] grid-cols-5 grid-rows-2 gap-3 sm:h-[600px] lg:h-[660px]">
                                 {MOSAIC.map((ph) => (
-                                    <figure key={ph.src} className={`group relative overflow-hidden rounded-2xl bg-[#091324] ring-1 ring-[#091324]/10 shadow-[0_20px_50px_-24px_rgba(9,19,36,0.35)] ${ph.cls}`}>
+                                    <figure key={ph.src} className={`group relative overflow-hidden rounded-xl bg-brand-navy ring-1 ring-brand-navy/10 ${ph.cls}`}>
                                         <img
                                             src={ph.src}
                                             alt={ph.alt}

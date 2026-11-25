@@ -7,7 +7,7 @@ import type { Committee } from '@/types/intake97';
 
 export function LandingCommittee({ committee, mergedColleges }: { committee: Committee | null; mergedColleges: MergedCollege[] }) {
     return (
-                        <section id="committee" className={`${LANDING_SECTION} bg-[#F4F2EE]`}>
+                        <section id="committee" className={`${LANDING_SECTION} bg-brand-cream`}>
                             <div className={LANDING_CONTAINER}>
                                 {(() => {
                                     const people = (committee?.members && committee.members.length > 0
@@ -64,7 +64,7 @@ export function LandingCommittee({ committee, mergedColleges }: { committee: Com
                                                 {/* Featured: President */}
                                                 {lead && (
                                                     <Reveal className="lg:col-span-5">
-                                                        <article className="group relative isolate flex h-full min-h-[540px] flex-col justify-between overflow-hidden rounded-3xl bg-[#091324] text-white ring-1 ring-[#C8A252]/40 shadow-[0_32px_64px_-32px_rgba(9,19,36,0.55)]">
+                                                        <article className="group relative isolate flex h-full min-h-[540px] flex-col justify-between overflow-hidden rounded-xl bg-brand-navy text-white ring-1 ring-brand-gold/30">
                                                             {lead.avatar ? (
                                                                 <img src={lead.avatar} alt={lead.name} className="absolute inset-0 -z-20 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-105" />
                                                             ) : (
@@ -118,7 +118,7 @@ export function LandingCommittee({ committee, mergedColleges }: { committee: Com
                                                     <div className={`grid grid-cols-1 gap-4 ${others.length > 1 ? 'sm:grid-cols-2' : ''}`}>
                                                     {others.slice(0, 4).map((p, i) => (
                                                         <Reveal key={p.key} delay={i * 70}>
-                                                            <article className="group flex h-full items-center gap-4 rounded-2xl bg-white p-5 ring-1 ring-[#091324]/[0.06] transition-all duration-300 hover:-translate-y-1 hover:ring-[#C8A252]/45 hover:shadow-[0_24px_48px_-28px_rgba(9,19,36,0.28)] sm:p-6">
+                                                            <article className="group flex h-full items-center gap-4 rounded-xl border border-brand-navy/10 bg-white p-5 sm:p-6">
                                                                 <div className="relative shrink-0">
                                                                     {p.avatar ? (
                                                                         <img src={p.avatar} alt={p.name} className="h-18 w-18 rounded-full object-cover ring-2 ring-[#C8A252]/30" />
@@ -191,7 +191,7 @@ export function LandingCommittee({ committee, mergedColleges }: { committee: Com
                                     <ol className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 ${LANDING_SECTION_BODY}`}>
                                         {CHARTER_ARTICLES.map((c, i) => (
                                             <Reveal key={c.numeral} delay={i * 70} className="h-full">
-                                                <li className="group h-full rounded-2xl bg-white p-7 ring-1 ring-[#091324]/[0.06] transition-all duration-300 hover:-translate-y-0.5 hover:ring-[#C8A252]/45 hover:shadow-md">
+                                                <li className="group h-full rounded-xl border border-brand-navy/10 bg-white p-7">
                                                     <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#091324] font-serif text-[16px] font-semibold text-[#E8D5A3] transition-colors group-hover:bg-[#8E6B28] group-hover:text-white">
                                                         {c.numeral}
                                                     </span>

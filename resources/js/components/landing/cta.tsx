@@ -8,8 +8,8 @@ const primaryBase =
 
 const variants = {
     cream: 'bg-brand-cream-text px-7 py-4 text-brand-navy hover:bg-white',
-    gold: 'bg-gradient-to-r from-[#E8D5A3] to-[#C9A55C] px-7 py-4 text-[#0B1220] hover:shadow-[0_10px_40px_-10px_rgba(201,165,92,0.6)]',
-    navy: 'bg-[#0B1220] px-7 py-4 text-[#F7F3EA] hover:bg-[#1A2438] hover:shadow-[0_16px_32px_-16px_rgba(11,18,32,0.6)]',
+    gold: 'border border-brand-gold-bright/50 bg-brand-navy px-7 py-4 text-brand-cream-text hover:bg-brand-ink-deep',
+    navy: 'border border-brand-gold-bright/50 bg-brand-navy px-7 py-4 text-brand-cream-text hover:bg-brand-ink-deep',
 } as const;
 
 type PrimaryCtaProps = {
@@ -32,8 +32,8 @@ export function PrimaryCta({ children, variant = 'navy', icon = true, className 
                     className={cn(
                         'h-4 w-4 transition-transform duration-300 group-hover:translate-x-1',
                         variant === 'cream' && 'text-brand-navy',
-                        variant === 'gold' && 'text-[#0B1220]',
-                        variant === 'navy' && 'text-[#E8D5A3]',
+                        variant === 'gold' && 'text-brand-cream-text',
+                        variant === 'navy' && 'text-brand-cream-text',
                     )}
                 />
             )}

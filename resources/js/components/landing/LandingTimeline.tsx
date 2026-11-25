@@ -13,7 +13,7 @@ export function LandingTimeline({ className = '' }: { className?: string }) {
                                     <ol className={`grid grid-cols-1 gap-6 md:grid-cols-4 lg:gap-8`}>
                                         {TIMELINE_MILESTONES.map((m, i) => (
                                             <Reveal key={m.year} delay={i * 90}>
-                                                <li className="relative h-full rounded-2xl border border-transparent p-4 transition-colors duration-300 hover:border-[#091324]/[0.06] hover:bg-[#FAF8F3]">
+                                                <li className="relative h-full rounded-xl border border-transparent p-4">
                                                     <div className="flex items-center gap-4 md:flex-col md:items-start">
                                                         <span className={`relative z-10 flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-full border ${i === TIMELINE_MILESTONES.length - 1 ? 'border-[#C8A252] bg-[#091324] shadow-[0_0_0_6px_rgba(200,162,82,0.22)]' : 'border-[#091324]/15 bg-white shadow-xs'}`}>
                                                             <span className={`h-2.5 w-2.5 rounded-full ${i === TIMELINE_MILESTONES.length - 1 ? 'bg-[#E8D5A3]' : 'bg-[#8E6B28]'}`} />
