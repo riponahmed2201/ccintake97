@@ -1,10 +1,15 @@
 import React from 'react';
 import { Head } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { BarChart3, Download, GraduationCap, Users } from 'lucide-react';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import { Download, GraduationCap, Users } from 'lucide-react';
 import type { College, Event } from '@/types';
 
 interface ReportsIndexProps {
@@ -18,7 +23,6 @@ export default function ReportsIndex({
     collegeBreakdown,
     statusBreakdown,
     verificationBreakdown,
-    eventsBreakdown,
 }: ReportsIndexProps) {
     return (
         <AdminLayout
@@ -28,109 +32,128 @@ export default function ReportsIndex({
             <Head title="Reports & Analytics - INTAKE 97 Admin" />
 
             <div className="space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                        <h1 className="text-[20px] font-bold tracking-tight text-[#071437]">
                             Association Reports & Analytic Summaries
                         </h1>
-                        <p className="text-xs text-slate-500 mt-1">
-                            Exportable breakdowns based on actual MySQL records. Never fabricated.
+                        <p className="mt-1 text-[13px] text-[#78829D]">
+                            Exportable breakdowns based on actual database records.
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2.5">
                         <a
                             href="/admin/reports/download/colleges"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold hover:bg-slate-50 transition-colors"
+                            className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#DBDFE9] bg-white px-4 text-[13px] font-semibold text-[#071437] transition-colors hover:border-[#1B84FF] hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
                         >
-                            <Download className="size-3.5" /> Export College Report (CSV)
+                            <Download className="size-4" /> Export College Report (CSV)
                         </a>
                         <a
                             href="/admin/members/export"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs transition-colors"
+                            className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#1B84FF] px-4 text-[13px] font-semibold text-white shadow-xs transition-colors hover:bg-[#1B84FF]/90"
                         >
-                            <Download className="size-3.5" /> Full Member Roll (CSV)
+                            <Download className="size-4" /> Full Member Roll (CSV)
                         </a>
                     </div>
                 </div>
 
-                {/* Status & Verification Breakdown Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Card>
-                        <CardHeader className="pb-3">
-                            <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                                <Users className="size-4 text-blue-600" />
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <div className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                        <div className="flex items-center gap-2.5 border-b border-[#F1F1F4] px-6 py-4">
+                            <span className="flex size-8 items-center justify-center rounded-lg bg-[#F1F6FF] text-[#1B84FF]">
+                                <Users className="size-4" />
+                            </span>
+                            <h2 className="text-[15px] font-bold text-[#071437]">
                                 Membership Lifecycle Breakdown
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-2 text-xs">
+                            </h2>
+                        </div>
+                        <div className="divide-y divide-[#F1F1F4] px-6 py-2">
                             {Object.entries(statusBreakdown).map(([status, count]) => (
-                                <div key={status} className="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
-                                    <span className="capitalize text-slate-600 dark:text-slate-400">{status.replace('_', ' ')}</span>
-                                    <span className="font-bold text-slate-900 dark:text-white">{count} alumni</span>
+                                <div key={status} className="flex items-center justify-between py-3 text-[13px]">
+                                    <span className="font-medium text-[#4B5675] capitalize">
+                                        {status.replace('_', ' ')}
+                                    </span>
+                                    <span className="font-bold text-[#071437]">{count} alumni</span>
                                 </div>
                             ))}
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
 
-                    <Card>
-                        <CardHeader className="pb-3">
-                            <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                                <GraduationCap className="size-4 text-emerald-600" />
+                    <div className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                        <div className="flex items-center gap-2.5 border-b border-[#F1F1F4] px-6 py-4">
+                            <span className="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                                <GraduationCap className="size-4" />
+                            </span>
+                            <h2 className="text-[15px] font-bold text-[#071437]">
                                 Verification Audit Breakdown
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-2 text-xs">
+                            </h2>
+                        </div>
+                        <div className="divide-y divide-[#F1F1F4] px-6 py-2">
                             {Object.entries(verificationBreakdown).map(([vStatus, count]) => (
-                                <div key={vStatus} className="flex items-center justify-between py-1.5 border-b border-slate-100 dark:border-slate-800">
-                                    <span className="capitalize text-slate-600 dark:text-slate-400">{vStatus}</span>
-                                    <span className="font-bold text-slate-900 dark:text-white">{count} alumni</span>
+                                <div key={vStatus} className="flex items-center justify-between py-3 text-[13px]">
+                                    <span className="font-medium text-[#4B5675] capitalize">{vStatus}</span>
+                                    <span className="font-bold text-[#071437]">{count} alumni</span>
                                 </div>
                             ))}
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
                 </div>
 
-                {/* College-wise Roster Breakdown Table */}
-                <Card className="overflow-hidden">
-                    <CardHeader className="p-4 border-b">
-                        <CardTitle className="text-sm font-bold text-slate-900 dark:text-white">
+                <div className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                    <div className="border-b border-[#F1F1F4] px-6 py-4">
+                        <h2 className="text-[15px] font-bold text-[#071437]">
                             Cadet College Representation Roster
-                        </CardTitle>
-                    </CardHeader>
-                    <Table>
-                        <TableHeader className="bg-slate-50 dark:bg-slate-900/60">
-                            <TableRow>
-                                <TableHead className="text-xs font-semibold">Cadet College</TableHead>
-                                <TableHead className="text-xs font-semibold">Short Code</TableHead>
-                                <TableHead className="text-xs font-semibold">Established</TableHead>
-                                <TableHead className="text-xs font-semibold">Location</TableHead>
-                                <TableHead className="text-xs font-semibold text-right">Registered 1997 Alumni</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {collegeBreakdown.map((c) => (
-                                <TableRow key={c.id}>
-                                    <TableCell className="font-semibold text-xs text-slate-900 dark:text-white">
-                                        {c.name}
-                                    </TableCell>
-                                    <TableCell className="font-mono text-xs text-slate-500">
-                                        {c.short_name || '—'}
-                                    </TableCell>
-                                    <TableCell className="text-xs text-slate-500">
-                                        {c.established_year || '—'}
-                                    </TableCell>
-                                    <TableCell className="text-xs text-slate-500">
-                                        {c.location || '—'}
-                                    </TableCell>
-                                    <TableCell className="text-right font-bold text-xs text-emerald-600">
-                                        {c.members_count}
-                                    </TableCell>
+                        </h2>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader className="bg-[#FCFCFC]">
+                                <TableRow className="border-[#F1F1F4] hover:bg-transparent">
+                                    <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Cadet College
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Short Code
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Established
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Location
+                                    </TableHead>
+                                    <TableHead className="px-5 py-3.5 text-right text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Registered 1997 Alumni
+                                    </TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </Card>
+                            </TableHeader>
+                            <TableBody>
+                                {collegeBreakdown.map((c) => (
+                                    <TableRow
+                                        key={c.id}
+                                        className="border-[#F1F1F4] transition-colors hover:bg-[#FCFCFC]"
+                                    >
+                                        <TableCell className="px-5 py-3.5 text-[13px] font-semibold text-[#071437]">
+                                            {c.name}
+                                        </TableCell>
+                                        <TableCell className="px-4 py-3.5 font-mono text-[12.5px] text-[#78829D]">
+                                            {c.short_name || '—'}
+                                        </TableCell>
+                                        <TableCell className="px-4 py-3.5 text-[13px] text-[#4B5675]">
+                                            {c.established_year || '—'}
+                                        </TableCell>
+                                        <TableCell className="px-4 py-3.5 text-[13px] text-[#4B5675]">
+                                            {c.location || '—'}
+                                        </TableCell>
+                                        <TableCell className="px-5 py-3.5 text-right text-[13px] font-bold text-emerald-600">
+                                            {c.members_count}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </div>
             </div>
         </AdminLayout>
     );

@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ArrowLeft, QrCode, CheckCircle2, Users, Search } from 'lucide-react';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import { ArrowLeft, Calendar, CheckCircle2, MapPin, QrCode, Users } from 'lucide-react';
 import type { Event, EventRegistration } from '@/types';
 
 interface RegistrationsProps {
@@ -18,6 +22,9 @@ interface RegistrationsProps {
         total: number;
     };
 }
+
+const fieldClass =
+    'h-10 w-full rounded-md border !border-[#DBDFE9] !bg-white px-3 text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-white dark:!text-[#071437]';
 
 export default function EventRegistrations({ event, registrations }: RegistrationsProps) {
     const [qrCodeInput, setQrCodeInput] = useState('');
@@ -32,7 +39,7 @@ export default function EventRegistrations({ event, registrations }: Registratio
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
+                    Accept: 'application/json',
                     'X-CSRF-TOKEN': (document.querySelector('meta[name="csrf-token"]') as any)?.content || '',
                 },
                 body: JSON.stringify({ qr_token: qrCodeInput.trim() }),
@@ -45,7 +52,7 @@ export default function EventRegistrations({ event, registrations }: Registratio
             } else {
                 setCheckinMessage({ text: data.message || 'Check-in failed.', error: true });
             }
-        } catch (err: any) {
+        } catch {
             setCheckinMessage({ text: 'Error executing check-in.', error: true });
         }
     };
@@ -63,160 +70,179 @@ export default function EventRegistrations({ event, registrations }: Registratio
             <div className="space-y-6">
                 <Link
                     href="/admin/events"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900"
+                    className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#78829D] transition-colors hover:text-[#071437]"
                 >
                     <ArrowLeft className="size-4" />
                     Back to Events
                 </Link>
 
-                {/* Event Summary & Fast Check-in Terminal */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Card className="md:col-span-2">
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-base font-bold text-slate-900 dark:text-white">
-                                {event.title}
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-2 text-xs text-slate-600 dark:text-slate-400">
-                            <div>Venue: <strong>{event.venue}</strong></div>
-                            <div>
-                                Date: <strong>{new Date(event.starts_on).toLocaleDateString()}</strong> · Start Time: {event.start_time || 'TBA'}
-                            </div>
-                            <div className="flex items-center gap-4 pt-2">
-                                <Badge variant="outline" className="text-xs font-bold text-emerald-600">
-                                    Total Registered: {registrations.total}
-                                </Badge>
-                                {event.capacity && (
-                                    <Badge variant="outline" className="text-xs">
-                                        Capacity: {event.capacity} seats
-                                    </Badge>
-                                )}
-                            </div>
-                        </CardContent>
-                    </Card>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                    <div className="rounded-xl border border-[#F1F1F4] bg-white p-6 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] md:col-span-2">
+                        <h1 className="text-[18px] font-bold text-[#071437]">{event.title}</h1>
+                        <div className="mt-3 flex flex-wrap gap-4 text-[13px] text-[#4B5675]">
+                            <span className="inline-flex items-center gap-1.5">
+                                <MapPin className="size-4 text-[#78829D]" />
+                                <strong className="font-semibold text-[#071437]">{event.venue}</strong>
+                            </span>
+                            <span className="inline-flex items-center gap-1.5">
+                                <Calendar className="size-4 text-[#78829D]" />
+                                <strong className="font-semibold text-[#071437]">
+                                    {new Date(event.starts_on).toLocaleDateString()}
+                                </strong>
+                                · Start Time: {event.start_time || 'TBA'}
+                            </span>
+                        </div>
+                        <div className="mt-5 flex flex-wrap items-center gap-3">
+                            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[12px] font-semibold text-emerald-700">
+                                <Users className="size-3.5" />
+                                Total Registered: {registrations.total}
+                            </span>
+                            {event.capacity && (
+                                <span className="inline-flex items-center rounded-full border border-[#E5E7EB] bg-[#FCFCFC] px-3 py-1 text-[12px] font-semibold text-[#4B5675]">
+                                    Capacity: {event.capacity} seats
+                                </span>
+                            )}
+                        </div>
+                    </div>
 
-                    {/* QR Check-in Terminal Box */}
-                    <Card className="border-indigo-200 dark:border-indigo-900 bg-indigo-50/40 dark:bg-indigo-950/20">
-                        <CardHeader className="pb-2">
-                            <CardTitle className="text-xs font-bold flex items-center gap-2 text-indigo-700 dark:text-indigo-400">
-                                <QrCode className="size-4" />
-                                Live QR Check-in Terminal
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <form onSubmit={handleCheckinSubmit} className="space-y-3">
-                                <div>
-                                    <Input
-                                        placeholder="Scan or paste QR Token..."
-                                        value={qrCodeInput}
-                                        onChange={(e) => setQrCodeInput(e.target.value)}
-                                        className="text-xs bg-white dark:bg-slate-900"
-                                        autoFocus
-                                    />
-                                </div>
-                                <Button type="submit" size="sm" className="w-full bg-indigo-600 hover:bg-indigo-700 text-xs font-semibold">
-                                    Validate & Check In
-                                </Button>
-                                {checkinMessage && (
-                                    <div className={`p-2.5 rounded-lg text-xs font-medium ${
+                    <div className="rounded-xl border border-[#DCEBFF] bg-[#F6FAFF] p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                        <div className="mb-3 flex items-center gap-2 text-[13px] font-bold text-[#1B84FF]">
+                            <QrCode className="size-4" />
+                            Live QR Check-in Terminal
+                        </div>
+                        <form onSubmit={handleCheckinSubmit} className="space-y-3">
+                            <input
+                                placeholder="Scan or paste QR Token..."
+                                value={qrCodeInput}
+                                onChange={(e) => setQrCodeInput(e.target.value)}
+                                className={fieldClass}
+                                autoFocus
+                            />
+                            <Button
+                                type="submit"
+                                className="h-10 w-full rounded-lg bg-[#1B84FF] text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90"
+                            >
+                                Validate & Check In
+                            </Button>
+                            {checkinMessage && (
+                                <div
+                                    className={`rounded-lg border px-3 py-2.5 text-[12.5px] font-medium ${
                                         checkinMessage.error
-                                            ? 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
-                                            : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-                                    }`}>
-                                        {checkinMessage.text}
-                                    </div>
-                                )}
-                            </form>
-                        </CardContent>
-                    </Card>
+                                            ? 'border-rose-200 bg-rose-50 text-rose-700'
+                                            : 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                                    }`}
+                                >
+                                    {checkinMessage.text}
+                                </div>
+                            )}
+                        </form>
+                    </div>
                 </div>
 
-                {/* Attendee Registry Table */}
-                <Card className="overflow-hidden">
-                    <Table>
-                        <TableHeader className="bg-slate-50 dark:bg-slate-900/60">
-                            <TableRow>
-                                <TableHead className="text-xs font-semibold">Alumnus Name & Email</TableHead>
-                                <TableHead className="text-xs font-semibold">Cadet College & Roll</TableHead>
-                                <TableHead className="text-xs font-semibold">Additional Guests</TableHead>
-                                <TableHead className="text-xs font-semibold">QR Pass Token</TableHead>
-                                <TableHead className="text-xs font-semibold">Attendance Status</TableHead>
-                                <TableHead className="text-xs font-semibold text-right">Checked In At</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {registrations.data.length === 0 ? (
-                                <TableRow>
-                                    <TableCell colSpan={6} className="h-28 text-center text-xs text-slate-500">
-                                        No registrations found for this event yet.
-                                    </TableCell>
+                <div className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader className="bg-[#FCFCFC]">
+                                <TableRow className="border-[#F1F1F4] hover:bg-transparent">
+                                    <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Alumnus Name & Email
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Cadet College & Roll
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Additional Guests
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        QR Pass Token
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Attendance Status
+                                    </TableHead>
+                                    <TableHead className="px-5 py-3.5 text-right text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Checked In At
+                                    </TableHead>
                                 </TableRow>
-                            ) : (
-                                registrations.data.map((reg) => (
-                                    <TableRow key={reg.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
-                                        <TableCell>
-                                            <div className="font-semibold text-xs text-slate-900 dark:text-white">
-                                                {reg.member?.user?.name}
-                                            </div>
-                                            <div className="text-[11px] text-slate-500">
-                                                {reg.member?.user?.email}
-                                            </div>
-                                        </TableCell>
-                                        <TableCell>
-                                            <div className="text-xs font-medium text-slate-800 dark:text-slate-200">
-                                                {reg.member?.college?.name}
-                                            </div>
-                                            <div className="text-[10px] text-slate-400">
-                                                Roll #{reg.member?.college_roll_no}
-                                            </div>
-                                        </TableCell>
-                                        <TableCell>
-                                            <span className="font-semibold text-xs text-slate-800 dark:text-slate-200">
-                                                {reg.guest_count} guests
-                                            </span>
-                                            {reg.guests && reg.guests.length > 0 && (
-                                                <div className="text-[10px] text-slate-500">
-                                                    ({reg.guests.map(g => g.name).join(', ')})
-                                                </div>
-                                            )}
-                                        </TableCell>
-                                        <TableCell className="font-mono text-[11px] text-slate-500">
-                                            {reg.qr_token.substring(0, 16)}...
-                                        </TableCell>
-                                        <TableCell>
-                                            <Badge
-                                                className={`text-[10px] capitalize ${
-                                                    reg.status === 'attended'
-                                                        ? 'bg-emerald-100 text-emerald-800'
-                                                        : 'bg-blue-100 text-blue-800'
-                                                }`}
-                                            >
-                                                {reg.status}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="text-right text-xs text-slate-500">
-                                            {reg.checked_in_at ? (
-                                                <span className="text-emerald-600 font-semibold flex items-center justify-end gap-1">
-                                                    <CheckCircle2 className="size-3.5" />
-                                                    {new Date(reg.checked_in_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                </span>
-                                            ) : (
-                                                <button
-                                                    onClick={() => {
-                                                        setQrCodeInput(reg.qr_token);
-                                                    }}
-                                                    className="text-xs text-indigo-600 hover:underline"
-                                                >
-                                                    Manual Check-in
-                                                </button>
-                                            )}
+                            </TableHeader>
+                            <TableBody>
+                                {registrations.data.length === 0 ? (
+                                    <TableRow className="border-[#F1F1F4] hover:bg-transparent">
+                                        <TableCell colSpan={6} className="h-32 text-center text-[13px] text-[#78829D]">
+                                            No registrations found for this event yet.
                                         </TableCell>
                                     </TableRow>
-                                ))
-                            )}
-                        </TableBody>
-                    </Table>
-                </Card>
+                                ) : (
+                                    registrations.data.map((reg) => (
+                                        <TableRow
+                                            key={reg.id}
+                                            className="border-[#F1F1F4] transition-colors hover:bg-[#FCFCFC]"
+                                        >
+                                            <TableCell className="px-5 py-3.5">
+                                                <div className="text-[13px] font-semibold text-[#071437]">
+                                                    {reg.member?.user?.name}
+                                                </div>
+                                                <div className="text-[11.5px] text-[#78829D]">
+                                                    {reg.member?.user?.email}
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="px-4 py-3.5">
+                                                <div className="text-[13px] font-medium text-[#071437]">
+                                                    {reg.member?.college?.name}
+                                                </div>
+                                                <div className="text-[11px] text-[#99A1B7]">
+                                                    Roll #{reg.member?.college_roll_no}
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="px-4 py-3.5">
+                                                <span className="text-[13px] font-semibold text-[#071437]">
+                                                    {reg.guest_count} guests
+                                                </span>
+                                                {reg.guests && reg.guests.length > 0 && (
+                                                    <div className="text-[11px] text-[#78829D]">
+                                                        ({reg.guests.map((g) => g.name).join(', ')})
+                                                    </div>
+                                                )}
+                                            </TableCell>
+                                            <TableCell className="px-4 py-3.5 font-mono text-[12px] text-[#78829D]">
+                                                {reg.qr_token.substring(0, 16)}...
+                                            </TableCell>
+                                            <TableCell className="px-4 py-3.5">
+                                                <span
+                                                    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold capitalize ${
+                                                        reg.status === 'attended'
+                                                            ? 'border border-emerald-200 bg-emerald-50 text-emerald-700'
+                                                            : 'border border-blue-200 bg-[#F1F6FF] text-[#1B84FF]'
+                                                    }`}
+                                                >
+                                                    {reg.status}
+                                                </span>
+                                            </TableCell>
+                                            <TableCell className="px-5 py-3.5 text-right text-[13px] text-[#78829D]">
+                                                {reg.checked_in_at ? (
+                                                    <span className="inline-flex items-center justify-end gap-1 font-semibold text-emerald-600">
+                                                        <CheckCircle2 className="size-3.5" />
+                                                        {new Date(reg.checked_in_at).toLocaleTimeString([], {
+                                                            hour: '2-digit',
+                                                            minute: '2-digit',
+                                                        })}
+                                                    </span>
+                                                ) : (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setQrCodeInput(reg.qr_token)}
+                                                        className="text-[12.5px] font-semibold text-[#1B84FF] hover:underline"
+                                                    >
+                                                        Manual Check-in
+                                                    </button>
+                                                )}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </div>
             </div>
         </AdminLayout>
     );

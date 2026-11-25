@@ -37,7 +37,7 @@ export default function Login({ status, canResetPassword }: Props) {
                                     Email address
                                 </Label>
                                 <div className="relative">
-                                    <Mail className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-[#0B1220]/35" />
+                                    <Mail className="pointer-events-none absolute top-1/2 left-3.5 z-10 h-4 w-4 -translate-y-1/2 text-[#0B1220]/35" />
                                     <Input
                                         id="email"
                                         type="email"
@@ -65,7 +65,7 @@ export default function Login({ status, canResetPassword }: Props) {
                                     )}
                                 </div>
                                 <div className="relative">
-                                    <Lock className="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-[#0B1220]/35" />
+                                    <Lock className="pointer-events-none absolute top-1/2 left-3.5 z-10 h-4 w-4 -translate-y-1/2 text-[#0B1220]/35" />
                                     <PasswordInput
                                         id="password"
                                         name="password"

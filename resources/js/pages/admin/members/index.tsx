@@ -15,10 +15,9 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
     Dialog,
     DialogContent,
@@ -36,7 +35,6 @@ import {
     RotateCcw,
     Eye,
     PlusCircle,
-    GraduationCap,
 } from 'lucide-react';
 import type { Member, College, Industry } from '@/types';
 
@@ -61,10 +59,23 @@ interface MembersPageProps {
     };
 }
 
+const ALL = '__all__';
+
+const fieldClass =
+    'h-10 w-full rounded-md border !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!bg-white focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:!text-[#071437]';
+
+const selectTriggerClass =
+    '!h-10 w-full cursor-pointer rounded-md !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none transition-all duration-200 hover:!border-[#C4CADA] hover:!bg-[#FCFCFC] focus-visible:!border-[#1B84FF] focus-visible:!bg-white focus-visible:!ring-[3px] focus-visible:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:hover:!bg-[#FCFCFC]';
+
+const selectMenuClass =
+    'z-[60] rounded-xl !border-[#F1F1F4] !bg-white p-1 !text-[#071437] shadow-[0_12px_32px_-8px_rgba(7,20,55,0.16)] dark:!bg-white dark:!text-[#071437]';
+
+const selectItemClass =
+    'cursor-pointer rounded-lg py-2 pr-8 pl-2.5 text-[13px] text-[#071437] focus:!bg-[#F1F6FF] focus:!text-[#1B84FF] dark:text-[#071437]';
+
 export default function MembersIndex({
     members,
     colleges,
-    industries,
     filters,
 }: MembersPageProps) {
     const [search, setSearch] = useState(filters.search || '');
@@ -72,7 +83,6 @@ export default function MembersIndex({
     const [selectedStatus, setSelectedStatus] = useState(filters.membership_status || '');
     const [selectedVerification, setSelectedVerification] = useState(filters.verification_status || '');
 
-    // Action Dialogs state
     const [verifyMember, setVerifyMember] = useState<Member | null>(null);
     const [verifyMethod, setVerifyMethod] = useState('committee_manual');
     const [evidenceNote, setEvidenceNote] = useState('');
@@ -97,196 +107,210 @@ export default function MembersIndex({
     };
 
     const handleApprove = (id: number) => {
-        router.post(`/admin/members/${id}/approve`);
+        router.post(`/admin/members/${id}/approve`, {}, { preserveScroll: true });
     };
 
     const handleVerifySubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!verifyMember) return;
-        router.post(`/admin/members/${verifyMember.id}/verify`, {
-            method: verifyMethod,
-            evidence_note: evidenceNote,
-        }, {
-            onSuccess: () => {
-                setVerifyMember(null);
-                setEvidenceNote('');
+        router.post(
+            `/admin/members/${verifyMember.id}/verify`,
+            {
+                method: verifyMethod,
+                evidence_note: evidenceNote,
             },
-        });
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setVerifyMember(null);
+                    setEvidenceNote('');
+                },
+            }
+        );
     };
 
     const handleSuspendSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!suspendMember) return;
-        router.post(`/admin/members/${suspendMember.id}/suspend`, {
-            reason: suspendReason,
-        }, {
-            onSuccess: () => {
-                setSuspendMember(null);
-                setSuspendReason('');
-            },
-        });
+        router.post(
+            `/admin/members/${suspendMember.id}/suspend`,
+            { reason: suspendReason },
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setSuspendMember(null);
+                    setSuspendReason('');
+                },
+            }
+        );
     };
 
     const handleReactivate = (id: number) => {
-        router.post(`/admin/members/${id}/reactivate`);
+        router.post(`/admin/members/${id}/reactivate`, {}, { preserveScroll: true });
     };
 
     const handleAssignCode = (id: number) => {
-        router.post(`/admin/members/${id}/assign-code`);
+        router.post(`/admin/members/${id}/assign-code`, {}, { preserveScroll: true });
     };
 
-    // TanStack Table Column Definitions
     const columnHelper = createColumnHelper<Member>();
-    const columns = useMemo(() => [
-        columnHelper.accessor('member_code', {
-            header: 'Member ID',
-            cell: (info) => (
-                <div className="font-mono text-xs font-semibold text-slate-800 dark:text-slate-200">
-                    {info.getValue() || (
-                        <button
-                            onClick={() => handleAssignCode(info.row.original.id)}
-                            className="text-xs text-indigo-600 hover:underline flex items-center gap-1"
+    const columns = useMemo(
+        () => [
+            columnHelper.accessor('member_code', {
+                header: 'Member ID',
+                cell: (info) => (
+                    <div className="font-mono text-[12.5px] font-semibold text-[#071437]">
+                        {info.getValue() || (
+                            <button
+                                type="button"
+                                onClick={() => handleAssignCode(info.row.original.id)}
+                                className="inline-flex cursor-pointer items-center gap-1 text-[12px] font-semibold text-[#1B84FF] hover:text-[#006AE6]"
+                            >
+                                <PlusCircle className="size-3.5" /> Assign ID
+                            </button>
+                        )}
+                    </div>
+                ),
+            }),
+            columnHelper.accessor('user.name', {
+                header: 'Alumnus',
+                cell: (info) => (
+                    <div>
+                        <div className="text-[13px] font-semibold text-[#071437]">
+                            {info.getValue()}
+                        </div>
+                        <div className="text-[11.5px] text-[#78829D]">
+                            {info.row.original.user?.email}
+                        </div>
+                    </div>
+                ),
+            }),
+            columnHelper.accessor('college.short_name', {
+                header: 'Cadet College',
+                cell: (info) => (
+                    <div>
+                        <div className="text-[12.5px] font-medium text-[#071437]">
+                            {info.getValue() || info.row.original.college?.name || 'Not set'}
+                        </div>
+                        <div className="text-[11px] text-[#99A1B7]">
+                            Roll: {info.row.original.college_roll_no || 'N/A'} ({info.row.original.intake_year || '1997'})
+                        </div>
+                    </div>
+                ),
+            }),
+            columnHelper.accessor('profile.designation', {
+                header: 'Profession & Org',
+                cell: (info) => (
+                    <div>
+                        <div className="text-[12.5px] font-medium text-[#071437]">
+                            {info.getValue() || '—'}
+                        </div>
+                        <div className="text-[11.5px] text-[#78829D]">
+                            {info.row.original.profile?.organization || info.row.original.profile?.city || '—'}
+                        </div>
+                    </div>
+                ),
+            }),
+            columnHelper.accessor('membership_status', {
+                header: 'Membership',
+                cell: (info) => {
+                    const s = info.getValue();
+                    return (
+                        <span
+                            className={`inline-flex rounded-md px-2 py-0.5 text-[11px] font-semibold capitalize ${
+                                s === 'approved'
+                                    ? 'bg-[#EAFFF1] text-[#17C653]'
+                                    : s === 'pending'
+                                      ? 'bg-[#FFF8DD] text-[#B45309]'
+                                      : s === 'suspended'
+                                        ? 'bg-[#FFEEF3] text-[#F8285A]'
+                                        : 'bg-[#F1F1F4] text-[#4B5675]'
+                            }`}
                         >
-                            <PlusCircle className="size-3" /> Assign ID
-                        </button>
-                    )}
-                </div>
-            ),
-        }),
-        columnHelper.accessor('user.name', {
-            header: 'Alumnus',
-            cell: (info) => (
-                <div>
-                    <div className="font-semibold text-xs text-slate-900 dark:text-white">
-                        {info.getValue()}
-                    </div>
-                    <div className="text-[11px] text-slate-500">
-                        {info.row.original.user?.email}
-                    </div>
-                </div>
-            ),
-        }),
-        columnHelper.accessor('college.short_name', {
-            header: 'Cadet College',
-            cell: (info) => (
-                <div>
-                    <div className="font-medium text-xs text-slate-800 dark:text-slate-200">
-                        {info.getValue() || info.row.original.college?.name}
-                    </div>
-                    <div className="text-[10px] text-slate-400">
-                        Roll: {info.row.original.college_roll_no || 'N/A'} (1997)
-                    </div>
-                </div>
-            ),
-        }),
-        columnHelper.accessor('profile.designation', {
-            header: 'Profession & Org',
-            cell: (info) => (
-                <div>
-                    <div className="text-xs font-medium text-slate-800 dark:text-slate-200">
-                        {info.getValue() || '—'}
-                    </div>
-                    <div className="text-[11px] text-slate-500">
-                        {info.row.original.profile?.organization || info.row.original.profile?.city || '—'}
-                    </div>
-                </div>
-            ),
-        }),
-        columnHelper.accessor('membership_status', {
-            header: 'Membership',
-            cell: (info) => {
-                const s = info.getValue();
-                return (
-                    <Badge
-                        className={`text-[10px] capitalize ${
-                            s === 'approved'
-                                ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-                                : s === 'pending'
-                                ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
-                                : s === 'suspended'
-                                ? 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
-                                : 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300'
-                        }`}
-                    >
-                        {s}
-                    </Badge>
-                );
-            },
-        }),
-        columnHelper.accessor('verification_status', {
-            header: 'Verification',
-            cell: (info) => {
-                const v = info.getValue();
-                return (
-                    <Badge
-                        variant="outline"
-                        className={`text-[10px] capitalize font-medium ${
-                            v === 'verified'
-                                ? 'border-emerald-500 text-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/20'
-                                : v === 'pending'
-                                ? 'border-amber-500 text-amber-600 bg-amber-50/50 dark:bg-amber-950/20'
-                                : 'border-slate-300 text-slate-500'
-                        }`}
-                    >
-                        {v}
-                    </Badge>
-                );
-            },
-        }),
-        columnHelper.display({
-            id: 'actions',
-            header: () => <div className="text-right">Actions</div>,
-            cell: (info) => {
-                const m = info.row.original;
-                return (
-                    <div className="flex items-center justify-end gap-1.5">
-                        <Link
-                            href={`/admin/members/${m.id}`}
-                            className="p-1 rounded text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
-                            title="View Full Profile"
+                            {s}
+                        </span>
+                    );
+                },
+            }),
+            columnHelper.accessor('verification_status', {
+                header: 'Verification',
+                cell: (info) => {
+                    const v = info.getValue();
+                    return (
+                        <span
+                            className={`inline-flex rounded-md px-2 py-0.5 text-[11px] font-semibold capitalize ${
+                                v === 'verified'
+                                    ? 'bg-[#EAFFF1] text-[#17C653]'
+                                    : v === 'pending'
+                                      ? 'bg-[#FFF8DD] text-[#B45309]'
+                                      : 'bg-[#F1F1F4] text-[#78829D]'
+                            }`}
                         >
-                            <Eye className="size-4" />
-                        </Link>
-                        {m.membership_status === 'pending' && (
-                            <button
-                                onClick={() => handleApprove(m.id)}
-                                className="p-1 rounded text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
-                                title="Approve Membership"
+                            {v}
+                        </span>
+                    );
+                },
+            }),
+            columnHelper.display({
+                id: 'actions',
+                header: () => <div className="text-right">Actions</div>,
+                cell: (info) => {
+                    const m = info.row.original;
+                    return (
+                        <div className="flex items-center justify-end gap-1">
+                            <Link
+                                href={`/admin/members/${m.id}`}
+                                className="rounded-lg p-1.5 text-[#78829D] transition-colors hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
+                                title="View Full Profile"
                             >
-                                <CheckCircle2 className="size-4" />
-                            </button>
-                        )}
-                        {m.verification_status !== 'verified' && (
-                            <button
-                                onClick={() => setVerifyMember(m)}
-                                className="p-1 rounded text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-950/40"
-                                title="Verify 1997 Intake Affiliation"
-                            >
-                                <ShieldCheck className="size-4" />
-                            </button>
-                        )}
-                        {m.membership_status !== 'suspended' ? (
-                            <button
-                                onClick={() => setSuspendMember(m)}
-                                className="p-1 rounded text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40"
-                                title="Suspend Member"
-                            >
-                                <Ban className="size-4" />
-                            </button>
-                        ) : (
-                            <button
-                                onClick={() => handleReactivate(m.id)}
-                                className="p-1 rounded text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950/40"
-                                title="Reactivate Member"
-                            >
-                                <RotateCcw className="size-4" />
-                            </button>
-                        )}
-                    </div>
-                );
-            },
-        }),
-    ], []);
+                                <Eye className="size-4" />
+                            </Link>
+                            {m.membership_status === 'pending' && (
+                                <button
+                                    type="button"
+                                    onClick={() => handleApprove(m.id)}
+                                    className="cursor-pointer rounded-lg p-1.5 text-[#17C653] transition-colors hover:bg-[#EAFFF1]"
+                                    title="Approve Membership"
+                                >
+                                    <CheckCircle2 className="size-4" />
+                                </button>
+                            )}
+                            {m.verification_status !== 'verified' && (
+                                <button
+                                    type="button"
+                                    onClick={() => setVerifyMember(m)}
+                                    className="cursor-pointer rounded-lg p-1.5 text-[#1B84FF] transition-colors hover:bg-[#F1F6FF]"
+                                    title="Verify 1997 Intake Affiliation"
+                                >
+                                    <ShieldCheck className="size-4" />
+                                </button>
+                            )}
+                            {m.membership_status !== 'suspended' ? (
+                                <button
+                                    type="button"
+                                    onClick={() => setSuspendMember(m)}
+                                    className="cursor-pointer rounded-lg p-1.5 text-[#F8285A] transition-colors hover:bg-[#FFEEF3]"
+                                    title="Suspend Member"
+                                >
+                                    <Ban className="size-4" />
+                                </button>
+                            ) : (
+                                <button
+                                    type="button"
+                                    onClick={() => handleReactivate(m.id)}
+                                    className="cursor-pointer rounded-lg p-1.5 text-[#B45309] transition-colors hover:bg-[#FFF8DD]"
+                                    title="Reactivate Member"
+                                >
+                                    <RotateCcw className="size-4" />
+                                </button>
+                            )}
+                        </div>
+                    );
+                },
+            }),
+        ],
+        []
+    );
 
     const table = useReactTable({
         data: members.data,
@@ -295,112 +319,120 @@ export default function MembersIndex({
     });
 
     return (
-        <AdminLayout
-            title="Member Management"
-            breadcrumbs={[{ title: 'Members' }]}
-        >
+        <AdminLayout title="Member Management" breadcrumbs={[{ title: 'Members' }]}>
             <Head title="Member Management - INTAKE 97 Admin" />
 
-            <div className="space-y-6">
+            <div className="w-full space-y-6">
                 {/* Topbar */}
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                        <h1 className="text-[22px] font-semibold tracking-tight text-[#071437]">
                             Alumni Member Registry
                         </h1>
-                        <p className="text-xs text-slate-500 mt-1">
+                        <p className="mt-1 text-[13px] text-[#78829D]">
                             Showing {members.from || 0} to {members.to || 0} of {members.total} registered alumni across participating Cadet Colleges.
                         </p>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <a
-                            href="/admin/members/export"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs font-semibold hover:bg-slate-50 transition-colors"
-                        >
-                            <Download className="size-3.5" />
-                            Export CSV
-                        </a>
-                    </div>
+                    <a
+                        href="/admin/members/export"
+                        className="inline-flex h-9 items-center gap-1.5 self-start rounded-lg border border-[#DBDFE9] bg-white px-3.5 text-[12.5px] font-semibold text-[#4B5675] transition-colors hover:bg-[#F9F9F9] hover:text-[#071437] sm:self-auto"
+                    >
+                        <Download className="size-3.5 text-[#78829D]" />
+                        Export CSV
+                    </a>
                 </div>
 
                 {/* Filter Toolbar */}
-                <Card className="p-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-                        {/* Search */}
+                <div className="rounded-xl border border-[#F1F1F4] bg-white p-4 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
                         <form onSubmit={handleSearchSubmit} className="relative sm:col-span-2">
-                            <Search className="absolute left-3 top-2.5 size-4 text-slate-400" />
+                            <Search className="absolute top-3 left-3 size-4 text-[#99A1B7]" />
                             <Input
                                 placeholder="Search by name, email, roll or ID..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                className="pl-9 text-xs"
+                                className={`${fieldClass} pl-9`}
                             />
                         </form>
 
-                        {/* College Filter */}
-                        <select
-                            value={selectedCollege}
-                            onChange={(e) => {
-                                setSelectedCollege(e.target.value);
-                                applyFilter('college_id', e.target.value);
+                        <Select
+                            value={selectedCollege || ALL}
+                            onValueChange={(val) => {
+                                const next = val === ALL ? '' : val;
+                                setSelectedCollege(next);
+                                applyFilter('college_id', next);
                             }}
-                            className="w-full text-xs rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2"
                         >
-                            <option value="">All Cadet Colleges</option>
-                            {colleges.map((c) => (
-                                <option key={c.id} value={c.id}>
-                                    {c.short_name || c.name}
-                                </option>
-                            ))}
-                        </select>
+                            <SelectTrigger className={selectTriggerClass}>
+                                <SelectValue placeholder="All Cadet Colleges" />
+                            </SelectTrigger>
+                            <SelectContent className={selectMenuClass}>
+                                <SelectItem value={ALL} className={selectItemClass}>
+                                    All Cadet Colleges
+                                </SelectItem>
+                                {colleges.map((c) => (
+                                    <SelectItem key={c.id} value={String(c.id)} className={selectItemClass}>
+                                        {c.short_name || c.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
 
-                        {/* Membership Status */}
-                        <select
-                            value={selectedStatus}
-                            onChange={(e) => {
-                                setSelectedStatus(e.target.value);
-                                applyFilter('membership_status', e.target.value);
+                        <Select
+                            value={selectedStatus || ALL}
+                            onValueChange={(val) => {
+                                const next = val === ALL ? '' : val;
+                                setSelectedStatus(next);
+                                applyFilter('membership_status', next);
                             }}
-                            className="w-full text-xs rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2"
                         >
-                            <option value="">All Membership Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="under_review">Under Review</option>
-                            <option value="approved">Approved</option>
-                            <option value="rejected">Rejected</option>
-                            <option value="suspended">Suspended</option>
-                        </select>
+                            <SelectTrigger className={selectTriggerClass}>
+                                <SelectValue placeholder="All Membership Status" />
+                            </SelectTrigger>
+                            <SelectContent className={selectMenuClass}>
+                                <SelectItem value={ALL} className={selectItemClass}>All Membership Status</SelectItem>
+                                <SelectItem value="pending" className={selectItemClass}>Pending</SelectItem>
+                                <SelectItem value="under_review" className={selectItemClass}>Under Review</SelectItem>
+                                <SelectItem value="approved" className={selectItemClass}>Approved</SelectItem>
+                                <SelectItem value="rejected" className={selectItemClass}>Rejected</SelectItem>
+                                <SelectItem value="suspended" className={selectItemClass}>Suspended</SelectItem>
+                            </SelectContent>
+                        </Select>
 
-                        {/* Verification Status */}
-                        <select
-                            value={selectedVerification}
-                            onChange={(e) => {
-                                setSelectedVerification(e.target.value);
-                                applyFilter('verification_status', e.target.value);
+                        <Select
+                            value={selectedVerification || ALL}
+                            onValueChange={(val) => {
+                                const next = val === ALL ? '' : val;
+                                setSelectedVerification(next);
+                                applyFilter('verification_status', next);
                             }}
-                            className="w-full text-xs rounded-md border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2"
                         >
-                            <option value="">All Verification Status</option>
-                            <option value="unverified">Unverified</option>
-                            <option value="pending">Pending</option>
-                            <option value="verified">Verified</option>
-                            <option value="rejected">Rejected</option>
-                        </select>
+                            <SelectTrigger className={selectTriggerClass}>
+                                <SelectValue placeholder="All Verification Status" />
+                            </SelectTrigger>
+                            <SelectContent className={selectMenuClass}>
+                                <SelectItem value={ALL} className={selectItemClass}>All Verification Status</SelectItem>
+                                <SelectItem value="unverified" className={selectItemClass}>Unverified</SelectItem>
+                                <SelectItem value="pending" className={selectItemClass}>Pending</SelectItem>
+                                <SelectItem value="verified" className={selectItemClass}>Verified</SelectItem>
+                                <SelectItem value="rejected" className={selectItemClass}>Rejected</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
-                </Card>
+                </div>
 
-                {/* TanStack Data Table */}
-                <Card className="overflow-hidden border-slate-200 dark:border-slate-800">
+                {/* Data Table */}
+                <div className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
                     <Table>
-                        <TableHeader className="bg-slate-50 dark:bg-slate-900/60">
+                        <TableHeader className="bg-[#FCFCFC]">
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id}>
+                                <TableRow key={headerGroup.id} className="border-[#F1F1F4] hover:bg-transparent">
                                     {headerGroup.headers.map((header) => (
-                                        <TableHead key={header.id} className="text-xs font-semibold">
-                                            {flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
+                                        <TableHead
+                                            key={header.id}
+                                            className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase"
+                                        >
+                                            {flexRender(header.column.columnDef.header, header.getContext())}
                                         </TableHead>
                                     ))}
                                 </TableRow>
@@ -408,20 +440,17 @@ export default function MembersIndex({
                         </TableHeader>
                         <TableBody>
                             {table.getRowModel().rows.length === 0 ? (
-                                <TableRow>
-                                    <TableCell colSpan={columns.length} className="h-28 text-center text-xs text-slate-500">
+                                <TableRow className="hover:bg-transparent">
+                                    <TableCell colSpan={columns.length} className="h-28 text-center text-[13px] text-[#99A1B7]">
                                         No alumni records found matching the active filters.
                                     </TableCell>
                                 </TableRow>
                             ) : (
                                 table.getRowModel().rows.map((row) => (
-                                    <TableRow key={row.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
+                                    <TableRow key={row.id} className="border-[#F1F1F4] hover:bg-[#FCFCFC]">
                                         {row.getVisibleCells().map((cell) => (
-                                            <TableCell key={cell.id} className="text-xs py-3">
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
+                                            <TableCell key={cell.id} className="px-4 py-3.5">
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                             </TableCell>
                                         ))}
                                     </TableRow>
@@ -431,62 +460,63 @@ export default function MembersIndex({
                     </Table>
 
                     {/* Pagination */}
-                    <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
+                    <div className="flex flex-col items-center justify-between gap-3 border-t border-[#F1F1F4] px-5 py-3.5 text-[12.5px] text-[#78829D] sm:flex-row">
                         <div>
                             Page {members.current_page} of {members.last_page}
                         </div>
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex flex-wrap items-center gap-1.5">
                             {members.links.map((link, idx) => (
                                 <Link
                                     key={idx}
                                     href={link.url || '#'}
                                     disabled={!link.url}
                                     dangerouslySetInnerHTML={{ __html: link.label }}
-                                    className={`px-2.5 py-1 rounded text-xs transition-colors ${
+                                    className={`rounded-lg px-2.5 py-1 text-[12px] font-medium transition-colors ${
                                         link.active
-                                            ? 'bg-emerald-600 text-white font-semibold'
+                                            ? 'bg-[#1B84FF] font-semibold text-white'
                                             : link.url
-                                            ? 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300'
-                                            : 'text-slate-300 dark:text-slate-700 pointer-events-none'
+                                              ? 'text-[#4B5675] hover:bg-[#F1F6FF] hover:text-[#1B84FF]'
+                                              : 'pointer-events-none text-[#DBDFE9]'
                                     }`}
                                 />
                             ))}
                         </div>
                     </div>
-                </Card>
+                </div>
             </div>
 
             {/* Verification Dialog */}
             <Dialog open={!!verifyMember} onOpenChange={(open) => !open && setVerifyMember(null)}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle className="flex items-center gap-2">
-                            <ShieldCheck className="size-5 text-indigo-600" />
+                <DialogContent className="rounded-2xl border-[#F1F1F4] !bg-white p-0 !text-[#071437] shadow-[0_20px_50px_-12px_rgba(7,20,55,0.18)] sm:max-w-lg">
+                    <DialogHeader className="border-b border-[#F1F1F4] px-6 py-5">
+                        <DialogTitle className="flex items-center gap-2 text-[16px] font-semibold text-[#071437]">
+                            <ShieldCheck className="size-5 text-[#1B84FF]" />
                             Verify 1997 Cadet Affiliation
                         </DialogTitle>
-                        <DialogDescription className="text-xs">
-                            Verify authentic membership for <strong>{verifyMember?.user?.name}</strong> ({verifyMember?.college?.name}, Roll #{verifyMember?.college_roll_no}).
+                        <DialogDescription className="mt-1 text-[12.5px] text-[#78829D]">
+                            Verify authentic membership for <strong className="text-[#071437]">{verifyMember?.user?.name}</strong> ({verifyMember?.college?.name}, Roll #{verifyMember?.college_roll_no}).
                         </DialogDescription>
                     </DialogHeader>
-                    <form onSubmit={handleVerifySubmit} className="space-y-4 py-2">
+                    <form onSubmit={handleVerifySubmit} className="space-y-4 px-6 py-5">
                         <div>
-                            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-1">
-                                Verification Method
+                            <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                Verification Method <span className="text-[#F8285A]">*</span>
                             </label>
-                            <select
-                                value={verifyMethod}
-                                onChange={(e) => setVerifyMethod(e.target.value)}
-                                className="w-full text-xs rounded-md border border-slate-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-900"
-                            >
-                                <option value="committee_manual">Manual Verification by Committee Member</option>
-                                <option value="college_record">Cadet College Roll / Official Archive Record</option>
-                                <option value="alumni_reference">Batchmate Alumnus Reference</option>
-                                <option value="document_proof">Supporting Documentary Proof</option>
-                            </select>
+                            <Select value={verifyMethod} onValueChange={setVerifyMethod}>
+                                <SelectTrigger className={selectTriggerClass}>
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent className={selectMenuClass}>
+                                    <SelectItem value="committee_manual" className={selectItemClass}>Manual Verification by Committee Member</SelectItem>
+                                    <SelectItem value="college_record" className={selectItemClass}>Cadet College Roll / Official Archive Record</SelectItem>
+                                    <SelectItem value="alumni_reference" className={selectItemClass}>Batchmate Alumnus Reference</SelectItem>
+                                    <SelectItem value="document_proof" className={selectItemClass}>Supporting Documentary Proof</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
                         <div>
-                            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-1">
-                                Verification Evidence Note (Audited)
+                            <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                Verification Evidence Note <span className="text-[#F8285A]">*</span>
                             </label>
                             <textarea
                                 required
@@ -494,14 +524,22 @@ export default function MembersIndex({
                                 placeholder="State clearly the verified record, committee member reference, or documentary basis..."
                                 value={evidenceNote}
                                 onChange={(e) => setEvidenceNote(e.target.value)}
-                                className="w-full text-xs rounded-md border border-slate-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-900"
+                                className={`${fieldClass} h-auto py-2.5`}
                             />
                         </div>
-                        <DialogFooter>
-                            <Button type="button" variant="outline" size="sm" onClick={() => setVerifyMember(null)}>
+                        <DialogFooter className="border-t border-[#F1F1F4] pt-4">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setVerifyMember(null)}
+                                className="h-9.5 rounded-lg border-[#DBDFE9] !bg-white px-4 text-[12.5px] font-semibold text-[#4B5675] hover:!bg-[#F9F9F9]"
+                            >
                                 Cancel
                             </Button>
-                            <Button type="submit" size="sm" className="bg-indigo-600 hover:bg-indigo-700">
+                            <Button
+                                type="submit"
+                                className="h-9.5 rounded-lg bg-[#1B84FF] px-4 text-[12.5px] font-semibold text-white hover:bg-[#006AE6]"
+                            >
                                 Confirm Verification
                             </Button>
                         </DialogFooter>
@@ -511,20 +549,20 @@ export default function MembersIndex({
 
             {/* Suspension Dialog */}
             <Dialog open={!!suspendMember} onOpenChange={(open) => !open && setSuspendMember(null)}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle className="flex items-center gap-2 text-rose-600">
+                <DialogContent className="rounded-2xl border-[#F1F1F4] !bg-white p-0 !text-[#071437] shadow-[0_20px_50px_-12px_rgba(7,20,55,0.18)] sm:max-w-lg">
+                    <DialogHeader className="border-b border-[#F1F1F4] px-6 py-5">
+                        <DialogTitle className="flex items-center gap-2 text-[16px] font-semibold text-[#F8285A]">
                             <Ban className="size-5" />
                             Suspend Alumni Account
                         </DialogTitle>
-                        <DialogDescription className="text-xs">
-                            Suspend account for <strong>{suspendMember?.user?.name}</strong>. The user will lose access to member-only directories and events.
+                        <DialogDescription className="mt-1 text-[12.5px] text-[#78829D]">
+                            Suspend account for <strong className="text-[#071437]">{suspendMember?.user?.name}</strong>. The user will lose access to member-only directories and events.
                         </DialogDescription>
                     </DialogHeader>
-                    <form onSubmit={handleSuspendSubmit} className="space-y-4 py-2">
+                    <form onSubmit={handleSuspendSubmit} className="space-y-4 px-6 py-5">
                         <div>
-                            <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 block mb-1">
-                                Suspension Reason
+                            <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                Suspension Reason <span className="text-[#F8285A]">*</span>
                             </label>
                             <textarea
                                 required
@@ -532,14 +570,22 @@ export default function MembersIndex({
                                 placeholder="Document reason for suspension (e.g. policy violation, identity mismatch)..."
                                 value={suspendReason}
                                 onChange={(e) => setSuspendReason(e.target.value)}
-                                className="w-full text-xs rounded-md border border-slate-300 dark:border-slate-700 p-2 bg-white dark:bg-slate-900"
+                                className={`${fieldClass} h-auto py-2.5`}
                             />
                         </div>
-                        <DialogFooter>
-                            <Button type="button" variant="outline" size="sm" onClick={() => setSuspendMember(null)}>
+                        <DialogFooter className="border-t border-[#F1F1F4] pt-4">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setSuspendMember(null)}
+                                className="h-9.5 rounded-lg border-[#DBDFE9] !bg-white px-4 text-[12.5px] font-semibold text-[#4B5675] hover:!bg-[#F9F9F9]"
+                            >
                                 Cancel
                             </Button>
-                            <Button type="submit" size="sm" variant="destructive">
+                            <Button
+                                type="submit"
+                                className="h-9.5 rounded-lg bg-[#F8285A] px-4 text-[12.5px] font-semibold text-white hover:bg-[#e11d48]"
+                            >
                                 Confirm Suspension
                             </Button>
                         </DialogFooter>

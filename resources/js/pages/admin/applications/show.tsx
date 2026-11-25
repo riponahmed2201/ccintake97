@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
     ArrowLeft,
@@ -20,20 +18,26 @@ interface ApplicationShowProps {
     application: MembershipApplication;
 }
 
+const fieldClass =
+    'w-full rounded-md border !border-[#DBDFE9] !bg-[#FCFCFC] p-3 text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!bg-white focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:!text-[#071437]';
+
 export default function ApplicationShow({ application }: ApplicationShowProps) {
     const [selectedDecision, setSelectedDecision] = useState<'approved' | 'rejected' | 'under_review' | 'info_required'>('approved');
     const [decisionNote, setDecisionNote] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        router.post(`/admin/applications/${application.id}/decide`, {
-            status: selectedDecision,
-            note: decisionNote,
-        }, {
-            onSuccess: () => {
-                setDecisionNote('');
+        router.post(
+            `/admin/applications/${application.id}/decide`,
+            {
+                status: selectedDecision,
+                note: decisionNote,
             },
-        });
+            {
+                preserveScroll: true,
+                onSuccess: () => setDecisionNote(''),
+            }
+        );
     };
 
     return (
@@ -46,230 +50,201 @@ export default function ApplicationShow({ application }: ApplicationShowProps) {
         >
             <Head title={`Application ${application.application_no} - INTAKE 97 Admin`} />
 
-            <div className="space-y-6">
-                <Link
-                    href="/admin/applications"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 dark:hover:text-white"
-                >
-                    <ArrowLeft className="size-4" />
-                    Back to Applications Queue
-                </Link>
+            <div className="w-full space-y-6">
+                <div>
+                    <Link
+                        href="/admin/applications"
+                        className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-[#78829D] transition-colors hover:text-[#1B84FF]"
+                    >
+                        <ArrowLeft className="size-4" />
+                        Back to Applications Queue
+                    </Link>
+                </div>
 
                 {/* Hero Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div className="flex flex-col justify-between gap-4 rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:flex-row sm:items-center sm:p-6">
                     <div>
-                        <div className="flex items-center gap-3">
-                            <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+                        <div className="flex flex-wrap items-center gap-2.5">
+                            <h1 className="text-[20px] font-bold tracking-tight text-[#071437]">
                                 Application #{application.application_no}
                             </h1>
-                            <Badge
-                                className={`text-[10px] capitalize ${
+                            <span
+                                className={`inline-flex rounded-md px-2.5 py-0.5 text-[11px] font-semibold capitalize ${
                                     application.status === 'approved'
-                                        ? 'bg-emerald-100 text-emerald-800'
+                                        ? 'bg-[#EAFFF1] text-[#17C653]'
                                         : application.status === 'submitted'
-                                        ? 'bg-amber-100 text-amber-800'
-                                        : application.status === 'under_review'
-                                        ? 'bg-blue-100 text-blue-800'
-                                        : 'bg-rose-100 text-rose-800'
+                                          ? 'bg-[#FFF8DD] text-[#B45309]'
+                                          : application.status === 'under_review'
+                                            ? 'bg-[#F1F6FF] text-[#1B84FF]'
+                                            : 'bg-[#FFEEF3] text-[#F8285A]'
                                 }`}
                             >
                                 {application.status.replace('_', ' ')}
-                            </Badge>
+                            </span>
                         </div>
-                        <p className="text-xs text-slate-500 mt-1">
+                        <p className="mt-1 text-[12.5px] text-[#78829D]">
                             Submitted on {new Date(application.submitted_at).toLocaleString()}
                         </p>
                     </div>
 
-                    <div className="text-xs text-slate-600 dark:text-slate-400">
-                        Applicant: <strong>{application.member?.user?.name}</strong> ({application.member?.user?.email})
+                    <div className="text-[13px] text-[#4B5675]">
+                        Applicant: <strong className="font-semibold text-[#071437]">{application.member?.user?.name}</strong>{' '}
+                        <span className="text-[#78829D]">({application.member?.user?.email})</span>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Left: 2 Columns - Credentials Details */}
-                    <div className="lg:col-span-2 space-y-6">
-                        {/* Cadet College Credential Declaration */}
-                        <Card>
-                            <CardHeader className="pb-3">
-                                <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                                    <GraduationCap className="size-4 text-emerald-600" />
-                                    Declared Cadet College Credentials
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-4 text-xs">
-                                <div className="grid grid-cols-2 gap-4 p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-100 dark:border-slate-800">
-                                    <div>
-                                        <div className="text-slate-400 text-[11px]">Declared Cadet College</div>
-                                        <div className="font-bold text-sm text-slate-900 dark:text-white mt-0.5">
-                                            {application.declared_college?.name}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="text-slate-400 text-[11px]">Declared College Roll #</div>
-                                        <div className="font-bold text-sm text-slate-900 dark:text-white mt-0.5">
-                                            {application.declared_roll_no}
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="text-slate-400 text-[11px]">Community Intake Year</div>
-                                        <div className="font-semibold text-slate-800 dark:text-slate-200 mt-0.5">
-                                            1997 (Strict Batch Rule)
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="text-slate-400 text-[11px]">Alumni Reference</div>
-                                        <div className="font-semibold text-slate-800 dark:text-slate-200 mt-0.5">
-                                            {application.reference_name || 'None Declared'} {application.reference_phone ? `(${application.reference_phone})` : ''}
-                                        </div>
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                    {/* Left: 2 Columns */}
+                    <div className="space-y-6 lg:col-span-2">
+                        <section className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-6">
+                            <h2 className="flex items-center gap-2 border-b border-[#F1F1F4] pb-3.5 text-[15px] font-semibold text-[#071437]">
+                                <GraduationCap className="size-4 text-[#1B84FF]" />
+                                Declared Cadet College Credentials
+                            </h2>
+
+                            <div className="mt-4 grid grid-cols-1 gap-4 rounded-xl border border-[#F1F1F4] bg-[#FCFCFC] p-4 sm:grid-cols-2">
+                                <div>
+                                    <div className="text-[11.5px] text-[#99A1B7]">Declared Cadet College</div>
+                                    <div className="mt-0.5 text-[14px] font-semibold text-[#071437]">
+                                        {application.declared_college?.name}
                                     </div>
                                 </div>
-
-                                <div className="p-3 bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200/60 rounded-lg text-amber-800 dark:text-amber-300 text-[11px] leading-relaxed">
-                                    <strong>Important Verification Policy:</strong> Do not approve an application solely based on declared name. Cross-reference college records, batch databases, or obtain confirmation from a Cadet College intake coordinator.
+                                <div>
+                                    <div className="text-[11.5px] text-[#99A1B7]">Declared College Roll #</div>
+                                    <div className="mt-0.5 text-[14px] font-semibold text-[#071437]">
+                                        {application.declared_roll_no}
+                                    </div>
                                 </div>
-                            </CardContent>
-                        </Card>
+                                <div>
+                                    <div className="text-[11.5px] text-[#99A1B7]">Community Intake Year</div>
+                                    <div className="mt-0.5 text-[13px] font-semibold text-[#071437]">
+                                        1997 (Strict Batch Rule)
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="text-[11.5px] text-[#99A1B7]">Alumni Reference</div>
+                                    <div className="mt-0.5 text-[13px] font-semibold text-[#071437]">
+                                        {application.reference_name || 'None Declared'}{' '}
+                                        {application.reference_phone ? `(${application.reference_phone})` : ''}
+                                    </div>
+                                </div>
+                            </div>
 
-                        {/* Review History */}
-                        <Card>
-                            <CardHeader className="pb-3">
-                                <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                                    <History className="size-4 text-blue-600" />
-                                    Review & Decision Audit History
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="p-0">
-                                <div className="divide-y divide-slate-100 dark:divide-slate-800 text-xs">
-                                    {application.reviews?.length === 0 ? (
-                                        <div className="p-4 text-center text-slate-400 text-xs">
-                                            No decisions logged yet.
-                                        </div>
-                                    ) : (
-                                        application.reviews?.map((r) => (
-                                            <div key={r.id} className="p-4 space-y-1">
-                                                <div className="flex items-center justify-between font-semibold">
-                                                    <span className="text-slate-800 dark:text-slate-200">
-                                                        Transition: {r.from_status} → {r.to_status}
-                                                    </span>
-                                                    <span className="text-slate-400 text-[11px]">
-                                                        {new Date(r.created_at).toLocaleString()}
-                                                    </span>
-                                                </div>
-                                                {r.note && (
-                                                    <p className="text-slate-600 dark:text-slate-300 text-[11px]">
-                                                        Note: {r.note}
-                                                    </p>
-                                                )}
-                                                <div className="text-[10px] text-slate-400">
-                                                    Action by: {r.actor?.name || 'Reviewer'}
-                                                </div>
+                            <div className="mt-4 rounded-xl border border-[#F6C000]/30 bg-[#FFFBEB] p-3.5 text-[12px] leading-relaxed text-[#92400E]">
+                                <strong>Important Verification Policy:</strong> Do not approve an application solely based on declared name. Cross-reference college records, batch databases, or obtain confirmation from a Cadet College intake coordinator.
+                            </div>
+                        </section>
+
+                        <section className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                            <div className="border-b border-[#F1F1F4] px-5 py-4 sm:px-6">
+                                <h2 className="flex items-center gap-2 text-[15px] font-semibold text-[#071437]">
+                                    <History className="size-4 text-[#1B84FF]" />
+                                    Review &amp; Decision Audit History
+                                </h2>
+                            </div>
+                            <div className="divide-y divide-[#F1F1F4] text-[13px]">
+                                {application.reviews?.length === 0 ? (
+                                    <div className="p-6 text-center text-[12.5px] text-[#99A1B7]">
+                                        No decisions logged yet.
+                                    </div>
+                                ) : (
+                                    application.reviews?.map((r) => (
+                                        <div key={r.id} className="space-y-1 px-5 py-4 sm:px-6">
+                                            <div className="flex items-center justify-between font-semibold">
+                                                <span className="text-[#071437]">
+                                                    Transition: {r.from_status} → {r.to_status}
+                                                </span>
+                                                <span className="text-[11.5px] font-normal text-[#99A1B7]">
+                                                    {new Date(r.created_at).toLocaleString()}
+                                                </span>
                                             </div>
-                                        ))
-                                    )}
-                                </div>
-                            </CardContent>
-                        </Card>
+                                            {r.note && <p className="text-[12.5px] text-[#4B5675]">Note: {r.note}</p>}
+                                            <div className="text-[11.5px] text-[#99A1B7]">
+                                                Action by: {r.actor?.name || 'Reviewer'}
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </section>
                     </div>
 
                     {/* Right: Decision Action Card */}
-                    <div className="space-y-6">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                                    <UserCheck className="size-4 text-indigo-600" />
-                                    Review Decision
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <form onSubmit={handleSubmit} className="space-y-4">
-                                    <div>
-                                        <label className="text-xs font-semibold block mb-1.5 text-slate-700 dark:text-slate-300">
-                                            Target Decision Status
-                                        </label>
-                                        <div className="space-y-2">
-                                            <label className="flex items-center gap-2 p-2 rounded-lg border text-xs cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
-                                                <input
-                                                    type="radio"
-                                                    name="decision"
-                                                    value="approved"
-                                                    checked={selectedDecision === 'approved'}
-                                                    onChange={() => setSelectedDecision('approved')}
-                                                    className="text-emerald-600"
-                                                />
-                                                <CheckCircle2 className="size-4 text-emerald-600" />
-                                                <span className="font-medium">Approve Application</span>
-                                            </label>
+                    <div>
+                        <section className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-6">
+                            <h2 className="flex items-center gap-2 border-b border-[#F1F1F4] pb-3.5 text-[15px] font-semibold text-[#071437]">
+                                <UserCheck className="size-4 text-[#1B84FF]" />
+                                Review Decision
+                            </h2>
 
-                                            <label className="flex items-center gap-2 p-2 rounded-lg border text-xs cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
-                                                <input
-                                                    type="radio"
-                                                    name="decision"
-                                                    value="under_review"
-                                                    checked={selectedDecision === 'under_review'}
-                                                    onChange={() => setSelectedDecision('under_review')}
-                                                    className="text-blue-600"
-                                                />
-                                                <Clock className="size-4 text-blue-600" />
-                                                <span className="font-medium">Mark Under Review</span>
-                                            </label>
-
-                                            <label className="flex items-center gap-2 p-2 rounded-lg border text-xs cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
-                                                <input
-                                                    type="radio"
-                                                    name="decision"
-                                                    value="info_required"
-                                                    checked={selectedDecision === 'info_required'}
-                                                    onChange={() => setSelectedDecision('info_required')}
-                                                    className="text-amber-600"
-                                                />
-                                                <HelpCircle className="size-4 text-amber-600" />
-                                                <span className="font-medium">Request Additional Info</span>
-                                            </label>
-
-                                            <label className="flex items-center gap-2 p-2 rounded-lg border text-xs cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
-                                                <input
-                                                    type="radio"
-                                                    name="decision"
-                                                    value="rejected"
-                                                    checked={selectedDecision === 'rejected'}
-                                                    onChange={() => setSelectedDecision('rejected')}
-                                                    className="text-rose-600"
-                                                />
-                                                <XCircle className="size-4 text-rose-600" />
-                                                <span className="font-medium text-rose-600">Reject Application</span>
-                                            </label>
-                                        </div>
+                            <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+                                <div>
+                                    <label className="mb-2 block text-[12.5px] font-semibold text-[#071437]">
+                                        Target Decision Status
+                                    </label>
+                                    <div className="space-y-2">
+                                        {[
+                                            { value: 'approved' as const, label: 'Approve Application', icon: CheckCircle2, color: 'text-[#17C653]' },
+                                            { value: 'under_review' as const, label: 'Mark Under Review', icon: Clock, color: 'text-[#1B84FF]' },
+                                            { value: 'info_required' as const, label: 'Request Additional Info', icon: HelpCircle, color: 'text-[#B45309]' },
+                                            { value: 'rejected' as const, label: 'Reject Application', icon: XCircle, color: 'text-[#F8285A]' },
+                                        ].map((opt) => {
+                                            const Icon = opt.icon;
+                                            const active = selectedDecision === opt.value;
+                                            return (
+                                                <label
+                                                    key={opt.value}
+                                                    className={`flex cursor-pointer items-center gap-2.5 rounded-lg border p-2.5 text-[12.5px] transition-colors ${
+                                                        active
+                                                            ? 'border-[#1B84FF] bg-[#F1F6FF]/60'
+                                                            : 'border-[#F1F1F4] bg-[#FCFCFC] hover:bg-[#F9F9F9]'
+                                                    }`}
+                                                >
+                                                    <input
+                                                        type="radio"
+                                                        name="decision"
+                                                        value={opt.value}
+                                                        checked={active}
+                                                        onChange={() => setSelectedDecision(opt.value)}
+                                                        className="text-[#1B84FF]"
+                                                    />
+                                                    <Icon className={`size-4 ${opt.color}`} />
+                                                    <span className={`font-semibold ${opt.value === 'rejected' ? 'text-[#F8285A]' : 'text-[#071437]'}`}>
+                                                        {opt.label}
+                                                    </span>
+                                                </label>
+                                            );
+                                        })}
                                     </div>
+                                </div>
 
-                                    <div>
-                                        <label className="text-xs font-semibold block mb-1 text-slate-700 dark:text-slate-300">
-                                            Decision / Internal Note
-                                        </label>
-                                        <textarea
-                                            rows={3}
-                                            placeholder="Provide context or explanation for applicant and reviewer logs..."
-                                            value={decisionNote}
-                                            onChange={(e) => setDecisionNote(e.target.value)}
-                                            className="w-full text-xs rounded-md border p-2 bg-white dark:bg-slate-900"
-                                        />
-                                    </div>
+                                <div>
+                                    <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                        Decision / Internal Note
+                                    </label>
+                                    <textarea
+                                        rows={3}
+                                        placeholder="Provide context or explanation for applicant and reviewer logs..."
+                                        value={decisionNote}
+                                        onChange={(e) => setDecisionNote(e.target.value)}
+                                        className={fieldClass}
+                                    />
+                                </div>
 
-                                    <Button
-                                        type="submit"
-                                        className={`w-full text-xs font-semibold ${
-                                            selectedDecision === 'approved'
-                                                ? 'bg-emerald-600 hover:bg-emerald-700'
-                                                : selectedDecision === 'rejected'
-                                                ? 'bg-rose-600 hover:bg-rose-700'
-                                                : 'bg-indigo-600 hover:bg-indigo-700'
-                                        }`}
-                                    >
-                                        Submit Decision
-                                    </Button>
-                                </form>
-                            </CardContent>
-                        </Card>
+                                <Button
+                                    type="submit"
+                                    className={`h-10 w-full rounded-lg text-[13px] font-semibold text-white ${
+                                        selectedDecision === 'approved'
+                                            ? 'bg-[#17C653] hover:bg-[#13a845]'
+                                            : selectedDecision === 'rejected'
+                                              ? 'bg-[#F8285A] hover:bg-[#e11d48]'
+                                              : 'bg-[#1B84FF] hover:bg-[#006AE6]'
+                                    }`}
+                                >
+                                    Submit Decision
+                                </Button>
+                            </form>
+                        </section>
                     </div>
                 </div>
             </div>

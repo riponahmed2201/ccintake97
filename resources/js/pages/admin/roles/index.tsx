@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -12,8 +9,15 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { ShieldCheck, UserCheck, Edit2 } from 'lucide-react';
-import type { AuthUser } from '@/types';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import { Edit2, ShieldCheck, UserCheck } from 'lucide-react';
 
 interface StaffUserItem {
     id: number;
@@ -28,23 +32,27 @@ interface RolesIndexProps {
 }
 
 export default function RolesIndex({ roles, staffUsers }: RolesIndexProps) {
-    const [selectedUser, setSelectedUser] = useState<any | null>(null);
+    const [selectedUser, setSelectedUser] = useState<StaffUserItem | null>(null);
     const [userRoles, setUserRoles] = useState<string[]>([]);
 
-    const openAssign = (u: any) => {
+    const openAssign = (u: StaffUserItem) => {
         setSelectedUser(u);
-        setUserRoles(u.roles.map((r: any) => r.name));
+        setUserRoles(u.roles.map((r) => r.name));
     };
 
     const handleAssignSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!selectedUser) return;
 
-        router.post(`/admin/roles/assign/${selectedUser.id}`, {
-            roles: userRoles,
-        }, {
-            onSuccess: () => setSelectedUser(null),
-        });
+        router.post(
+            `/admin/roles/assign/${selectedUser.id}`,
+            {
+                roles: userRoles,
+            },
+            {
+                onSuccess: () => setSelectedUser(null),
+            },
+        );
     };
 
     const toggleRole = (roleName: string) => {
@@ -64,121 +72,156 @@ export default function RolesIndex({ roles, staffUsers }: RolesIndexProps) {
 
             <div className="space-y-6">
                 <div>
-                    <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                    <h1 className="text-[20px] font-bold tracking-tight text-[#071437]">
                         Roles & Action-Level Permission Management
                     </h1>
-                    <p className="text-xs text-slate-500 mt-1">
+                    <p className="mt-1 text-[13px] text-[#78829D]">
                         Spatie Role-Based Access Control (RBAC) assigning operational privileges across admin modules.
                     </p>
                 </div>
 
-                {/* Staff Users Assignment Card */}
-                <Card className="overflow-hidden">
-                    <CardHeader className="p-4 border-b">
-                        <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                            <UserCheck className="size-4 text-emerald-600" />
+                <div className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                    <div className="flex items-center gap-2.5 border-b border-[#F1F1F4] px-6 py-4">
+                        <span className="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                            <UserCheck className="size-4" />
+                        </span>
+                        <h2 className="text-[15px] font-bold text-[#071437]">
                             Administrative Staff & Role Assignments
-                        </CardTitle>
-                    </CardHeader>
-                    <Table>
-                        <TableHeader className="bg-slate-50 dark:bg-slate-900/60">
-                            <TableRow>
-                                <TableHead className="text-xs font-semibold">User Name & Email</TableHead>
-                                <TableHead className="text-xs font-semibold">Assigned Roles</TableHead>
-                                <TableHead className="text-xs font-semibold text-right">Action</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {staffUsers.map((u) => (
-                                <TableRow key={u.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
-                                    <TableCell>
-                                        <div className="font-semibold text-xs text-slate-900 dark:text-white">
-                                            {u.name}
-                                        </div>
-                                        <div className="text-[11px] text-slate-500">
-                                            {u.email}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex flex-wrap gap-1.5">
-                                            {u.roles.map((r) => (
-                                                <Badge key={r.id} variant="outline" className="text-[10px] uppercase font-mono text-indigo-600">
-                                                    {r.name.replace('_', ' ')}
-                                                </Badge>
-                                            ))}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        <Button
-                                            size="sm"
-                                            variant="ghost"
-                                            onClick={() => openAssign(u)}
-                                            className="text-xs"
-                                        >
-                                            <Edit2 className="size-3.5 mr-1" /> Edit Roles
-                                        </Button>
-                                    </TableCell>
+                        </h2>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader className="bg-[#FCFCFC]">
+                                <TableRow className="border-[#F1F1F4] hover:bg-transparent">
+                                    <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        User Name & Email
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Assigned Roles
+                                    </TableHead>
+                                    <TableHead className="px-5 py-3.5 text-right text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Action
+                                    </TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </Card>
+                            </TableHeader>
+                            <TableBody>
+                                {staffUsers.map((u) => (
+                                    <TableRow
+                                        key={u.id}
+                                        className="border-[#F1F1F4] transition-colors hover:bg-[#FCFCFC]"
+                                    >
+                                        <TableCell className="px-5 py-3.5">
+                                            <div className="text-[13px] font-semibold text-[#071437]">
+                                                {u.name}
+                                            </div>
+                                            <div className="text-[11.5px] text-[#78829D]">
+                                                {u.email}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="px-4 py-3.5">
+                                            <div className="flex flex-wrap gap-1.5">
+                                                {u.roles.map((r) => (
+                                                    <span
+                                                        key={r.id}
+                                                        className="inline-flex items-center rounded-md border border-[#DCEBFF] bg-[#F1F6FF] px-2 py-0.5 font-mono text-[11px] font-semibold text-[#1B84FF] uppercase"
+                                                    >
+                                                        {r.name.replace('_', ' ')}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="px-5 py-3.5 text-right">
+                                            <Button
+                                                variant="outline"
+                                                onClick={() => openAssign(u)}
+                                                className="h-8 rounded-lg border-[#DBDFE9] bg-white px-3 text-[12px] font-semibold text-[#071437] hover:border-[#1B84FF] hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
+                                            >
+                                                <Edit2 className="mr-1.5 size-3.5" /> Edit Roles
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </div>
 
-                {/* System Defined Roles & Capabilities */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {roles.map((r) => (
-                        <Card key={r.id} className="p-4 space-y-2">
+                        <div
+                            key={r.id}
+                            className="space-y-3 rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]"
+                        >
                             <div className="flex items-center justify-between">
-                                <span className="font-bold text-xs uppercase text-slate-900 dark:text-white flex items-center gap-1.5">
-                                    <ShieldCheck className="size-4 text-indigo-600" />
+                                <span className="flex items-center gap-2 text-[13px] font-bold text-[#071437] uppercase">
+                                    <ShieldCheck className="size-4 text-[#1B84FF]" />
                                     {r.name.replace('_', ' ')}
                                 </span>
-                                <Badge variant="outline" className="text-[10px]">
+                                <span className="inline-flex items-center rounded-full border border-[#E5E7EB] bg-[#FCFCFC] px-2.5 py-0.5 text-[11px] font-semibold text-[#4B5675]">
                                     {r.permissions.length} perms
-                                </Badge>
+                                </span>
                             </div>
-                            <div className="flex flex-wrap gap-1 max-h-24 overflow-y-auto pt-1">
+                            <div className="flex max-h-24 flex-wrap gap-1.5 overflow-y-auto pt-1">
                                 {r.permissions.slice(0, 8).map((p) => (
-                                    <span key={p.id} className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[9px] font-mono text-slate-600 dark:text-slate-400">
+                                    <span
+                                        key={p.id}
+                                        className="rounded-md border border-[#F1F1F4] bg-[#FCFCFC] px-2 py-0.5 font-mono text-[10.5px] text-[#4B5675]"
+                                    >
                                         {p.name}
                                     </span>
                                 ))}
                                 {r.permissions.length > 8 && (
-                                    <span className="text-[9px] text-slate-400 pl-1 self-center">
+                                    <span className="self-center pl-1 text-[11px] text-[#99A1B7]">
                                         +{r.permissions.length - 8} more
                                     </span>
                                 )}
                             </div>
-                        </Card>
+                        </div>
                     ))}
                 </div>
             </div>
 
-            {/* Assign Roles Dialog */}
             <Dialog open={!!selectedUser} onOpenChange={(open) => !open && setSelectedUser(null)}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle className="text-sm font-semibold">
+                <DialogContent className="rounded-2xl border-[#F1F1F4] !bg-white p-0 !text-[#071437] shadow-[0_20px_50px_-12px_rgba(7,20,55,0.18)] sm:max-w-md">
+                    <DialogHeader className="border-b border-[#F1F1F4] px-6 py-5">
+                        <DialogTitle className="text-[16px] font-bold text-[#071437]">
                             Assign Roles for {selectedUser?.name}
                         </DialogTitle>
                     </DialogHeader>
-                    <form onSubmit={handleAssignSubmit} className="space-y-4 py-2 text-xs">
-                        <div className="space-y-2 max-h-60 overflow-y-auto">
+                    <form onSubmit={handleAssignSubmit} className="space-y-4 px-6 py-5">
+                        <div className="max-h-64 space-y-2 overflow-y-auto">
                             {roles.map((r) => (
-                                <label key={r.id} className="flex items-center gap-2 p-2 rounded-lg border text-xs cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+                                <label
+                                    key={r.id}
+                                    className="flex cursor-pointer items-center gap-2.5 rounded-lg border border-[#F1F1F4] bg-[#FCFCFC] p-3 text-[13px] transition-colors hover:border-[#DBDFE9]"
+                                >
                                     <input
                                         type="checkbox"
                                         checked={userRoles.includes(r.name)}
                                         onChange={() => toggleRole(r.name)}
-                                        className="rounded text-indigo-600"
+                                        className="size-4 rounded border-[#DBDFE9] text-[#1B84FF] focus:ring-[#1B84FF]"
                                     />
-                                    <span className="font-medium uppercase">{r.name.replace('_', ' ')}</span>
+                                    <span className="font-semibold text-[#071437] uppercase">
+                                        {r.name.replace('_', ' ')}
+                                    </span>
                                 </label>
                             ))}
                         </div>
-                        <DialogFooter>
-                            <Button type="button" variant="outline" size="sm" onClick={() => setSelectedUser(null)}>Cancel</Button>
-                            <Button type="submit" size="sm" className="bg-indigo-600 hover:bg-indigo-700">Save Role Assignments</Button>
+                        <DialogFooter className="border-t border-[#F1F1F4] pt-4">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setSelectedUser(null)}
+                                className="h-9 rounded-lg border-[#DBDFE9] bg-white px-4 text-[13px] font-semibold text-[#4B5675] hover:bg-[#FCFCFC]"
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                className="h-9 rounded-lg bg-[#1B84FF] px-4 text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90"
+                            >
+                                Save Role Assignments
+                            </Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>

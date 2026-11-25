@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
-import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Search, FileCheck2, ArrowRight } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Search, ArrowRight } from 'lucide-react';
 import type { MembershipApplication, College } from '@/types';
 
 interface ApplicationsIndexProps {
@@ -23,6 +22,20 @@ interface ApplicationsIndexProps {
         college_id?: string;
     };
 }
+
+const ALL = '__all__';
+
+const fieldClass =
+    'h-10 w-full rounded-md border !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!bg-white focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:!text-[#071437]';
+
+const selectTriggerClass =
+    '!h-10 w-full cursor-pointer rounded-md !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none transition-all duration-200 hover:!border-[#C4CADA] hover:!bg-[#FCFCFC] focus-visible:!border-[#1B84FF] focus-visible:!bg-white focus-visible:!ring-[3px] focus-visible:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:hover:!bg-[#FCFCFC]';
+
+const selectMenuClass =
+    'z-[60] rounded-xl !border-[#F1F1F4] !bg-white p-1 !text-[#071437] shadow-[0_12px_32px_-8px_rgba(7,20,55,0.16)] dark:!bg-white dark:!text-[#071437]';
+
+const selectItemClass =
+    'cursor-pointer rounded-lg py-2 pr-8 pl-2.5 text-[13px] text-[#071437] focus:!bg-[#F1F6FF] focus:!text-[#1B84FF] dark:text-[#071437]';
 
 export default function ApplicationsIndex({
     applications,
@@ -45,133 +58,149 @@ export default function ApplicationsIndex({
 
     return (
         <AdminLayout
-            title="Membership Applications Queue"
+            title="Membership Applications"
             breadcrumbs={[{ title: 'Applications' }]}
         >
             <Head title="Membership Applications Queue - INTAKE 97 Admin" />
 
-            <div className="space-y-6">
+            <div className="w-full space-y-6">
                 <div>
-                    <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                    <h1 className="text-[22px] font-semibold tracking-tight text-[#071437]">
                         Membership Application Review Queue
                     </h1>
-                    <p className="text-xs text-slate-500 mt-1">
+                    <p className="mt-1 text-[13px] text-[#78829D]">
                         Review declared Cadet College intake credentials and manage verification decision workflows.
                     </p>
                 </div>
 
                 {/* Filters */}
-                <Card className="p-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="rounded-xl border border-[#F1F1F4] bg-white p-4 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                         <div className="relative">
-                            <Search className="absolute left-3 top-2.5 size-4 text-slate-400" />
+                            <Search className="absolute top-3 left-3 size-4 text-[#99A1B7]" />
                             <Input
                                 placeholder="Search by name, email or application #..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && applyFilter('search', search)}
-                                className="pl-9 text-xs"
+                                className={`${fieldClass} pl-9`}
                             />
                         </div>
 
-                        <select
-                            value={selectedStatus}
-                            onChange={(e) => {
-                                setSelectedStatus(e.target.value);
-                                applyFilter('status', e.target.value);
+                        <Select
+                            value={selectedStatus || ALL}
+                            onValueChange={(val) => {
+                                const next = val === ALL ? '' : val;
+                                setSelectedStatus(next);
+                                applyFilter('status', next);
                             }}
-                            className="text-xs rounded-md border p-2 bg-white dark:bg-slate-900"
                         >
-                            <option value="">All Application Statuses</option>
-                            <option value="submitted">Submitted (New)</option>
-                            <option value="under_review">Under Review</option>
-                            <option value="info_required">Info Required</option>
-                            <option value="approved">Approved</option>
-                            <option value="rejected">Rejected</option>
-                        </select>
+                            <SelectTrigger className={selectTriggerClass}>
+                                <SelectValue placeholder="All Application Statuses" />
+                            </SelectTrigger>
+                            <SelectContent className={selectMenuClass}>
+                                <SelectItem value={ALL} className={selectItemClass}>All Application Statuses</SelectItem>
+                                <SelectItem value="submitted" className={selectItemClass}>Submitted (New)</SelectItem>
+                                <SelectItem value="under_review" className={selectItemClass}>Under Review</SelectItem>
+                                <SelectItem value="info_required" className={selectItemClass}>Info Required</SelectItem>
+                                <SelectItem value="approved" className={selectItemClass}>Approved</SelectItem>
+                                <SelectItem value="rejected" className={selectItemClass}>Rejected</SelectItem>
+                            </SelectContent>
+                        </Select>
 
-                        <select
-                            value={selectedCollege}
-                            onChange={(e) => {
-                                setSelectedCollege(e.target.value);
-                                applyFilter('college_id', e.target.value);
+                        <Select
+                            value={selectedCollege || ALL}
+                            onValueChange={(val) => {
+                                const next = val === ALL ? '' : val;
+                                setSelectedCollege(next);
+                                applyFilter('college_id', next);
                             }}
-                            className="text-xs rounded-md border p-2 bg-white dark:bg-slate-900"
                         >
-                            <option value="">All Cadet Colleges</option>
-                            {colleges.map((c) => (
-                                <option key={c.id} value={c.id}>{c.name}</option>
-                            ))}
-                        </select>
+                            <SelectTrigger className={selectTriggerClass}>
+                                <SelectValue placeholder="All Cadet Colleges" />
+                            </SelectTrigger>
+                            <SelectContent className={selectMenuClass}>
+                                <SelectItem value={ALL} className={selectItemClass}>All Cadet Colleges</SelectItem>
+                                {colleges.map((c) => (
+                                    <SelectItem key={c.id} value={String(c.id)} className={selectItemClass}>
+                                        {c.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
-                </Card>
+                </div>
 
                 {/* Queue Table */}
-                <Card className="overflow-hidden">
+                <div className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
                     <Table>
-                        <TableHeader className="bg-slate-50 dark:bg-slate-900/60">
-                            <TableRow>
-                                <TableHead className="text-xs font-semibold">Application #</TableHead>
-                                <TableHead className="text-xs font-semibold">Applicant</TableHead>
-                                <TableHead className="text-xs font-semibold">Declared College & Roll</TableHead>
-                                <TableHead className="text-xs font-semibold">Status</TableHead>
-                                <TableHead className="text-xs font-semibold">Submission Date</TableHead>
-                                <TableHead className="text-xs font-semibold text-right">Action</TableHead>
+                        <TableHeader className="bg-[#FCFCFC]">
+                            <TableRow className="border-[#F1F1F4] hover:bg-transparent">
+                                <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">Application #</TableHead>
+                                <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">Applicant</TableHead>
+                                <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">Declared College &amp; Roll</TableHead>
+                                <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">Status</TableHead>
+                                <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">Submitted</TableHead>
+                                <TableHead className="px-5 py-3.5 text-right text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">Action</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {applications.data.length === 0 ? (
-                                <TableRow>
-                                    <TableCell colSpan={6} className="h-28 text-center text-xs text-slate-500">
+                                <TableRow className="hover:bg-transparent">
+                                    <TableCell colSpan={6} className="h-28 text-center text-[13px] text-[#99A1B7]">
                                         No applications match your query.
                                     </TableCell>
                                 </TableRow>
                             ) : (
                                 applications.data.map((app) => (
-                                    <TableRow key={app.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
-                                        <TableCell className="font-mono text-xs font-bold text-slate-900 dark:text-white">
+                                    <TableRow key={app.id} className="border-[#F1F1F4] hover:bg-[#FCFCFC]">
+                                        <TableCell className="px-5 py-3.5 font-mono text-[12.5px] font-semibold text-[#071437]">
                                             {app.application_no}
                                         </TableCell>
-                                        <TableCell>
-                                            <div className="font-semibold text-xs text-slate-900 dark:text-white">
+                                        <TableCell className="px-5 py-3.5">
+                                            <div className="text-[13px] font-semibold text-[#071437]">
                                                 {app.member?.user?.name}
                                             </div>
-                                            <div className="text-[11px] text-slate-500">
+                                            <div className="text-[11.5px] text-[#78829D]">
                                                 {app.member?.user?.email}
                                             </div>
                                         </TableCell>
-                                        <TableCell>
-                                            <div className="font-medium text-xs text-slate-800 dark:text-slate-200">
+                                        <TableCell className="px-5 py-3.5">
+                                            <div className="text-[12.5px] font-medium text-[#071437]">
                                                 {app.declared_college?.name}
                                             </div>
-                                            <div className="text-[10px] text-slate-400">
+                                            <div className="text-[11px] text-[#99A1B7]">
                                                 Roll #{app.declared_roll_no} (Intake 1997)
                                             </div>
                                         </TableCell>
-                                        <TableCell>
-                                            <Badge
-                                                className={`text-[10px] capitalize ${
+                                        <TableCell className="px-5 py-3.5">
+                                            <span
+                                                className={`inline-flex rounded-md px-2 py-0.5 text-[11px] font-semibold capitalize ${
                                                     app.status === 'approved'
-                                                        ? 'bg-emerald-100 text-emerald-800'
+                                                        ? 'bg-[#EAFFF1] text-[#17C653]'
                                                         : app.status === 'submitted'
-                                                        ? 'bg-amber-100 text-amber-800'
-                                                        : app.status === 'under_review'
-                                                        ? 'bg-blue-100 text-blue-800'
-                                                        : 'bg-rose-100 text-rose-800'
+                                                          ? 'bg-[#FFF8DD] text-[#B45309]'
+                                                          : app.status === 'under_review'
+                                                            ? 'bg-[#F1F6FF] text-[#1B84FF]'
+                                                            : 'bg-[#FFEEF3] text-[#F8285A]'
                                                 }`}
                                             >
                                                 {app.status.replace('_', ' ')}
-                                            </Badge>
+                                            </span>
                                         </TableCell>
-                                        <TableCell className="text-xs text-slate-500">
-                                            {new Date(app.submitted_at).toLocaleDateString()}
+                                        <TableCell className="px-5 py-3.5 text-[12.5px] text-[#78829D]">
+                                            {new Date(app.submitted_at).toLocaleDateString('en-US', {
+                                                month: 'short',
+                                                day: 'numeric',
+                                                year: 'numeric',
+                                            })}
                                         </TableCell>
-                                        <TableCell className="text-right">
+                                        <TableCell className="px-5 py-3.5 text-right">
                                             <Link
                                                 href={`/admin/applications/${app.id}`}
-                                                className="inline-flex items-center gap-1 px-3 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-xs font-semibold text-slate-800 dark:text-slate-200"
+                                                className="inline-flex items-center gap-1 rounded-lg border border-[#DBDFE9] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#4B5675] transition-colors hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
                                             >
-                                                Inspect <ArrowRight className="size-3" />
+                                                Inspect <ArrowRight className="size-3.5" />
                                             </Link>
                                         </TableCell>
                                     </TableRow>
@@ -179,7 +208,7 @@ export default function ApplicationsIndex({
                             )}
                         </TableBody>
                     </Table>
-                </Card>
+                </div>
             </div>
         </AdminLayout>
     );

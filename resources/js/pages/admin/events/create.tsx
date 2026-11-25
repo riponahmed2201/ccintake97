@@ -1,15 +1,37 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { ArrowLeft } from 'lucide-react';
 import type { EventCategory } from '@/types';
 
 interface EventCreateProps {
     categories: EventCategory[];
 }
+
+const fieldClass =
+    'h-10 w-full rounded-md border !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!bg-white focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:!text-[#071437]';
+
+const textareaClass =
+    'w-full rounded-md border !border-[#DBDFE9] !bg-[#FCFCFC] p-3 text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!bg-white focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:!text-[#071437]';
+
+const selectTriggerClass =
+    '!h-10 w-full cursor-pointer rounded-md !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none transition-all duration-200 hover:!border-[#C4CADA] hover:!bg-[#FCFCFC] focus-visible:!border-[#1B84FF] focus-visible:!bg-white focus-visible:!ring-[3px] focus-visible:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:hover:!bg-[#FCFCFC]';
+
+const selectMenuClass =
+    'z-[60] rounded-xl !border-[#F1F1F4] !bg-white p-1 !text-[#071437] shadow-[0_12px_32px_-8px_rgba(7,20,55,0.16)] dark:!bg-white dark:!text-[#071437]';
+
+const selectItemClass =
+    'cursor-pointer rounded-lg py-2 pr-8 pl-2.5 text-[13px] text-[#071437] focus:!bg-[#F1F6FF] focus:!text-[#1B84FF] dark:text-[#071437]';
+
+const labelClass = 'mb-1.5 block text-[12.5px] font-semibold text-[#071437]';
 
 export default function EventCreate({ categories }: EventCreateProps) {
     const [title, setTitle] = useState('');
@@ -61,184 +83,230 @@ export default function EventCreate({ categories }: EventCreateProps) {
         >
             <Head title="Create New Event - INTAKE 97 Admin" />
 
-            <div className="max-w-4xl mx-auto space-y-6">
+            <div className="mx-auto max-w-4xl space-y-5">
                 <Link
                     href="/admin/events"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900"
+                    className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#78829D] transition-colors hover:text-[#071437]"
                 >
                     <ArrowLeft className="size-4" />
                     Back to Events
                 </Link>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-base font-bold">Create Alumni Event / Reunion</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div className="sm:col-span-2">
-                                    <label className="font-semibold block mb-1">Event Title *</label>
-                                    <Input
-                                        required
-                                        placeholder="e.g. INTAKE 97 Grand Silver Jubilee Reunion"
-                                        value={title}
-                                        onChange={(e) => setTitle(e.target.value)}
-                                    />
-                                </div>
+                <div className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                    <div className="border-b border-[#F1F1F4] px-6 py-4">
+                        <h2 className="text-[16px] font-bold text-[#071437]">
+                            Create Alumni Event / Reunion
+                        </h2>
+                        <p className="mt-0.5 text-[12.5px] text-[#78829D]">
+                            Configure schedule, venue, capacity, and registration rules for the event.
+                        </p>
+                    </div>
 
-                                <div>
-                                    <label className="font-semibold block mb-1">Category *</label>
-                                    <select
-                                        value={categoryId}
-                                        onChange={(e) => setCategoryId(e.target.value)}
-                                        className="w-full text-xs rounded-md border p-2 bg-white dark:bg-slate-900"
-                                    >
+                    <form onSubmit={handleSubmit} className="space-y-5 p-6">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div className="sm:col-span-2">
+                                <label className={labelClass}>Event Title *</label>
+                                <input
+                                    required
+                                    className={fieldClass}
+                                    placeholder="e.g. INTAKE 97 Grand Silver Jubilee Reunion"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                />
+                            </div>
+
+                            <div>
+                                <label className={labelClass}>Category *</label>
+                                <Select value={categoryId} onValueChange={setCategoryId}>
+                                    <SelectTrigger className={selectTriggerClass}>
+                                        <SelectValue placeholder="Select category" />
+                                    </SelectTrigger>
+                                    <SelectContent className={selectMenuClass}>
                                         {categories.map((cat) => (
-                                            <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                            <SelectItem key={cat.id} value={String(cat.id)} className={selectItemClass}>
+                                                {cat.name}
+                                            </SelectItem>
                                         ))}
-                                    </select>
-                                </div>
+                                    </SelectContent>
+                                </Select>
+                            </div>
 
-                                <div>
-                                    <label className="font-semibold block mb-1">Visibility Audience *</label>
-                                    <select
-                                        value={visibility}
-                                        onChange={(e) => setVisibility(e.target.value)}
-                                        className="w-full text-xs rounded-md border p-2 bg-white dark:bg-slate-900"
-                                    >
-                                        <option value="members">All Registered Members</option>
-                                        <option value="verified_members">Verified Members Only</option>
-                                        <option value="public">Public (Open for Everyone)</option>
-                                    </select>
-                                </div>
+                            <div>
+                                <label className={labelClass}>Visibility Audience *</label>
+                                <Select value={visibility} onValueChange={setVisibility}>
+                                    <SelectTrigger className={selectTriggerClass}>
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent className={selectMenuClass}>
+                                        <SelectItem value="members" className={selectItemClass}>
+                                            All Registered Members
+                                        </SelectItem>
+                                        <SelectItem value="verified_members" className={selectItemClass}>
+                                            Verified Members Only
+                                        </SelectItem>
+                                        <SelectItem value="public" className={selectItemClass}>
+                                            Public (Open for Everyone)
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
 
-                                <div>
-                                    <label className="font-semibold block mb-1">Venue / Hall *</label>
-                                    <Input
-                                        required
-                                        placeholder="e.g. Army Golf Club, Dhaka"
-                                        value={venue}
-                                        onChange={(e) => setVenue(e.target.value)}
+                            <div>
+                                <label className={labelClass}>Venue / Hall *</label>
+                                <input
+                                    required
+                                    className={fieldClass}
+                                    placeholder="e.g. Army Golf Club, Dhaka"
+                                    value={venue}
+                                    onChange={(e) => setVenue(e.target.value)}
+                                />
+                            </div>
+
+                            <div>
+                                <label className={labelClass}>Venue Address</label>
+                                <input
+                                    className={fieldClass}
+                                    placeholder="e.g. Airport Road, Dhaka"
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                />
+                            </div>
+
+                            <div>
+                                <label className={labelClass}>Google Maps Link</label>
+                                <input
+                                    className={fieldClass}
+                                    placeholder="https://maps.google.com/..."
+                                    value={googleMapsLink}
+                                    onChange={(e) => setGoogleMapsLink(e.target.value)}
+                                />
+                            </div>
+
+                            <div>
+                                <label className={labelClass}>Registration Closes At</label>
+                                <input
+                                    type="date"
+                                    className={fieldClass}
+                                    value={registrationClosesAt}
+                                    onChange={(e) => setRegistrationClosesAt(e.target.value)}
+                                />
+                            </div>
+
+                            <div>
+                                <label className={labelClass}>Event Start Date *</label>
+                                <input
+                                    required
+                                    type="date"
+                                    className={fieldClass}
+                                    value={startsOn}
+                                    onChange={(e) => setStartsOn(e.target.value)}
+                                />
+                            </div>
+
+                            <div>
+                                <label className={labelClass}>Event End Date</label>
+                                <input
+                                    type="date"
+                                    className={fieldClass}
+                                    value={endsOn}
+                                    onChange={(e) => setEndsOn(e.target.value)}
+                                />
+                            </div>
+
+                            <div>
+                                <label className={labelClass}>Start Time</label>
+                                <input
+                                    type="time"
+                                    className={fieldClass}
+                                    value={startTime}
+                                    onChange={(e) => setStartTime(e.target.value)}
+                                />
+                            </div>
+
+                            <div>
+                                <label className={labelClass}>End Time</label>
+                                <input
+                                    type="time"
+                                    className={fieldClass}
+                                    value={endTime}
+                                    onChange={(e) => setEndTime(e.target.value)}
+                                />
+                            </div>
+
+                            <div>
+                                <label className={labelClass}>Maximum Capacity (Seats)</label>
+                                <input
+                                    type="number"
+                                    className={fieldClass}
+                                    placeholder="Leave blank for unlimited"
+                                    value={capacity}
+                                    onChange={(e) => setCapacity(e.target.value)}
+                                />
+                            </div>
+
+                            <div>
+                                <label className={labelClass}>Registration Fee (BDT)</label>
+                                <input
+                                    type="number"
+                                    className={fieldClass}
+                                    placeholder="0 for free"
+                                    value={registrationFee}
+                                    onChange={(e) => setRegistrationFee(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="flex flex-wrap items-center gap-4 pt-2 sm:col-span-2">
+                                <label className="flex cursor-pointer items-center gap-2 text-[13px] font-medium text-[#071437]">
+                                    <input
+                                        type="checkbox"
+                                        checked={allowsGuests}
+                                        onChange={(e) => setAllowsGuests(e.target.checked)}
+                                        className="size-4 rounded border-[#DBDFE9] text-[#1B84FF] focus:ring-[#1B84FF]"
                                     />
-                                </div>
+                                    Allow members to register additional guests (spouse, children)
+                                </label>
 
-                                <div>
-                                    <label className="font-semibold block mb-1">Venue Address</label>
-                                    <Input
-                                        placeholder="e.g. Airport Road, Dhaka"
-                                        value={address}
-                                        onChange={(e) => setAddress(e.target.value)}
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="font-semibold block mb-1">Event Start Date *</label>
-                                    <Input
-                                        required
-                                        type="date"
-                                        value={startsOn}
-                                        onChange={(e) => setStartsOn(e.target.value)}
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="font-semibold block mb-1">Event End Date</label>
-                                    <Input
-                                        type="date"
-                                        value={endsOn}
-                                        onChange={(e) => setEndsOn(e.target.value)}
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="font-semibold block mb-1">Start Time</label>
-                                    <Input
-                                        type="time"
-                                        value={startTime}
-                                        onChange={(e) => setStartTime(e.target.value)}
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="font-semibold block mb-1">End Time</label>
-                                    <Input
-                                        type="time"
-                                        value={endTime}
-                                        onChange={(e) => setEndTime(e.target.value)}
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="font-semibold block mb-1">Maximum Capacity (Seats)</label>
-                                    <Input
-                                        type="number"
-                                        placeholder="Leave blank for unlimited"
-                                        value={capacity}
-                                        onChange={(e) => setCapacity(e.target.value)}
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="font-semibold block mb-1">Registration Fee (BDT)</label>
-                                    <Input
-                                        type="number"
-                                        placeholder="0 for free"
-                                        value={registrationFee}
-                                        onChange={(e) => setRegistrationFee(e.target.value)}
-                                    />
-                                </div>
-
-                                <div className="flex items-center gap-4 sm:col-span-2 pt-2">
-                                    <label className="flex items-center gap-2 cursor-pointer font-medium">
+                                {allowsGuests && (
+                                    <div className="flex items-center gap-2 text-[13px] text-[#4B5675]">
+                                        <span>Max guests:</span>
                                         <input
-                                            type="checkbox"
-                                            checked={allowsGuests}
-                                            onChange={(e) => setAllowsGuests(e.target.checked)}
-                                            className="rounded text-emerald-600"
+                                            type="number"
+                                            className={`${fieldClass} w-20`}
+                                            value={maxGuests}
+                                            onChange={(e) => setMaxGuests(e.target.value)}
                                         />
-                                        Allow members to register additional guests (spouse, children)
-                                    </label>
-
-                                    {allowsGuests && (
-                                        <div className="flex items-center gap-2">
-                                            <span>Max guests:</span>
-                                            <Input
-                                                type="number"
-                                                className="w-16"
-                                                value={maxGuests}
-                                                onChange={(e) => setMaxGuests(e.target.value)}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="sm:col-span-2">
-                                    <label className="font-semibold block mb-1">Event Description & Program Schedule</label>
-                                    <textarea
-                                        rows={5}
-                                        className="w-full text-xs rounded-md border p-3 bg-white dark:bg-slate-900"
-                                        placeholder="Full details regarding reunion agenda, dress code, catering, accommodation..."
-                                        value={description}
-                                        onChange={(e) => setDescription(e.target.value)}
-                                    />
-                                </div>
+                                    </div>
+                                )}
                             </div>
 
-                            <div className="flex items-center justify-end gap-3 pt-4 border-t">
-                                <Link
-                                    href="/admin/events"
-                                    className="px-4 py-2 rounded-lg border text-xs font-semibold hover:bg-slate-50"
-                                >
-                                    Cancel
-                                </Link>
-                                <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700 text-xs font-semibold">
-                                    Save Event Draft
-                                </Button>
+                            <div className="sm:col-span-2">
+                                <label className={labelClass}>Event Description & Program Schedule</label>
+                                <textarea
+                                    rows={5}
+                                    className={textareaClass}
+                                    placeholder="Full details regarding reunion agenda, dress code, catering, accommodation..."
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                />
                             </div>
-                        </form>
-                    </CardContent>
-                </Card>
+                        </div>
+
+                        <div className="flex items-center justify-end gap-3 border-t border-[#F1F1F4] pt-5">
+                            <Link
+                                href="/admin/events"
+                                className="inline-flex h-10 items-center rounded-lg border border-[#DBDFE9] bg-white px-4 text-[13px] font-semibold text-[#4B5675] transition-colors hover:bg-[#FCFCFC]"
+                            >
+                                Cancel
+                            </Link>
+                            <Button
+                                type="submit"
+                                className="h-10 rounded-lg bg-[#1B84FF] px-5 text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90"
+                            >
+                                Save Event Draft
+                            </Button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </AdminLayout>
     );

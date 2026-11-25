@@ -1,11 +1,15 @@
 import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
-import { Card } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Newspaper, Plus, CheckCircle2, Trash2 } from 'lucide-react';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import { CheckCircle2, Newspaper, Plus, Trash2 } from 'lucide-react';
 import type { Article } from '@/types';
 
 interface ArticlesIndexProps {
@@ -16,6 +20,12 @@ interface ArticlesIndexProps {
         total: number;
     };
 }
+
+const statusPill = (status: string) => {
+    if (status === 'published') return 'border border-emerald-200 bg-emerald-50 text-emerald-700';
+    if (status === 'pending_review') return 'border border-amber-200 bg-amber-50 text-amber-700';
+    return 'border border-[#E5E7EB] bg-[#F9FAFB] text-[#78829D]';
+};
 
 export default function ArticlesIndex({ articles }: ArticlesIndexProps) {
     const handlePublish = (id: number) => {
@@ -36,105 +46,124 @@ export default function ArticlesIndex({ articles }: ArticlesIndexProps) {
             <Head title="News & Notices - INTAKE 97 Admin" />
 
             <div className="space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                        <h1 className="text-[20px] font-bold tracking-tight text-[#071437]">
                             Association News & Announcements
                         </h1>
-                        <p className="text-xs text-slate-500 mt-1">
+                        <p className="mt-1 text-[13px] text-[#78829D]">
                             Publish official notices, alumni achievements, and association news.
                         </p>
                     </div>
                     <Link
                         href="/admin/articles/create"
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs transition-colors"
+                        className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#1B84FF] px-4 text-[13px] font-semibold text-white shadow-xs transition-colors hover:bg-[#1B84FF]/90"
                     >
-                        <Plus className="size-3.5" /> Compose Article
+                        <Plus className="size-4" />
+                        Compose Article
                     </Link>
                 </div>
 
-                <Card className="overflow-hidden">
-                    <Table>
-                        <TableHeader className="bg-slate-50 dark:bg-slate-900/60">
-                            <TableRow>
-                                <TableHead className="text-xs font-semibold">Title</TableHead>
-                                <TableHead className="text-xs font-semibold">Category</TableHead>
-                                <TableHead className="text-xs font-semibold">Author</TableHead>
-                                <TableHead className="text-xs font-semibold">Status</TableHead>
-                                <TableHead className="text-xs font-semibold">Published At</TableHead>
-                                <TableHead className="text-xs font-semibold text-right">Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {articles.data.length === 0 ? (
-                                <TableRow>
-                                    <TableCell colSpan={6} className="h-28 text-center text-xs text-slate-500">
-                                        No articles found. Click "Compose Article" to draft one.
-                                    </TableCell>
+                <div className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader className="bg-[#FCFCFC]">
+                                <TableRow className="border-[#F1F1F4] hover:bg-transparent">
+                                    <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Title
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Category
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Author
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Status
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Published At
+                                    </TableHead>
+                                    <TableHead className="px-5 py-3.5 text-right text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Actions
+                                    </TableHead>
                                 </TableRow>
-                            ) : (
-                                articles.data.map((art) => (
-                                    <TableRow key={art.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
-                                        <TableCell>
-                                            <div className="font-semibold text-xs text-slate-900 dark:text-white">
-                                                {art.title}
-                                            </div>
-                                            <div className="text-[11px] text-slate-400 line-clamp-1">
-                                                {art.excerpt || '—'}
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className="text-xs text-slate-700 dark:text-slate-300">
-                                            {art.category?.name}
-                                        </TableCell>
-                                        <TableCell className="text-xs text-slate-700 dark:text-slate-300">
-                                            {art.author?.name || 'Editorial Staff'}
-                                        </TableCell>
-                                        <TableCell>
-                                            <Badge
-                                                className={`text-[10px] capitalize ${
-                                                    art.status === 'published'
-                                                        ? 'bg-emerald-100 text-emerald-800'
-                                                        : art.status === 'pending_review'
-                                                        ? 'bg-amber-100 text-amber-800'
-                                                        : 'bg-slate-100 text-slate-700'
-                                                }`}
-                                            >
-                                                {art.status.replace('_', ' ')}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="text-xs text-slate-500">
-                                            {art.published_at ? new Date(art.published_at).toLocaleDateString() : 'Unpublished'}
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            <div className="flex items-center justify-end gap-1.5">
-                                                {art.status !== 'published' && (
-                                                    <Button
-                                                        size="sm"
-                                                        variant="ghost"
-                                                        onClick={() => handlePublish(art.id)}
-                                                        className="text-xs text-emerald-600"
-                                                        title="Approve & Publish"
-                                                    >
-                                                        <CheckCircle2 className="size-4" />
-                                                    </Button>
-                                                )}
-                                                <Button
-                                                    size="sm"
-                                                    variant="ghost"
-                                                    onClick={() => handleDelete(art.id)}
-                                                    className="text-xs text-rose-500"
-                                                    title="Delete Article"
-                                                >
-                                                    <Trash2 className="size-4" />
-                                                </Button>
-                                            </div>
+                            </TableHeader>
+                            <TableBody>
+                                {articles.data.length === 0 ? (
+                                    <TableRow className="border-[#F1F1F4] hover:bg-transparent">
+                                        <TableCell colSpan={6} className="h-32 text-center text-[13px] text-[#78829D]">
+                                            No articles found. Click "Compose Article" to draft one.
                                         </TableCell>
                                     </TableRow>
-                                ))
-                            )}
-                        </TableBody>
-                    </Table>
-                </Card>
+                                ) : (
+                                    articles.data.map((art) => (
+                                        <TableRow
+                                            key={art.id}
+                                            className="border-[#F1F1F4] transition-colors hover:bg-[#FCFCFC]"
+                                        >
+                                            <TableCell className="px-5 py-3.5">
+                                                <div className="flex items-start gap-2.5">
+                                                    <div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-[#F1F6FF] text-[#1B84FF]">
+                                                        <Newspaper className="size-4" />
+                                                    </div>
+                                                    <div>
+                                                        <div className="text-[13px] font-semibold text-[#071437]">
+                                                            {art.title}
+                                                        </div>
+                                                        <div className="line-clamp-1 text-[11.5px] text-[#78829D]">
+                                                            {art.excerpt || '—'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell className="px-4 py-3.5 text-[13px] text-[#4B5675]">
+                                                {art.category?.name}
+                                            </TableCell>
+                                            <TableCell className="px-4 py-3.5 text-[13px] text-[#4B5675]">
+                                                {art.author?.name || 'Editorial Staff'}
+                                            </TableCell>
+                                            <TableCell className="px-4 py-3.5">
+                                                <span
+                                                    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold capitalize ${statusPill(art.status)}`}
+                                                >
+                                                    {art.status.replace('_', ' ')}
+                                                </span>
+                                            </TableCell>
+                                            <TableCell className="px-4 py-3.5 text-[13px] text-[#78829D]">
+                                                {art.published_at
+                                                    ? new Date(art.published_at).toLocaleDateString()
+                                                    : 'Unpublished'}
+                                            </TableCell>
+                                            <TableCell className="px-5 py-3.5 text-right">
+                                                <div className="flex items-center justify-end gap-1">
+                                                    {art.status !== 'published' && (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handlePublish(art.id)}
+                                                            className="inline-flex size-8 items-center justify-center rounded-lg text-emerald-600 transition-colors hover:bg-emerald-50"
+                                                            title="Approve & Publish"
+                                                        >
+                                                            <CheckCircle2 className="size-4" />
+                                                        </button>
+                                                    )}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleDelete(art.id)}
+                                                        className="inline-flex size-8 items-center justify-center rounded-lg text-rose-500 transition-colors hover:bg-rose-50"
+                                                        title="Delete Article"
+                                                    >
+                                                        <Trash2 className="size-4" />
+                                                    </button>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </div>
             </div>
         </AdminLayout>
     );

@@ -1,11 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
-import { Card, CardContent } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
     Dialog,
     DialogContent,
@@ -13,12 +9,28 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { Plus, ExternalLink, Edit2, ImagePlus, Trash2 } from 'lucide-react';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import { Edit2, ExternalLink, ImagePlus, Plus, Trash2 } from 'lucide-react';
 import type { College } from '@/types';
 
 interface CollegesIndexProps {
     colleges: (College & { members_count: number })[];
 }
+
+const fieldClass =
+    'h-10 w-full rounded-md border !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!bg-white focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:!text-[#071437]';
+
+const textareaClass =
+    'w-full rounded-md border !border-[#DBDFE9] !bg-[#FCFCFC] p-3 text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!bg-white focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:!text-[#071437]';
+
+const labelClass = 'mb-1.5 block text-[12.5px] font-semibold text-[#071437]';
 
 export default function CollegesIndex({ colleges }: CollegesIndexProps) {
     const [editCollege, setEditCollege] = useState<College | null>(null);
@@ -34,7 +46,6 @@ export default function CollegesIndex({ colleges }: CollegesIndexProps) {
     const [logoError, setLogoError] = useState<string | null>(null);
     const logoInput = useRef<HTMLInputElement>(null);
 
-    // Keep the dialog in sync with fresh props after a logo upload/removal.
     const editing = editCollege ? colleges.find((c) => c.id === editCollege.id) ?? editCollege : null;
 
     const handleLogoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,12 +54,16 @@ export default function CollegesIndex({ colleges }: CollegesIndexProps) {
         if (!file || !editing) return;
         setLogoError(null);
         setLogoUploading(true);
-        router.post(`/admin/colleges/${editing.id}/logo`, { logo: file }, {
-            forceFormData: true,
-            preserveScroll: true,
-            onError: (errs) => setLogoError(errs.logo || 'Upload failed.'),
-            onFinish: () => setLogoUploading(false),
-        });
+        router.post(
+            `/admin/colleges/${editing.id}/logo`,
+            { logo: file },
+            {
+                forceFormData: true,
+                preserveScroll: true,
+                onError: (errs) => setLogoError(errs.logo || 'Upload failed.'),
+                onFinish: () => setLogoUploading(false),
+            },
+        );
     };
 
     const handleLogoRemove = () => {
@@ -67,45 +82,6 @@ export default function CollegesIndex({ colleges }: CollegesIndexProps) {
         setFormDescription(c.description || '');
     };
 
-    const handleCreateSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        router.post('/admin/colleges', {
-            name: formName,
-            short_name: formShortName,
-            website: formWebsite,
-            established_year: formYear ? parseInt(formYear) : null,
-            location: formLocation,
-            description: formDescription,
-        }, {
-            onSuccess: () => {
-                setCreateOpen(false);
-                resetForm();
-            },
-        });
-    };
-
-    const handleUpdateSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!editCollege) return;
-        router.put(`/admin/colleges/${editCollege.id}`, {
-            name: formName,
-            short_name: formShortName,
-            website: formWebsite,
-            established_year: formYear ? parseInt(formYear) : null,
-            location: formLocation,
-            description: formDescription,
-        }, {
-            onSuccess: () => {
-                setEditCollege(null);
-                resetForm();
-            },
-        });
-    };
-
-    const handleToggle = (id: number) => {
-        router.post(`/admin/colleges/${id}/toggle`);
-    };
-
     const resetForm = () => {
         setFormName('');
         setFormShortName('');
@@ -113,6 +89,53 @@ export default function CollegesIndex({ colleges }: CollegesIndexProps) {
         setFormYear('');
         setFormLocation('');
         setFormDescription('');
+    };
+
+    const handleCreateSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        router.post(
+            '/admin/colleges',
+            {
+                name: formName,
+                short_name: formShortName,
+                website: formWebsite,
+                established_year: formYear ? parseInt(formYear) : null,
+                location: formLocation,
+                description: formDescription,
+            },
+            {
+                onSuccess: () => {
+                    setCreateOpen(false);
+                    resetForm();
+                },
+            },
+        );
+    };
+
+    const handleUpdateSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!editCollege) return;
+        router.put(
+            `/admin/colleges/${editCollege.id}`,
+            {
+                name: formName,
+                short_name: formShortName,
+                website: formWebsite,
+                established_year: formYear ? parseInt(formYear) : null,
+                location: formLocation,
+                description: formDescription,
+            },
+            {
+                onSuccess: () => {
+                    setEditCollege(null);
+                    resetForm();
+                },
+            },
+        );
+    };
+
+    const handleToggle = (id: number) => {
+        router.post(`/admin/colleges/${id}/toggle`);
     };
 
     return (
@@ -123,145 +146,221 @@ export default function CollegesIndex({ colleges }: CollegesIndexProps) {
             <Head title="Cadet College Network - INTAKE 97 Admin" />
 
             <div className="space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                        <h1 className="text-[20px] font-bold tracking-tight text-[#071437]">
                             Participating Cadet Colleges Network
                         </h1>
-                        <p className="text-xs text-slate-500 mt-1">
+                        <p className="mt-1 text-[13px] text-[#78829D]">
                             Manage the Cadet Colleges represented in the 1997 intake association.
                         </p>
                     </div>
                     <Button
-                        size="sm"
                         onClick={() => {
                             resetForm();
                             setCreateOpen(true);
                         }}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-xs font-semibold"
+                        className="h-10 rounded-lg bg-[#1B84FF] px-4 text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90"
                     >
-                        <Plus className="size-3.5 mr-1" /> Add Cadet College
+                        <Plus className="mr-1.5 size-4" />
+                        Add Cadet College
                     </Button>
                 </div>
 
-                <Card className="overflow-hidden">
-                    <Table>
-                        <TableHeader className="bg-slate-50 dark:bg-slate-900/60">
-                            <TableRow>
-                                <TableHead className="text-xs font-semibold">College Name</TableHead>
-                                <TableHead className="text-xs font-semibold">Short Code</TableHead>
-                                <TableHead className="text-xs font-semibold">Location</TableHead>
-                                <TableHead className="text-xs font-semibold">Established</TableHead>
-                                <TableHead className="text-xs font-semibold">1997 Alumni</TableHead>
-                                <TableHead className="text-xs font-semibold">Participation Status</TableHead>
-                                <TableHead className="text-xs font-semibold text-right">Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {colleges.map((c) => (
-                                <TableRow key={c.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
-                                    <TableCell>
-                                        <div className="font-semibold text-xs text-slate-900 dark:text-white flex items-center gap-2.5">
-                                            <span className="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-amber-300/60 bg-white">
-                                                {c.logo_url ? (
-                                                    <img src={c.logo_url} alt="" className="size-full object-contain p-0.5" />
-                                                ) : (
-                                                    <span className="text-[9px] font-bold text-slate-400">{c.short_name || '—'}</span>
-                                                )}
-                                            </span>
-                                            {c.name}
-                                        </div>
-                                        {c.website && (
-                                            <a
-                                                href={c.website}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="text-[11px] text-slate-400 hover:text-indigo-600 flex items-center gap-1 mt-0.5"
-                                            >
-                                                {c.website.replace('https://', '')} <ExternalLink className="size-2.5" />
-                                            </a>
-                                        )}
-                                    </TableCell>
-                                    <TableCell className="font-mono text-xs font-semibold">
-                                        {c.short_name || '—'}
-                                    </TableCell>
-                                    <TableCell className="text-xs text-slate-600 dark:text-slate-300">
-                                        {c.location || '—'}
-                                    </TableCell>
-                                    <TableCell className="text-xs text-slate-600 dark:text-slate-300">
-                                        {c.established_year || '—'}
-                                    </TableCell>
-                                    <TableCell className="text-xs font-bold text-slate-900 dark:text-white">
-                                        {c.members_count} members
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge
-                                            className={`text-[10px] cursor-pointer ${
-                                                c.is_participating
-                                                    ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200'
-                                                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                            }`}
-                                            onClick={() => handleToggle(c.id)}
-                                            title="Click to toggle participating status"
-                                        >
-                                            {c.is_participating ? 'Participating' : 'Inactive'}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => openEdit(c)}
-                                            className="text-xs"
-                                        >
-                                            <Edit2 className="size-3.5" />
-                                        </Button>
-                                    </TableCell>
+                <div className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader className="bg-[#FCFCFC]">
+                                <TableRow className="border-[#F1F1F4] hover:bg-transparent">
+                                    <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        College Name
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Short Code
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Location
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Established
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        1997 Alumni
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Participation Status
+                                    </TableHead>
+                                    <TableHead className="px-5 py-3.5 text-right text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Actions
+                                    </TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </Card>
+                            </TableHeader>
+                            <TableBody>
+                                {colleges.map((c) => (
+                                    <TableRow
+                                        key={c.id}
+                                        className="border-[#F1F1F4] transition-colors hover:bg-[#FCFCFC]"
+                                    >
+                                        <TableCell className="px-5 py-3.5">
+                                            <div className="flex items-center gap-3">
+                                                <span className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-amber-300/70 bg-white">
+                                                    {c.logo_url ? (
+                                                        <img
+                                                            src={c.logo_url}
+                                                            alt=""
+                                                            className="size-full object-contain p-0.5"
+                                                        />
+                                                    ) : (
+                                                        <span className="text-[10px] font-bold text-[#99A1B7]">
+                                                            {c.short_name || '—'}
+                                                        </span>
+                                                    )}
+                                                </span>
+                                                <div>
+                                                    <div className="text-[13px] font-semibold text-[#071437]">
+                                                        {c.name}
+                                                    </div>
+                                                    {c.website && (
+                                                        <a
+                                                            href={c.website}
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                            className="mt-0.5 inline-flex items-center gap-1 text-[11.5px] text-[#1B84FF] hover:underline"
+                                                        >
+                                                            {c.website.replace('https://', '')}{' '}
+                                                            <ExternalLink className="size-3" />
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="px-4 py-3.5 font-mono text-[12.5px] font-semibold text-[#071437]">
+                                            {c.short_name || '—'}
+                                        </TableCell>
+                                        <TableCell className="px-4 py-3.5 text-[13px] text-[#4B5675]">
+                                            {c.location || '—'}
+                                        </TableCell>
+                                        <TableCell className="px-4 py-3.5 text-[13px] text-[#4B5675]">
+                                            {c.established_year || '—'}
+                                        </TableCell>
+                                        <TableCell className="px-4 py-3.5 text-[13px] font-bold text-[#071437]">
+                                            {c.members_count} members
+                                        </TableCell>
+                                        <TableCell className="px-4 py-3.5">
+                                            <button
+                                                type="button"
+                                                onClick={() => handleToggle(c.id)}
+                                                title="Click to toggle participating status"
+                                                className={`inline-flex cursor-pointer items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold transition-colors ${
+                                                    c.is_participating
+                                                        ? 'border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+                                                        : 'border border-[#E5E7EB] bg-[#F9FAFB] text-[#78829D] hover:bg-[#F1F1F4]'
+                                                }`}
+                                            >
+                                                {c.is_participating ? 'Participating' : 'Inactive'}
+                                            </button>
+                                        </TableCell>
+                                        <TableCell className="px-5 py-3.5 text-right">
+                                            <button
+                                                type="button"
+                                                onClick={() => openEdit(c)}
+                                                className="inline-flex size-8 items-center justify-center rounded-lg text-[#4B5675] transition-colors hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
+                                                title="Edit College"
+                                            >
+                                                <Edit2 className="size-4" />
+                                            </button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </div>
             </div>
 
             {/* Create Dialog */}
             <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle className="text-sm font-semibold">Add Cadet College</DialogTitle>
+                <DialogContent className="rounded-2xl border-[#F1F1F4] !bg-white p-0 !text-[#071437] shadow-[0_20px_50px_-12px_rgba(7,20,55,0.18)] sm:max-w-lg">
+                    <DialogHeader className="border-b border-[#F1F1F4] px-6 py-5">
+                        <DialogTitle className="text-[16px] font-bold text-[#071437]">
+                            Add Cadet College
+                        </DialogTitle>
                     </DialogHeader>
-                    <form onSubmit={handleCreateSubmit} className="space-y-3 py-2 text-xs">
+                    <form onSubmit={handleCreateSubmit} className="space-y-4 px-6 py-5">
                         <div>
-                            <label className="font-semibold block mb-1">College Name</label>
-                            <Input required value={formName} onChange={(e) => setFormName(e.target.value)} />
+                            <label className={labelClass}>College Name *</label>
+                            <input
+                                required
+                                className={fieldClass}
+                                value={formName}
+                                onChange={(e) => setFormName(e.target.value)}
+                            />
                         </div>
                         <div className="grid grid-cols-2 gap-3">
                             <div>
-                                <label className="font-semibold block mb-1">Short Name / Code</label>
-                                <Input placeholder="e.g. FCC, MCC" value={formShortName} onChange={(e) => setFormShortName(e.target.value)} />
+                                <label className={labelClass}>Short Name / Code</label>
+                                <input
+                                    className={fieldClass}
+                                    placeholder="e.g. FCC, MCC"
+                                    value={formShortName}
+                                    onChange={(e) => setFormShortName(e.target.value)}
+                                />
                             </div>
                             <div>
-                                <label className="font-semibold block mb-1">Established Year</label>
-                                <Input type="number" placeholder="1958" value={formYear} onChange={(e) => setFormYear(e.target.value)} />
+                                <label className={labelClass}>Established Year</label>
+                                <input
+                                    type="number"
+                                    className={fieldClass}
+                                    placeholder="1958"
+                                    value={formYear}
+                                    onChange={(e) => setFormYear(e.target.value)}
+                                />
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-3">
                             <div>
-                                <label className="font-semibold block mb-1">Campus Location</label>
-                                <Input placeholder="City, Division" value={formLocation} onChange={(e) => setFormLocation(e.target.value)} />
+                                <label className={labelClass}>Campus Location</label>
+                                <input
+                                    className={fieldClass}
+                                    placeholder="City, Division"
+                                    value={formLocation}
+                                    onChange={(e) => setFormLocation(e.target.value)}
+                                />
                             </div>
                             <div>
-                                <label className="font-semibold block mb-1">Official Website</label>
-                                <Input placeholder="https://..." value={formWebsite} onChange={(e) => setFormWebsite(e.target.value)} />
+                                <label className={labelClass}>Official Website</label>
+                                <input
+                                    className={fieldClass}
+                                    placeholder="https://..."
+                                    value={formWebsite}
+                                    onChange={(e) => setFormWebsite(e.target.value)}
+                                />
                             </div>
                         </div>
                         <div>
-                            <label className="font-semibold block mb-1">Description</label>
-                            <textarea rows={2} className="w-full text-xs rounded-md border p-2" value={formDescription} onChange={(e) => setFormDescription(e.target.value)} />
+                            <label className={labelClass}>Description</label>
+                            <textarea
+                                rows={2}
+                                className={textareaClass}
+                                value={formDescription}
+                                onChange={(e) => setFormDescription(e.target.value)}
+                            />
                         </div>
-                        <DialogFooter>
-                            <Button type="button" variant="outline" size="sm" onClick={() => setCreateOpen(false)}>Cancel</Button>
-                            <Button type="submit" size="sm" className="bg-emerald-600 hover:bg-emerald-700">Save College</Button>
+                        <DialogFooter className="border-t border-[#F1F1F4] pt-4">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setCreateOpen(false)}
+                                className="h-9 rounded-lg border-[#DBDFE9] bg-white px-4 text-[13px] font-semibold text-[#4B5675] hover:bg-[#FCFCFC]"
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                className="h-9 rounded-lg bg-[#1B84FF] px-4 text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90"
+                            >
+                                Save College
+                            </Button>
                         </DialogFooter>
                     </form>
                 </DialogContent>
@@ -269,69 +368,143 @@ export default function CollegesIndex({ colleges }: CollegesIndexProps) {
 
             {/* Edit Dialog */}
             <Dialog open={!!editCollege} onOpenChange={(open) => !open && setEditCollege(null)}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle className="text-sm font-semibold">Edit College Details</DialogTitle>
+                <DialogContent className="rounded-2xl border-[#F1F1F4] !bg-white p-0 !text-[#071437] shadow-[0_20px_50px_-12px_rgba(7,20,55,0.18)] sm:max-w-lg">
+                    <DialogHeader className="border-b border-[#F1F1F4] px-6 py-5">
+                        <DialogTitle className="text-[16px] font-bold text-[#071437]">
+                            Edit College Details
+                        </DialogTitle>
                     </DialogHeader>
-                    <div className="flex items-center gap-4 rounded-lg border border-dashed border-slate-200 p-3 dark:border-slate-700">
-                        <span className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-amber-300/70 bg-white">
-                            {editing?.logo_url ? (
-                                <img src={editing.logo_url} alt="" className="size-full object-contain p-1" />
-                            ) : (
-                                <span className="text-xs font-bold text-slate-400">{editing?.short_name || 'Logo'}</span>
-                            )}
-                        </span>
-                        <div className="flex-1 space-y-1.5 text-xs">
-                            <div className="font-semibold">College logo / crest</div>
-                            <div className="text-[11px] text-slate-500">PNG, JPG or WebP · max 2 MB · square, transparent background works best</div>
-                            <div className="flex gap-2 pt-0.5">
-                                <input ref={logoInput} type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={handleLogoSelect} />
-                                <Button type="button" size="sm" variant="outline" className="h-7 text-[11px]" disabled={logoUploading} onClick={() => logoInput.current?.click()}>
-                                    <ImagePlus className="size-3.5 mr-1" /> {logoUploading ? 'Uploading…' : editing?.logo_url ? 'Replace' : 'Upload'}
-                                </Button>
-                                {editing?.logo_url && (
-                                    <Button type="button" size="sm" variant="ghost" className="h-7 text-[11px] text-red-600 hover:text-red-700" onClick={handleLogoRemove}>
-                                        <Trash2 className="size-3.5 mr-1" /> Remove
-                                    </Button>
+                    <div className="space-y-4 px-6 py-5">
+                        <div className="flex items-center gap-4 rounded-xl border border-dashed border-[#DBDFE9] bg-[#FCFCFC] p-3.5">
+                            <span className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-amber-300/70 bg-white">
+                                {editing?.logo_url ? (
+                                    <img
+                                        src={editing.logo_url}
+                                        alt=""
+                                        className="size-full object-contain p-1"
+                                    />
+                                ) : (
+                                    <span className="text-[12px] font-bold text-[#99A1B7]">
+                                        {editing?.short_name || 'Logo'}
+                                    </span>
                                 )}
+                            </span>
+                            <div className="flex-1 space-y-1.5">
+                                <div className="text-[13px] font-semibold text-[#071437]">
+                                    College logo / crest
+                                </div>
+                                <div className="text-[11.5px] text-[#78829D]">
+                                    PNG, JPG or WebP · max 2 MB · square, transparent background works best
+                                </div>
+                                <div className="flex gap-2 pt-0.5">
+                                    <input
+                                        ref={logoInput}
+                                        type="file"
+                                        accept="image/png,image/jpeg,image/webp"
+                                        className="hidden"
+                                        onChange={handleLogoSelect}
+                                    />
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="outline"
+                                        className="h-8 rounded-lg border-[#DBDFE9] bg-white px-3 text-[12px] font-semibold text-[#4B5675] hover:bg-[#FCFCFC]"
+                                        disabled={logoUploading}
+                                        onClick={() => logoInput.current?.click()}
+                                    >
+                                        <ImagePlus className="mr-1.5 size-3.5" />
+                                        {logoUploading ? 'Uploading…' : editing?.logo_url ? 'Replace' : 'Upload'}
+                                    </Button>
+                                    {editing?.logo_url && (
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant="ghost"
+                                            className="h-8 rounded-lg px-3 text-[12px] font-semibold text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+                                            onClick={handleLogoRemove}
+                                        >
+                                            <Trash2 className="mr-1.5 size-3.5" /> Remove
+                                        </Button>
+                                    )}
+                                </div>
+                                {logoError && <div className="text-[11.5px] text-rose-600">{logoError}</div>}
                             </div>
-                            {logoError && <div className="text-[11px] text-red-600">{logoError}</div>}
                         </div>
+
+                        <form onSubmit={handleUpdateSubmit} className="space-y-4">
+                            <div>
+                                <label className={labelClass}>College Name *</label>
+                                <input
+                                    required
+                                    className={fieldClass}
+                                    value={formName}
+                                    onChange={(e) => setFormName(e.target.value)}
+                                />
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label className={labelClass}>Short Name / Code</label>
+                                    <input
+                                        className={fieldClass}
+                                        value={formShortName}
+                                        onChange={(e) => setFormShortName(e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <label className={labelClass}>Established Year</label>
+                                    <input
+                                        type="number"
+                                        className={fieldClass}
+                                        value={formYear}
+                                        onChange={(e) => setFormYear(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label className={labelClass}>Campus Location</label>
+                                    <input
+                                        className={fieldClass}
+                                        value={formLocation}
+                                        onChange={(e) => setFormLocation(e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <label className={labelClass}>Official Website</label>
+                                    <input
+                                        className={fieldClass}
+                                        value={formWebsite}
+                                        onChange={(e) => setFormWebsite(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label className={labelClass}>Description</label>
+                                <textarea
+                                    rows={2}
+                                    className={textareaClass}
+                                    value={formDescription}
+                                    onChange={(e) => setFormDescription(e.target.value)}
+                                />
+                            </div>
+                            <DialogFooter className="border-t border-[#F1F1F4] pt-4">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => setEditCollege(null)}
+                                    className="h-9 rounded-lg border-[#DBDFE9] bg-white px-4 text-[13px] font-semibold text-[#4B5675] hover:bg-[#FCFCFC]"
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    type="submit"
+                                    className="h-9 rounded-lg bg-[#1B84FF] px-4 text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90"
+                                >
+                                    Update College
+                                </Button>
+                            </DialogFooter>
+                        </form>
                     </div>
-                    <form onSubmit={handleUpdateSubmit} className="space-y-3 py-2 text-xs">
-                        <div>
-                            <label className="font-semibold block mb-1">College Name</label>
-                            <Input required value={formName} onChange={(e) => setFormName(e.target.value)} />
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                            <div>
-                                <label className="font-semibold block mb-1">Short Name / Code</label>
-                                <Input value={formShortName} onChange={(e) => setFormShortName(e.target.value)} />
-                            </div>
-                            <div>
-                                <label className="font-semibold block mb-1">Established Year</label>
-                                <Input type="number" value={formYear} onChange={(e) => setFormYear(e.target.value)} />
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                            <div>
-                                <label className="font-semibold block mb-1">Campus Location</label>
-                                <Input value={formLocation} onChange={(e) => setFormLocation(e.target.value)} />
-                            </div>
-                            <div>
-                                <label className="font-semibold block mb-1">Official Website</label>
-                                <Input value={formWebsite} onChange={(e) => setFormWebsite(e.target.value)} />
-                            </div>
-                        </div>
-                        <div>
-                            <label className="font-semibold block mb-1">Description</label>
-                            <textarea rows={2} className="w-full text-xs rounded-md border p-2" value={formDescription} onChange={(e) => setFormDescription(e.target.value)} />
-                        </div>
-                        <DialogFooter>
-                            <Button type="button" variant="outline" size="sm" onClick={() => setEditCollege(null)}>Cancel</Button>
-                            <Button type="submit" size="sm" className="bg-indigo-600 hover:bg-indigo-700">Update College</Button>
-                        </DialogFooter>
-                    </form>
                 </DialogContent>
             </Dialog>
         </AdminLayout>
