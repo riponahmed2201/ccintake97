@@ -401,11 +401,11 @@ class DevSampleDataSeeder extends Seeder
 
         // 5. Privacy settings
         $privacyDefaults = [
-            'photo' => 'verified_members',
-            'organization' => 'verified_members',
-            'designation' => 'verified_members',
-            'country' => 'verified_members',
-            'city' => 'connections',
+            'photo' => 'public',
+            'organization' => 'public',
+            'designation' => 'public',
+            'country' => 'public',
+            'city' => 'public',
             'linkedin' => 'connections',
             'date_of_birth' => 'private',
         ];

@@ -59,4 +59,25 @@ class DirectoryController extends Controller
             'total' => PublicMemberPresenter::query()->count(),
         ]);
     }
+
+    public function show(int $id): Response
+    {
+        $member = PublicMemberPresenter::query()
+            ->with(['profile.industry', 'businesses' => fn ($q) => $q->where('status', 'approved')])
+            ->findOrFail($id);
+
+        $base = PublicMemberPresenter::present($member);
+        $privacy = $member->privacySettings->pluck('visibility', 'field_key');
+        $isPublic = fn (string $field): bool => $privacy->get($field) === 'public';
+
+        return Inertia::render('directory/show', [
+            'member' => array_merge($base, [
+                'intake_year' => $member->intake_year,
+                'industry' => $isPublic('organization') || $isPublic('designation') ? $member->profile?->industry?->name : null,
+                'professional_bio' => $member->profile?->professional_bio,
+                'linkedin_url' => $isPublic('linkedin') ? $member->profile?->linkedin_url : null,
+                'website_url' => $isPublic('organization') ? $member->profile?->website_url : null,
+            ]),
+        ]);
+    }
 }

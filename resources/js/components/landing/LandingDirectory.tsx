@@ -84,11 +84,11 @@ export function LandingDirectory({
                                 {(directoryPreview.length >= 4
                                     ? directoryPreview.map((d) => ({
                                           key: `m${d.id}`,
-                                          href: auth?.user ? `/member/directory/${d.id}` : `/directory?search=${encodeURIComponent(d.name)}`,
+                                          href: auth?.user ? `/member/directory/${d.id}` : `/directory/${d.id}`,
                                           name: d.name,
                                           post: '',
                                           initials: d.initials,
-                                          role: [d.designation, d.organization].filter(Boolean).join(', ') || 'Verified batchmate',
+                                          role: [d.designation, d.organization].filter(Boolean).join(' · ') || 'Verified batchmate',
                                           college: d.college?.short_name ?? '',
                                           location: d.city || '',
                                           photo: d.photo_url,
@@ -106,52 +106,73 @@ export function LandingDirectory({
                                       }))
                                 ).map((m) => {
                                     const col = mergedColleges.find((c) => c.short_name === m.college);
-                                    const bg = CAMPUS_PHOTOS[m.college];
                                     return (
                                         <Link
                                             key={m.key}
                                             href={m.href}
                                             data-card
-                                            className="group relative isolate flex h-[420px] w-[78vw] shrink-0 snap-start flex-col overflow-hidden rounded-xl bg-brand-navy text-brand-cream-text ring-1 ring-brand-navy/10 sm:w-[300px]"
+                                            className="group flex w-[78vw] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-[#0B1220]/10 bg-white text-[#0B1220] shadow-[0_4px_20px_-8px_rgba(11,18,32,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-[#1B84FF]/40 hover:shadow-[0_16px_36px_-12px_rgba(11,18,32,0.16)] sm:w-[290px]"
                                         >
-                                            {bg && (
-                                                <img src={bg} alt="" loading="lazy" className="absolute inset-0 -z-20 h-full w-full object-cover opacity-45 transition-transform duration-[1200ms] ease-out group-hover:scale-110" />
-                                            )}
-                                            <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#0B1220]/40 via-[#0B1220]/70 to-[#0B1220]" />
-        
-                                            <div className="flex items-center justify-between p-5">
-                                                <span className="flex items-center gap-2 rounded-full bg-white/10 py-1 pr-3 pl-1 text-[12px] font-medium backdrop-blur-md">
-                                                    <span className="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-white">
-                                                        {col?.logo_url ? <img src={col.logo_url} alt="" className="h-full w-full object-contain p-0.5" /> : <span className="text-[8px] text-[#0B1220]">{m.college}</span>}
-                                                    </span>
-                                                    {m.college} ’97
-                                                </span>
-                                                {usingSamples ? (
-                                                    <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-medium tracking-wide text-white/70 uppercase">Sample</span>
+                                            <div className="relative h-56 w-full overflow-hidden bg-[#F4F6FA]">
+                                                {m.photo ? (
+                                                    <img
+                                                        src={m.photo}
+                                                        alt={m.name}
+                                                        loading="lazy"
+                                                        className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                                                    />
                                                 ) : (
-                                                    <ShieldCheck className="h-5 w-5 text-[#C9A55C]" aria-label="Verified" />
+                                                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F4F6FA] to-[#EAECEF]">
+                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-white font-serif text-3xl font-semibold text-[#0B1220] shadow-xs ring-1 ring-[#0B1220]/10">
+                                                            {m.initials}
+                                                        </span>
+                                                    </div>
                                                 )}
-                                            </div>
-        
-                                            <div className="flex flex-1 items-center justify-center">
-                                                <div className="rounded-full bg-gradient-to-b from-[#F3E3B5] to-[#9A7B3F] p-[3px] shadow-[0_20px_40px_-15px_rgba(0,0,0,0.7)] transition-transform duration-500 group-hover:scale-105">
-                                                    {m.photo ? (
-                                                        <img src={m.photo} alt={m.name} className="h-28 w-28 rounded-full object-cover" />
+
+                                                <div className="absolute top-3 right-3 left-3 flex items-center justify-between">
+                                                    <span className="flex items-center gap-1.5 rounded-full bg-white/95 py-1 pr-2.5 pl-1 text-[11px] font-semibold text-[#0B1220] shadow-xs ring-1 ring-[#0B1220]/10 backdrop-blur-sm">
+                                                        <span className="flex h-5 w-5 items-center justify-center overflow-hidden rounded-full bg-white">
+                                                            {col?.logo_url ? (
+                                                                <img src={col.logo_url} alt="" className="h-full w-full object-contain p-0.5" />
+                                                            ) : (
+                                                                <span className="text-[8px] font-bold text-[#0B1220]">{m.college}</span>
+                                                            )}
+                                                        </span>
+                                                        {m.college} ’97
+                                                    </span>
+                                                    {usingSamples ? (
+                                                        <span className="rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-[#4A4F5C] uppercase ring-1 ring-[#0B1220]/10">
+                                                            Sample
+                                                        </span>
                                                     ) : (
-                                                        <span className="flex h-28 w-28 items-center justify-center rounded-full bg-[#0B1220] text-3xl font-semibold text-[#E8D5A3]">{m.initials}</span>
+                                                        <span
+                                                            className="flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-emerald-600 shadow-xs ring-1 ring-[#0B1220]/10"
+                                                            aria-label="Verified"
+                                                        >
+                                                            <ShieldCheck className="h-4 w-4" />
+                                                        </span>
                                                     )}
                                                 </div>
                                             </div>
-        
-                                            <div className="p-6 pt-0 text-center">
-                                                <h3 className="text-[21px] leading-tight font-semibold">{m.name}</h3>
-                                                <div className="mt-0.5 min-h-[1.25rem] text-[13px] text-[#F7F3EA]/45">{m.post}</div>
-                                                <p className="mt-2 line-clamp-2 min-h-[2.6rem] text-[14px] leading-snug text-[#F7F3EA]/70">{m.role}</p>
+
+                                            <div className="flex flex-1 flex-col p-5">
+                                                <h3 className="line-clamp-1 text-[17px] leading-snug font-bold text-[#0B1220] transition-colors group-hover:text-[#1B84FF]">
+                                                    {m.name}
+                                                </h3>
+                                                <p className="mt-1 line-clamp-1 text-[13px] text-[#4A4F5C]">
+                                                    {m.role}
+                                                </p>
                                                 {m.location && (
-                                                    <div className="mt-3 inline-flex items-center gap-1 text-[12.5px] text-[#E8D5A3]/80">
-                                                        <MapPin className="h-3.5 w-3.5" /> {m.location}
+                                                    <div className="mt-2.5 inline-flex items-center gap-1 text-[12px] text-[#78829D]">
+                                                        <MapPin className="h-3.5 w-3.5 shrink-0" />
+                                                        <span className="truncate">{m.location}</span>
                                                     </div>
                                                 )}
+                                            </div>
+
+                                            <div className="flex items-center justify-between border-t border-[#F1F1F4] px-5 py-3 text-[13px] font-semibold text-[#1B84FF]">
+                                                <span>View Profile</span>
+                                                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                                             </div>
                                         </Link>
                                     );

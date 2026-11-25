@@ -13,6 +13,7 @@ Route::get('/committee', [Public\MarketingPageController::class, 'committee'])->
 Route::get('/welfare', [Public\MarketingPageController::class, 'welfare'])->name('welfare');
 Route::get('/contact', [Public\MarketingPageController::class, 'contact'])->name('contact');
 Route::get('/directory', [Public\DirectoryController::class, 'index'])->name('directory.public');
+Route::get('/directory/{id}', [Public\DirectoryController::class, 'show'])->whereNumber('id')->name('directory.public.show');
 Route::get('/news/{slug}', [Public\ArticleController::class, 'show'])->name('news.show');
 Route::get('/register-alumni', [Public\RegistrationController::class, 'create'])->name('register.alumni');
 Route::post('/register-alumni', [Public\RegistrationController::class, 'store'])->name('register.alumni.store');

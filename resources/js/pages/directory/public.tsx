@@ -66,7 +66,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
     const hasFilters = !!(filters.search || collegeId);
 
   const profileHref = (m: PublicMember) =>
-        auth?.user ? `/member/directory/${m.id}` : `/login`;
+        auth?.user ? `/member/directory/${m.id}` : `/directory/${m.id}`;
 
     return (
         <>
@@ -243,74 +243,73 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                     </div>
 
                     {members.data.length > 0 ? (
-                        <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        <ul className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                             {members.data.map((m) => {
                                 const code = m.college?.short_name ?? '';
-                                const campusBg = code ? CAMPUS_PHOTOS[code] : undefined;
                                 const subtitle = [m.designation, m.organization].filter(Boolean).join(' · ');
                                 return (
                                     <li key={m.id}>
                                         <Link
                                             href={profileHref(m)}
-                                            className="group relative isolate flex min-h-[330px] flex-col overflow-hidden rounded-2xl bg-[#0E182B] text-[#F8F5EE] ring-1 ring-[#C8A252]/15 transition-all duration-300 hover:-translate-y-1 hover:ring-[#C8A252]/50 hover:shadow-[0_28px_56px_-24px_rgba(9,19,36,0.55)]"
+                                            className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#0B1220]/10 bg-white text-[#0B1220] shadow-[0_4px_20px_-8px_rgba(11,18,32,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-[#1B84FF]/40 hover:shadow-[0_16px_36px_-12px_rgba(11,18,32,0.16)]"
                                         >
-                                            {campusBg && (
-                                                <img
-                                                    src={campusBg}
-                                                    alt=""
-                                                    loading="lazy"
-                                                    className="absolute inset-0 -z-20 h-full w-full object-cover opacity-35 transition-transform duration-[1000ms] group-hover:scale-105"
-                                                />
-                                            )}
-                                            <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#091324]/50 via-[#091324]/75 to-[#091324]" />
-
-                                            <div className="flex items-center justify-between p-4">
-                                                <span className="flex items-center gap-2 rounded-full bg-white/10 py-1 pr-3 pl-1 text-[11px] font-medium backdrop-blur-sm">
-                                                    <span className="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-white">
-                                                        {m.college?.logo_url ? (
-                                                            <img src={m.college.logo_url} alt="" className="h-full w-full object-contain p-0.5" />
-                                                        ) : (
-                                                            <span className="text-[8px] font-semibold text-[#091324]">{code || 'CC'}</span>
-                                                        )}
-                                                    </span>
-                                                    {code ? `${code} ’97` : 'INTAKE 97'}
-                                                </span>
-                                                <ShieldCheck className="h-4 w-4 text-[#C8A252]" aria-label="Verified member" />
-                                            </div>
-
-                                            <div className="flex flex-1 flex-col items-center justify-center px-4">
-                                                <div className="rounded-full bg-gradient-to-b from-[#F3E3B5] to-[#8E6B28] p-[3px] shadow-lg transition-transform duration-500 group-hover:scale-105">
-                                                    {m.photo_url ? (
-                                                        <img src={m.photo_url} alt="" className="h-24 w-24 rounded-full object-cover" />
-                                                    ) : (
-                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[#091324] font-serif text-2xl font-semibold text-[#E8D5A3]">
+                                            <div className="relative h-56 w-full overflow-hidden bg-[#F4F6FA]">
+                                                {m.photo_url ? (
+                                                    <img
+                                                        src={m.photo_url}
+                                                        alt={m.name}
+                                                        loading="lazy"
+                                                        className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                                                    />
+                                                ) : (
+                                                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F4F6FA] to-[#EAECEF]">
+                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-white font-serif text-3xl font-semibold text-[#0B1220] shadow-xs ring-1 ring-[#0B1220]/10">
                                                             {m.initials}
                                                         </span>
-                                                    )}
+                                                    </div>
+                                                )}
+
+                                                <div className="absolute top-3 right-3 left-3 flex items-center justify-between">
+                                                    <span className="flex items-center gap-1.5 rounded-full bg-white/95 py-1 pr-2.5 pl-1 text-[11px] font-semibold text-[#0B1220] shadow-xs ring-1 ring-[#0B1220]/10 backdrop-blur-sm">
+                                                        <span className="flex h-5 w-5 items-center justify-center overflow-hidden rounded-full bg-white">
+                                                            {m.college?.logo_url ? (
+                                                                <img src={m.college.logo_url} alt="" className="h-full w-full object-contain p-0.5" />
+                                                            ) : (
+                                                                <span className="text-[8px] font-bold text-[#0B1220]">{code || 'CC'}</span>
+                                                            )}
+                                                        </span>
+                                                        {code ? `${code} ’97` : 'INTAKE 97'}
+                                                    </span>
+                                                    <span
+                                                        className="flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-emerald-600 shadow-xs ring-1 ring-[#0B1220]/10"
+                                                        aria-label="Verified member"
+                                                    >
+                                                        <ShieldCheck className="h-4 w-4" />
+                                                    </span>
                                                 </div>
-                                                <h2 className="mt-5 text-center font-serif text-[21px] leading-snug font-semibold text-white">{m.name}</h2>
-                                                <p className="mt-1 line-clamp-2 min-h-[2.5rem] max-w-[16rem] text-center text-[13px] leading-snug text-[#F7F3EA]/70">
-                                                    {subtitle || m.college?.name}
+                                            </div>
+
+                                            <div className="flex flex-1 flex-col p-5">
+                                                <h2 className="line-clamp-1 text-[17px] leading-snug font-bold text-[#0B1220] transition-colors group-hover:text-[#1B84FF]">
+                                                    {m.name}
+                                                </h2>
+                                                <p className="mt-1 line-clamp-1 text-[13px] text-[#4A4F5C]">
+                                                    {subtitle || m.college?.name || '1997 Cadet College Alumnus'}
                                                 </p>
                                                 {m.city && (
-                                                    <p className="mt-2 flex items-center gap-1 text-[12px] text-[#E8D5A3]/80">
-                                                        <MapPin className="h-3 w-3" aria-hidden />
-                                                        {m.city}
-                                                        {m.country_code && m.country_code !== 'BD' ? ` · ${m.country_code}` : ''}
+                                                    <p className="mt-2.5 flex items-center gap-1 text-[12px] text-[#78829D]">
+                                                        <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                                                        <span className="truncate">
+                                                            {m.city}
+                                                            {m.country_code && m.country_code !== 'BD' ? ` · ${m.country_code}` : ''}
+                                                        </span>
                                                     </p>
                                                 )}
                                             </div>
 
-                                            <div className="border-t border-white/10 px-4 py-3 text-center text-[12px] font-medium text-[#E8D5A3]/90 group-hover:text-[#E8D5A3]">
-                                                {auth?.user ? (
-                                                    <span className="inline-flex items-center justify-center gap-1">
-                                                        View profile <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-                                                    </span>
-                                                ) : (
-                                                    <span className="inline-flex items-center justify-center gap-1">
-                                                        Sign in for full profile <ArrowRight className="h-3.5 w-3.5" />
-                                                    </span>
-                                                )}
+                                            <div className="flex items-center justify-between border-t border-[#F1F1F4] px-5 py-3 text-[13px] font-semibold text-[#1B84FF]">
+                                                <span>View Profile</span>
+                                                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                                             </div>
                                         </Link>
                                     </li>
