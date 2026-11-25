@@ -7,6 +7,8 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\Response;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -33,4 +35,15 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
+
+        $exceptions->respond(function (Response $response, \Throwable $exception, Request $request) {
+            if ($response->getStatusCode() === 403 && ! $request->is('api/*') && ! $request->expectsJson()) {
+                return Inertia::render('errors/forbidden', [
+                    'status' => 403,
+                    'message' => $exception->getMessage() ?: 'You do not have permission to view this page.',
+                ])->toResponse($request)->setStatusCode(403);
+            }
+
+            return $response;
+        });
     })->create();

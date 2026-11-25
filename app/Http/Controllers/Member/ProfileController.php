@@ -139,6 +139,32 @@ class ProfileController extends Controller
         return back()->with('success', 'Profile updated successfully.');
     }
 
+    public function updatePhoto(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'photo' => 'required|image|max:5120',
+        ]);
+
+        $user = $request->user();
+        if ($user->avatar_path) {
+            Storage::disk('public')->delete($user->avatar_path);
+        }
+        $user->avatar_path = $validated['photo']->store('avatars', 'public');
+        $user->save();
+
+        if ($user->member?->profile) {
+            $user->member->profile->update([
+                'profile_completion' => $this->completionScore(
+                    $user->fresh(),
+                    $user->member->fresh(),
+                    $user->member->profile->toArray()
+                ),
+            ]);
+        }
+
+        return back()->with('success', 'Profile picture updated successfully.');
+    }
+
     public function updatePrivacy(Request $request): RedirectResponse
     {
         $user = $request->user();

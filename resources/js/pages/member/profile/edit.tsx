@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Head, router, useForm } from '@inertiajs/react';
 import MemberLayout from '@/layouts/member-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Check, ChevronLeft, ChevronRight, Save } from 'lucide-react';
+import { Camera, Check, ChevronLeft, ChevronRight, Save } from 'lucide-react';
 import type { College, Member } from '@/types';
 
 interface ProfileEditProps {
@@ -18,13 +18,22 @@ interface ProfileEditProps {
 }
 
 const fieldClass =
-    'h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-[#0B1220] outline-none focus:border-[#C9A55C] dark:border-white/10 dark:bg-[#0B1220] dark:text-white';
+    'h-10 w-full rounded-md border !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!bg-white focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:!text-[#071437]';
 
-function Label({ children, optional = false }: { children: React.ReactNode; optional?: boolean }) {
+function Label({
+    children,
+    optional = false,
+    required = false,
+}: {
+    children: React.ReactNode;
+    optional?: boolean;
+    required?: boolean;
+}) {
     return (
-        <label className="mb-1.5 block text-xs font-semibold text-[#0B1220] dark:text-white">
+        <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
             {children}
-            {optional && <span className="ml-1 font-normal text-slate-400">Optional</span>}
+            {required && <span className="ml-1 font-semibold text-[#F8285A]">*</span>}
+            {optional && <span className="ml-1.5 font-normal text-[#99A1B7]">(Optional)</span>}
         </label>
     );
 }
@@ -34,19 +43,19 @@ function ErrorText({ message }: { message?: string }) {
         return null;
     }
 
-    return <p className="mt-1 text-[11px] text-rose-600">{message}</p>;
+    return <p className="mt-1 text-[11.5px] text-[#F8285A]">{message}</p>;
 }
 
 const CLEAR = '__clear__';
 
 const selectTriggerClass =
-    'h-10 w-full cursor-pointer rounded-xl border-slate-200 bg-white px-3 text-sm font-normal text-[#0B1220] shadow-none focus-visible:border-[#C9A55C] focus-visible:ring-[#C9A55C]/30 data-[placeholder]:text-slate-400 dark:border-white/10 dark:bg-[#0B1220] dark:text-white';
+    '!h-10 w-full cursor-pointer rounded-md !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none transition-all duration-200 hover:!border-[#C4CADA] hover:!bg-[#FCFCFC] focus-visible:!border-[#1B84FF] focus-visible:!bg-white focus-visible:!ring-[3px] focus-visible:!ring-[#1B84FF]/10 data-[placeholder]:!text-[#99A1B7] disabled:!bg-[#F4F4F6] disabled:opacity-75 dark:!bg-[#FCFCFC] dark:hover:!bg-[#FCFCFC]';
 
 const selectMenuClass =
-    'rounded-xl border-slate-200 bg-white text-[#0B1220] shadow-[0_18px_40px_-24px_rgba(7,17,31,0.55)] dark:border-white/10 dark:bg-[#0F1724] dark:text-white';
+    'rounded-xl !border-[#F1F1F4] !bg-white !text-[#071437] shadow-[0_12px_32px_-8px_rgba(7,20,55,0.16)] dark:!bg-white dark:!text-[#071437]';
 
 const selectItemClass =
-    'cursor-pointer rounded-lg py-2 pr-8 pl-2.5 focus:bg-[#C9A55C]/15 focus:text-[#0B1220] dark:focus:text-white';
+    'cursor-pointer rounded-lg py-2 pr-8 pl-2.5 text-[13px] text-[#071437] focus:!bg-[#F1F6FF] focus:!text-[#1B84FF] dark:text-[#071437]';
 
 const HOUSE_SWATCH: Record<string, string> = {
     Red: 'bg-red-600',
@@ -103,7 +112,7 @@ const STEPS = [
     { key: 'personal', label: 'Personal', title: 'Personal information', hint: 'Spouse, spouse career, and children can be left blank.' },
     { key: 'address', label: 'Address', title: 'Address information', hint: 'Where you can be reached at home.' },
     { key: 'career', label: 'Career', title: 'Professional information', hint: 'Job type is a fixed list. Office address sits with the occupation.' },
-    { key: 'more', label: 'More', title: 'Additional information', hint: 'Photo up to 5 MB. Links and remarks can be left blank.' },
+    { key: 'more', label: 'More', title: 'Additional information', hint: 'Links and remarks can be left blank.' },
 ] as const;
 
 const STEP_FIELDS: Record<string, number> = {
@@ -134,9 +143,11 @@ const STEP_FIELDS: Record<string, number> = {
 
 function Section({ title, hint, children }: { title: string; hint: string; children: React.ReactNode }) {
     return (
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(7,17,31,0.04)] dark:border-white/10 dark:bg-[#0F1724] sm:p-6">
-            <h2 className="text-sm font-semibold text-[#0B1220] dark:text-white">{title}</h2>
-            <p className="mt-0.5 text-xs text-slate-500 dark:text-white/55">{hint}</p>
+        <section className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-6">
+            <div className="border-b border-[#F1F1F4] pb-4">
+                <h2 className="text-[15px] font-semibold text-[#071437]">{title}</h2>
+                <p className="mt-0.5 text-[12.5px] text-[#78829D]">{hint}</p>
+            </div>
             <div className="mt-5">{children}</div>
         </section>
     );
@@ -148,6 +159,8 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
     const [step, setStep] = useState(0);
     const [stepNotice, setStepNotice] = useState<string | null>(null);
     const [preview, setPreview] = useState<string | null>(photoUrl || null);
+    const [photoSaving, setPhotoSaving] = useState(false);
+    const photoInputRef = useRef<HTMLInputElement | null>(null);
 
     const form = useForm({
         name: member.user?.name || '',
@@ -256,52 +269,90 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
         router.put('/member/privacy', { settings: privacySettings }, { preserveScroll: true });
     };
 
+    const savePhoto = () => {
+        if (!(form.data.photo instanceof File)) {
+            return;
+        }
+        setPhotoSaving(true);
+        setSaved(false);
+        setStepNotice(null);
+        router.post(
+            '/member/profile/photo',
+            { photo: form.data.photo },
+            {
+                forceFormData: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    setSaved(true);
+                    form.setData('photo', null);
+                    form.clearErrors('photo');
+                },
+                onError: (errors) => {
+                    if (errors.photo) {
+                        form.setError('photo', errors.photo);
+                    }
+                },
+                onFinish: () => setPhotoSaving(false),
+            }
+        );
+    };
+
     return (
-        <MemberLayout fluid title="My Alumni Profile" breadcrumbs={[{ title: 'My Profile' }]}>
+        <MemberLayout title="My Alumni Profile" breadcrumbs={[{ title: 'My Profile' }]}>
             <Head title="My Profile - INTAKE 97 Alumni" />
 
-            <div className="w-full space-y-5 px-4 py-5 sm:px-6 sm:py-6 lg:px-8">
+            <div className="w-full space-y-6">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <h1 className="font-serif text-3xl text-[#0B1220] dark:text-white">Profile</h1>
-                        <p className="mt-1 max-w-xl text-sm text-slate-500 dark:text-white/55">
-                            Move across the steps. College is a fixed list, and intake number is the year you entered.
+                        <h1 className="text-[22px] font-semibold tracking-tight text-[#071437]">My Alumni Profile</h1>
+                        <p className="mt-1 max-w-xl text-[13px] text-[#78829D]">
+                            Move across the steps below. College is a fixed list, and intake number is the year you entered.
                         </p>
                     </div>
-                    {saved && <p className="text-sm font-medium text-emerald-600">Saved.</p>}
+                    {saved && (
+                        <span className="inline-flex items-center gap-1.5 rounded-lg bg-[#EAFFF1] px-3 py-1.5 text-[12.5px] font-semibold text-[#17C653]">
+                            <Check className="size-3.5" /> Profile saved
+                        </span>
+                    )}
                 </div>
 
-                <div className="grid items-start gap-5 lg:grid-cols-[220px_minmax(0,1fr)]">
-                <ol className="rounded-2xl border border-slate-200 bg-white p-3 dark:border-white/10 dark:bg-[#0F1724]">
+                {/* Horizontal Metronic Stepper */}
+                <ol className="grid grid-cols-2 gap-2 rounded-xl border border-[#F1F1F4] bg-white p-3 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:grid-cols-5 sm:gap-3 sm:p-3.5">
                     {STEPS.map((item, index) => {
                         const active = index === step;
                         const done = index < step;
 
                         return (
                             <li key={item.key} className="relative">
-                                {index < STEPS.length - 1 && (
-                                    <span className={`absolute top-10 left-5 h-[calc(100%-1.5rem)] w-px ${done ? 'bg-[#C9A55C]' : 'bg-slate-200 dark:bg-white/10'}`} />
-                                )}
                                 <button
                                     type="button"
                                     onClick={() => goTo(index)}
-                                    className={`relative flex w-full items-center gap-3 rounded-xl px-1 py-2.5 text-left ${active ? 'bg-[#C9A55C]/10' : ''}`}
+                                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left transition-colors ${
+                                        active
+                                            ? 'bg-[#F1F6FF] ring-1 ring-[#1B84FF]/20'
+                                            : 'hover:bg-[#FCFCFC]'
+                                    }`}
                                     aria-current={active ? 'step' : undefined}
                                 >
                                     <span
-                                        className={`flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
+                                        className={`flex size-7 shrink-0 items-center justify-center rounded-full text-[12px] font-semibold ${
                                             active
-                                                ? 'bg-[#C9A55C] text-[#07111F]'
+                                                ? 'bg-[#1B84FF] text-white'
                                                 : done
-                                                  ? 'bg-[#07111F] text-[#E8D5A3] dark:bg-[#C9A55C]/20'
-                                                  : 'bg-slate-100 text-slate-400 dark:bg-white/10 dark:text-white/40'
+                                                  ? 'bg-[#EAFFF1] text-[#17C653]'
+                                                  : 'bg-[#F9F9F9] text-[#99A1B7]'
                                         }`}
                                     >
                                         {done ? <Check className="size-3.5" /> : index + 1}
                                     </span>
-                                    <span className={`text-sm font-semibold ${active ? 'text-[#0B1220] dark:text-white' : 'text-slate-400 dark:text-white/45'}`}>
-                                        {item.label}
-                                    </span>
+                                    <div className="min-w-0">
+                                        <span className="block text-[10px] font-medium tracking-wide text-[#99A1B7] uppercase">
+                                            Step {index + 1}
+                                        </span>
+                                        <span className={`block truncate text-[13px] font-semibold ${active ? 'text-[#1B84FF]' : done ? 'text-[#071437]' : 'text-[#78829D]'}`}>
+                                            {item.label}
+                                        </span>
+                                    </div>
                                 </button>
                             </li>
                         );
@@ -309,14 +360,71 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                 </ol>
 
                 <div className="space-y-5">
-                {stepNotice && <p className="text-sm text-rose-600">{stepNotice}</p>}
+                {stepNotice && (
+                    <div className="rounded-lg border border-[#F8285A]/20 bg-[#FFEEF3] px-4 py-2.5 text-[13px] font-medium text-[#F8285A]">
+                        {stepNotice}
+                    </div>
+                )}
 
                 <form onSubmit={submit} className="space-y-5">
                 {step === 0 && (
                 <Section title={STEPS[0].title} hint={STEPS[0].hint}>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div className="sm:col-span-2 flex flex-col justify-between gap-4 border-b border-[#F1F1F4] pb-5 sm:flex-row sm:items-center">
+                            <div className="flex items-center gap-4">
+                                <div className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#F1F6FF] text-[20px] font-semibold text-[#1B84FF] ring-2 ring-[#F1F1F4]">
+                                    {preview ? (
+                                        <img src={preview} alt={form.data.name || 'Profile'} className="size-full object-cover" />
+                                    ) : (
+                                        form.data.name.charAt(0) || 'C'
+                                    )}
+                                </div>
+                                <div>
+                                    <div className="text-[13.5px] font-semibold text-[#071437]">
+                                        Profile picture
+                                        <span className="ml-1.5 text-[12px] font-normal text-[#99A1B7]">(Optional)</span>
+                                    </div>
+                                    <p className="mt-0.5 text-[12px] text-[#78829D]">JPG or PNG, up to 5 MB.</p>
+                                    <ErrorText message={form.errors.photo} />
+                                </div>
+                            </div>
+
+                            <div className="flex flex-wrap items-center gap-2.5">
+                                <input
+                                    ref={photoInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={(event) => {
+                                        const file = event.target.files?.[0] ?? null;
+                                        form.setData('photo', file);
+                                        setPreview(file ? URL.createObjectURL(file) : photoUrl || null);
+                                    }}
+                                />
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => photoInputRef.current?.click()}
+                                    className="h-9 rounded-lg border-[#DBDFE9] bg-white px-3.5 text-[12.5px] font-semibold text-[#4B5675] hover:bg-[#F9F9F9] hover:text-[#071437]"
+                                >
+                                    <Camera className="mr-1.5 size-3.5 text-[#78829D]" />
+                                    {preview ? 'Change photo' : 'Upload photo'}
+                                </Button>
+                                {form.data.photo && (
+                                    <Button
+                                        type="button"
+                                        disabled={photoSaving}
+                                        onClick={savePhoto}
+                                        className="h-9 rounded-lg bg-[#1B84FF] px-3.5 text-[12.5px] font-semibold text-white hover:bg-[#006AE6]"
+                                    >
+                                        <Save className="mr-1.5 size-3.5" /> {photoSaving ? 'Saving...' : 'Save photo'}
+                                    </Button>
+                                )}
+                            </div>
+                        </div>
+
                         <div className="sm:col-span-2">
-                            <Label>College name</Label>
+                            <Label required>College name</Label>
                             <FieldSelect
                                 value={form.data.college_id}
                                 placeholder="Select college"
@@ -329,14 +437,13 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                             <ErrorText message={form.errors.college_id} />
                         </div>
                         <div>
-                            <Label>Cadet number</Label>
+                            <Label required>Cadet number</Label>
                             <Input required value={form.data.college_roll_no} onChange={(event) => form.setData('college_roll_no', event.target.value)} className={fieldClass} placeholder="Roll number" />
                             <ErrorText message={form.errors.college_roll_no} />
                         </div>
                         <div>
-                            <Label>Intake number</Label>
+                            <Label required>Intake number</Label>
                             <Input required type="number" min={1950} max={2035} value={form.data.intake_year} onChange={(event) => form.setData('intake_year', event.target.value)} className={fieldClass} placeholder="1997" />
-                            <p className="mt-1 text-[11px] text-slate-400">Year of entry, for example 1997. Not the passing-out year.</p>
                             <ErrorText message={form.errors.intake_year} />
                         </div>
                         <div>
@@ -383,12 +490,12 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                             <ErrorText message={form.errors.cadet_name} />
                         </div>
                         <div>
-                            <Label>Full name</Label>
+                            <Label required>Full name</Label>
                             <Input required value={form.data.name} onChange={(event) => form.setData('name', event.target.value)} className={fieldClass} />
                             <ErrorText message={form.errors.name} />
                         </div>
                         <div>
-                            <Label>Mobile number</Label>
+                            <Label required>Mobile number</Label>
                             <Input required type="tel" value={form.data.phone} onChange={(event) => form.setData('phone', event.target.value)} className={fieldClass} placeholder="+880..." />
                             <ErrorText message={form.errors.phone} />
                         </div>
@@ -504,26 +611,6 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                 {step === 4 && (
                 <Section title={STEPS[4].title} hint={STEPS[4].hint}>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div className="sm:col-span-2">
-                            <Label optional>Personal photo</Label>
-                            <div className="flex items-center gap-4">
-                                <div className="flex size-16 items-center justify-center overflow-hidden rounded-full bg-[#07111F] text-lg font-semibold text-[#E8D5A3]">
-                                    {preview ? <img src={preview} alt="" className="size-full object-cover" /> : (form.data.name.charAt(0) || 'C')}
-                                </div>
-                                <Input
-                                    type="file"
-                                    accept="image/*"
-                                    className={fieldClass}
-                                    onChange={(event) => {
-                                        const file = event.target.files?.[0] ?? null;
-                                        form.setData('photo', file);
-                                        setPreview(file ? URL.createObjectURL(file) : photoUrl || null);
-                                    }}
-                                />
-                            </div>
-                            <p className="mt-1 text-[11px] text-slate-400">JPG or PNG. Maximum 5 MB.</p>
-                            <ErrorText message={form.errors.photo} />
-                        </div>
                         <div>
                             <Label optional>Facebook profile</Label>
                             <Input type="url" value={form.data.facebook_url} onChange={(event) => form.setData('facebook_url', event.target.value)} className={fieldClass} placeholder="https://facebook.com/..." />
@@ -552,7 +639,7 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                     <Button
                         type="button"
                         variant="outline"
-                        className="rounded-xl"
+                        className="rounded-lg border-[#DBDFE9] bg-white text-[13px] font-semibold text-[#4B5675] hover:bg-[#F9F9F9] hover:text-[#071437]"
                         disabled={step === 0}
                         onClick={() => goTo(step - 1)}
                     >
@@ -561,13 +648,13 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                     {step < STEPS.length - 1 ? (
                         <Button
                             type="button"
-                            className="rounded-xl bg-[#07111F] px-5 text-white hover:bg-[#121b2e] dark:bg-[#C9A55C] dark:text-[#07111F] dark:hover:bg-[#E8D5A3]"
+                            className="rounded-lg bg-[#1B84FF] px-5 text-[13px] font-semibold text-white hover:bg-[#006AE6]"
                             onClick={() => goTo(step + 1)}
                         >
                             Next <ChevronRight className="ml-1 size-4" />
                         </Button>
                     ) : (
-                        <Button type="submit" disabled={form.processing} className="rounded-xl bg-[#07111F] px-5 text-white hover:bg-[#121b2e] dark:bg-[#C9A55C] dark:text-[#07111F] dark:hover:bg-[#E8D5A3]">
+                        <Button type="submit" disabled={form.processing} className="rounded-lg bg-[#1B84FF] px-5 text-[13px] font-semibold text-white hover:bg-[#006AE6]">
                             <Save className="mr-1.5 size-4" /> Save profile
                         </Button>
                     )}
@@ -576,17 +663,19 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
 
                 {step === 4 && (
                 <form onSubmit={savePrivacy}>
-                <section className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-[#0F1724] sm:p-6">
-                    <h2 className="text-sm font-semibold text-[#0B1220] dark:text-white">Who can see these details</h2>
-                    <p className="mt-0.5 text-xs text-slate-500 dark:text-white/55">Choose who can see organization, designation, and LinkedIn.</p>
-                    <div className="mt-4 divide-y divide-slate-100 dark:divide-white/10">
+                <section className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-6">
+                    <div className="border-b border-[#F1F1F4] pb-4">
+                        <h2 className="text-[15px] font-semibold text-[#071437]">Who can see these details</h2>
+                        <p className="mt-0.5 text-[12.5px] text-[#78829D]">Choose who can see organization, designation, and LinkedIn.</p>
+                    </div>
+                    <div className="mt-2 divide-y divide-[#F1F1F4]">
                         {[
                             { key: 'organization', label: 'Organization' },
                             { key: 'designation', label: 'Designation' },
                             { key: 'linkedin', label: 'LinkedIn' },
                         ].map((item) => (
-                            <div key={item.key} className="flex flex-col gap-2 py-3 sm:flex-row sm:items-center sm:justify-between">
-                                <span className="text-sm text-[#0B1220] dark:text-white">{item.label}</span>
+                            <div key={item.key} className="flex flex-col gap-2 py-3.5 sm:flex-row sm:items-center sm:justify-between">
+                                <span className="text-[13.5px] font-medium text-[#071437]">{item.label}</span>
                                 <FieldSelect
                                     className="sm:w-56"
                                     value={privacySettings[item.key] || 'verified_members'}
@@ -602,12 +691,13 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                         ))}
                     </div>
                     <div className="mt-4 flex justify-end">
-                        <Button type="submit" variant="outline" className="rounded-xl">Save privacy</Button>
+                        <Button type="submit" variant="outline" className="rounded-lg border-[#DBDFE9] bg-white text-[13px] font-semibold text-[#4B5675] hover:bg-[#F9F9F9] hover:text-[#071437]">
+                            Save privacy
+                        </Button>
                     </div>
                 </section>
                 </form>
                 )}
-                </div>
                 </div>
             </div>
         </MemberLayout>

@@ -17,30 +17,52 @@ export function LandingAbout({ omitHeading = false, className }: { omitHeading?:
             <div className={LANDING_CONTAINER}>
                 <div className={`grid grid-cols-1 items-start lg:grid-cols-12 ${LANDING_GRID_GAP}`}>
                     <div className="lg:col-span-5">
-                        {!omitHeading && (
+                        {omitHeading ? (
+                            <div className="space-y-3">
+                                <p className="text-[11px] font-medium tracking-[0.26em] text-[#8E6B28] uppercase">
+                                    The Crucible · 1997–2003
+                                </p>
+                                <h2 className="font-serif text-3xl leading-tight font-medium text-[#091324] sm:text-4xl">
+                                    Six years that forged a <em className="font-normal italic text-[#8E6B28]">lifetime.</em>
+                                </h2>
+                            </div>
+                        ) : (
                             <SectionHeading
                                 eyebrow="Our story"
                                 title={
                                     <>
-                                        Bound by a <em className="font-normal text-[#9A7B3F]">shared</em> beginning.
+                                        Bound by a <em className="font-normal italic text-[#8E6B28]">shared</em> beginning.
                                     </>
                                 }
                             />
                         )}
                         <Reveal delay={100}>
-                            <p className={cn('text-[17px] leading-[1.75] text-[#4A4F5C]', omitHeading ? 'mt-0' : 'mt-8')}>
+                            <p className={cn('text-[17px] leading-[1.75] text-[#4A4F5C]', omitHeading ? 'mt-5' : 'mt-8')}>
                                 They arrived as Class 7 cadets: reveille, drill, prep and house life at Faujdarhat, Jhenaidah, Mirzapur, Rajshahi, Sylhet, Rangpur, Barishal, Pabna, Mymensingh Girls&apos; and Cumilla. Most passed out around 2003.
                             </p>
                             <p className="mt-4 text-[17px] leading-[1.75] text-[#4A4F5C]">
                                 ccIntake97 is their association — a verified directory, a way to find batchmates, and a home for welfare and the reunion planned for 2027.
                             </p>
-                            <blockquote className="mt-9 border-l border-brand-gold bg-brand-cream py-5 pr-6 pl-6 font-serif text-xl leading-snug text-brand-navy italic">
+                            <blockquote className="mt-8 rounded-r-2xl border-l-2 border-brand-gold bg-brand-cream py-5 pr-6 pl-6 font-serif text-xl leading-snug text-brand-navy italic">
                                 “No rank outside this room supersedes that of a brother who stood the same cold morning muster beside you.”
                                 <footer className="mt-2.5 font-sans text-[11px] font-medium tracking-[0.2em] text-[#8E6B28] uppercase not-italic">
                                     — Central Council Founding Charter
                                 </footer>
                             </blockquote>
-                            {!omitHeading && (
+                            {omitHeading ? (
+                                <dl className="mt-8 grid grid-cols-1 gap-4 border-t border-[#091324]/10 pt-6 sm:grid-cols-3">
+                                    {[
+                                        { k: 'Discipline & Honor', v: 'Forged on the drill square' },
+                                        { k: 'Equal Parity', v: 'Ten colleges, one voice' },
+                                        { k: '1997 Affinity', v: 'Verified batchmates only' },
+                                    ].map((pillar) => (
+                                        <div key={pillar.k}>
+                                            <dt className="text-[11px] font-semibold tracking-[0.16em] text-[#8E6B28] uppercase">{pillar.k}</dt>
+                                            <dd className="mt-1 text-[13.5px] text-[#4A4F5C]">{pillar.v}</dd>
+                                        </div>
+                                    ))}
+                                </dl>
+                            ) : (
                                 <dl className="mt-10 grid grid-cols-4 gap-4 border-t border-[#091324]/10 pt-6">
                                     {[
                                         { v: '1997', l: 'Induction' },

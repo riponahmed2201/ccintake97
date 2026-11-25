@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
-import { ArrowRight, Menu, X } from 'lucide-react';
+import { ArrowRight, Menu, UserRound, X } from 'lucide-react';
 import BrandMark from '@/components/brand-mark';
 import { LANDING_CONTAINER } from '@/components/landing/layout';
 import { NAV_LINKS } from '@/components/landing/nav-links';
@@ -156,37 +156,25 @@ export function SiteHeader({
                         <Link
                             href="/dashboard"
                             className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-nav text-[15px] font-medium transition-all duration-300 ${
-                                solidHeader || variant === 'solid'
+                                solidHeader
                                     ? 'bg-brand-navy text-brand-cream-text hover:bg-[#1A2438]'
                                     : 'bg-brand-cream-text text-brand-navy hover:bg-white'
                             }`}
                         >
-                            Member Portal <ArrowRight className="h-3.5 w-3.5" />
+                            Member Portal <ArrowRight className="h-3.5 w-3.5 text-brand-gold" />
                         </Link>
                     ) : (
-                        <>
-                            <Link
-                                href="/login"
-                                className={`hidden px-3 py-2 font-nav text-[15px] font-medium transition-colors sm:inline-block ${
-                                    solidHeader || variant === 'solid'
-                                        ? 'text-brand-navy hover:text-brand-gold-muted'
-                                        : 'text-white hover:text-[#E8D5A3]'
-                                }`}
-                            >
-                                Sign in
-                            </Link>
-                            <button
-                                type="button"
-                                onClick={openApply}
-                                className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-nav text-[15px] font-medium transition-all duration-300 ${
-                                    solidHeader || variant === 'solid'
-                                        ? 'bg-brand-navy text-brand-cream-text hover:bg-[#1A2438]'
-                                        : 'bg-brand-cream-text text-brand-navy hover:bg-white'
-                                }`}
-                            >
-                                Join
-                            </button>
-                        </>
+                        <Link
+                            href="/login"
+                            className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-nav text-[15px] font-medium transition-all duration-300 ${
+                                solidHeader
+                                    ? 'bg-brand-navy text-brand-cream-text hover:bg-[#1A2438]'
+                                    : 'bg-brand-cream-text text-brand-navy hover:bg-white'
+                            }`}
+                        >
+                            <UserRound className="h-4 w-4 text-brand-gold" />
+                            <span>Sign in</span>
+                        </Link>
                     )}
                     <button
                         type="button"
@@ -195,7 +183,7 @@ export function SiteHeader({
                         aria-controls="site-mobile-menu"
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                         className={`rounded-full p-2 transition-colors xl:hidden ${
-                            solidHeader || variant === 'solid'
+                            solidHeader
                                 ? 'text-brand-navy hover:bg-brand-navy/5'
                                 : 'text-brand-cream-text hover:bg-white/10'
                         }`}
@@ -235,10 +223,11 @@ export function SiteHeader({
                         </a>
                     )}
                     <div className="mt-4 grid grid-cols-2 gap-3">
-                        <Link href="/login" onClick={closeMobile} className="rounded-full border border-brand-navy/15 py-3 text-center text-sm font-medium">
+                        <Link href="/login" onClick={closeMobile} className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-navy py-3 text-center text-sm font-medium text-brand-cream-text">
+                            <UserRound className="h-4 w-4 text-brand-gold" />
                             Sign in
                         </Link>
-                        <button type="button" onClick={openApply} className="rounded-full bg-brand-navy py-3 text-center text-sm font-medium text-brand-cream-text">
+                        <button type="button" onClick={openApply} className="rounded-full border border-brand-navy/15 py-3 text-center text-sm font-medium text-brand-navy">
                             Apply
                         </button>
                     </div>

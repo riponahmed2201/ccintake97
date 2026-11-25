@@ -34,6 +34,7 @@ Route::middleware(['auth'])->prefix('member')->name('member.')->group(function (
     Route::get('/dashboard', [Member\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [Member\ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [Member\ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/photo', [Member\ProfileController::class, 'updatePhoto'])->name('profile.photo');
     Route::put('/profile/cadet', [Member\ProfileController::class, 'updateCadet'])->name('profile.cadet');
     Route::put('/privacy', [Member\ProfileController::class, 'updatePrivacy'])->name('privacy.update');
     Route::get('/id-card', [Member\IdCardController::class, 'show'])->name('id_card');

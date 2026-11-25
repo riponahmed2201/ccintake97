@@ -12,7 +12,7 @@ class IdCardController extends Controller
     public function show(Request $request): Response
     {
         $user = $request->user();
-        $member = $user->member->load(['college', 'profile.industry']);
+        $member = $user->member->load(['user', 'college', 'profile.industry']);
 
         // Generate or retrieve QR verification payload
         $qrPayload = [
@@ -26,6 +26,7 @@ class IdCardController extends Controller
 
         return Inertia::render('member/id-card', [
             'member' => $member,
+            'photoUrl' => $user->avatar_path ? '/storage/'.$user->avatar_path : null,
             'qrPayload' => json_encode($qrPayload),
         ]);
     }

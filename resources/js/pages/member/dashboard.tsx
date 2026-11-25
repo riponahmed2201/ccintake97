@@ -7,8 +7,6 @@ import {
     Users,
     ArrowRight,
     Bell,
-    Clock,
-    ShieldCheck,
     UserCheck,
     MapPin,
     GraduationCap,
@@ -52,7 +50,6 @@ export default function MemberDashboard({
     const page = usePage();
     const authName = (page.props as { auth?: { user?: { name?: string } } }).auth?.user?.name;
     const fullName = member?.user?.name || authName || 'Batchmate';
-    const isVerified = member?.verification_status === 'verified';
     const completion = member?.profile?.profile_completion ?? 0;
     const collegeName = member?.college?.short_name || member?.college?.name;
     const registeredEventIds = new Set(myRegistrations.map((registration) => registration.event_id));
@@ -83,93 +80,62 @@ export default function MemberDashboard({
             <Head title="Alumni Portal - INTAKE97.COM" />
 
             <div className="space-y-6">
-                <section className="overflow-hidden rounded-3xl border border-white/10 bg-[#07111F] text-white shadow-[0_18px_40px_rgba(7,17,31,0.16)]">
-                    <div className="h-1 bg-gradient-to-r from-[#9A7B3F] via-[#E8D5A3] to-[#C9A55C]" />
-                    <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_240px] lg:items-center">
+                {/* Clean Metronic Welcome Header + Digital ID */}
+                <section className="rounded-xl border border-[#F1F1F4] bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.02)] sm:p-7">
+                    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_270px] lg:items-center">
                         <div>
-                            <div className="flex flex-wrap items-center gap-2">
-                                <span className="rounded-full bg-[#C9A55C]/15 px-2.5 py-1 text-[10px] font-semibold tracking-[0.16em] text-[#E8D5A3] uppercase">
-                                    Intake 1997
-                                </span>
-                                {isVerified ? (
-                                    <span className="inline-flex items-center gap-1 rounded-full bg-emerald-400/15 px-2.5 py-1 text-[10px] font-semibold text-emerald-200">
-                                        <ShieldCheck className="size-3" /> Verified
-                                    </span>
-                                ) : (
-                                    <span className="inline-flex items-center gap-1 rounded-full bg-[#C9A55C]/15 px-2.5 py-1 text-[10px] font-semibold text-[#E8D5A3]">
-                                        <Clock className="size-3" /> Verification pending
-                                    </span>
-                                )}
-                            </div>
-                            <h1 className="mt-4 font-serif text-3xl leading-tight font-medium tracking-tight sm:text-4xl">
-                                Welcome back, {fullName}.
+                            <p className="text-[11px] font-semibold tracking-[0.12em] text-[#99A1B7] uppercase">
+                                Alumni Overview · Class of 1997
+                            </p>
+                            <h1 className="mt-1.5 text-[24px] leading-tight font-semibold tracking-tight text-[#071437] sm:text-[28px]">
+                                Welcome back, {fullName}
                             </h1>
-                            <p className="mt-2 max-w-xl text-sm text-white/65">
+                            <p className="mt-2 max-w-xl text-[13.5px] text-[#78829D]">
                                 {collegeName ? (
                                     <>
-                                        <span className="text-white">{collegeName}</span>
-                                        <span> · </span>
+                                        <span className="font-medium text-[#071437]">{collegeName}</span>
+                                        <span className="mx-2 text-[#DBDFE9]">·</span>
                                     </>
                                 ) : (
                                     <>
-                                        <Link href="/member/profile" className="text-[#E8D5A3] underline underline-offset-4 hover:text-white">
+                                        <Link href="/member/profile" className="font-medium text-[#1B84FF] hover:underline">
                                             Add your college
                                         </Link>
-                                        <span> · </span>
+                                        <span className="mx-2 text-[#DBDFE9]">·</span>
                                     </>
                                 )}
-                                Member ID <span className="font-mono text-[#E8D5A3]">{member?.member_code || 'Pending'}</span>
+                                <span>Member ID </span>
+                                <span className="font-mono font-medium text-[#071437]">{member?.member_code || 'Pending'}</span>
                             </p>
                         </div>
 
                         <Link
                             href="/member/id-card"
-                            className="group rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:bg-white/10"
+                            className="group rounded-xl border border-[#F1F1F4] bg-[#FCFCFC] p-4 transition-all hover:border-[#1B84FF]/35 hover:bg-white"
                         >
-                            <div className="flex items-center justify-between text-[11px] font-semibold tracking-wide text-[#E8D5A3] uppercase">
-                                <span>Digital ID</span>
-                                <QrCode className="size-4" />
+                            <div className="flex items-center justify-between text-[11px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                <span>Digital Alumni ID</span>
+                                <QrCode className="size-4 text-[#1B84FF]" />
                             </div>
-                            <div className="mt-4 flex items-center gap-3">
-                                <div className="flex size-11 items-center justify-center rounded-xl bg-[#C9A55C] font-serif text-lg font-medium text-[#07111F]">
+                            <div className="mt-3 flex items-center gap-3">
+                                <div className="flex size-10 items-center justify-center rounded-lg bg-[#071437] text-[13px] font-bold text-white">
                                     97
                                 </div>
                                 <div className="min-w-0">
-                                    <div className="truncate text-sm font-semibold">{fullName}</div>
-                                    <div className="truncate text-xs text-white/55">{collegeName || 'College not set'}</div>
+                                    <div className="truncate text-[13.5px] font-semibold text-[#071437]">{fullName}</div>
+                                    <div className="truncate text-[12px] text-[#78829D]">{collegeName || 'College not set'}</div>
                                 </div>
                             </div>
-                            <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-3 text-xs text-white/70">
-                                <span>View and download</span>
-                                <ArrowRight className="size-3.5 transition group-hover:translate-x-0.5" />
+                            <div className="mt-3 flex items-center justify-between border-t border-[#F1F1F4] pt-2.5 text-[12px] font-medium text-[#4B5675] group-hover:text-[#1B84FF]">
+                                <span>View &amp; download pass</span>
+                                <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
                             </div>
                         </Link>
                     </div>
                 </section>
 
-                {completion < 100 && (
-                    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(7,17,31,0.04)] dark:border-white/10 dark:bg-[#0F1724]">
-                        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                            <div className="min-w-0 flex-1">
-                                <div className="flex items-center justify-between gap-3 text-sm">
-                                    <span className="font-semibold text-[#0B1220] dark:text-white">Profile {completion}% complete</span>
-                                </div>
-                                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100 dark:bg-white/10">
-                                    <div className="h-full rounded-full bg-[#C9A55C]" style={{ width: `${Math.min(completion, 100)}%` }} />
-                                </div>
-                                <p className="mt-2 text-xs text-slate-500 dark:text-white/55">{gapCopy}</p>
-                            </div>
-                            <Link
-                                href="/member/profile"
-                                className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[#07111F] px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-[#121b2e] dark:bg-[#C9A55C] dark:text-[#07111F] dark:hover:bg-[#E8D5A3]"
-                            >
-                                {member?.college_id ? 'Finish profile' : 'Add college'}
-                            </Link>
-                        </div>
-                    </section>
-                )}
-
-                <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+                {/* Metronic KPI Stat Cards */}
+                <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
                     {stats.map((stat) => {
                         const Icon = stat.icon;
 
@@ -177,35 +143,61 @@ export default function MemberDashboard({
                             <Link
                                 key={stat.label}
                                 href={stat.href}
-                                className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_1px_2px_rgba(7,17,31,0.04)] transition hover:border-[#C9A55C]/70 dark:border-white/10 dark:bg-[#0F1724]"
+                                className="group rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] transition-all hover:border-[#1B84FF]/35 hover:shadow-md"
                             >
                                 <div className="flex items-center justify-between gap-2">
-                                    <span className="text-[11px] font-semibold tracking-[0.12em] text-slate-500 uppercase dark:text-white/45">{stat.label}</span>
-                                    <span className="flex size-8 items-center justify-center rounded-lg bg-[#07111F]/5 text-[#9A7B3F] dark:bg-[#C9A55C]/15 dark:text-[#E8D5A3]">
-                                        <Icon className="size-4" />
+                                    <span className="text-[12px] font-medium text-[#78829D]">{stat.label}</span>
+                                    <span className="flex size-9 items-center justify-center rounded-lg bg-[#F1F6FF] text-[#1B84FF]">
+                                        <Icon className="size-[18px]" strokeWidth={1.75} />
                                     </span>
                                 </div>
-                                <div className="mt-3 font-serif text-3xl leading-none text-[#0B1220] dark:text-white">{stat.value}</div>
-                                <div className="mt-2 text-[11px] text-slate-400">{stat.hint}</div>
+                                <div className="mt-3 text-[28px] leading-none font-semibold tracking-tight text-[#071437] tabular-nums">{stat.value}</div>
+                                <div className="mt-2.5 flex items-center justify-between text-[12px] text-[#99A1B7]">
+                                    <span>{stat.hint}</span>
+                                    <ArrowRight className="size-3.5 text-[#1B84FF] opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-100" />
+                                </div>
                             </Link>
                         );
                     })}
                 </section>
 
+                {completion < 100 && (
+                    <section className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="min-w-0 flex-1">
+                                <div className="flex items-center justify-between gap-3 text-[13.5px]">
+                                    <span className="font-semibold text-[#071437]">Profile Completion</span>
+                                    <span className="font-semibold text-[#1B84FF]">{completion}%</span>
+                                </div>
+                                <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#F1F1F4]">
+                                    <div className="h-full rounded-full bg-[#1B84FF]" style={{ width: `${Math.min(completion, 100)}%` }} />
+                                </div>
+                                <p className="mt-2 text-[12.5px] text-[#78829D]">{gapCopy}</p>
+                            </div>
+                            <Link
+                                href="/member/profile"
+                                className="inline-flex shrink-0 items-center justify-center rounded-lg bg-[#1B84FF] px-4 py-2 text-[12.5px] font-semibold text-white transition hover:bg-[#006AE6]"
+                            >
+                                {member?.college_id ? 'Finish profile' : 'Add college'}
+                            </Link>
+                        </div>
+                    </section>
+                )}
+
                 <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(7,17,31,0.04)] lg:col-span-2 dark:border-white/10 dark:bg-[#0F1724]">
-                        <div className="flex items-center justify-between gap-3">
-                            <h2 className="flex items-center gap-2 text-sm font-semibold text-[#0B1220] dark:text-white">
-                                <Calendar className="size-4 text-[#9A7B3F]" />
+                    <div className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] lg:col-span-2">
+                        <div className="flex items-center justify-between gap-3 border-b border-[#F1F1F4] pb-4">
+                            <h2 className="flex items-center gap-2 text-[15px] font-semibold text-[#071437]">
+                                <Calendar className="size-[18px] text-[#1B84FF]" strokeWidth={1.75} />
                                 Upcoming gatherings
                             </h2>
-                            <Link href="/member/events" className="inline-flex items-center gap-1 text-xs font-semibold text-[#9A7B3F] hover:text-[#07111F]">
-                                All events <ArrowRight className="size-3" />
+                            <Link href="/member/events" className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-[#1B84FF] hover:text-[#006AE6]">
+                                All events <ArrowRight className="size-3.5" />
                             </Link>
                         </div>
                         <div className="mt-4 space-y-3">
                             {upcomingEvents.length === 0 ? (
-                                <p className="rounded-xl bg-slate-50 px-4 py-8 text-center text-sm text-slate-500 dark:bg-white/5 dark:text-white/55">
+                                <p className="rounded-lg bg-[#FCFCFC] px-4 py-8 text-center text-[13px] text-[#78829D]">
                                     No gatherings are on the calendar yet.
                                 </p>
                             ) : (
@@ -214,21 +206,21 @@ export default function MemberDashboard({
                                     const registered = registeredEventIds.has(event.id);
 
                                     return (
-                                        <div key={event.id} className="flex flex-col gap-4 rounded-xl border border-slate-100 bg-slate-50/70 p-4 sm:flex-row sm:items-center dark:border-white/10 dark:bg-white/5">
-                                            <div className="flex size-14 shrink-0 flex-col items-center justify-center rounded-xl bg-[#07111F] text-white">
-                                                <span className="text-[10px] font-semibold tracking-wider text-[#E8D5A3] uppercase">{when.month}</span>
-                                                <span className="font-serif text-xl leading-none">{when.day}</span>
+                                        <div key={event.id} className="flex flex-col gap-4 rounded-xl border border-[#F1F1F4] bg-[#FCFCFC] p-4 transition hover:border-[#1B84FF]/30 hover:bg-white sm:flex-row sm:items-center">
+                                            <div className="flex size-13 shrink-0 flex-col items-center justify-center rounded-lg bg-[#F1F6FF] text-[#1B84FF]">
+                                                <span className="text-[10px] font-semibold tracking-wider uppercase">{when.month}</span>
+                                                <span className="text-[18px] leading-none font-bold">{when.day}</span>
                                             </div>
                                             <div className="min-w-0 flex-1">
-                                                <div className="text-sm font-semibold text-[#0B1220] dark:text-white">{event.title}</div>
-                                                <div className="mt-1 flex items-center gap-1.5 text-xs text-slate-500">
-                                                    <MapPin className="size-3.5 shrink-0" />
+                                                <div className="text-[14px] font-semibold text-[#071437]">{event.title}</div>
+                                                <div className="mt-1 flex items-center gap-1.5 text-[12.5px] text-[#78829D]">
+                                                    <MapPin className="size-3.5 shrink-0 text-[#99A1B7]" />
                                                     <span className="truncate">{event.venue}</span>
                                                 </div>
                                             </div>
                                             <Link
                                                 href={`/member/events/${event.slug}`}
-                                                className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[#07111F] px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-[#121b2e] dark:bg-[#C9A55C] dark:text-[#07111F] dark:hover:bg-[#E8D5A3]"
+                                                className="inline-flex shrink-0 items-center justify-center rounded-lg border border-[#DBDFE9] bg-white px-3.5 py-2 text-[12px] font-semibold text-[#4B5675] transition hover:border-[#1B84FF] hover:bg-[#1B84FF] hover:text-white"
                                             >
                                                 {registered ? 'View registration' : 'View and register'}
                                             </Link>
@@ -239,14 +231,19 @@ export default function MemberDashboard({
                         </div>
                     </div>
 
-                    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(7,17,31,0.04)] dark:border-white/10 dark:bg-[#0F1724]">
-                        <h2 className="flex items-center gap-2 text-sm font-semibold text-[#0B1220] dark:text-white">
-                            <Bell className="size-4 text-[#9A7B3F]" />
-                            Announcements
-                        </h2>
-                        <div className="mt-4 space-y-3">
+                    <div className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                        <div className="flex items-center justify-between gap-3 border-b border-[#F1F1F4] pb-4">
+                            <h2 className="flex items-center gap-2 text-[15px] font-semibold text-[#071437]">
+                                <Bell className="size-[18px] text-[#1B84FF]" strokeWidth={1.75} />
+                                Announcements
+                            </h2>
+                            <Link href="/member/articles" className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-[#1B84FF] hover:text-[#006AE6]">
+                                All notices <ArrowRight className="size-3.5" />
+                            </Link>
+                        </div>
+                        <div className="mt-4 space-y-2.5">
                             {latestAnnouncements.length === 0 ? (
-                                <p className="rounded-xl bg-slate-50 px-4 py-8 text-center text-sm text-slate-500 dark:bg-white/5 dark:text-white/55">
+                                <p className="rounded-lg bg-[#FCFCFC] px-4 py-8 text-center text-[13px] text-[#78829D]">
                                     Nothing published yet.
                                 </p>
                             ) : (
@@ -257,10 +254,10 @@ export default function MemberDashboard({
                                     <Link
                                         key={article.id}
                                         href={`/member/articles/${article.slug}`}
-                                        className="block rounded-xl border border-slate-100 px-3.5 py-3 transition hover:border-[#C9A55C]/60 dark:border-white/10 dark:hover:border-[#C9A55C]/50"
+                                        className="block rounded-lg border border-[#F1F1F4] px-3.5 py-3 transition hover:border-[#1B84FF]/30 hover:bg-[#FCFCFC]"
                                     >
-                                        <div className="line-clamp-2 text-sm font-semibold text-[#0B1220] dark:text-white">{article.title}</div>
-                                        <div className="mt-1 text-[11px] text-slate-400">
+                                        <div className="line-clamp-2 text-[13.5px] font-semibold text-[#071437]">{article.title}</div>
+                                        <div className="mt-1 text-[11.5px] text-[#99A1B7]">
                                             {`${published.month} ${published.day}, ${published.year}`}
                                             {article.category?.name ? ` · ${article.category.name}` : ''}
                                         </div>
@@ -268,31 +265,28 @@ export default function MemberDashboard({
                                     );
                                 })
                             )}
-                            <Link href="/member/articles" className="inline-flex items-center gap-1 text-xs font-semibold text-[#9A7B3F] hover:text-[#07111F]">
-                                All notices <ArrowRight className="size-3" />
-                            </Link>
                         </div>
                     </div>
                 </section>
 
-                <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(7,17,31,0.04)] dark:border-white/10 dark:bg-[#0F1724]">
-                    <div className="flex items-center justify-between gap-3">
+                <section className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                    <div className="flex items-center justify-between gap-3 border-b border-[#F1F1F4] pb-4">
                         <div>
-                            <h2 className="flex items-center gap-2 text-sm font-semibold text-[#0B1220] dark:text-white">
-                                <GraduationCap className="size-4 text-[#9A7B3F]" />
+                            <h2 className="flex items-center gap-2 text-[15px] font-semibold text-[#071437]">
+                                <GraduationCap className="size-[18px] text-[#1B84FF]" strokeWidth={1.75} />
                                 {featuredScope === 'college' && collegeName ? `From ${collegeName}` : 'Verified batchmates'}
                             </h2>
                             {featuredScope === 'batch' && (
-                                <p className="mt-1 text-xs text-slate-500 dark:text-white/55">Add your college to see your own campus first.</p>
+                                <p className="mt-1 text-[12.5px] text-[#78829D]">Add your college to see your own campus first.</p>
                             )}
                         </div>
-                        <Link href="/member/directory" className="inline-flex items-center gap-1 text-xs font-semibold text-[#9A7B3F] hover:text-[#07111F]">
-                            Directory <ArrowRight className="size-3" />
+                        <Link href="/member/directory" className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-[#1B84FF] hover:text-[#006AE6]">
+                            Directory <ArrowRight className="size-3.5" />
                         </Link>
                     </div>
-                    <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                         {featuredBatchmates.length === 0 ? (
-                            <p className="col-span-full rounded-xl bg-slate-50 px-4 py-8 text-center text-sm text-slate-500 dark:bg-white/5 dark:text-white/55">
+                            <p className="col-span-full rounded-lg bg-[#FCFCFC] px-4 py-8 text-center text-[13px] text-[#78829D]">
                                 No verified batchmates to show yet.
                             </p>
                         ) : (
@@ -300,14 +294,14 @@ export default function MemberDashboard({
                                 <Link
                                     key={batchmate.id}
                                     href={`/member/directory/${batchmate.id}`}
-                                    className="flex items-center gap-3 rounded-xl border border-slate-100 px-3 py-3 transition hover:border-[#C9A55C]/60 dark:border-white/10 dark:hover:border-[#C9A55C]/50"
+                                    className="group flex items-center gap-3 rounded-xl border border-[#F1F1F4] px-3.5 py-3 transition hover:border-[#1B84FF]/35 hover:bg-[#FCFCFC]"
                                 >
-                                    <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#07111F] text-sm font-semibold text-[#E8D5A3]">
+                                    <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#F1F6FF] text-[13px] font-semibold text-[#1B84FF]">
                                         {batchmate.user?.name?.charAt(0) || 'B'}
                                     </div>
-                                    <div className="min-w-0">
-                                        <div className="truncate text-sm font-semibold text-[#0B1220] dark:text-white">{batchmate.user?.name}</div>
-                                        <div className="truncate text-xs text-slate-500">
+                                    <div className="min-w-0 flex-1">
+                                        <div className="truncate text-[13.5px] font-semibold text-[#071437] group-hover:text-[#1B84FF]">{batchmate.user?.name}</div>
+                                        <div className="truncate text-[12px] text-[#78829D]">
                                             {batchmate.profile?.designation || batchmate.profile?.organization || batchmate.college?.short_name || '1997 alumnus'}
                                         </div>
                                     </div>

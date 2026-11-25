@@ -3,6 +3,7 @@ import { Head, Link, router, usePage } from '@inertiajs/react';
 import { ArrowLeft, ArrowRight, ChevronDown, Lock, MapPin, Search, ShieldCheck, Users, X } from 'lucide-react';
 import { PrimaryCta } from '@/components/landing/cta';
 import { CAMPUS_PHOTOS } from '@/components/landing/constants';
+import { LandingFooter } from '@/components/landing/LandingFooter';
 import { LANDING_CONTAINER } from '@/components/landing/layout';
 import { SectionHeading } from '@/components/landing/primitives';
 import PublicSiteHeader from '@/components/public-site-header';
@@ -44,7 +45,7 @@ const FIELDS = [
 ] as const;
 
 const inputBase =
-    'h-12 w-full rounded-xl border border-[#0B1220]/10 bg-[#FAF7F0] text-[15px] text-[#0B1220] transition-colors placeholder:text-[#0B1220]/35 focus:border-[#9A7B3F] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#C9A55C]/15';
+    'h-12 w-full rounded-xl border border-[#091324]/10 bg-[#FAF8F3] text-[15px] text-[#091324] transition-colors placeholder:text-[#091324]/35 focus:border-[#8E6B28] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#C8A252]/15';
 
 export default function PublicDirectory({ members, colleges, filters, total }: Props) {
     const { auth } = usePage().props as { auth?: { user?: unknown } };
@@ -70,16 +71,16 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
     return (
         <>
             <Head title="Public Directory — ccIntake97" />
-            <div className="min-h-screen bg-[#F4F2EE] font-sans text-[#0B1220] antialiased selection:bg-[#C9A55C] selection:text-[#0B1220]">
+            <div className="min-h-screen bg-[#FAF8F3] font-sans text-[#091324] antialiased selection:bg-[#C8A252] selection:text-[#091324]">
                 <PublicSiteHeader active="Directory" />
 
-                <section className="relative isolate overflow-hidden bg-[#0B1220] text-[#F7F3EA]">
+                <section className="relative isolate overflow-hidden bg-[#091324] text-[#F8F5EE]">
                     <div className="pointer-events-none absolute inset-0 -z-10">
-                        <img src="/images/campus/rcc.jpg" alt="" className="h-full w-full object-cover opacity-25" />
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#070B14] via-[#0B1220]/90 to-[#0B1220]/70" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1220] via-transparent to-[#0B1220]/40" />
+                        <img src="/images/campus/rcc.jpg" alt="" className="h-full w-full object-cover opacity-30" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#060B15] via-[#091324]/90 to-[#091324]/70" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#091324] via-[#091324]/25 to-[#091324]/50" />
                     </div>
-                    <div className={`${LANDING_CONTAINER} pb-28 pt-24 sm:pt-28 lg:pb-32`}>
+                    <div className={`${LANDING_CONTAINER} pt-28 pb-28 sm:pt-32 lg:pt-36 lg:pb-32`}>
                         <div className="flex flex-col justify-between gap-10 lg:flex-row lg:items-end">
                             <SectionHeading
                                 reveal={false}
@@ -88,19 +89,19 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                 eyebrow="Batch directory"
                                 title={
                                     <>
-                                        Meet verified <em className="font-normal text-[#E8D5A3]">batchmates.</em>
+                                        Meet verified <em className="font-normal italic text-[#E8D5A3]">batchmates.</em>
                                     </>
                                 }
                                 intro="INTAKE 1997 alumni across ten cadet colleges. Only details members mark as public appear here."
                             />
-                            <dl className="flex gap-10 rounded-2xl border border-white/10 bg-white/[0.06] px-8 py-6 backdrop-blur-md">
+                            <dl className="flex gap-10 rounded-2xl border border-[#C8A252]/30 bg-white/[0.06] px-8 py-6 shadow-[0_24px_48px_-24px_rgba(0,0,0,0.6)] backdrop-blur-md">
                                 <div>
-                                    <dd className="font-serif text-4xl font-medium tabular-nums">{total}</dd>
-                                    <dt className="mt-1 text-[10.5px] tracking-[0.2em] text-[#F7F3EA]/50 uppercase">Verified</dt>
+                                    <dd className="font-serif text-4xl font-semibold tabular-nums text-[#E8D5A3]">{total}</dd>
+                                    <dt className="mt-1 text-[10.5px] font-medium tracking-[0.2em] text-[#F8F5EE]/60 uppercase">Verified</dt>
                                 </div>
                                 <div>
-                                    <dd className="font-serif text-4xl font-medium tabular-nums">{colleges.length}</dd>
-                                    <dt className="mt-1 text-[10.5px] tracking-[0.2em] text-[#F7F3EA]/50 uppercase">Colleges</dt>
+                                    <dd className="font-serif text-4xl font-semibold tabular-nums text-[#E8D5A3]">{colleges.length}</dd>
+                                    <dt className="mt-1 text-[10.5px] font-medium tracking-[0.2em] text-[#F8F5EE]/60 uppercase">Colleges</dt>
                                 </div>
                             </dl>
                         </div>
@@ -108,7 +109,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                 </section>
 
                 <main className={`${LANDING_CONTAINER} pb-24`}>
-                    <div className="relative -mt-14 rounded-[1.75rem] bg-white p-5 shadow-[0_32px_64px_-32px_rgba(11,18,32,0.28)] ring-1 ring-[#0B1220]/[0.06] sm:p-6">
+                    <div className="relative -mt-14 rounded-[1.75rem] bg-white p-5 shadow-[0_32px_64px_-32px_rgba(9,19,36,0.25)] ring-1 ring-[#091324]/[0.07] sm:p-6">
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
@@ -251,17 +252,17 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                     <li key={m.id}>
                                         <Link
                                             href={profileHref(m)}
-                                            className="group relative isolate flex min-h-[320px] flex-col overflow-hidden rounded-3xl bg-[#121B2E] text-[#F7F3EA] ring-1 ring-[#0B1220]/10 transition-all duration-300 hover:-translate-y-1 hover:ring-[#C9A55C]/35 hover:shadow-[0_28px_56px_-24px_rgba(11,18,32,0.55)]"
+                                            className="group relative isolate flex min-h-[330px] flex-col overflow-hidden rounded-2xl bg-[#0E182B] text-[#F8F5EE] ring-1 ring-[#C8A252]/15 transition-all duration-300 hover:-translate-y-1 hover:ring-[#C8A252]/50 hover:shadow-[0_28px_56px_-24px_rgba(9,19,36,0.55)]"
                                         >
                                             {campusBg && (
                                                 <img
                                                     src={campusBg}
                                                     alt=""
                                                     loading="lazy"
-                                                    className="absolute inset-0 -z-20 h-full w-full object-cover opacity-40 transition-transform duration-[1000ms] group-hover:scale-105"
+                                                    className="absolute inset-0 -z-20 h-full w-full object-cover opacity-35 transition-transform duration-[1000ms] group-hover:scale-105"
                                                 />
                                             )}
-                                            <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#0B1220]/50 via-[#0B1220]/75 to-[#0B1220]" />
+                                            <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#091324]/50 via-[#091324]/75 to-[#091324]" />
 
                                             <div className="flex items-center justify-between p-4">
                                                 <span className="flex items-center gap-2 rounded-full bg-white/10 py-1 pr-3 pl-1 text-[11px] font-medium backdrop-blur-sm">
@@ -269,25 +270,25 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                                         {m.college?.logo_url ? (
                                                             <img src={m.college.logo_url} alt="" className="h-full w-full object-contain p-0.5" />
                                                         ) : (
-                                                            <span className="text-[8px] text-[#0B1220]">{code || 'CC'}</span>
+                                                            <span className="text-[8px] font-semibold text-[#091324]">{code || 'CC'}</span>
                                                         )}
                                                     </span>
                                                     {code ? `${code} ’97` : 'INTAKE 97'}
                                                 </span>
-                                                <ShieldCheck className="h-4 w-4 text-[#C9A55C]" aria-label="Verified member" />
+                                                <ShieldCheck className="h-4 w-4 text-[#C8A252]" aria-label="Verified member" />
                                             </div>
 
                                             <div className="flex flex-1 flex-col items-center justify-center px-4">
-                                                <div className="rounded-full bg-gradient-to-b from-[#F3E3B5] to-[#9A7B3F] p-[3px] shadow-lg transition-transform duration-500 group-hover:scale-105">
+                                                <div className="rounded-full bg-gradient-to-b from-[#F3E3B5] to-[#8E6B28] p-[3px] shadow-lg transition-transform duration-500 group-hover:scale-105">
                                                     {m.photo_url ? (
                                                         <img src={m.photo_url} alt="" className="h-24 w-24 rounded-full object-cover" />
                                                     ) : (
-                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[#0B1220] text-2xl font-semibold text-[#E8D5A3]">
+                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[#091324] font-serif text-2xl font-semibold text-[#E8D5A3]">
                                                             {m.initials}
                                                         </span>
                                                     )}
                                                 </div>
-                                                <h2 className="mt-5 text-center text-lg leading-snug font-semibold text-white">{m.name}</h2>
+                                                <h2 className="mt-5 text-center font-serif text-[21px] leading-snug font-semibold text-white">{m.name}</h2>
                                                 <p className="mt-1 line-clamp-2 min-h-[2.5rem] max-w-[16rem] text-center text-[13px] leading-snug text-[#F7F3EA]/70">
                                                     {subtitle || m.college?.name}
                                                 </p>
@@ -377,20 +378,22 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                         </nav>
                     )}
 
-                    <div className="mt-16 grid grid-cols-1 gap-4 md:grid-cols-2">
-                        <div className="flex items-start gap-4 rounded-2xl bg-white p-6 ring-1 ring-[#0B1220]/[0.06]">
-                            <Lock className="mt-0.5 h-5 w-5 shrink-0 text-[#9A7B3F]" aria-hidden />
+                    <div className="mt-16 grid grid-cols-1 gap-5 md:grid-cols-2">
+                        <div className="flex items-start gap-4 rounded-2xl bg-white p-7 ring-1 ring-[#091324]/[0.07] shadow-xs">
+                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FAF8F3] ring-1 ring-[#C8A252]/30">
+                                <Lock className="h-5 w-5 text-[#8E6B28]" aria-hidden />
+                            </span>
                             <div>
-                                <div className="font-semibold">Privacy first</div>
-                                <p className="mt-2 text-[14px] leading-relaxed text-[#4A4F5C]">
+                                <div className="font-serif text-xl font-semibold text-[#091324]">Privacy first</div>
+                                <p className="mt-1.5 text-[14px] leading-relaxed text-[#4A4F5C]">
                                     Email, phone and WhatsApp stay inside the verified member portal. This page shows only what alumni choose to make public.
                                 </p>
                             </div>
                         </div>
-                        <div className="flex flex-col justify-between gap-5 rounded-2xl bg-gradient-to-br from-[#E8D5A3] via-[#C9A55C] to-[#B8924A] p-6 sm:flex-row sm:items-center">
+                        <div className="flex flex-col justify-between gap-5 rounded-2xl bg-gradient-to-br from-[#E8D5A3] via-[#C8A252] to-[#B08A3C] p-7 shadow-sm sm:flex-row sm:items-center">
                             <div>
-                                <div className="font-semibold text-[#0B1220]">Not on the roll yet?</div>
-                                <p className="mt-1 text-[14px] text-[#0B1220]/75">Create your account and complete verification to be listed.</p>
+                                <div className="font-serif text-xl font-semibold text-[#091324]">Not on the roll yet?</div>
+                                <p className="mt-1 text-[14px] text-[#091324]/80">Create your account and complete verification to be listed.</p>
                             </div>
                             <PrimaryCta as="link" href="/?signup=1" variant="navy" className="shrink-0 !px-6 !py-3 text-[14px]">
                                 Apply now
@@ -399,12 +402,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                     </div>
                 </main>
 
-                <footer className="border-t border-[#0B1220]/[0.06] bg-white">
-                    <div className={`${LANDING_CONTAINER} flex flex-col items-center justify-between gap-3 py-8 text-[13px] text-[#0B1220]/45 sm:flex-row`}>
-                        <span>© {new Date().getFullYear()} ccIntake97 · Cadet College Alumni Association</span>
-                        <span className="tracking-[0.28em] uppercase">Fidelitas et Disciplina</span>
-                    </div>
-                </footer>
+                <LandingFooter />
             </div>
         </>
     );

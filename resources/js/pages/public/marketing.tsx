@@ -37,13 +37,9 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
     return (
         <SignupDialogProvider>
             <Head title={meta.title} />
-            <div
-                className={`min-h-screen font-sans text-brand-navy antialiased selection:bg-brand-gold selection:text-brand-navy ${
-                    page === 'about' ? 'bg-white' : 'bg-brand-cream'
-                }`}
-            >
-                <PublicSiteHeader active={meta.nav} surface={page === 'about' ? 'white' : 'cream'} />
-                <main id="main-content" className={page === 'about' ? '' : 'pt-[76px]'}>
+            <div className="min-h-screen bg-white font-sans text-brand-navy antialiased selection:bg-brand-gold selection:text-brand-navy">
+                <PublicSiteHeader active={meta.nav} surface="white" />
+                <main id="main-content">
                     {page === 'about' && (
                         <>
                             <MarketingPageHero
@@ -51,7 +47,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                                 eyebrow="Our story"
                                 title={
                                     <>
-                                        Bound by a <em className="font-normal text-[#E8D5A3]">shared</em> beginning.
+                                        Bound by a <em className="font-normal italic text-[#E8D5A3]">shared</em> beginning.
                                     </>
                                 }
                                 intro="INTAKE 1997 brings together the cadets who entered ten cadet colleges that year — one cohort, still known to each other by college, house and roll."
@@ -64,9 +60,9 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                             />
                             <LandingAbout
                                 omitHeading
-                                className="relative z-10 -mt-12 !scroll-mt-0 !pt-8 !pb-16 shadow-[0_32px_64px_-40px_rgba(11,18,32,0.2)] ring-1 ring-[#0B1220]/[0.06] sm:-mt-16 sm:!pt-10 sm:!pb-20 lg:mx-auto lg:max-w-[calc(1440px-5rem)] lg:rounded-[1.75rem] xl:max-w-[calc(1440px-5rem)]"
+                                className="relative z-10 -mt-12 !scroll-mt-0 !pt-8 !pb-14 shadow-[0_32px_64px_-40px_rgba(9,19,36,0.22)] ring-1 ring-[#091324]/[0.07] sm:-mt-16 sm:!pt-10 sm:!pb-16 lg:mx-auto lg:max-w-[calc(1440px-5rem)] lg:rounded-[1.75rem] xl:max-w-[calc(1440px-5rem)]"
                             />
-                            <LandingTimeline className="bg-white" />
+                            <LandingTimeline className="mt-12 bg-[#FAF8F3]" />
                             <LandingCampusLife className="!bg-white" />
                             <MarketingCtaBand
                                 title="Explore the batch"
@@ -80,27 +76,153 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                         </>
                     )}
                     {page === 'colleges' && (
-                        <LandingColleges
-                            selectedRegion={landing.selectedRegion}
-                            setSelectedRegion={landing.setSelectedRegion}
-                            activeCollege={landing.activeCollege}
-                            filteredColleges={landing.filteredColleges}
-                            featureRef={landing.featureRef}
-                            selectCollege={landing.selectCollege}
-                            stepCollege={landing.stepCollege}
-                        />
+                        <>
+                            <MarketingPageHero
+                                image="/images/campus/hero-fcc.jpg"
+                                eyebrow="Constituent network"
+                                title={
+                                    <>
+                                        Ten colleges. <em className="font-normal italic text-[#E8D5A3]">Equal voice.</em>
+                                    </>
+                                }
+                                intro="Every constituent cadet college from the 1997 intake holds an equal seat and sovereign parity in the Central Secretariat."
+                                stats={[
+                                    { value: '10', label: 'Colleges' },
+                                    { value: '~500', label: 'Cadets' },
+                                    { value: '1958', label: 'First Est.' },
+                                    { value: '1997', label: 'Intake' },
+                                ]}
+                            />
+                            <LandingColleges
+                                omitHeading
+                                className="relative z-10 -mt-12 !scroll-mt-0 !bg-white !pt-8 !pb-16 shadow-[0_32px_64px_-40px_rgba(9,19,36,0.22)] ring-1 ring-[#091324]/[0.07] sm:-mt-16 sm:!pt-10 sm:!pb-20 lg:mx-auto lg:max-w-[calc(1440px-5rem)] lg:rounded-[1.75rem] xl:max-w-[calc(1440px-5rem)]"
+                                selectedRegion={landing.selectedRegion}
+                                setSelectedRegion={landing.setSelectedRegion}
+                                activeCollege={landing.activeCollege}
+                                filteredColleges={landing.filteredColleges}
+                                featureRef={landing.featureRef}
+                                selectCollege={landing.selectCollege}
+                                stepCollege={landing.stepCollege}
+                            />
+                            <div className="mt-16" />
+                            <MarketingCtaBand
+                                title="Connect with your college chapter"
+                                description="Search verified batchmates by college and house, or submit your 1997 intake roll for verification."
+                                links={[
+                                    { href: '/directory', label: 'Public directory' },
+                                    { href: '/committee', label: 'Executive committee' },
+                                    { href: '/about', label: 'Our story' },
+                                ]}
+                            />
+                        </>
                     )}
                     {page === 'committee' && (
-                        <LandingCommittee committee={committee} mergedColleges={landing.mergedColleges} />
+                        <>
+                            <MarketingPageHero
+                                image="/images/campus/hero-mcc.jpg"
+                                eyebrow="Secretariat stewardship"
+                                title={
+                                    <>
+                                        Led by <em className="font-normal italic text-[#E8D5A3]">batchmates.</em>
+                                    </>
+                                }
+                                intro="The Central Executive Committee — elected from every college chapter to serve the whole intake with zero hierarchy."
+                                stats={[
+                                    { value: '10', label: 'Colleges' },
+                                    { value: '2-Yr', label: 'Term' },
+                                    { value: '5', label: 'Officers' },
+                                    { value: '1997', label: 'Intake' },
+                                ]}
+                            />
+                            <LandingCommittee
+                                omitHeading
+                                className="relative z-10 -mt-12 !scroll-mt-0 !bg-white !pt-8 !pb-16 shadow-[0_32px_64px_-40px_rgba(9,19,36,0.22)] ring-1 ring-[#091324]/[0.07] sm:-mt-16 sm:!pt-10 sm:!pb-20 lg:mx-auto lg:max-w-[calc(1440px-5rem)] lg:rounded-[1.75rem] xl:max-w-[calc(1440px-5rem)]"
+                                committee={committee}
+                                mergedColleges={landing.mergedColleges}
+                            />
+                            <div className="mt-16" />
+                            <MarketingCtaBand
+                                title="Participate in association governance"
+                                description="Verify your 1997 intake roll to vote in executive elections, join regional chapters, or contact the Secretariat."
+                                links={[
+                                    { href: '/directory', label: 'Public directory' },
+                                    { href: '/colleges', label: 'Ten cadet colleges' },
+                                    { href: '/contact', label: 'Contact secretariat' },
+                                ]}
+                            />
+                        </>
                     )}
-                    {page === 'welfare' && <LandingWelfare />}
+                    {page === 'welfare' && (
+                        <>
+                            <MarketingPageHero
+                                image="/images/campus/aerial-mcc.jpg"
+                                eyebrow="The Sacred Covenant"
+                                title={
+                                    <>
+                                        We leave <em className="font-normal italic text-[#E8D5A3]">no comrade</em> behind.
+                                    </>
+                                }
+                                intro="Medical lifelines, protected futures for the children of fallen batchmates, and privileges shared among our own."
+                                stats={[
+                                    { value: '৳42M+', label: 'Disbursed' },
+                                    { value: '18', label: 'Scholars' },
+                                    { value: '12,000+', label: 'Families' },
+                                    { value: '100%', label: 'Audited' },
+                                ]}
+                            />
+                            <LandingWelfare
+                                omitHeading
+                                className="relative z-10 -mt-12 shadow-[0_32px_64px_-40px_rgba(9,19,36,0.22)] ring-1 ring-[#091324]/[0.07] sm:-mt-16 lg:mx-auto lg:max-w-[calc(1440px-5rem)] lg:rounded-[1.75rem] xl:max-w-[calc(1440px-5rem)]"
+                            />
+                            <div className="mt-16" />
+                            <MarketingCtaBand
+                                title="Support the Intake ’97 Welfare Trust"
+                                description="Contact the Secretariat to contribute to the endowment, nominate a batchmate in urgent need, or extend an alumni enterprise privilege."
+                                links={[
+                                    { href: '/contact', label: 'Contact secretariat' },
+                                    { href: '/committee', label: 'Trustees & council' },
+                                    { href: '/directory', label: 'Public directory' },
+                                ]}
+                            />
+                        </>
+                    )}
                     {page === 'contact' && (
-                        <LandingContact
-                            contactSubmitted={landing.contactSubmitted}
-                            contactForm={landing.contactForm}
-                            setContactForm={landing.setContactForm}
-                            handleContactSubmit={landing.handleContactSubmit}
-                        />
+                        <>
+                            <MarketingPageHero
+                                image="/images/campus/hero-scc.jpg"
+                                eyebrow="Central Secretariat"
+                                title={
+                                    <>
+                                        Write to the <em className="font-normal italic text-[#E8D5A3]">Council.</em>
+                                    </>
+                                }
+                                intro="For membership verification, Grand Reunion 2027 reservations, welfare endowments, or regional chapter affiliations."
+                                stats={[
+                                    { value: '4', label: 'Global Desks' },
+                                    { value: '24h', label: 'Response' },
+                                    { value: 'Dhaka', label: 'Secretariat' },
+                                    { value: '1997', label: 'Intake' },
+                                ]}
+                            />
+                            <LandingContact
+                                omitHeading
+                                className="relative z-10 -mt-12 !scroll-mt-0 !pt-10 !pb-16 shadow-[0_32px_64px_-40px_rgba(9,19,36,0.22)] ring-1 ring-[#091324]/[0.07] sm:-mt-16 sm:!pt-12 sm:!pb-20 lg:mx-auto lg:max-w-[calc(1440px-5rem)] lg:rounded-[1.75rem] xl:max-w-[calc(1440px-5rem)]"
+                                contactSubmitted={landing.contactSubmitted}
+                                contactForm={landing.contactForm}
+                                setContactForm={landing.setContactForm}
+                                handleContactSubmit={landing.handleContactSubmit}
+                            />
+                            <div className="mt-16" />
+                            <MarketingCtaBand
+                                title="Ready to verify your batch roll?"
+                                description="Apply for verified membership in the 1997 intake network or browse our constituent cadet colleges."
+                                links={[
+                                    { href: '/directory', label: 'Public directory' },
+                                    { href: '/colleges', label: 'Ten cadet colleges' },
+                                    { href: '/about', label: 'Our story' },
+                                ]}
+                            />
+                        </>
                     )}
                 </main>
                 <LandingFooter />

@@ -15,6 +15,8 @@ export function LandingColleges({
     featureRef,
     selectCollege,
     stepCollege,
+    omitHeading = false,
+    className = '',
 }: {
     selectedRegion: string;
     setSelectedRegion: (r: string) => void;
@@ -23,43 +25,68 @@ export function LandingColleges({
     featureRef: RefObject<HTMLDivElement | null>;
     selectCollege: (code: string, scroll?: boolean) => void;
     stepCollege: (dir: 1 | -1) => void;
+    omitHeading?: boolean;
+    className?: string;
 }) {
     const { openSignup } = useSignupDialog();
 
+    const regionTabs = (
+        <div className="-mx-5 snap-x snap-mandatory overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
+            <div className="flex w-max min-w-full items-center gap-6 border-b border-[#091324]/10">
+                {REGIONS.map((tab) => {
+                    const active = selectedRegion === tab;
+                    return (
+                        <button
+                            key={tab}
+                            type="button"
+                            onClick={() => setSelectedRegion(tab)}
+                            className={`relative -mb-px border-b-2 pb-3 text-[14px] whitespace-nowrap transition-colors duration-300 ${
+                                active ? 'border-[#091324] font-semibold text-[#091324]' : 'border-transparent text-[#091324]/45 hover:text-[#091324]'
+                            }`}
+                        >
+                            {tab === 'All' ? 'All (10)' : tab === 'Girls Colleges' ? 'Girls’' : tab}
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
+
     return (
-                        <section id="colleges" className={`${LANDING_SECTION} bg-brand-cream`}>
+                        <section id={omitHeading ? undefined : 'colleges'} className={`${LANDING_SECTION} bg-brand-cream ${className}`.trim()}>
                             <div className={LANDING_CONTAINER}>
-                                <Reveal>
-                                    <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-                                        <div className="max-w-2xl">
-                                            <h2 className="font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] text-[#0B1220] lg:text-[3.75rem]">
-                                                Ten colleges. <em className="font-normal text-[#9A7B3F]">Equal voice.</em>
-                                            </h2>
-                                            <p className="mt-5 max-w-xl text-[16px] leading-relaxed text-[#4A4F5C]">
-                                                Every constituent college holds an equal seat in the Central Secretariat.
-                                            </p>
-                                        </div>
-                                        <div className="-mx-5 snap-x snap-mandatory overflow-x-auto px-5 [scrollbar-width:none] sm:mx-0 sm:px-0">
-                                            <div className="flex w-max min-w-full items-center gap-6 border-b border-[#0B1220]/10">
-                                                {REGIONS.map((tab) => {
-                                                    const active = selectedRegion === tab;
-                                                    return (
-                                                        <button
-                                                            key={tab}
-                                                            type="button"
-                                                            onClick={() => setSelectedRegion(tab)}
-                                                            className={`relative -mb-px border-b-2 pb-3 text-[14px] whitespace-nowrap transition-colors duration-300 ${
-                                                                active ? 'border-[#0B1220] font-medium text-[#0B1220]' : 'border-transparent text-[#0B1220]/45 hover:text-[#0B1220]'
-                                                            }`}
-                                                        >
-                                                            {tab === 'All' ? 'All' : tab === 'Girls Colleges' ? 'Girls’' : tab}
-                                                        </button>
-                                                    );
-                                                })}
+                                {omitHeading ? (
+                                    <Reveal>
+                                        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                                            <div>
+                                                <p className="text-[11px] font-medium tracking-[0.26em] text-[#8E6B28] uppercase">
+                                                    Select a Campus
+                                                </p>
+                                                <h2 className="mt-2 font-serif text-2xl font-medium text-[#091324] sm:text-3xl">
+                                                    Browse by <em className="font-normal italic text-[#8E6B28]">region.</em>
+                                                </h2>
                                             </div>
+                                            {regionTabs}
                                         </div>
-                                    </div>
-                                </Reveal>
+                                    </Reveal>
+                                ) : (
+                                    <Reveal>
+                                        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+                                            <div className="max-w-2xl">
+                                                <p className="text-[11px] font-medium tracking-[0.26em] text-[#8E6B28] uppercase">
+                                                    Constituent Network
+                                                </p>
+                                                <h2 className="mt-4 font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] text-[#091324] lg:text-[3.75rem]">
+                                                    Ten colleges. <em className="font-normal italic text-[#8E6B28]">Equal voice.</em>
+                                                </h2>
+                                                <p className="mt-5 max-w-xl text-[16px] leading-relaxed text-[#4A4F5C]">
+                                                    Every constituent college holds an equal seat in the Central Secretariat.
+                                                </p>
+                                            </div>
+                                            {regionTabs}
+                                        </div>
+                                    </Reveal>
+                                )}
         
                                 {activeCollege && (
                                     <div className={`${LANDING_SECTION_BODY} space-y-4`}>

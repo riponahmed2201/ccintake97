@@ -12,18 +12,20 @@ export function MarketingCtaBand({
     links?: { href: string; label: string }[];
 }) {
     return (
-        <section className="border-t border-[#0B1220]/[0.06] bg-white py-16 sm:py-20">
+        <section className="relative isolate overflow-hidden border-t border-[#C8A252]/20 bg-[#091324] py-16 text-[#F8F5EE] sm:py-20">
+            <div className="pointer-events-none absolute -top-32 right-0 -z-10 h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(200,162,82,0.16),transparent_65%)]" />
             <div className={`${LANDING_CONTAINER} flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center`}>
                 <div className="max-w-xl">
-                    <h2 className="font-serif text-2xl font-medium text-[#0B1220] sm:text-3xl">{title}</h2>
-                    <p className="mt-3 text-[15px] leading-relaxed text-[#4A4F5C]">{description}</p>
+                    <p className="text-[11px] font-medium tracking-[0.24em] text-[#E8D5A3]/75 uppercase">Next steps</p>
+                    <h2 className="mt-2 font-serif text-3xl font-medium text-white sm:text-4xl">{title}</h2>
+                    <p className="mt-3 text-[15px] leading-relaxed text-[#F8F5EE]/70">{description}</p>
                     {links && links.length > 0 && (
-                        <div className="mt-6 flex flex-wrap gap-4">
+                        <div className="mt-6 flex flex-wrap gap-3">
                             {links.map((l) => (
                                 <Link
                                     key={l.href}
                                     href={l.href}
-                                    className="text-[14px] font-medium text-[#7A5E28] underline decoration-[#9A7B3F]/40 underline-offset-4 hover:decoration-[#9A7B3F]"
+                                    className="rounded-full border border-white/15 bg-white/[0.06] px-4 py-1.5 text-[13px] font-medium text-[#E8D5A3] transition-colors hover:border-[#C8A252]/50 hover:bg-white/[0.12]"
                                 >
                                     {l.label}
                                 </Link>
@@ -31,7 +33,7 @@ export function MarketingCtaBand({
                         </div>
                     )}
                 </div>
-                <PrimaryCta as="link" href="/?signup=1" variant="navy" className="shrink-0 !px-7 !py-3.5">
+                <PrimaryCta as="link" href="/?signup=1" variant="gold" className="shrink-0 !px-8 !py-4">
                     Join the association
                 </PrimaryCta>
             </div>
