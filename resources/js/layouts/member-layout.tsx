@@ -107,7 +107,7 @@ export default function MemberLayout({ children, title, breadcrumbs = [], fluid 
                 {/* Brand Header + Metronic Floating Collapse Toggle */}
                 <div className="relative flex h-[64px] shrink-0 items-center justify-between border-b border-[#F1F1F4] bg-white px-5">
                     <Link href="/member/dashboard" className="flex min-w-0 items-center gap-3">
-                        <BrandMark className="h-8 w-auto shrink-0" />
+                        <BrandMark className="h-11 w-11 shrink-0" />
                         {!collapsed && (
                             <div className="min-w-0">
                                 <div className="truncate text-[16px] leading-tight font-bold tracking-tight text-[#071437]">

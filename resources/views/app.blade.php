@@ -31,12 +31,11 @@
         </style>
 
         {{-- ccIntake97 crest favicon. Bump ?v= when the icon changes so browsers refetch. --}}
-        <link rel="icon" href="/favicon.ico?v=2" sizes="any">
-        <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
-        <link rel="icon" href="/favicon-32x32.png?v=2" type="image/png" sizes="32x32">
-        <link rel="icon" href="/favicon-16x16.png?v=2" type="image/png" sizes="16x16">
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" sizes="180x180">
-        <link rel="manifest" href="/site.webmanifest?v=2">
+        <link rel="icon" href="/favicon.ico?v=3" sizes="any">
+        <link rel="icon" href="/favicon-32x32.png?v=3" type="image/png" sizes="32x32">
+        <link rel="icon" href="/favicon-16x16.png?v=3" type="image/png" sizes="16x16">
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3" sizes="180x180">
+        <link rel="manifest" href="/site.webmanifest?v=3">
         <meta name="theme-color" content="#0B1220">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">

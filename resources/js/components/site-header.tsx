@@ -94,8 +94,10 @@ export function SiteHeader({
             <div className={`flex h-[76px] items-center justify-between ${LANDING_CONTAINER}`}>
                 <Link href="/" className="group flex shrink-0 items-center gap-3">
                     <BrandMark
-                        className={`h-12 w-auto shrink-0 transition-transform duration-500 group-hover:-translate-y-0.5 ${
-                            variant === 'hero' && !solidHeader ? 'drop-shadow-[0_6px_14px_rgba(0,0,0,0.3)]' : ''
+                        className={`shrink-0 transition-all duration-500 group-hover:-translate-y-0.5 ${
+                            variant === 'hero' && !solidHeader
+                                ? 'h-[72px] w-[72px] translate-y-1.5 drop-shadow-[0_8px_18px_rgba(11,18,32,0.4)] sm:h-[84px] sm:w-[84px] sm:translate-y-2'
+                                : 'h-[58px] w-[58px] drop-shadow-[0_2px_6px_rgba(11,18,32,0.12)] sm:h-[64px] sm:w-[64px]'
                         }`}
                     />
                     <span className="leading-tight">
