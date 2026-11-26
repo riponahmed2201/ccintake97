@@ -87,38 +87,62 @@ export function LandingCommittee({
                                                 </Reveal>
                                             )}
 
-                                            <ol className="mt-10 border-t border-brand-navy/12">
-                                                {[...(lead ? [lead] : []), ...others].map((p, i) => {
-                                                    const collegeName = mergedColleges.find((c) => c.short_name === p.college)?.name;
-                                                    const isLead = lead ? p.key === lead.key : i === 0;
-                                                    return (
-                                                        <Reveal key={p.key} delay={i * 40}>
-                                                            <li className={`grid grid-cols-1 items-center gap-4 border-b border-brand-navy/10 py-6 sm:grid-cols-[4.5rem_1fr_auto] sm:gap-8 sm:py-7 ${isLead ? 'my-3 rounded-2xl border-b-0 bg-[#FAF8F3] px-5 ring-1 ring-[#C8A252]/35 shadow-xs sm:px-7' : ''}`}>
-                                                                <span className={`font-serif text-2xl font-medium ${isLead ? 'text-[#8E6B28]' : 'text-brand-navy/30'}`}>
-                                                                    {String(i + 1).padStart(2, '0')}
-                                                                </span>
-                                                                <div className="flex min-w-0 items-center gap-4">
-                                                                    {p.avatar ? (
-                                                                        <img src={p.avatar} alt="" className="h-14 w-14 shrink-0 rounded-full object-cover ring-2 ring-[#C8A252]/30" />
-                                                                    ) : (
-                                                                        <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#091324] font-serif text-lg font-semibold text-[#E8D5A3] ring-2 ring-[#C8A252]/30">
-                                                                            {initialsOf(p.name)}
-                                                                        </span>
-                                                                    )}
-                                                                    <div className="min-w-0">
-                                                                        <h3 className={`font-serif leading-tight font-semibold text-brand-navy ${isLead ? 'text-2xl sm:text-3xl' : 'text-2xl'}`}>{p.name}</h3>
-                                                                        {p.role && <p className="mt-1 truncate text-[14px] text-brand-navy/60">{p.role}</p>}
+                                            <div className="mt-10 space-y-5">
+                                                {lead && (
+                                                    <Reveal>
+                                                        <div className="flex flex-col justify-between gap-6 rounded-2xl border border-[#C8A252]/40 bg-[#091324] p-6 text-[#F7F3EA] shadow-[0_24px_50px_-24px_rgba(9,19,36,0.45)] sm:flex-row sm:items-center sm:p-8">
+                                                            <div className="flex items-center gap-5">
+                                                                {lead.avatar ? (
+                                                                    <img src={lead.avatar} alt="" className="h-18 w-18 shrink-0 rounded-2xl object-cover ring-2 ring-[#C8A252]/50" />
+                                                                ) : (
+                                                                    <span className="flex h-18 w-18 shrink-0 items-center justify-center rounded-2xl bg-[#11203B] font-serif text-2xl font-semibold text-[#E8D5A3] ring-2 ring-[#C8A252]/40">
+                                                                        {initialsOf(lead.name)}
+                                                                    </span>
+                                                                )}
+                                                                <div>
+                                                                    <span className="inline-block rounded-full bg-[#C8A252]/20 px-3 py-0.5 text-[11px] font-semibold tracking-[0.18em] text-[#E8D5A3] uppercase">
+                                                                        {lead.title}
+                                                                    </span>
+                                                                    <h3 className="mt-2 font-serif text-2xl font-medium text-white sm:text-3xl">{lead.name}</h3>
+                                                                    {lead.role && <p className="mt-1 text-[14px] text-[#F7F3EA]/70">{lead.role}</p>}
+                                                                </div>
+                                                            </div>
+                                                            <div className="text-[13px] font-medium text-[#E8D5A3]/85 sm:text-right">
+                                                                {mergedColleges.find((c) => c.short_name === lead.college)?.name || (lead.college ? `${lead.college} ’97` : 'Class of ’97')}
+                                                            </div>
+                                                        </div>
+                                                    </Reveal>
+                                                )}
+
+                                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                                    {others.map((p, i) => {
+                                                        const collegeName = mergedColleges.find((c) => c.short_name === p.college)?.name;
+                                                        return (
+                                                            <Reveal key={p.key} delay={i * 40}>
+                                                                <div className="flex h-full flex-col justify-between rounded-2xl border border-[#091324]/[0.08] bg-[#FAF8F3]/75 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#C8A252]/45 hover:bg-white hover:shadow-[0_14px_32px_-18px_rgba(9,19,36,0.14)]">
+                                                                    <div className="flex items-center gap-4">
+                                                                        {p.avatar ? (
+                                                                            <img src={p.avatar} alt="" className="h-14 w-14 shrink-0 rounded-full object-cover ring-2 ring-[#C8A252]/30" />
+                                                                        ) : (
+                                                                            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#091324] font-serif text-lg font-semibold text-[#E8D5A3] ring-2 ring-[#C8A252]/30">
+                                                                                {initialsOf(p.name)}
+                                                                            </span>
+                                                                        )}
+                                                                        <div className="min-w-0">
+                                                                            <div className="text-[10.5px] font-semibold tracking-[0.18em] text-[#8E6B28] uppercase">{p.title}</div>
+                                                                            <h3 className="mt-0.5 truncate font-serif text-xl font-semibold text-[#091324]">{p.name}</h3>
+                                                                            {p.role && <p className="mt-0.5 truncate text-[13px] text-[#4A4F5C]">{p.role}</p>}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="mt-4 border-t border-[#091324]/[0.06] pt-3 text-[12px] font-medium text-[#091324]/60">
+                                                                        {collegeName || (p.college ? `${p.college} ’97` : 'Class of ’97')}
                                                                     </div>
                                                                 </div>
-                                                                <div className="sm:text-right">
-                                                                    <div className="text-[11px] font-semibold tracking-[0.2em] text-brand-gold-muted uppercase">{p.title}</div>
-                                                                    <div className="mt-1 text-[13px] text-brand-navy/55">{collegeName || (p.college ? `${p.college} ’97` : 'Class of ’97')}</div>
-                                                                </div>
-                                                            </li>
-                                                        </Reveal>
-                                                    );
-                                                })}
-                                            </ol>
+                                                            </Reveal>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
 
                                             <div className="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                                                 <p className="max-w-md text-[14px] leading-relaxed text-brand-navy/60">

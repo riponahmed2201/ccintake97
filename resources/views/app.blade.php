@@ -41,7 +41,7 @@
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
 
         @fonts
 
@@ -50,16 +50,16 @@
         @php
             $appName = config('app.name');
             $defaultTitle = ($appName && $appName !== 'Laravel')
-                ? $appName
-                : 'ccIntake97 — Cadet College Alumni Association · Class of 1997';
+                ? $appName.' — Cadet College Alumni Association · Class of 1997'
+                : 'CCINTAKE 97 — Cadet College Alumni Association · Class of 1997';
             $defaultDescription = 'The central alumni association for the 1997 intake across ten cadet colleges — directory, welfare, reunion, and fraternity.';
         @endphp
         <x-inertia::head>
             <title>{{ $defaultTitle }}</title>
             <meta head-key="description" name="description" content="{{ $defaultDescription }}">
             <meta head-key="og:type" property="og:type" content="website">
-            <meta head-key="og:site_name" property="og:site_name" content="ccIntake97">
-            <meta head-key="og:title" property="og:title" content="ccIntake97 — Cadet College Alumni Association · Class of 1997">
+            <meta head-key="og:site_name" property="og:site_name" content="CCINTAKE 97">
+            <meta head-key="og:title" property="og:title" content="{{ $defaultTitle }}">
             <meta head-key="og:description" property="og:description" content="{{ $defaultDescription }}">
             <meta head-key="og:url" property="og:url" content="{{ url()->current() }}">
             <meta head-key="og:image" property="og:image" content="{{ asset('images/campus/hero-rcc-sunset.jpg') }}">

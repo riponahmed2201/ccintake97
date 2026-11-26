@@ -1,72 +1,49 @@
 import { Link } from '@inertiajs/react';
-import { CalendarDays, ShieldCheck, Users } from 'lucide-react';
 import BrandMark from '@/components/brand-mark';
 import type { AuthLayoutProps } from '@/types';
 
-const POINTS = [
-    { icon: Users, title: 'Verified directory', text: 'Find batchmates by college, house and roll.' },
-    { icon: ShieldCheck, title: 'Private by default', text: 'Contact details stay inside the member portal.' },
-    { icon: CalendarDays, title: 'Reunion 2027', text: 'One intake, ten colleges, gathering planned in Dhaka.' },
-];
-
 export default function AuthSimpleLayout({ children, title, description }: AuthLayoutProps) {
     return (
-        <div className="relative min-h-svh bg-[#F3F6F5] text-[#0B1220]">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_80%_0%,rgba(201,165,92,0.16),transparent_42%)]" />
-            <div className="relative grid min-h-svh lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="relative min-h-svh bg-[#F8FAFC] text-[#0B1220]">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_80%_0%,rgba(201,165,92,0.12),transparent_45%)]" />
+            <div className="relative grid min-h-svh lg:grid-cols-[1.05fr_0.95fr]">
                 <aside className="relative hidden overflow-hidden bg-[#07111F] text-[#F7F3EA] lg:flex lg:flex-col lg:justify-between">
                     <div
-                        className="pointer-events-none absolute inset-0 opacity-70"
+                        className="pointer-events-none absolute inset-0 opacity-60"
                         style={{
                             backgroundImage:
-                                'linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px)',
+                                'linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)',
                             backgroundSize: '56px 56px',
                         }}
                     />
-                    <div className="pointer-events-none absolute -right-24 bottom-0 h-[420px] w-[420px] rounded-full bg-[#C9A55C]/10 blur-3xl" />
+                    <div className="pointer-events-none absolute -right-24 bottom-0 h-[420px] w-[420px] rounded-full bg-[#C9A55C]/12 blur-3xl" />
 
-                    <div className="relative z-10 flex items-start justify-between px-12 pt-10 xl:px-16">
+                    <div className="relative z-10 px-12 pt-12 xl:px-16">
                         <Link href="/" className="inline-flex items-center gap-3">
-                            <BrandMark className="h-14 w-auto" />
+                            <BrandMark className="h-12 w-auto" />
                             <span>
                                 <span className="block font-brand text-[22px] font-semibold">
                                     ccIntake<span className="text-[#C9A55C]">97</span>
                                 </span>
-                                <span className="text-[11px] text-[#F7F3EA]/55">Cadet College Alumni</span>
+                                <span className="text-[11px] text-[#F7F3EA]/55">Cadet College Alumni Network</span>
                             </span>
                         </Link>
-                        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[12px] text-[#F7F3EA]/70">
-                            Trusted batch portal
-                        </span>
                     </div>
 
-                    <div className="relative z-10 px-12 pb-8 xl:px-16">
-                        <p className="inline-flex items-center gap-2 rounded-full bg-[#C9A55C]/15 px-3 py-1 text-[12px] font-medium text-[#E8D5A3]">
-                            <span className="h-1.5 w-1.5 rounded-full bg-[#E8D5A3]" />
-                            Intake 1997
-                        </p>
-                        <h2 className="mt-6 max-w-xl font-serif text-5xl leading-[1.05] font-medium tracking-[-0.02em] xl:text-6xl">
-                            Everything the batch needs.
-                            <span className="mt-1 block text-[#E8D5A3]">One secure sign-in.</span>
+                    <div className="relative z-10 px-12 pb-16 xl:px-16">
+                        <div className="mb-5 h-px w-12 bg-[#C9A55C]" />
+                        <h2 className="max-w-lg font-serif text-5xl leading-[1.06] font-medium tracking-[-0.02em] xl:text-[3.5rem]">
+                            Ten Cadet Colleges.
+                            <span className="mt-1 block text-[#E8D5A3]">One verified portal.</span>
                         </h2>
-                        <p className="mt-5 max-w-md text-[16px] leading-relaxed text-[#F7F3EA]/65">
-                            Directory, profile and reunion — for verified cadets of the ten colleges.
+                        <p className="mt-5 max-w-md text-[15.5px] leading-relaxed text-[#F7F3EA]/65">
+                            Access the alumni directory, batch events, and member services for the 1997 Cadet College intake.
                         </p>
                     </div>
 
-                    <ul className="relative z-10 space-y-3 px-12 pb-12 xl:px-16">
-                        {POINTS.map((point) => (
-                            <li key={point.title} className="flex max-w-md items-start gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-sm">
-                                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#C9A55C]/15 text-[#E8D5A3]">
-                                    <point.icon className="h-5 w-5" />
-                                </span>
-                                <span>
-                                    <span className="block text-[15px] font-semibold">{point.title}</span>
-                                    <span className="mt-0.5 block text-[13px] leading-snug text-[#F7F3EA]/55">{point.text}</span>
-                                </span>
-                            </li>
-                        ))}
-                    </ul>
+                    <div className="relative z-10 border-t border-white/10 px-12 py-6 text-[12.5px] text-[#F7F3EA]/50 xl:px-16">
+                        © {new Date().getFullYear()} CCINTAKE97.COM · Class of 1997
+                    </div>
                 </aside>
 
                 <main className="relative flex items-center justify-center px-5 py-10 sm:px-8">

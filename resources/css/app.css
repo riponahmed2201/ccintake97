@@ -8,17 +8,17 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-    /* Editorial serif for prestigious display headings + Barlow for crisp modern UI. */
+    /* Editorial serif for prestigious display headings + Manrope for crisp modern UI. */
     --font-sans:
-        'Barlow', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Manrope', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
         'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --font-serif:
-        'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+        'Playfair Display', Georgia, 'Times New Roman', serif;
     --font-nav:
-        'Barlow', ui-sans-serif, system-ui, sans-serif;
+        'Manrope', ui-sans-serif, system-ui, sans-serif;
     /* Brand wordmark only — matches the outlined lettering in the crest logo. */
     --font-brand:
-        'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+        'Playfair Display', Georgia, 'Times New Roman', serif;
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);

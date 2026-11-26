@@ -17,7 +17,6 @@ import { LandingNews } from '@/components/landing/LandingNews';
 import { LandingReunion } from '@/components/landing/LandingReunion';
 import { LandingContact } from '@/components/landing/LandingContact';
 import { LandingFooter } from '@/components/landing/LandingFooter';
-import { ScrollToTop } from '@/components/scroll-to-top';
 import { SignupDialogProvider } from '@/contexts/signup-dialog-context';
 
 const DEFAULT_METRICS = {
@@ -105,7 +104,6 @@ export function LandingPage({
                 />
             </main>
             <LandingFooter />
-            <ScrollToTop />
         </div>
         </SignupDialogProvider>
     );

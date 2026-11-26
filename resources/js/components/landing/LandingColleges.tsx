@@ -138,19 +138,7 @@ export function LandingColleges({
                                                                 </div>
                                                             ))}
                                                         </dl>
-                                                        <div className="mt-5 flex flex-wrap gap-2">
-                                                            {activeCollege.houses
-                                                                .replace(/\s*Houses?$/, '')
-                                                                .split(',')
-                                                                .map((h) => h.trim())
-                                                                .filter(Boolean)
-                                                                .map((h) => (
-                                                                    <span key={h} className="rounded-full border border-[#F7F3EA]/25 bg-white/10 px-3 py-1 text-[12.5px] backdrop-blur-sm">
-                                                                        {h}
-                                                                    </span>
-                                                                ))}
-                                                        </div>
-                                                        <div className="mt-7 flex items-center justify-between">
+                                                        <div className="mt-6 flex items-center justify-between">
                                                             <div className="flex gap-2">
                                                                 <button type="button" aria-label="Previous college" onClick={() => stepCollege(-1)} className="flex h-11 w-11 items-center justify-center rounded-full border border-[#F7F3EA]/30 backdrop-blur-sm transition-colors hover:bg-white hover:text-[#0B1220]">
                                                                     <ArrowRight className="h-4 w-4 rotate-180" />

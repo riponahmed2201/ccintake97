@@ -252,9 +252,9 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                     <li key={m.id}>
                                         <Link
                                             href={profileHref(m)}
-                                            className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#0B1220]/10 bg-white text-[#0B1220] shadow-[0_4px_20px_-8px_rgba(11,18,32,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-[#1B84FF]/40 hover:shadow-[0_16px_36px_-12px_rgba(11,18,32,0.16)]"
+                                            className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#091324]/[0.08] bg-white text-[#091324] shadow-[0_8px_28px_-14px_rgba(9,19,36,0.12)] transition-all duration-300 hover:-translate-y-1 hover:border-[#C9A55C]/60 hover:shadow-[0_22px_45px_-20px_rgba(9,19,36,0.2)]"
                                         >
-                                            <div className="relative h-56 w-full overflow-hidden bg-[#F4F6FA]">
+                                            <div className="relative h-56 w-full overflow-hidden bg-[#FAF8F3]">
                                                 {m.photo_url ? (
                                                     <img
                                                         src={m.photo_url}
@@ -263,26 +263,26 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                                         className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                                                     />
                                                 ) : (
-                                                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F4F6FA] to-[#EAECEF]">
-                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-white font-serif text-3xl font-semibold text-[#0B1220] shadow-xs ring-1 ring-[#0B1220]/10">
+                                                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#FAF8F3] to-[#EFEAE0]">
+                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[#091324] font-serif text-3xl font-semibold text-[#E8D5A3] shadow-sm ring-2 ring-[#C9A55C]/30">
                                                             {m.initials}
                                                         </span>
                                                     </div>
                                                 )}
 
                                                 <div className="absolute top-3 right-3 left-3 flex items-center justify-between">
-                                                    <span className="flex items-center gap-1.5 rounded-full bg-white/95 py-1 pr-2.5 pl-1 text-[11px] font-semibold text-[#0B1220] shadow-xs ring-1 ring-[#0B1220]/10 backdrop-blur-sm">
+                                                    <span className="flex items-center gap-1.5 rounded-full bg-white/95 py-1 pr-2.5 pl-1 text-[11px] font-semibold text-[#091324] shadow-xs ring-1 ring-[#091324]/10 backdrop-blur-sm">
                                                         <span className="flex h-5 w-5 items-center justify-center overflow-hidden rounded-full bg-white">
                                                             {m.college?.logo_url ? (
                                                                 <img src={m.college.logo_url} alt="" className="h-full w-full object-contain p-0.5" />
                                                             ) : (
-                                                                <span className="text-[8px] font-bold text-[#0B1220]">{code || 'CC'}</span>
+                                                                <span className="text-[8px] font-bold text-[#091324]">{code || 'CC'}</span>
                                                             )}
                                                         </span>
                                                         {code ? `${code} ’97` : 'CCINTAKE 97'}
                                                     </span>
                                                     <span
-                                                        className="flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-emerald-600 shadow-xs ring-1 ring-[#0B1220]/10"
+                                                        className="flex h-7 w-7 items-center justify-center rounded-full bg-[#091324] text-[#E8D5A3] shadow-xs ring-1 ring-[#C9A55C]/40"
                                                         aria-label="Verified member"
                                                     >
                                                         <ShieldCheck className="h-4 w-4" />
@@ -291,7 +291,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                             </div>
 
                                             <div className="flex flex-1 flex-col p-5">
-                                                <h2 className="line-clamp-1 text-[17px] leading-snug font-bold text-[#0B1220] transition-colors group-hover:text-[#1B84FF]">
+                                                <h2 className="line-clamp-1 font-serif text-[20px] leading-snug font-semibold text-[#091324] transition-colors group-hover:text-[#8E6B28]">
                                                     {m.name}
                                                 </h2>
                                                 <p className="mt-1 line-clamp-1 text-[13px] text-[#4A4F5C]">
@@ -299,7 +299,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                                 </p>
                                                 {m.city && (
                                                     <p className="mt-2.5 flex items-center gap-1 text-[12px] text-[#78829D]">
-                                                        <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                                                        <MapPin className="h-3.5 w-3.5 shrink-0 text-[#8E6B28]" aria-hidden />
                                                         <span className="truncate">
                                                             {m.city}
                                                             {m.country_code && m.country_code !== 'BD' ? ` · ${m.country_code}` : ''}
@@ -308,8 +308,8 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                                 )}
                                             </div>
 
-                                            <div className="flex items-center justify-between border-t border-[#F1F1F4] px-5 py-3 text-[13px] font-semibold text-[#1B84FF]">
-                                                <span>View Profile</span>
+                                            <div className="flex items-center justify-between border-t border-[#091324]/[0.06] bg-[#FAF8F3]/60 px-5 py-3 text-[13px] font-semibold text-[#091324] transition-colors group-hover:bg-[#091324] group-hover:text-[#E8D5A3]">
+                                                <span>View Dossier</span>
                                                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                                             </div>
                                         </Link>

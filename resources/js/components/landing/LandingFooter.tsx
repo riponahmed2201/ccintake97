@@ -2,6 +2,7 @@ import { Link } from '@inertiajs/react';
 import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react';
 import BrandMark from '@/components/brand-mark';
 import { LANDING_CONTAINER } from '@/components/landing/layout';
+import { ScrollToTop } from '@/components/scroll-to-top';
 
 export function LandingFooter() {
     return (
@@ -73,6 +74,7 @@ export function LandingFooter() {
                     <span className="tracking-[0.22em] text-[#C8A252]/80 uppercase">Fidelitas et Disciplina · Class of 1997</span>
                 </div>
             </div>
+            <ScrollToTop />
         </footer>
     );
 }
