@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { DatePicker } from '@/components/ui/date-picker';
 import {
     Select,
@@ -45,7 +46,7 @@ export default function EventCreate({ categories }: EventCreateProps) {
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
     const [capacity, setCapacity] = useState('');
-    const [allowsGuests, setAllowsGuests] = useState(true);
+    const [allowsGuests, setAllowsGuests] = useState(false);
     const [maxGuests, setMaxGuests] = useState('2');
     const [registrationClosesAt, setRegistrationClosesAt] = useState('');
     const [registrationFee, setRegistrationFee] = useState('0');
@@ -84,7 +85,7 @@ export default function EventCreate({ categories }: EventCreateProps) {
         >
             <Head title="Create New Event - INTAKE 97 Admin" />
 
-            <div className="mx-auto max-w-4xl space-y-5">
+            <div className="w-full space-y-5">
                 <Link
                     href="/admin/events"
                     className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#78829D] transition-colors hover:text-[#071437]"
@@ -255,22 +256,23 @@ export default function EventCreate({ categories }: EventCreateProps) {
                             </div>
 
                             <div className="flex flex-wrap items-center gap-4 pt-2 sm:col-span-2">
-                                <label className="flex cursor-pointer items-center gap-2 text-[13px] font-medium text-[#071437]">
-                                    <input
-                                        type="checkbox"
+                                <label className="flex cursor-pointer items-center gap-2.5 text-[13px] font-medium text-[#071437]">
+                                    <Checkbox
                                         checked={allowsGuests}
-                                        onChange={(e) => setAllowsGuests(e.target.checked)}
-                                        className="size-4 rounded border-[#DBDFE9] text-[#1B84FF] focus:ring-[#1B84FF]"
+                                        onCheckedChange={(checked) => setAllowsGuests(Boolean(checked))}
+                                        className="border-[#DBDFE9] data-[state=checked]:border-[#1B84FF] data-[state=checked]:bg-[#1B84FF] data-[state=checked]:text-white"
                                     />
-                                    Allow members to register additional guests (spouse, children)
+                                    <span>Allow members to register additional guests (spouse, children)</span>
                                 </label>
 
                                 {allowsGuests && (
-                                    <div className="flex items-center gap-2 text-[13px] text-[#4B5675]">
-                                        <span>Max guests:</span>
+                                    <div className="flex items-center gap-2.5 text-[13px] text-[#4B5675]">
+                                        <span className="shrink-0 whitespace-nowrap font-medium text-[#071437]">Max guests:</span>
                                         <input
                                             type="number"
-                                            className={`${fieldClass} w-20`}
+                                            min={0}
+                                            max={10}
+                                            className={`${fieldClass} !w-24 shrink-0`}
                                             value={maxGuests}
                                             onChange={(e) => setMaxGuests(e.target.value)}
                                         />
@@ -293,13 +295,13 @@ export default function EventCreate({ categories }: EventCreateProps) {
                         <div className="flex items-center justify-end gap-3 border-t border-[#F1F1F4] pt-5">
                             <Link
                                 href="/admin/events"
-                                className="inline-flex h-10 items-center rounded-lg border border-[#DBDFE9] bg-white px-4 text-[13px] font-semibold text-[#4B5675] transition-colors hover:bg-[#FCFCFC]"
+                                className="inline-flex h-10 items-center rounded-lg border border-[#DBDFE9] !bg-white px-4 text-[13px] font-semibold !text-[#4B5675] transition-colors hover:!bg-[#F9F9F9] hover:!text-[#071437]"
                             >
                                 Cancel
                             </Link>
                             <Button
                                 type="submit"
-                                className="h-10 rounded-lg bg-[#1B84FF] px-5 text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90"
+                                className="h-10 cursor-pointer rounded-lg bg-[#1B84FF] px-5 text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90"
                             >
                                 Save Event Draft
                             </Button>

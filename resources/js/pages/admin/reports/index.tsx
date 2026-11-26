@@ -9,7 +9,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { Download, GraduationCap, Users } from 'lucide-react';
+import { Calendar, Download, GraduationCap, Users } from 'lucide-react';
 import type { College, Event } from '@/types';
 
 interface ReportsIndexProps {
@@ -23,7 +23,11 @@ export default function ReportsIndex({
     collegeBreakdown,
     statusBreakdown,
     verificationBreakdown,
+    eventsBreakdown = [],
 }: ReportsIndexProps) {
+    const totalCollegeMembers = collegeBreakdown.reduce((sum, c) => sum + (c.members_count || 0), 0);
+    const totalStatusMembers = Object.values(statusBreakdown).reduce((sum, n) => sum + n, 0) || 1;
+    const totalVerificationMembers = Object.values(verificationBreakdown).reduce((sum, n) => sum + n, 0) || 1;
     return (
         <AdminLayout
             title="Reports & Analytics"
@@ -69,14 +73,24 @@ export default function ReportsIndex({
                             </h2>
                         </div>
                         <div className="divide-y divide-[#F1F1F4] px-6 py-2">
-                            {Object.entries(statusBreakdown).map(([status, count]) => (
-                                <div key={status} className="flex items-center justify-between py-3 text-[13px]">
-                                    <span className="font-medium text-[#4B5675] capitalize">
-                                        {status.replace('_', ' ')}
-                                    </span>
-                                    <span className="font-bold text-[#071437]">{count} alumni</span>
-                                </div>
-                            ))}
+                            {Object.entries(statusBreakdown).map(([status, count]) => {
+                                const pct = Math.round((count / totalStatusMembers) * 100);
+                                return (
+                                    <div key={status} className="space-y-1.5 py-3 text-[13px]">
+                                        <div className="flex items-center justify-between">
+                                            <span className="font-medium text-[#4B5675] capitalize">
+                                                {status.replace('_', ' ')}
+                                            </span>
+                                            <span className="font-bold text-[#071437] tabular-nums">
+                                                {count} alumni <span className="font-normal text-[#99A1B7]">({pct}%)</span>
+                                            </span>
+                                        </div>
+                                        <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#F1F1F4]">
+                                            <div className="h-full rounded-full bg-[#1B84FF]" style={{ width: `${pct}%` }} />
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
 
@@ -90,12 +104,22 @@ export default function ReportsIndex({
                             </h2>
                         </div>
                         <div className="divide-y divide-[#F1F1F4] px-6 py-2">
-                            {Object.entries(verificationBreakdown).map(([vStatus, count]) => (
-                                <div key={vStatus} className="flex items-center justify-between py-3 text-[13px]">
-                                    <span className="font-medium text-[#4B5675] capitalize">{vStatus}</span>
-                                    <span className="font-bold text-[#071437]">{count} alumni</span>
-                                </div>
-                            ))}
+                            {Object.entries(verificationBreakdown).map(([vStatus, count]) => {
+                                const pct = Math.round((count / totalVerificationMembers) * 100);
+                                return (
+                                    <div key={vStatus} className="space-y-1.5 py-3 text-[13px]">
+                                        <div className="flex items-center justify-between">
+                                            <span className="font-medium text-[#4B5675] capitalize">{vStatus}</span>
+                                            <span className="font-bold text-[#071437] tabular-nums">
+                                                {count} alumni <span className="font-normal text-[#99A1B7]">({pct}%)</span>
+                                            </span>
+                                        </div>
+                                        <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#F1F1F4]">
+                                            <div className="h-full rounded-full bg-emerald-500" style={{ width: `${pct}%` }} />
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
@@ -110,6 +134,9 @@ export default function ReportsIndex({
                         <Table>
                             <TableHeader className="bg-[#FCFCFC]">
                                 <TableRow className="border-[#F1F1F4] hover:bg-transparent">
+                                    <TableHead className="w-14 px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        SL
+                                    </TableHead>
                                     <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
                                         Cadet College
                                     </TableHead>
@@ -128,11 +155,14 @@ export default function ReportsIndex({
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {collegeBreakdown.map((c) => (
+                                {collegeBreakdown.map((c, idx) => (
                                     <TableRow
                                         key={c.id}
                                         className="border-[#F1F1F4] transition-colors hover:bg-[#FCFCFC]"
                                     >
+                                        <TableCell className="px-5 py-3.5 text-[12.5px] font-medium text-[#78829D] tabular-nums">
+                                            {idx + 1}
+                                        </TableCell>
                                         <TableCell className="px-5 py-3.5 text-[13px] font-semibold text-[#071437]">
                                             {c.name}
                                         </TableCell>
@@ -145,15 +175,82 @@ export default function ReportsIndex({
                                         <TableCell className="px-4 py-3.5 text-[13px] text-[#4B5675]">
                                             {c.location || '—'}
                                         </TableCell>
-                                        <TableCell className="px-5 py-3.5 text-right text-[13px] font-bold text-emerald-600">
+                                        <TableCell className="px-5 py-3.5 text-right text-[13px] font-bold text-emerald-600 tabular-nums">
                                             {c.members_count}
                                         </TableCell>
                                     </TableRow>
                                 ))}
+                                <TableRow className="border-t-2 border-[#F1F1F4] bg-[#FCFCFC] hover:bg-[#FCFCFC]">
+                                    <TableCell colSpan={5} className="px-5 py-3.5 text-right text-[12.5px] font-bold tracking-wide text-[#4B5675] uppercase">
+                                        Total Registered Alumni
+                                    </TableCell>
+                                    <TableCell className="px-5 py-3.5 text-right text-[14px] font-bold text-[#071437] tabular-nums">
+                                        {totalCollegeMembers}
+                                    </TableCell>
+                                </TableRow>
                             </TableBody>
                         </Table>
                     </div>
                 </div>
+
+                {eventsBreakdown.length > 0 && (
+                    <div className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                        <div className="flex items-center gap-2.5 border-b border-[#F1F1F4] px-6 py-4">
+                            <span className="flex size-8 items-center justify-center rounded-lg bg-[#F1F6FF] text-[#1B84FF]">
+                                <Calendar className="size-4" />
+                            </span>
+                            <h2 className="text-[15px] font-bold text-[#071437]">
+                                Events &amp; Reunion Participation
+                            </h2>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <Table>
+                                <TableHeader className="bg-[#FCFCFC]">
+                                    <TableRow className="border-[#F1F1F4] hover:bg-transparent">
+                                        <TableHead className="w-14 px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                            SL
+                                        </TableHead>
+                                        <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                            Event
+                                        </TableHead>
+                                        <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                            Date
+                                        </TableHead>
+                                        <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                            Status
+                                        </TableHead>
+                                        <TableHead className="px-5 py-3.5 text-right text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                            Registrations
+                                        </TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {eventsBreakdown.map((ev, idx) => (
+                                        <TableRow key={ev.id} className="border-[#F1F1F4] transition-colors hover:bg-[#FCFCFC]">
+                                            <TableCell className="px-5 py-3.5 text-[12.5px] font-medium text-[#78829D] tabular-nums">
+                                                {idx + 1}
+                                            </TableCell>
+                                            <TableCell className="px-5 py-3.5 text-[13px] font-semibold text-[#071437]">
+                                                {ev.title}
+                                            </TableCell>
+                                            <TableCell className="px-4 py-3.5 text-[13px] text-[#4B5675]">
+                                                {ev.starts_on ? new Date(ev.starts_on).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}
+                                            </TableCell>
+                                            <TableCell className="px-4 py-3.5">
+                                                <span className="inline-flex items-center rounded-full border border-[#E5E7EB] bg-[#F9FAFB] px-2.5 py-0.5 text-[11px] font-semibold text-[#4B5675] capitalize">
+                                                    {ev.status}
+                                                </span>
+                                            </TableCell>
+                                            <TableCell className="px-5 py-3.5 text-right text-[13px] font-bold text-[#1B84FF] tabular-nums">
+                                                {ev.registrations_count}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
+                    </div>
+                )}
             </div>
         </AdminLayout>
     );

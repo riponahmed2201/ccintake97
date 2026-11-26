@@ -20,7 +20,7 @@ const fieldClass =
     'h-10 w-full rounded-md border !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!bg-white focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:!text-[#071437]';
 
 const textareaClass =
-    'w-full rounded-md border !border-[#DBDFE9] !bg-[#FCFCFC] p-3 font-mono text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!bg-white focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:!text-[#071437]';
+    'w-full rounded-md border !border-[#DBDFE9] !bg-[#FCFCFC] p-3 text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!bg-white focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:!text-[#071437]';
 
 const selectTriggerClass =
     '!h-10 w-full cursor-pointer rounded-md !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none transition-all duration-200 hover:!border-[#C4CADA] hover:!bg-[#FCFCFC] focus-visible:!border-[#1B84FF] focus-visible:!bg-white focus-visible:!ring-[3px] focus-visible:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:hover:!bg-[#FCFCFC]';
@@ -65,7 +65,7 @@ export default function ArticleCreate({ categories }: ArticleCreateProps) {
         >
             <Head title="Compose Article - INTAKE 97 Admin" />
 
-            <div className="mx-auto max-w-4xl space-y-5">
+            <div className="w-full space-y-5">
                 <Link
                     href="/admin/articles"
                     className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#78829D] transition-colors hover:text-[#071437]"
@@ -159,13 +159,13 @@ export default function ArticleCreate({ categories }: ArticleCreateProps) {
                         <div className="flex items-center justify-end gap-3 border-t border-[#F1F1F4] pt-5">
                             <Link
                                 href="/admin/articles"
-                                className="inline-flex h-10 items-center rounded-lg border border-[#DBDFE9] bg-white px-4 text-[13px] font-semibold text-[#4B5675] transition-colors hover:bg-[#FCFCFC]"
+                                className="inline-flex h-10 items-center rounded-lg border border-[#DBDFE9] !bg-white px-4 text-[13px] font-semibold !text-[#4B5675] transition-colors hover:!bg-[#F9F9F9] hover:!text-[#071437]"
                             >
                                 Cancel
                             </Link>
                             <Button
                                 type="submit"
-                                className="h-10 rounded-lg bg-[#1B84FF] px-5 text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90"
+                                className="h-10 cursor-pointer rounded-lg bg-[#1B84FF] px-5 text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90"
                             >
                                 Save & Proceed
                             </Button>

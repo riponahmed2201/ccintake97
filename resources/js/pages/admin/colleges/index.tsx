@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Head, router } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,6 +9,8 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
     Table,
     TableBody,
@@ -17,12 +19,39 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { Edit2, ExternalLink, ImagePlus, Plus, Trash2 } from 'lucide-react';
+import { Edit2, ExternalLink, ImagePlus, Plus, Search, Trash2 } from 'lucide-react';
 import type { College } from '@/types';
 
+type CollegeRow = College & { members_count: number };
+
 interface CollegesIndexProps {
-    colleges: (College & { members_count: number })[];
+    colleges: {
+        data: CollegeRow[];
+        current_page: number;
+        last_page: number;
+        per_page?: number;
+        from?: number;
+        to?: number;
+        total: number;
+        links: any[];
+    };
+    filters: {
+        search?: string;
+        status?: string;
+        per_page?: string;
+    };
 }
+
+const ALL = '__all__';
+
+const selectTriggerClass =
+    '!h-10 w-full cursor-pointer rounded-md !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none transition-all duration-200 hover:!border-[#C4CADA] hover:!bg-[#FCFCFC] focus-visible:!border-[#1B84FF] focus-visible:!bg-white focus-visible:!ring-[3px] focus-visible:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:hover:!bg-[#FCFCFC]';
+
+const selectMenuClass =
+    'z-[60] rounded-xl !border-[#F1F1F4] !bg-white p-1 !text-[#071437] shadow-[0_12px_32px_-8px_rgba(7,20,55,0.16)] dark:!bg-white dark:!text-[#071437]';
+
+const selectItemClass =
+    'cursor-pointer rounded-lg py-2 pr-8 pl-2.5 text-[13px] text-[#071437] focus:!bg-[#F1F6FF] focus:!text-[#1B84FF] dark:text-[#071437]';
 
 const fieldClass =
     'h-10 w-full rounded-md border !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!bg-white focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:!text-[#071437]';
@@ -32,7 +61,11 @@ const textareaClass =
 
 const labelClass = 'mb-1.5 block text-[12.5px] font-semibold text-[#071437]';
 
-export default function CollegesIndex({ colleges }: CollegesIndexProps) {
+export default function CollegesIndex({ colleges, filters }: CollegesIndexProps) {
+    const [search, setSearch] = useState(filters?.search || '');
+    const [selectedStatus, setSelectedStatus] = useState(filters?.status || '');
+    const [perPage, setPerPage] = useState(filters?.per_page || String(colleges.per_page || 10));
+
     const [editCollege, setEditCollege] = useState<College | null>(null);
     const [createOpen, setCreateOpen] = useState(false);
 
@@ -46,7 +79,17 @@ export default function CollegesIndex({ colleges }: CollegesIndexProps) {
     const [logoError, setLogoError] = useState<string | null>(null);
     const logoInput = useRef<HTMLInputElement>(null);
 
-    const editing = editCollege ? colleges.find((c) => c.id === editCollege.id) ?? editCollege : null;
+    const editing = editCollege ? colleges.data.find((c) => c.id === editCollege.id) ?? editCollege : null;
+
+    const applyFilter = (key: string, val: string) => {
+        const query = {
+            search,
+            status: selectedStatus,
+            per_page: perPage,
+            [key]: val,
+        };
+        router.get('/admin/colleges', query, { preserveState: true, replace: true });
+    };
 
     const handleLogoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -152,7 +195,7 @@ export default function CollegesIndex({ colleges }: CollegesIndexProps) {
                             Participating Cadet Colleges Network
                         </h1>
                         <p className="mt-1 text-[13px] text-[#78829D]">
-                            Manage the Cadet Colleges represented in the 1997 intake association.
+                            Showing {colleges.from || 0} to {colleges.to || 0} of {colleges.total} Cadet Colleges represented in the 1997 intake association.
                         </p>
                     </div>
                     <Button
@@ -160,11 +203,49 @@ export default function CollegesIndex({ colleges }: CollegesIndexProps) {
                             resetForm();
                             setCreateOpen(true);
                         }}
-                        className="h-10 rounded-lg bg-[#1B84FF] px-4 text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90"
+                        className="h-10 cursor-pointer rounded-lg bg-[#1B84FF] px-4 text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90"
                     >
                         <Plus className="mr-1.5 size-4" />
                         Add Cadet College
                     </Button>
+                </div>
+
+                {/* Filter Toolbar */}
+                <div className="rounded-xl border border-[#F1F1F4] bg-white p-4 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                applyFilter('search', search);
+                            }}
+                            className="relative sm:col-span-2"
+                        >
+                            <Search className="absolute top-3 left-3 size-4 text-[#99A1B7]" />
+                            <Input
+                                placeholder="Search by college name, short code, or location..."
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                className={`${fieldClass} pl-9`}
+                            />
+                        </form>
+                        <Select
+                            value={selectedStatus || ALL}
+                            onValueChange={(val) => {
+                                const next = val === ALL ? '' : val;
+                                setSelectedStatus(next);
+                                applyFilter('status', next);
+                            }}
+                        >
+                            <SelectTrigger className={selectTriggerClass}>
+                                <SelectValue placeholder="All Statuses" />
+                            </SelectTrigger>
+                            <SelectContent className={selectMenuClass}>
+                                <SelectItem value={ALL} className={selectItemClass}>All Statuses</SelectItem>
+                                <SelectItem value="participating" className={selectItemClass}>Participating</SelectItem>
+                                <SelectItem value="inactive" className={selectItemClass}>Inactive</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
                 </div>
 
                 <div className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
@@ -172,6 +253,9 @@ export default function CollegesIndex({ colleges }: CollegesIndexProps) {
                         <Table>
                             <TableHeader className="bg-[#FCFCFC]">
                                 <TableRow className="border-[#F1F1F4] hover:bg-transparent">
+                                    <TableHead className="w-14 px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        SL
+                                    </TableHead>
                                     <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
                                         College Name
                                     </TableHead>
@@ -196,12 +280,22 @@ export default function CollegesIndex({ colleges }: CollegesIndexProps) {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {colleges.map((c) => (
-                                    <TableRow
-                                        key={c.id}
-                                        className="border-[#F1F1F4] transition-colors hover:bg-[#FCFCFC]"
-                                    >
-                                        <TableCell className="px-5 py-3.5">
+                                {colleges.data.length === 0 ? (
+                                    <TableRow className="hover:bg-transparent">
+                                        <TableCell colSpan={8} className="h-28 text-center text-[13px] text-[#99A1B7]">
+                                            No cadet colleges match your query.
+                                        </TableCell>
+                                    </TableRow>
+                                ) : (
+                                    colleges.data.map((c, idx) => (
+                                        <TableRow
+                                            key={c.id}
+                                            className="border-[#F1F1F4] transition-colors hover:bg-[#FCFCFC]"
+                                        >
+                                            <TableCell className="px-5 py-3.5 text-[12.5px] font-medium text-[#78829D] tabular-nums">
+                                                {(colleges.from || 1) + idx}
+                                            </TableCell>
+                                            <TableCell className="px-5 py-3.5">
                                             <div className="flex items-center gap-3">
                                                 <span className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-amber-300/70 bg-white">
                                                     {c.logo_url ? (
@@ -264,16 +358,67 @@ export default function CollegesIndex({ colleges }: CollegesIndexProps) {
                                             <button
                                                 type="button"
                                                 onClick={() => openEdit(c)}
-                                                className="inline-flex size-8 items-center justify-center rounded-lg text-[#4B5675] transition-colors hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
+                                                className="inline-flex size-8 cursor-pointer items-center justify-center rounded-lg text-[#4B5675] transition-colors hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
                                                 title="Edit College"
                                             >
                                                 <Edit2 className="size-4" />
                                             </button>
                                         </TableCell>
                                     </TableRow>
-                                ))}
+                                    ))
+                                )}
                             </TableBody>
                         </Table>
+                    </div>
+
+                    {/* Pagination */}
+                    <div className="flex flex-col items-center justify-between gap-3 border-t border-[#F1F1F4] px-5 py-3.5 text-[12.5px] text-[#78829D] sm:flex-row">
+                        <div className="flex flex-wrap items-center gap-3">
+                            <span>
+                                Showing <strong className="font-semibold text-[#071437]">{colleges.from || 0}</strong>–
+                                <strong className="font-semibold text-[#071437]">{colleges.to || 0}</strong> of{' '}
+                                <strong className="font-semibold text-[#071437]">{colleges.total}</strong> · Page {colleges.current_page} of {colleges.last_page}
+                            </span>
+                            <div className="flex items-center gap-1.5">
+                                <span className="text-[12px] text-[#78829D]">Rows:</span>
+                                <Select
+                                    value={perPage}
+                                    onValueChange={(val) => {
+                                        setPerPage(val);
+                                        applyFilter('per_page', val);
+                                    }}
+                                >
+                                    <SelectTrigger className="!h-8 w-[72px] cursor-pointer rounded-md !border-[#DBDFE9] !bg-[#FCFCFC] px-2.5 text-[12px] font-medium !text-[#071437] !shadow-none">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent className={selectMenuClass}>
+                                        {['10', '25', '50', '100'].map((size) => (
+                                            <SelectItem key={size} value={size} className={selectItemClass}>
+                                                {size}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-1.5">
+                            {colleges.links.map((link, idx) => (
+                                <Link
+                                    key={idx}
+                                    href={link.url || '#'}
+                                    preserveScroll
+                                    disabled={!link.url}
+                                    dangerouslySetInnerHTML={{ __html: link.label }}
+                                    className={`rounded-lg px-2.5 py-1 text-[12px] font-medium transition-colors ${
+                                        link.active
+                                            ? 'bg-[#1B84FF] font-semibold text-white'
+                                            : link.url
+                                              ? 'text-[#4B5675] hover:bg-[#F1F6FF] hover:text-[#1B84FF]'
+                                              : 'pointer-events-none text-[#DBDFE9]'
+                                    }`}
+                                />
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>

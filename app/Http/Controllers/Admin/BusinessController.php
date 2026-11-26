@@ -17,15 +17,33 @@ class BusinessController extends Controller
         $query = Business::with(['owner.user', 'owner.college', 'category', 'industry'])
             ->latest();
 
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('city', 'like', "%{$search}%")
+                    ->orWhereHas('owner.user', function ($uq) use ($search) {
+                        $uq->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
         if ($status = $request->input('status')) {
             $query->where('status', $status);
         }
 
-        $businesses = $query->paginate(10)->withQueryString();
+        $perPage = (int) $request->input('per_page', 10);
+        if (! in_array($perPage, [10, 25, 50, 100], true)) {
+            $perPage = 10;
+        }
+
+        $businesses = $query->paginate($perPage)->withQueryString();
 
         return Inertia::render('admin/businesses/index', [
             'businesses' => $businesses,
-            'filters' => $request->only('status'),
+            'filters' => array_merge(
+                $request->only(['search', 'status']),
+                ['per_page' => (string) $perPage]
+            ),
         ]);
     }
 

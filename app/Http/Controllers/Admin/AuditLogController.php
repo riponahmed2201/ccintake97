@@ -19,14 +19,29 @@ class AuditLogController extends Controller
         }
 
         if ($action = $request->input('action')) {
-            $query->where('action', 'like', "%{$action}%");
+            $query->where(function ($q) use ($action) {
+                $q->where('action', 'like', "%{$action}%")
+                    ->orWhereHas('user', function ($uq) use ($action) {
+                        $uq->where('name', 'like', "%{$action}%");
+                    });
+            });
         }
 
-        $logs = $query->paginate(20)->withQueryString();
+        $perPage = (int) $request->input('per_page', 20);
+        if (! in_array($perPage, [10, 20, 50, 100], true)) {
+            $perPage = 20;
+        }
+
+        $logs = $query->paginate($perPage)->withQueryString();
+        $modules = AuditLog::query()->distinct()->orderBy('module')->pluck('module');
 
         return Inertia::render('admin/audit-logs/index', [
             'logs' => $logs,
-            'filters' => $request->only(['module', 'action']),
+            'modules' => $modules,
+            'filters' => array_merge(
+                $request->only(['module', 'action']),
+                ['per_page' => (string) $perPage]
+            ),
         ]);
     }
 }

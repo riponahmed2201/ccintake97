@@ -6,6 +6,7 @@ import { DatePicker } from '@/components/ui/date-picker';
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -17,7 +18,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Award, Plus, Trash2, UserPlus } from 'lucide-react';
+import { Award, Calendar, Plus, Search, Trash2, UserPlus } from 'lucide-react';
 import type { Committee, Member } from '@/types';
 
 interface CommitteesIndexProps {
@@ -43,8 +44,11 @@ const selectItemClass =
 const labelClass = 'mb-1.5 block text-[12.5px] font-semibold text-[#071437]';
 
 export default function CommitteesIndex({ committees, approvedMembers }: CommitteesIndexProps) {
+    const [search, setSearch] = useState('');
+    const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'past'>('all');
     const [createOpen, setCreateOpen] = useState(false);
     const [assignOpen, setAssignOpen] = useState<number | null>(null);
+    const [removeTarget, setRemoveTarget] = useState<{ id: number; name: string } | null>(null);
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -54,6 +58,24 @@ export default function CommitteesIndex({ committees, approvedMembers }: Committ
     const [selectedMemberId, setSelectedMemberId] = useState('');
     const [positionTitle, setPositionTitle] = useState('');
     const [roleType, setRoleType] = useState('member');
+
+    const filteredCommittees = committees.filter((c) => {
+        const matchesStatus = statusFilter === 'all' || c.status === statusFilter;
+        const q = search.trim().toLowerCase();
+        const matchesSearch =
+            !q ||
+            c.name.toLowerCase().includes(q) ||
+            (c.description || '').toLowerCase().includes(q) ||
+            (c.members || []).some((m) => (m.member?.user?.name || '').toLowerCase().includes(q));
+        return matchesStatus && matchesSearch;
+    });
+
+    const formatTermDate = (val?: string | null) => {
+        if (!val) return null;
+        const d = new Date(val);
+        if (Number.isNaN(d.getTime())) return val;
+        return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    };
 
     const handleCreate = (e: React.FormEvent) => {
         e.preventDefault();
@@ -71,6 +93,8 @@ export default function CommitteesIndex({ committees, approvedMembers }: Committ
                     setCreateOpen(false);
                     setName('');
                     setDescription('');
+                    setTermStart('');
+                    setTermEnd('');
                 },
             },
         );
@@ -97,10 +121,12 @@ export default function CommitteesIndex({ committees, approvedMembers }: Committ
         );
     };
 
-    const handleRemoveMember = (id: number) => {
-        if (confirm('Remove this member from the committee?')) {
-            router.delete(`/admin/committees/members/${id}`);
-        }
+    const confirmRemoveMember = () => {
+        if (!removeTarget) return;
+        router.delete(`/admin/committees/members/${removeTarget.id}`, {
+            preserveScroll: true,
+            onSuccess: () => setRemoveTarget(null),
+        });
     };
 
     return (
@@ -122,14 +148,53 @@ export default function CommitteesIndex({ committees, approvedMembers }: Committ
                     </div>
                     <Button
                         onClick={() => setCreateOpen(true)}
-                        className="h-10 rounded-lg bg-[#1B84FF] px-4 text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90"
+                        className="h-10 cursor-pointer rounded-lg bg-[#1B84FF] px-4 text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90"
                     >
                         <Plus className="mr-1.5 size-4" /> Create Committee
                     </Button>
                 </div>
 
+                {/* Search & Status Filter */}
+                <div className="rounded-xl border border-[#F1F1F4] bg-white p-4 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="relative flex-1">
+                            <Search className="absolute top-3 left-3 size-4 text-[#99A1B7]" />
+                            <input
+                                type="text"
+                                placeholder="Search committees or assigned members..."
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                className={`${fieldClass} pl-9`}
+                            />
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                            {(['all', 'active', 'past'] as const).map((st) => (
+                                <button
+                                    key={st}
+                                    type="button"
+                                    onClick={() => setStatusFilter(st)}
+                                    className={`cursor-pointer rounded-lg border px-3 py-1.5 text-[12.5px] font-semibold capitalize transition-colors ${
+                                        statusFilter === st
+                                            ? 'border-[#1B84FF] bg-[#F1F6FF] text-[#1B84FF]'
+                                            : 'border-[#F1F1F4] bg-white text-[#4B5675] hover:border-[#DBDFE9]'
+                                    }`}
+                                >
+                                    {st}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
                 <div className="grid grid-cols-1 gap-6">
-                    {committees.map((comm) => (
+                    {filteredCommittees.length === 0 ? (
+                        <div className="rounded-xl border border-[#F1F1F4] bg-white p-12 text-center shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                            <p className="text-[13.5px] font-medium text-[#78829D]">
+                                No committees match your filter.
+                            </p>
+                        </div>
+                    ) : (
+                        filteredCommittees.map((comm) => (
                         <div
                             key={comm.id}
                             className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]"
@@ -143,8 +208,23 @@ export default function CommitteesIndex({ committees, approvedMembers }: Committ
                                         <h2 className="text-[15px] font-bold text-[#071437]">
                                             {comm.name}
                                         </h2>
-                                        <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 font-mono text-[10.5px] font-semibold text-emerald-700 uppercase">
+                                        <span
+                                            className={`inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-[10.5px] font-semibold uppercase ${
+                                                comm.status === 'active'
+                                                    ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                                                    : 'border-[#DBDFE9] bg-[#F9F9F9] text-[#78829D]'
+                                            }`}
+                                        >
                                             {comm.status}
+                                        </span>
+                                        {(comm.term_start || comm.term_end) && (
+                                            <span className="inline-flex items-center gap-1 text-[11.5px] font-medium text-[#78829D]">
+                                                <Calendar className="size-3.5" />
+                                                {formatTermDate(comm.term_start) || 'Start'} – {formatTermDate(comm.term_end) || 'Present'}
+                                            </span>
+                                        )}
+                                        <span className="text-[11.5px] text-[#99A1B7]">
+                                            · {comm.members?.length ?? 0} {(comm.members?.length ?? 0) === 1 ? 'member' : 'members'}
                                         </span>
                                     </div>
                                     <p className="line-clamp-1 text-[12.5px] text-[#78829D]">
@@ -154,7 +234,7 @@ export default function CommitteesIndex({ committees, approvedMembers }: Committ
                                 <Button
                                     variant="outline"
                                     onClick={() => setAssignOpen(comm.id)}
-                                    className="h-9 shrink-0 rounded-lg border-[#DBDFE9] bg-white px-3.5 text-[12.5px] font-semibold text-[#071437] hover:border-[#1B84FF] hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
+                                    className="h-9 shrink-0 cursor-pointer rounded-lg border-[#DBDFE9] bg-white px-3.5 text-[12.5px] font-semibold text-[#071437] hover:border-[#1B84FF] hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
                                 >
                                     <UserPlus className="mr-1.5 size-3.5" /> Assign Member
                                 </Button>
@@ -179,13 +259,13 @@ export default function CommitteesIndex({ committees, approvedMembers }: Committ
                                                         {m.position_title}
                                                     </div>
                                                     <div className="text-[11px] text-[#78829D]">
-                                                        {m.member?.college?.short_name || m.member?.college?.name}
+                                                        {m.member?.college?.short_name || m.member?.college?.name || '—'}
                                                     </div>
                                                 </div>
                                                 <button
                                                     type="button"
-                                                    onClick={() => handleRemoveMember(m.id)}
-                                                    className="inline-flex size-8 items-center justify-center rounded-lg text-[#99A1B7] transition-colors hover:bg-rose-50 hover:text-rose-600"
+                                                    onClick={() => setRemoveTarget({ id: m.id, name: m.member?.user?.name || 'this member' })}
+                                                    className="inline-flex size-8 cursor-pointer items-center justify-center rounded-lg text-[#99A1B7] transition-colors hover:bg-rose-50 hover:text-rose-600"
                                                     title="Remove member"
                                                 >
                                                     <Trash2 className="size-4" />
@@ -196,7 +276,8 @@ export default function CommitteesIndex({ committees, approvedMembers }: Committ
                                 </div>
                             </div>
                         </div>
-                    ))}
+                        ))
+                    )}
                 </div>
             </div>
 
@@ -252,7 +333,7 @@ export default function CommitteesIndex({ committees, approvedMembers }: Committ
                                 type="button"
                                 variant="outline"
                                 onClick={() => setCreateOpen(false)}
-                                className="h-9 rounded-lg border-[#DBDFE9] bg-white px-4 text-[13px] font-semibold text-[#4B5675] hover:bg-[#FCFCFC]"
+                                className="h-9 cursor-pointer rounded-lg border-[#DBDFE9] !bg-white px-4 text-[13px] font-semibold !text-[#4B5675] hover:!bg-[#F9F9F9] hover:!text-[#071437]"
                             >
                                 Cancel
                             </Button>
@@ -338,7 +419,7 @@ export default function CommitteesIndex({ committees, approvedMembers }: Committ
                                 type="button"
                                 variant="outline"
                                 onClick={() => setAssignOpen(null)}
-                                className="h-9 rounded-lg border-[#DBDFE9] bg-white px-4 text-[13px] font-semibold text-[#4B5675] hover:bg-[#FCFCFC]"
+                                className="h-9 cursor-pointer rounded-lg border-[#DBDFE9] !bg-white px-4 text-[13px] font-semibold !text-[#4B5675] hover:!bg-[#F9F9F9] hover:!text-[#071437]"
                             >
                                 Cancel
                             </Button>
@@ -351,6 +432,36 @@ export default function CommitteesIndex({ committees, approvedMembers }: Committ
                             </Button>
                         </DialogFooter>
                     </form>
+                </DialogContent>
+            </Dialog>
+            {/* Confirm Remove Member Dialog */}
+            <Dialog open={!!removeTarget} onOpenChange={(open) => !open && setRemoveTarget(null)}>
+                <DialogContent className="rounded-2xl border-[#F1F1F4] !bg-white p-0 !text-[#071437] shadow-[0_20px_50px_-12px_rgba(7,20,55,0.18)] sm:max-w-md">
+                    <DialogHeader className="border-b border-[#F1F1F4] px-6 py-5">
+                        <DialogTitle className="text-[16px] font-bold text-[#071437]">
+                            Remove Committee Member
+                        </DialogTitle>
+                        <DialogDescription className="mt-1 text-[12.5px] text-[#78829D]">
+                            Are you sure you want to remove <strong className="text-[#071437]">{removeTarget?.name}</strong> from this committee?
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="px-6 py-4">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => setRemoveTarget(null)}
+                            className="h-9 cursor-pointer rounded-lg border-[#DBDFE9] !bg-white px-4 text-[13px] font-semibold !text-[#4B5675] hover:!bg-[#F9F9F9] hover:!text-[#071437]"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            type="button"
+                            onClick={confirmRemoveMember}
+                            className="h-9 cursor-pointer rounded-lg bg-[#F8285A] px-4 text-[13px] font-semibold text-white hover:bg-[#e11d48]"
+                        >
+                            Remove Member
+                        </Button>
+                    </DialogFooter>
                 </DialogContent>
             </Dialog>
         </AdminLayout>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
     Select,
     SelectContent,
@@ -28,14 +29,29 @@ const selectMenuClass =
 const selectItemClass =
     'cursor-pointer rounded-lg py-2 pr-8 pl-2.5 text-[13px] text-[#071437] focus:!bg-[#F1F6FF] focus:!text-[#1B84FF] dark:text-[#071437]';
 
+const statusPill = (status: string) => {
+    if (status === 'open') return 'border border-amber-200 bg-amber-50 text-amber-700';
+    if (status === 'resolved') return 'border border-emerald-200 bg-emerald-50 text-emerald-700';
+    if (status === 'closed') return 'border border-[#E5E7EB] bg-[#F9FAFB] text-[#78829D]';
+    return 'border border-blue-200 bg-[#F1F6FF] text-[#1B84FF]';
+};
+
+const priorityPill = (priority: string) => {
+    if (priority === 'urgent' || priority === 'high') return 'border border-rose-200 bg-rose-50 text-rose-700';
+    if (priority === 'medium') return 'border border-amber-200 bg-amber-50 text-amber-700';
+    return 'border border-[#E5E7EB] bg-[#FCFCFC] text-[#4B5675]';
+};
+
 export default function TicketShow({ ticket }: TicketShowProps) {
     const [replyText, setReplyText] = useState('');
     const [isInternal, setIsInternal] = useState(false);
     const [selectedStatus, setSelectedStatus] = useState<string>(ticket.status);
+    const [submitting, setSubmitting] = useState(false);
 
     const handleReply = (e: React.FormEvent) => {
         e.preventDefault();
         if (!replyText.trim()) return;
+        setSubmitting(true);
 
         router.post(
             `/admin/tickets/${ticket.id}/reply`,
@@ -44,7 +60,9 @@ export default function TicketShow({ ticket }: TicketShowProps) {
                 is_internal_note: isInternal,
             },
             {
+                preserveScroll: true,
                 onSuccess: () => setReplyText(''),
+                onFinish: () => setSubmitting(false),
             },
         );
     };
@@ -64,7 +82,7 @@ export default function TicketShow({ ticket }: TicketShowProps) {
         >
             <Head title={`Ticket ${ticket.ticket_no} - INTAKE 97 Admin`} />
 
-            <div className="mx-auto max-w-4xl space-y-6">
+            <div className="w-full space-y-6">
                 <Link
                     href="/admin/tickets"
                     className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#78829D] transition-colors hover:text-[#071437]"
@@ -80,10 +98,10 @@ export default function TicketShow({ ticket }: TicketShowProps) {
                                 <span className="font-mono text-[14px] font-bold text-[#071437]">
                                     {ticket.ticket_no}
                                 </span>
-                                <span className="inline-flex items-center rounded-md border border-[#E5E7EB] bg-[#FCFCFC] px-2 py-0.5 text-[11px] font-semibold text-[#4B5675] uppercase">
+                                <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] font-semibold uppercase ${priorityPill(ticket.priority)}`}>
                                     Priority: {ticket.priority}
                                 </span>
-                                <span className="inline-flex items-center rounded-full border border-blue-200 bg-[#F1F6FF] px-2.5 py-0.5 text-[11px] font-semibold text-[#1B84FF] capitalize">
+                                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold capitalize ${statusPill(ticket.status)}`}>
                                     {ticket.status.replace('_', ' ')}
                                 </span>
                             </div>
@@ -173,26 +191,26 @@ export default function TicketShow({ ticket }: TicketShowProps) {
                         />
 
                         <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
-                            <label className="flex cursor-pointer items-center gap-2 text-[12.5px] font-medium text-[#4B5675]">
-                                <input
-                                    type="checkbox"
+                            <label className="flex cursor-pointer items-center gap-2.5 text-[12.5px] font-medium text-[#4B5675]">
+                                <Checkbox
                                     checked={isInternal}
-                                    onChange={(e) => setIsInternal(e.target.checked)}
-                                    className="size-4 rounded border-[#DBDFE9] text-amber-600 focus:ring-amber-500"
+                                    onCheckedChange={(checked) => setIsInternal(Boolean(checked))}
+                                    className="border-[#DBDFE9] data-[state=checked]:border-amber-600 data-[state=checked]:bg-amber-600 data-[state=checked]:text-white"
                                 />
-                                Internal note only (not visible to member)
+                                <span>Internal note only (not visible to member)</span>
                             </label>
 
                             <Button
                                 type="submit"
-                                className={`h-10 rounded-lg px-5 text-[13px] font-semibold text-white ${
+                                disabled={submitting}
+                                className={`h-10 cursor-pointer rounded-lg px-5 text-[13px] font-semibold text-white ${
                                     isInternal
                                         ? 'bg-amber-600 hover:bg-amber-700'
                                         : 'bg-[#1B84FF] hover:bg-[#1B84FF]/90'
                                 }`}
                             >
                                 <Send className="mr-1.5 size-3.5" />
-                                {isInternal ? 'Save Internal Note' : 'Send Reply to Member'}
+                                {submitting ? 'Sending...' : isInternal ? 'Save Internal Note' : 'Send Reply to Member'}
                             </Button>
                         </div>
                     </form>

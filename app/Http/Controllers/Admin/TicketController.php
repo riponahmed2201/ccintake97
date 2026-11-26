@@ -18,15 +18,38 @@ class TicketController extends Controller
         $query = SupportTicket::with(['user', 'assignedAgent'])
             ->latest();
 
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('ticket_no', 'like', "%{$search}%")
+                    ->orWhere('subject', 'like', "%{$search}%")
+                    ->orWhereHas('user', function ($uq) use ($search) {
+                        $uq->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    });
+            });
+        }
+
         if ($status = $request->input('status')) {
             $query->where('status', $status);
         }
 
-        $tickets = $query->paginate(10)->withQueryString();
+        if ($priority = $request->input('priority')) {
+            $query->where('priority', $priority);
+        }
+
+        $perPage = (int) $request->input('per_page', 10);
+        if (! in_array($perPage, [10, 25, 50, 100], true)) {
+            $perPage = 10;
+        }
+
+        $tickets = $query->paginate($perPage)->withQueryString();
 
         return Inertia::render('admin/tickets/index', [
             'tickets' => $tickets,
-            'filters' => $request->only('status'),
+            'filters' => array_merge(
+                $request->only(['search', 'status', 'priority']),
+                ['per_page' => (string) $perPage]
+            ),
         ]);
     }
 

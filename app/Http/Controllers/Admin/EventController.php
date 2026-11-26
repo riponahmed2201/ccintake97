@@ -18,13 +18,40 @@ class EventController extends Controller
 {
     public function index(Request $request): Response
     {
-        $events = Event::with('category')
+        $query = Event::with('category')
             ->withCount('registrations')
-            ->latest('starts_on')
-            ->paginate(10);
+            ->latest('starts_on');
+
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('venue', 'like', "%{$search}%");
+            });
+        }
+
+        if ($status = $request->input('status')) {
+            $query->where('status', $status);
+        }
+
+        if ($categoryId = $request->input('category_id')) {
+            $query->where('category_id', $categoryId);
+        }
+
+        $perPage = (int) $request->input('per_page', 10);
+        if (! in_array($perPage, [10, 25, 50, 100], true)) {
+            $perPage = 10;
+        }
+
+        $events = $query->paginate($perPage)->withQueryString();
+        $categories = EventCategory::orderBy('display_order')->get(['id', 'name']);
 
         return Inertia::render('admin/events/index', [
             'events' => $events,
+            'categories' => $categories,
+            'filters' => array_merge(
+                $request->only(['search', 'status', 'category_id']),
+                ['per_page' => (string) $perPage]
+            ),
         ]);
     }
 

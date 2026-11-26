@@ -14,18 +14,42 @@ use Inertia\Response;
 
 class InitiativeController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $initiatives = Initiative::with(['coordinator.user', 'coordinator.college'])
+        $query = Initiative::with(['coordinator.user', 'coordinator.college'])
             ->withCount('participants')
-            ->latest()
-            ->paginate(10);
+            ->latest();
 
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        if ($category = $request->input('category')) {
+            $query->where('category', $category);
+        }
+
+        if ($status = $request->input('status')) {
+            $query->where('status', $status);
+        }
+
+        $perPage = (int) $request->input('per_page', 10);
+        if (! in_array($perPage, [10, 25, 50, 100], true)) {
+            $perPage = 10;
+        }
+
+        $initiatives = $query->paginate($perPage)->withQueryString();
         $approvedMembers = Member::with('user')->where('membership_status', 'approved')->get();
 
         return Inertia::render('admin/initiatives/index', [
             'initiatives' => $initiatives,
             'approvedMembers' => $approvedMembers,
+            'filters' => array_merge(
+                $request->only(['search', 'category', 'status']),
+                ['per_page' => (string) $perPage]
+            ),
         ]);
     }
 

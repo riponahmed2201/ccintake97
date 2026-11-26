@@ -14,14 +14,40 @@ use Inertia\Response;
 
 class CollegeController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $colleges = College::withCount('members')
-            ->orderBy('display_order')
-            ->get();
+        $query = College::withCount('members')
+            ->orderBy('display_order');
+
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('short_name', 'like', "%{$search}%")
+                  ->orWhere('location', 'like', "%{$search}%");
+            });
+        }
+
+        if (($status = $request->input('status')) !== null && $status !== '') {
+            if ($status === 'participating') {
+                $query->where('is_participating', true);
+            } elseif ($status === 'inactive') {
+                $query->where('is_participating', false);
+            }
+        }
+
+        $perPage = (int) $request->input('per_page', 10);
+        if (! in_array($perPage, [10, 25, 50, 100], true)) {
+            $perPage = 10;
+        }
+
+        $colleges = $query->paginate($perPage)->withQueryString();
 
         return Inertia::render('admin/colleges/index', [
             'colleges' => $colleges,
+            'filters' => array_merge(
+                $request->only(['search', 'status']),
+                ['per_page' => (string) $perPage]
+            ),
         ]);
     }
 

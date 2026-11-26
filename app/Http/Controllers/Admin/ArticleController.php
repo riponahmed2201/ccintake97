@@ -16,12 +16,39 @@ class ArticleController extends Controller
 {
     public function index(Request $request): Response
     {
-        $articles = Article::with(['category', 'author', 'publisher'])
-            ->latest()
-            ->paginate(10);
+        $query = Article::with(['category', 'author', 'publisher'])
+            ->latest();
+
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('excerpt', 'like', "%{$search}%");
+            });
+        }
+
+        if ($status = $request->input('status')) {
+            $query->where('status', $status);
+        }
+
+        if ($categoryId = $request->input('category_id')) {
+            $query->where('category_id', $categoryId);
+        }
+
+        $perPage = (int) $request->input('per_page', 10);
+        if (! in_array($perPage, [10, 25, 50, 100], true)) {
+            $perPage = 10;
+        }
+
+        $articles = $query->paginate($perPage)->withQueryString();
+        $categories = ArticleCategory::orderBy('display_order')->get(['id', 'name']);
 
         return Inertia::render('admin/articles/index', [
             'articles' => $articles,
+            'categories' => $categories,
+            'filters' => array_merge(
+                $request->only(['search', 'status', 'category_id']),
+                ['per_page' => (string) $perPage]
+            ),
         ]);
     }
 

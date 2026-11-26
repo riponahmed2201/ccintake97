@@ -11,6 +11,9 @@ import {
     GraduationCap,
     UserCheck,
     History,
+    User,
+    Pencil,
+    ExternalLink,
 } from 'lucide-react';
 import type { MembershipApplication } from '@/types';
 
@@ -24,9 +27,11 @@ const fieldClass =
 export default function ApplicationShow({ application }: ApplicationShowProps) {
     const [selectedDecision, setSelectedDecision] = useState<'approved' | 'rejected' | 'under_review' | 'info_required'>('approved');
     const [decisionNote, setDecisionNote] = useState('');
+    const [submitting, setSubmitting] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setSubmitting(true);
         router.post(
             `/admin/applications/${application.id}/decide`,
             {
@@ -36,9 +41,20 @@ export default function ApplicationShow({ application }: ApplicationShowProps) {
             {
                 preserveScroll: true,
                 onSuccess: () => setDecisionNote(''),
+                onFinish: () => setSubmitting(false),
             }
         );
     };
+
+    const statusBadgeClass = (status: string) => {
+        if (status === 'approved') return 'bg-[#EAFFF1] text-[#17C653]';
+        if (status === 'submitted') return 'bg-[#FFF8DD] text-[#B45309]';
+        if (status === 'under_review') return 'bg-[#F1F6FF] text-[#1B84FF]';
+        if (status === 'info_required') return 'bg-[#F8F5FF] text-[#7239EA]';
+        return 'bg-[#FFEEF3] text-[#F8285A]';
+    };
+
+    const formatStatus = (status: string) => status.replace(/_/g, ' ');
 
     return (
         <AdminLayout
@@ -69,17 +85,9 @@ export default function ApplicationShow({ application }: ApplicationShowProps) {
                                 Application #{application.application_no}
                             </h1>
                             <span
-                                className={`inline-flex rounded-md px-2.5 py-0.5 text-[11px] font-semibold capitalize ${
-                                    application.status === 'approved'
-                                        ? 'bg-[#EAFFF1] text-[#17C653]'
-                                        : application.status === 'submitted'
-                                          ? 'bg-[#FFF8DD] text-[#B45309]'
-                                          : application.status === 'under_review'
-                                            ? 'bg-[#F1F6FF] text-[#1B84FF]'
-                                            : 'bg-[#FFEEF3] text-[#F8285A]'
-                                }`}
+                                className={`inline-flex rounded-md px-2.5 py-0.5 text-[11px] font-semibold capitalize ${statusBadgeClass(application.status)}`}
                             >
-                                {application.status.replace('_', ' ')}
+                                {formatStatus(application.status)}
                             </span>
                         </div>
                         <p className="mt-1 text-[12.5px] text-[#78829D]">
@@ -87,15 +95,79 @@ export default function ApplicationShow({ application }: ApplicationShowProps) {
                         </p>
                     </div>
 
-                    <div className="text-[13px] text-[#4B5675]">
-                        Applicant: <strong className="font-semibold text-[#071437]">{application.member?.user?.name}</strong>{' '}
-                        <span className="text-[#78829D]">({application.member?.user?.email})</span>
+                    <div className="flex flex-wrap items-center gap-2">
+                        {application.member_id && (
+                            <>
+                                <Link
+                                    href={`/admin/members/${application.member_id}`}
+                                    className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-[#DBDFE9] bg-white px-3 text-[12.5px] font-semibold text-[#4B5675] transition-colors hover:bg-[#F9F9F9] hover:text-[#071437]"
+                                >
+                                    <ExternalLink className="size-3.5 text-[#78829D]" />
+                                    Member Profile
+                                </Link>
+                                <Link
+                                    href={`/admin/members/${application.member_id}/edit`}
+                                    className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-[#DBDFE9] bg-white px-3 text-[12.5px] font-semibold text-[#4B5675] transition-colors hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
+                                >
+                                    <Pencil className="size-3.5 text-[#78829D]" />
+                                    Edit Member
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                     {/* Left: 2 Columns */}
                     <div className="space-y-6 lg:col-span-2">
+                        {/* Applicant Profile Snapshot */}
+                        <section className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-6">
+                            <h2 className="flex items-center gap-2 border-b border-[#F1F1F4] pb-3.5 text-[15px] font-semibold text-[#071437]">
+                                <User className="size-4 text-[#1B84FF]" />
+                                Applicant Details
+                            </h2>
+                            <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                                <div>
+                                    <div className="text-[11.5px] text-[#99A1B7]">Full Name</div>
+                                    <div className="mt-0.5 text-[13.5px] font-semibold text-[#071437]">
+                                        {application.member?.user?.name || '—'}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="text-[11.5px] text-[#99A1B7]">Email Address</div>
+                                    <div className="mt-0.5 text-[13px] font-medium text-[#4B5675]">
+                                        {application.member?.user?.email || '—'}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="text-[11.5px] text-[#99A1B7]">Phone Number</div>
+                                    <div className="mt-0.5 text-[13px] font-medium text-[#4B5675]">
+                                        {application.member?.user?.phone || '—'}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="text-[11.5px] text-[#99A1B7]">Cadet Name</div>
+                                    <div className="mt-0.5 text-[13px] font-medium text-[#071437]">
+                                        {application.member?.profile?.cadet_name || '—'}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="text-[11.5px] text-[#99A1B7]">Designation &amp; Organization</div>
+                                    <div className="mt-0.5 text-[13px] font-medium text-[#071437]">
+                                        {application.member?.profile?.designation || application.member?.profile?.organization
+                                            ? [application.member?.profile?.designation, application.member?.profile?.organization].filter(Boolean).join(' · ')
+                                            : '—'}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="text-[11.5px] text-[#99A1B7]">CCCL Life Member No</div>
+                                    <div className="mt-0.5 text-[13px] font-medium text-[#071437]">
+                                        {application.member?.profile?.cccl_life_member_no || '—'}
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
                         <section className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] sm:p-6">
                             <h2 className="flex items-center gap-2 border-b border-[#F1F1F4] pb-3.5 text-[15px] font-semibold text-[#071437]">
                                 <GraduationCap className="size-4 text-[#1B84FF]" />
@@ -150,9 +222,9 @@ export default function ApplicationShow({ application }: ApplicationShowProps) {
                                 ) : (
                                     application.reviews?.map((r) => (
                                         <div key={r.id} className="space-y-1 px-5 py-4 sm:px-6">
-                                            <div className="flex items-center justify-between font-semibold">
-                                                <span className="text-[#071437]">
-                                                    Transition: {r.from_status} → {r.to_status}
+                                            <div className="flex flex-wrap items-center justify-between gap-2 font-semibold">
+                                                <span className="text-[#071437] capitalize">
+                                                    {formatStatus(r.from_status || 'new')} → {formatStatus(r.to_status)}
                                                 </span>
                                                 <span className="text-[11.5px] font-normal text-[#99A1B7]">
                                                     {new Date(r.created_at).toLocaleString()}
@@ -233,7 +305,8 @@ export default function ApplicationShow({ application }: ApplicationShowProps) {
 
                                 <Button
                                     type="submit"
-                                    className={`h-10 w-full rounded-lg text-[13px] font-semibold text-white ${
+                                    disabled={submitting}
+                                    className={`h-10 w-full cursor-pointer rounded-lg text-[13px] font-semibold text-white ${
                                         selectedDecision === 'approved'
                                             ? 'bg-[#17C653] hover:bg-[#13a845]'
                                             : selectedDecision === 'rejected'
@@ -241,7 +314,7 @@ export default function ApplicationShow({ application }: ApplicationShowProps) {
                                               : 'bg-[#1B84FF] hover:bg-[#006AE6]'
                                     }`}
                                 >
-                                    Submit Decision
+                                    {submitting ? 'Submitting...' : 'Submit Decision'}
                                 </Button>
                             </form>
                         </section>
