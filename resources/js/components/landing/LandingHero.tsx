@@ -115,7 +115,7 @@ export function LandingHero({
 
             <div className={`${LANDING_CONTAINER} ${LANDING_HERO_INNER}`}>
                 <Reveal>
-                    <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-[#F4C2C7]/25 bg-white/[0.06] px-4 py-1.5 text-[11px] font-medium tracking-[0.22em] text-[#F4C2C7] uppercase backdrop-blur-md">
+                    <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-[#F4C2C7]/30 bg-[#450D15]/85 px-4 py-1.5 text-[11px] font-medium tracking-[0.22em] text-white uppercase shadow-sm backdrop-blur-md">
                         <span className="h-1.5 w-1.5 rounded-full bg-[#F4C2C7]" />
                         CCINTAKE 97 · Ten Cadet Colleges · Est. {metrics.intake_year}
                     </div>

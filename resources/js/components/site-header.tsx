@@ -150,22 +150,14 @@ export function SiteHeader({
                     {auth?.user ? (
                         <Link
                             href="/dashboard"
-                            className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-nav text-[15px] font-medium transition-all duration-300 ${
-                                solidHeader
-                                    ? 'bg-brand-gold text-white hover:bg-brand-gold-muted shadow-sm'
-                                    : 'bg-brand-gold text-white hover:bg-brand-gold-muted shadow-sm'
-                            }`}
+                            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#6E1622] via-[#450D15] to-[#5E121D] px-5 py-2.5 font-nav text-[15px] font-medium text-white shadow-[0_10px_24px_-8px_rgba(94,18,29,0.5)] transition-all duration-300 hover:brightness-110"
                         >
                             Member Portal <ArrowRight className="h-3.5 w-3.5 text-white" />
                         </Link>
                     ) : (
                         <Link
                             href="/login"
-                            className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-nav text-[15px] font-medium transition-all duration-300 ${
-                                solidHeader
-                                    ? 'bg-brand-gold text-white hover:bg-brand-gold-muted shadow-sm'
-                                    : 'bg-brand-gold text-white hover:bg-brand-gold-muted shadow-sm'
-                            }`}
+                            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#6E1622] via-[#450D15] to-[#5E121D] px-5 py-2.5 font-nav text-[15px] font-medium text-white shadow-[0_10px_24px_-8px_rgba(94,18,29,0.5)] transition-all duration-300 hover:brightness-110"
                         >
                             <UserRound className="h-4 w-4 text-white" />
                             <span>Sign in</span>
@@ -218,7 +210,7 @@ export function SiteHeader({
                         </a>
                     )}
                     <div className="mt-4 grid grid-cols-2 gap-3">
-                        <Link href="/login" onClick={closeMobile} className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-gold py-3 text-center text-sm font-medium text-white hover:bg-brand-gold-muted">
+                        <Link href="/login" onClick={closeMobile} className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#6E1622] via-[#450D15] to-[#5E121D] py-3 text-center text-sm font-medium text-white shadow-[0_10px_24px_-8px_rgba(94,18,29,0.5)] transition-all hover:brightness-110">
                             <UserRound className="h-4 w-4 text-white" />
                             Sign in
                         </Link>
