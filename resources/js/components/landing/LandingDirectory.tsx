@@ -111,9 +111,9 @@ export function LandingDirectory({
                                             key={m.key}
                                             href={m.href}
                                             data-card
-                                            className="group flex w-[78vw] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-[#091324]/[0.08] bg-white text-[#091324] shadow-[0_8px_28px_-14px_rgba(9,19,36,0.12)] transition-all duration-300 hover:-translate-y-1 hover:border-[#450D15]/60 hover:shadow-[0_22px_45px_-20px_rgba(9,19,36,0.2)] sm:w-[290px]"
+                                            className="group flex w-[78vw] shrink-0 snap-start flex-col overflow-hidden rounded-3xl border border-[#450D15]/12 bg-white text-[#091324] shadow-[0_14px_34px_-18px_rgba(69,13,21,0.18)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[#450D15]/40 hover:shadow-[0_24px_50px_-20px_rgba(69,13,21,0.26)] sm:w-[290px]"
                                         >
-                                            <div className="relative h-56 w-full overflow-hidden bg-[#F8FAFC]">
+                                            <div className="relative h-56 w-full overflow-hidden bg-[#FAF5F6]">
                                                 {m.photo ? (
                                                     <img
                                                         src={m.photo}
@@ -122,31 +122,31 @@ export function LandingDirectory({
                                                         className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                                                     />
                                                 ) : (
-                                                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F8FAFC] to-[#F1F5F9]">
-                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[#091324] font-serif text-3xl font-semibold text-[#F4C2C7] shadow-sm ring-2 ring-[#450D15]/30">
+                                                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#FAF5F6] to-[#F2E6E8]">
+                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-[#6E1622] to-[#450D15] font-serif text-3xl font-semibold text-[#F4C2C7] shadow-md ring-4 ring-white">
                                                             {m.initials}
                                                         </span>
                                                     </div>
                                                 )}
 
-                                                <div className="absolute top-3 right-3 left-3 flex items-center justify-between">
-                                                    <span className="flex items-center gap-1.5 rounded-full bg-white/95 py-1 pr-2.5 pl-1 text-[11px] font-semibold text-[#0B1220] shadow-xs ring-1 ring-[#0B1220]/10 backdrop-blur-sm">
+                                                <div className="absolute top-3.5 right-3.5 left-3.5 flex items-center justify-between">
+                                                    <span className="flex items-center gap-1.5 rounded-full bg-white/95 py-1 pr-2.5 pl-1 text-[11px] font-semibold text-[#091324] shadow-xs ring-1 ring-[#450D15]/10 backdrop-blur-sm">
                                                         <span className="flex h-5 w-5 items-center justify-center overflow-hidden rounded-full bg-white">
                                                             {col?.logo_url ? (
                                                                 <img src={col.logo_url} alt="" className="h-full w-full object-contain p-0.5" />
                                                             ) : (
-                                                                <span className="text-[8px] font-bold text-[#0B1220]">{m.college}</span>
+                                                                <span className="text-[8px] font-bold text-[#450D15]">{m.college}</span>
                                                             )}
                                                         </span>
                                                         {m.college} ’97
                                                     </span>
                                                     {usingSamples ? (
-                                                        <span className="rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-[#4A4F5C] uppercase ring-1 ring-[#0B1220]/10">
+                                                        <span className="rounded-full bg-white/95 px-2.5 py-0.5 text-[10px] font-semibold tracking-wide text-[#5E121D] uppercase ring-1 ring-[#450D15]/15">
                                                             Sample
                                                         </span>
                                                     ) : (
                                                         <span
-                                                            className="flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-emerald-600 shadow-xs ring-1 ring-[#0B1220]/10"
+                                                            className="flex h-7 w-7 items-center justify-center rounded-full bg-[#450D15] text-[#F4C2C7] shadow-xs ring-1 ring-[#F4C2C7]/40"
                                                             aria-label="Verified"
                                                         >
                                                             <ShieldCheck className="h-4 w-4" />
@@ -156,22 +156,22 @@ export function LandingDirectory({
                                             </div>
 
                                             <div className="flex flex-1 flex-col p-5">
-                                                <h3 className="line-clamp-1 text-[17px] leading-snug font-bold text-[#0B1220] transition-colors group-hover:text-[#1B84FF]">
+                                                <h3 className="line-clamp-1 font-serif text-[20px] leading-snug font-medium text-[#091324] transition-colors group-hover:text-[#450D15]">
                                                     {m.name}
                                                 </h3>
-                                                <p className="mt-1 line-clamp-1 text-[13px] text-[#4A4F5C]">
+                                                <p className="mt-1 line-clamp-1 text-[13.5px] text-[#4A4F5C]">
                                                     {m.role}
                                                 </p>
                                                 {m.location && (
-                                                    <div className="mt-2.5 inline-flex items-center gap-1 text-[12px] text-[#78829D]">
-                                                        <MapPin className="h-3.5 w-3.5 shrink-0" />
+                                                    <div className="mt-2.5 inline-flex items-center gap-1.5 text-[12px] text-[#4A4F5C]">
+                                                        <MapPin className="h-3.5 w-3.5 shrink-0 text-[#5E121D]" />
                                                         <span className="truncate">{m.location}</span>
                                                     </div>
                                                 )}
                                             </div>
 
-                                            <div className="flex items-center justify-between border-t border-[#F1F1F4] px-5 py-3 text-[13px] font-semibold text-[#1B84FF]">
-                                                <span>View Profile</span>
+                                            <div className="flex items-center justify-between border-t border-[#450D15]/[0.08] bg-[#FAF5F6]/70 px-5 py-3 text-[13px] font-semibold text-[#450D15] transition-colors duration-300 group-hover:bg-[#450D15] group-hover:text-white">
+                                                <span>View Dossier</span>
                                                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                                             </div>
                                         </Link>
@@ -182,13 +182,15 @@ export function LandingDirectory({
                                 <Link
                                     href="/directory"
                                     data-card
-                                    className="group flex h-[420px] w-[78vw] shrink-0 snap-start flex-col justify-between rounded-xl border border-brand-navy/10 bg-slate-50 p-7 text-brand-navy sm:w-[300px]"
+                                    className="group flex h-[402px] w-[78vw] shrink-0 snap-start flex-col justify-between rounded-3xl border border-[#F4C2C7]/20 bg-gradient-to-br from-[#6E1622] via-[#450D15] to-[#2E080E] p-7 text-white shadow-[0_20px_50px_-20px_rgba(69,13,21,0.5)] transition-all duration-300 hover:-translate-y-1.5 sm:w-[290px]"
                                 >
-                                    <Users className="h-8 w-8" strokeWidth={1.5} />
+                                    <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-[#F4C2C7]">
+                                        <Users className="h-6 w-6" strokeWidth={1.6} />
+                                    </span>
                                     <div>
-                                        <div className="text-[56px] leading-none font-semibold tabular-nums">{metrics.verified_members}</div>
-                                        <div className="mt-2 text-[22px] leading-tight font-semibold">batchmates across 34 nations</div>
-                                        <span className="mt-6 inline-flex items-center gap-2 text-[15px] font-medium">
+                                        <div className="font-sans text-[52px] leading-none font-bold tabular-nums text-white">{metrics.verified_members}</div>
+                                        <div className="mt-3 font-serif text-[22px] leading-snug font-medium text-white/95">batchmates across 34 nations</div>
+                                        <span className="mt-6 inline-flex items-center gap-2 text-[14px] font-semibold text-[#F4C2C7]">
                                             Browse everyone <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                                         </span>
                                     </div>
@@ -201,7 +203,7 @@ export function LandingDirectory({
                                     <div className="flex flex-col gap-6 border-t border-brand-navy/10 pt-10 lg:flex-row lg:items-center lg:justify-between">
                                         <form
                                             onSubmit={submitDirectorySearch}
-                                            className="flex w-full items-center gap-2 rounded-full border border-brand-navy/10 bg-slate-50 p-1.5 pl-5 lg:max-w-xl"
+                                            className="flex w-full items-center gap-2 rounded-full border border-[#450D15]/15 bg-[#FAF5F6]/70 p-1.5 pl-5 focus-within:border-[#450D15]/40 focus-within:bg-white lg:max-w-xl"
                                         >
                                             <Search className="h-5 w-5 shrink-0 text-[#0B1220]/40" />
                                             <input
@@ -226,7 +228,7 @@ export function LandingDirectory({
                                                         title={c.name}
                                                         aria-label={`Browse ${c.name}`}
                                                         onClick={() => router.get(typeof c.id === 'number' ? `/directory?college_id=${c.id}` : '/directory')}
-                                                        className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white ring-2 ring-[#0B1220] transition-transform duration-300 hover:z-10 hover:-translate-y-1 hover:scale-110"
+                                                        className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-white ring-2 ring-[#450D15]/25 transition-transform duration-300 hover:z-10 hover:-translate-y-1 hover:scale-110"
                                                     >
                                                         {c.logo_url ? <img src={c.logo_url} alt="" className="h-full w-full object-contain p-0.5" /> : <span className="text-[9px] font-semibold text-[#0B1220]">{c.short_name}</span>}
                                                     </button>
