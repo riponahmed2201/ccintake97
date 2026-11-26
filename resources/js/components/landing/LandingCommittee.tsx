@@ -42,7 +42,7 @@ export function LandingCommittee({
                                                 <Reveal>
                                                     <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
                                                         <div>
-                                                            <p className="text-[11px] font-medium tracking-[0.26em] text-[#8E6B28] uppercase">
+                                                            <p className="text-[11px] font-medium tracking-[0.26em] text-[#047857] uppercase">
                                                                 Executive Roster
                                                             </p>
                                                             <h2 className="mt-2 font-serif text-3xl font-medium text-[#091324] sm:text-4xl">
@@ -50,7 +50,7 @@ export function LandingCommittee({
                                                             </h2>
                                                         </div>
                                                         <div className="flex items-center gap-3 rounded-full bg-[#FAF8F3] px-4 py-2 ring-1 ring-[#091324]/[0.07]">
-                                                            <Calendar className="h-4 w-4 text-[#8E6B28]" />
+                                                            <Calendar className="h-4 w-4 text-[#047857]" />
                                                             <span className="text-[13px] font-semibold text-[#091324]">
                                                                 {term ? `${term[1]} – ${term[2]}` : 'Two-year term'}
                                                             </span>
@@ -90,24 +90,24 @@ export function LandingCommittee({
                                             <div className="mt-10 space-y-5">
                                                 {lead && (
                                                     <Reveal>
-                                                        <div className="flex flex-col justify-between gap-6 rounded-2xl border border-[#C8A252]/40 bg-[#091324] p-6 text-[#F7F3EA] shadow-[0_24px_50px_-24px_rgba(9,19,36,0.45)] sm:flex-row sm:items-center sm:p-8">
+                                                        <div className="flex flex-col justify-between gap-6 rounded-2xl border border-[#10B981]/40 bg-[#091324] p-6 text-[#F7F3EA] shadow-[0_24px_50px_-24px_rgba(9,19,36,0.45)] sm:flex-row sm:items-center sm:p-8">
                                                             <div className="flex items-center gap-5">
                                                                 {lead.avatar ? (
-                                                                    <img src={lead.avatar} alt="" className="h-18 w-18 shrink-0 rounded-2xl object-cover ring-2 ring-[#C8A252]/50" />
+                                                                    <img src={lead.avatar} alt="" className="h-18 w-18 shrink-0 rounded-2xl object-cover ring-2 ring-[#10B981]/50" />
                                                                 ) : (
-                                                                    <span className="flex h-18 w-18 shrink-0 items-center justify-center rounded-2xl bg-[#11203B] font-serif text-2xl font-semibold text-[#E8D5A3] ring-2 ring-[#C8A252]/40">
+                                                                    <span className="flex h-18 w-18 shrink-0 items-center justify-center rounded-2xl bg-[#11203B] font-serif text-2xl font-semibold text-[#34D399] ring-2 ring-[#10B981]/40">
                                                                         {initialsOf(lead.name)}
                                                                     </span>
                                                                 )}
                                                                 <div>
-                                                                    <span className="inline-block rounded-full bg-[#C8A252]/20 px-3 py-0.5 text-[11px] font-semibold tracking-[0.18em] text-[#E8D5A3] uppercase">
+                                                                    <span className="inline-block rounded-full bg-[#10B981]/20 px-3 py-0.5 text-[11px] font-semibold tracking-[0.18em] text-[#34D399] uppercase">
                                                                         {lead.title}
                                                                     </span>
                                                                     <h3 className="mt-2 font-serif text-2xl font-medium text-white sm:text-3xl">{lead.name}</h3>
                                                                     {lead.role && <p className="mt-1 text-[14px] text-[#F7F3EA]/70">{lead.role}</p>}
                                                                 </div>
                                                             </div>
-                                                            <div className="text-[13px] font-medium text-[#E8D5A3]/85 sm:text-right">
+                                                            <div className="text-[13px] font-medium text-[#34D399]/85 sm:text-right">
                                                                 {mergedColleges.find((c) => c.short_name === lead.college)?.name || (lead.college ? `${lead.college} ’97` : 'Class of ’97')}
                                                             </div>
                                                         </div>
@@ -119,17 +119,17 @@ export function LandingCommittee({
                                                         const collegeName = mergedColleges.find((c) => c.short_name === p.college)?.name;
                                                         return (
                                                             <Reveal key={p.key} delay={i * 40}>
-                                                                <div className="flex h-full flex-col justify-between rounded-2xl border border-[#091324]/[0.08] bg-[#FAF8F3]/75 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#C8A252]/45 hover:bg-white hover:shadow-[0_14px_32px_-18px_rgba(9,19,36,0.14)]">
+                                                                <div className="flex h-full flex-col justify-between rounded-2xl border border-[#091324]/[0.08] bg-[#FAF8F3]/75 p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#10B981]/45 hover:bg-white hover:shadow-[0_14px_32px_-18px_rgba(9,19,36,0.14)]">
                                                                     <div className="flex items-center gap-4">
                                                                         {p.avatar ? (
-                                                                            <img src={p.avatar} alt="" className="h-14 w-14 shrink-0 rounded-full object-cover ring-2 ring-[#C8A252]/30" />
+                                                                            <img src={p.avatar} alt="" className="h-14 w-14 shrink-0 rounded-full object-cover ring-2 ring-[#10B981]/30" />
                                                                         ) : (
-                                                                            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#091324] font-serif text-lg font-semibold text-[#E8D5A3] ring-2 ring-[#C8A252]/30">
+                                                                            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#091324] font-serif text-lg font-semibold text-[#34D399] ring-2 ring-[#10B981]/30">
                                                                                 {initialsOf(p.name)}
                                                                             </span>
                                                                         )}
                                                                         <div className="min-w-0">
-                                                                            <div className="text-[10.5px] font-semibold tracking-[0.18em] text-[#8E6B28] uppercase">{p.title}</div>
+                                                                            <div className="text-[10.5px] font-semibold tracking-[0.18em] text-[#047857] uppercase">{p.title}</div>
                                                                             <h3 className="mt-0.5 truncate font-serif text-xl font-semibold text-[#091324]">{p.name}</h3>
                                                                             {p.role && <p className="mt-0.5 truncate text-[13px] text-[#4A4F5C]">{p.role}</p>}
                                                                         </div>
@@ -165,9 +165,9 @@ export function LandingCommittee({
                                     <Reveal>
                                         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
                                             <div>
-                                                <p className="text-[11px] font-medium tracking-[0.26em] text-[#8E6B28] uppercase">Governance &amp; Bylaws</p>
+                                                <p className="text-[11px] font-medium tracking-[0.26em] text-[#047857] uppercase">Governance &amp; Bylaws</p>
                                                 <h3 className="mt-3 font-serif text-3xl font-medium text-[#091324] sm:text-4xl">
-                                                    The <em className="font-normal italic text-[#8E6B28]">Charter.</em>
+                                                    The <em className="font-normal italic text-[#047857]">Charter.</em>
                                                 </h3>
                                             </div>
                                             <ExploreLink href="/login" internal={false}>Download full charter</ExploreLink>
@@ -176,8 +176,8 @@ export function LandingCommittee({
                                     <ol className={`grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 ${LANDING_SECTION_BODY}`}>
                                         {CHARTER_ARTICLES.map((c, i) => (
                                             <Reveal key={c.numeral} delay={i * 70} className="h-full">
-                                                <li className="group h-full rounded-2xl border border-brand-navy/[0.08] bg-[#FAF8F3]/60 p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#C8A252]/45 hover:bg-white hover:shadow-md">
-                                                    <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#091324] font-serif text-[16px] font-semibold text-[#E8D5A3] transition-colors group-hover:bg-[#8E6B28] group-hover:text-white">
+                                                <li className="group h-full rounded-2xl border border-brand-navy/[0.08] bg-[#FAF8F3]/60 p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#10B981]/45 hover:bg-white hover:shadow-md">
+                                                    <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#091324] font-serif text-[16px] font-semibold text-[#34D399] transition-colors group-hover:bg-[#047857] group-hover:text-white">
                                                         {c.numeral}
                                                     </span>
                                                     <h4 className="mt-5 text-[17px] font-semibold text-[#091324]">{c.title}</h4>

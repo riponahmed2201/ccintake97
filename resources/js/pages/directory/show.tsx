@@ -56,18 +56,18 @@ export default function PublicMemberShow({ member }: { member: PublicMemberDetai
                         </Link>
 
                         {/* Hero Card */}
-                        <div className="overflow-hidden rounded-3xl border border-[#C9A55C]/30 bg-[#091324] text-[#F7F3EA] shadow-[0_24px_60px_-24px_rgba(9,19,36,0.5)]">
-                            <div className="h-1 bg-gradient-to-r from-[#E8D5A3] via-[#C9A55C] to-[#9A7B3F]" />
+                        <div className="overflow-hidden rounded-3xl border border-[#10B981]/30 bg-[#091324] text-[#F7F3EA] shadow-[0_24px_60px_-24px_rgba(9,19,36,0.5)]">
+                            <div className="h-1 bg-gradient-to-r from-[#34D399] via-[#10B981] to-[#047857]" />
                             <div className="flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-9">
                                 <div className="flex items-center gap-5">
                                     {member.photo_url ? (
                                         <img
                                             src={member.photo_url}
                                             alt={member.name}
-                                            className="h-24 w-24 shrink-0 rounded-2xl border border-[#C9A55C]/40 object-cover object-top shadow-md"
+                                            className="h-24 w-24 shrink-0 rounded-2xl border border-[#10B981]/40 object-cover object-top shadow-md"
                                         />
                                     ) : (
-                                        <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-[#11203B] font-serif text-3xl font-semibold text-[#E8D5A3] ring-1 ring-[#C9A55C]/40">
+                                        <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-[#11203B] font-serif text-3xl font-semibold text-[#34D399] ring-1 ring-[#10B981]/40">
                                             {member.initials}
                                         </div>
                                     )}
@@ -77,7 +77,7 @@ export default function PublicMemberShow({ member }: { member: PublicMemberDetai
                                             <h1 className="font-serif text-3xl font-medium tracking-tight text-white">
                                                 {member.name}
                                             </h1>
-                                            <span className="inline-flex items-center gap-1 rounded-full border border-[#C9A55C]/40 bg-[#C9A55C]/15 px-2.5 py-0.5 text-[11px] font-semibold text-[#E8D5A3]">
+                                            <span className="inline-flex items-center gap-1 rounded-full border border-[#10B981]/40 bg-[#10B981]/15 px-2.5 py-0.5 text-[11px] font-semibold text-[#34D399]">
                                                 <ShieldCheck className="h-3.5 w-3.5" />
                                                 Verified
                                             </span>
@@ -87,7 +87,7 @@ export default function PublicMemberShow({ member }: { member: PublicMemberDetai
                                             {member.organization ? ` · ${member.organization}` : ''}
                                         </p>
                                         {member.college && (
-                                            <div className="inline-flex items-center gap-2 pt-1 text-[13px] font-medium text-[#E8D5A3]">
+                                            <div className="inline-flex items-center gap-2 pt-1 text-[13px] font-medium text-[#34D399]">
                                                 {member.college.logo_url && (
                                                     <img
                                                         src={member.college.logo_url}
@@ -106,14 +106,14 @@ export default function PublicMemberShow({ member }: { member: PublicMemberDetai
                                     {auth?.user ? (
                                         <Link
                                             href={`/member/directory/${member.id}`}
-                                            className="inline-flex h-10 items-center rounded-full bg-gradient-to-r from-[#E8D5A3] to-[#C9A55C] px-5 text-[13px] font-semibold text-[#071018] transition-all hover:brightness-105"
+                                            className="inline-flex h-10 items-center rounded-full bg-gradient-to-r from-[#34D399] to-[#10B981] px-5 text-[13px] font-semibold text-[#071018] transition-all hover:brightness-105"
                                         >
                                             Open Full Member Profile
                                         </Link>
                                     ) : (
                                         <Link
                                             href="/login"
-                                            className="inline-flex h-10 items-center gap-2 rounded-full bg-gradient-to-r from-[#E8D5A3] to-[#C9A55C] px-5 text-[13px] font-semibold text-[#071018] transition-all hover:brightness-105"
+                                            className="inline-flex h-10 items-center gap-2 rounded-full bg-gradient-to-r from-[#34D399] to-[#10B981] px-5 text-[13px] font-semibold text-[#071018] transition-all hover:brightness-105"
                                         >
                                             <Lock className="h-3.5 w-3.5" />
                                             Sign in for full details

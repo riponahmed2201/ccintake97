@@ -8,7 +8,7 @@ const primaryBase =
 
 const variants = {
     cream: 'bg-brand-cream-text px-7 py-4 text-brand-navy shadow-[0_10px_28px_-10px_rgba(11,18,32,0.28)] hover:bg-white hover:-translate-y-0.5',
-    gold: 'bg-gradient-to-r from-[#E8D5A3] via-[#D6B76E] to-[#C9A55C] px-7 py-4 text-[#071018] shadow-[0_14px_34px_-10px_rgba(201,165,92,0.55)] hover:brightness-105 hover:-translate-y-0.5',
+    gold: 'bg-gradient-to-r from-[#34D399] via-[#34D399] to-[#10B981] px-7 py-4 text-[#071018] shadow-[0_14px_34px_-10px_rgba(201,165,92,0.55)] hover:brightness-105 hover:-translate-y-0.5',
     navy: 'border border-brand-gold-bright/50 bg-brand-navy px-7 py-4 text-brand-cream-text shadow-[0_12px_30px_-12px_rgba(7,16,24,0.65)] hover:bg-brand-ink-deep hover:-translate-y-0.5',
 } as const;
 

@@ -4,7 +4,7 @@ import { ArrowRight, Eye, EyeOff } from 'lucide-react';
 
 const inputBase =
     'h-11 w-full rounded-xl border bg-[#FAF8F3] px-3.5 text-[15px] text-[#091324] transition-all duration-200 placeholder:text-[#091324]/35 focus:bg-white focus:outline-none focus:ring-4';
-const inputOk = 'border-[#091324]/12 hover:border-[#091324]/25 focus:border-[#8E6B28] focus:ring-[#C8A252]/15';
+const inputOk = 'border-[#091324]/12 hover:border-[#091324]/25 focus:border-[#047857] focus:ring-[#10B981]/15';
 const inputErr = 'border-red-300 bg-red-50/40 focus:border-red-500 focus:ring-red-500/10';
 
 function Field({ label, error, children, className = '' }: {
@@ -71,7 +71,7 @@ export function AlumniSignupForm({
             {!compact && (
                 <p className="text-[14px] text-[#4A4F5C]">
                     Already a member?{' '}
-                    <Link href="/login" className="font-medium text-[#0B1220] underline decoration-[#9A7B3F]/40 underline-offset-4">
+                    <Link href="/login" className="font-medium text-[#0B1220] underline decoration-[#047857]/40 underline-offset-4">
                         Sign in
                     </Link>
                 </p>
@@ -160,11 +160,11 @@ export function AlumniSignupForm({
                 className="group mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#091324] text-[15px] font-semibold text-[#F8F5EE] transition-all duration-300 hover:bg-[#152238] hover:shadow-[0_12px_28px_-10px_rgba(9,19,36,0.55)] disabled:cursor-not-allowed disabled:opacity-65"
             >
                 {processing ? (
-                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#E8D5A3]/30 border-t-[#E8D5A3]" />
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#34D399]/30 border-t-[#34D399]" />
                 ) : (
                     <>
                         Create account
-                        <ArrowRight className="h-4 w-4 text-[#E8D5A3] transition-transform duration-300 group-hover:translate-x-1" />
+                        <ArrowRight className="h-4 w-4 text-[#34D399] transition-transform duration-300 group-hover:translate-x-1" />
                     </>
                 )}
             </button>
@@ -178,7 +178,7 @@ export function AlumniSignupForm({
                         Already a member?{' '}
                         <Link
                             href="/login"
-                            className="font-semibold text-[#091324] underline decoration-[#C8A252]/60 underline-offset-4 hover:text-[#8E6B28]"
+                            className="font-semibold text-[#091324] underline decoration-[#10B981]/60 underline-offset-4 hover:text-[#047857]"
                         >
                             Sign in
                         </Link>

@@ -48,7 +48,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                                 eyebrow="Our story"
                                 title={
                                     <>
-                                        Bound by a <em className="font-normal italic text-[#E8D5A3]">shared</em> beginning.
+                                        Bound by a <em className="font-normal italic text-[#34D399]">shared</em> beginning.
                                     </>
                                 }
                                 intro="INTAKE 1997 brings together the cadets who entered ten cadet colleges that year — one cohort, still known to each other by college, house and roll."
@@ -83,7 +83,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                                 eyebrow="Constituent network"
                                 title={
                                     <>
-                                        Ten colleges. <em className="font-normal italic text-[#E8D5A3]">Equal voice.</em>
+                                        Ten colleges. <em className="font-normal italic text-[#34D399]">Equal voice.</em>
                                     </>
                                 }
                                 intro="Every constituent cadet college from the 1997 intake holds an equal seat and sovereign parity in the Central Secretariat."
@@ -124,7 +124,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                                 eyebrow="Secretariat stewardship"
                                 title={
                                     <>
-                                        Led by <em className="font-normal italic text-[#E8D5A3]">batchmates.</em>
+                                        Led by <em className="font-normal italic text-[#34D399]">batchmates.</em>
                                     </>
                                 }
                                 intro="The Central Executive Committee — elected from every college chapter to serve the whole intake with zero hierarchy."
@@ -160,7 +160,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                                 eyebrow="The Sacred Covenant"
                                 title={
                                     <>
-                                        We leave <em className="font-normal italic text-[#E8D5A3]">no comrade</em> behind.
+                                        We leave <em className="font-normal italic text-[#34D399]">no comrade</em> behind.
                                     </>
                                 }
                                 intro="Medical lifelines, protected futures for the children of fallen batchmates, and privileges shared among our own."
@@ -194,7 +194,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                                 eyebrow="Central Secretariat"
                                 title={
                                     <>
-                                        Write to the <em className="font-normal italic text-[#E8D5A3]">Council.</em>
+                                        Write to the <em className="font-normal italic text-[#34D399]">Council.</em>
                                     </>
                                 }
                                 intro="For membership verification, Grand Reunion 2027 reservations, welfare endowments, or regional chapter affiliations."

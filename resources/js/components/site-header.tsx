@@ -122,8 +122,8 @@ export function SiteHeader({
                                   ? 'text-brand-gold-muted hover:text-brand-gold-muted'
                                   : 'text-brand-navy hover:text-brand-gold-muted'
                                 : isActive
-                                  ? 'text-[#E8D5A3]'
-                                  : 'text-white hover:text-[#E8D5A3]'
+                                  ? 'text-[#34D399]'
+                                  : 'text-white hover:text-[#34D399]'
                         }`;
                         return (
                             <Link key={l.href} href={l.href} aria-current={isActive ? 'page' : undefined} className={linkClass}>
@@ -140,7 +140,7 @@ export function SiteHeader({
                             className={`hidden items-center gap-2 rounded-full border px-4 py-2 font-nav text-[15px] font-medium transition-all duration-300 lg:inline-flex ${
                                 solidHeader
                                     ? 'border-brand-gold-muted/40 text-brand-gold-muted hover:bg-brand-gold-muted/10'
-                                    : 'border-[#D9BF85]/40 text-[#E8D5A3] hover:bg-white/5'
+                                    : 'border-[#34D399]/40 text-[#34D399] hover:bg-white/5'
                             }`}
                         >
                             <span className="h-1.5 w-1.5 rounded-full bg-brand-gold" />

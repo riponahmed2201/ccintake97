@@ -59,7 +59,7 @@ export function LandingReunion() {
                         />
                         <Reveal delay={200}>
                             <div className="mt-8 inline-flex flex-col rounded-2xl border border-[#F7F3EA]/15 bg-[#0B1220]/50 px-6 py-4 backdrop-blur-sm sm:flex-row sm:items-baseline sm:gap-4">
-                                <span className="font-serif text-4xl font-medium tabular-nums text-[#E8D5A3]">{countdown.days}</span>
+                                <span className="font-serif text-4xl font-medium tabular-nums text-[#34D399]">{countdown.days}</span>
                                 <span className="text-[13px] tracking-[0.16em] text-[#F7F3EA]/55 uppercase">{countdown.label}</span>
                             </div>
                         </Reveal>
@@ -71,7 +71,7 @@ export function LandingReunion() {
                                     { icon: QrCode, k: 'Access', v: 'Encrypted digital pass' },
                                 ].map((d) => (
                                     <div key={d.k}>
-                                        <dt className="flex items-center gap-2 text-[11px] tracking-[0.2em] text-[#D9BF85] uppercase">
+                                        <dt className="flex items-center gap-2 text-[11px] tracking-[0.2em] text-[#34D399] uppercase">
                                             <d.icon className="h-3.5 w-3.5" aria-hidden />
                                             {d.k}
                                         </dt>
@@ -84,10 +84,10 @@ export function LandingReunion() {
 
                     <div className="lg:col-span-5">
                         <Reveal delay={200}>
-                            <div className="relative rounded-[2rem] bg-gradient-to-b from-[#C9A55C]/50 via-[#C9A55C]/10 to-transparent p-px">
+                            <div className="relative rounded-[2rem] bg-gradient-to-b from-[#10B981]/50 via-[#10B981]/10 to-transparent p-px">
                                 <div className="rounded-[calc(2rem-1px)] bg-[#0B1220]/95 p-8 backdrop-blur-xl sm:p-10">
                                     <div className="flex items-center justify-between gap-3">
-                                        <span className="text-[11px] tracking-[0.24em] text-[#D9BF85] uppercase">Class of 1997 Pass</span>
+                                        <span className="text-[11px] tracking-[0.24em] text-[#34D399] uppercase">Class of 1997 Pass</span>
                                         <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/10 px-3 py-1 text-[11px] text-emerald-300">
                                             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" /> Pre-registration open
                                         </span>
@@ -103,8 +103,8 @@ export function LandingReunion() {
                                     <ul className="mt-8 space-y-3.5 border-t border-[#F7F3EA]/10 pt-8">
                                         {['Exclusive to verified 1997 alumni', 'Official commemorative medallion', 'Spouse and children included'].map((f) => (
                                             <li key={f} className="flex items-center gap-3 text-[14px] text-[#F7F3EA]/80">
-                                                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#C9A55C]/15">
-                                                    <Check className="h-3 w-3 text-[#E8D5A3]" aria-hidden />
+                                                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#10B981]/15">
+                                                    <Check className="h-3 w-3 text-[#34D399]" aria-hidden />
                                                 </span>
                                                 {f}
                                             </li>
