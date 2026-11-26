@@ -4,7 +4,7 @@ import { SECTORS } from '@/components/landing/constants';
 
 export function LandingSectors() {
     return (
-        <section id="sectors" className={`bg-white ${LANDING_SECTION}`}>
+        <section id="sectors" className={`border-y border-[#450D15]/[0.06] bg-[#FAF5F6] ${LANDING_SECTION}`}>
             <div className={LANDING_CONTAINER}>
                 <SectionHeading
                     eyebrow="Where we lead"

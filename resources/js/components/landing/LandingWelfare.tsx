@@ -56,19 +56,20 @@ export function LandingWelfare({ omitHeading = false, className = '' }: { omitHe
     }
 
     return (
-                        <section id="welfare" className={`relative isolate overflow-hidden bg-white text-brand-navy ${LANDING_SECTION}`}>
+                        <section id="welfare" className={`relative isolate overflow-hidden bg-[#450D15] text-white ${LANDING_SECTION}`}>
+                            <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,rgba(244,194,199,0.12),transparent_55%)]" />
                             <span id="offers" className="sr-only absolute -top-24" />
         
                             <div className={`flex flex-col justify-between ${LANDING_CONTAINER}`}>
                                 <Reveal>
-                                    <h2 className="max-w-3xl font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] lg:text-[4.25rem]">
-                                        We leave <em className="font-normal text-brand-gold-muted">no comrade</em> behind.
+                                    <h2 className="max-w-3xl font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] text-white lg:text-[4.25rem]">
+                                        We leave <em className="font-normal text-[#F4C2C7]">no comrade</em> behind.
                                     </h2>
-                                    <p className="mt-6 max-w-lg text-[16px] leading-relaxed text-brand-navy/65">
+                                    <p className="mt-6 max-w-lg text-[16px] leading-relaxed text-white/75">
                                         Medical lifelines, protected futures for the children of fallen batchmates, and privileges shared among our own.
                                     </p>
                                     <div className="mt-8">
-                                        <ExploreLink href="/contact" internal={false}>Support the Trust</ExploreLink>
+                                        <ExploreLink href="/contact" internal={false} light>Support the Trust</ExploreLink>
                                     </div>
                                 </Reveal>
         
@@ -77,17 +78,17 @@ export function LandingWelfare({ omitHeading = false, className = '' }: { omitHe
                                         const Icon = w.icon;
                                         return (
                                             <Reveal key={w.title} delay={i * 80} className="h-full">
-                                                <article className="group flex h-full flex-col justify-between rounded-2xl border border-[#091324]/[0.08] bg-[#F8FAFC] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[#450D15]/45 hover:bg-white hover:shadow-[0_18px_40px_-20px_rgba(9,19,36,0.16)]">
+                                                <article className="group flex h-full flex-col justify-between rounded-2xl border border-white/15 bg-white/[0.06] p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#F4C2C7]/45 hover:bg-white/[0.11] hover:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.45)]">
                                                     <div>
                                                         <div className="flex items-center justify-between gap-2">
-                                                            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#091324] text-[#F4C2C7] transition-colors group-hover:bg-[#5E121D] group-hover:text-white">
+                                                            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-[#F4C2C7] transition-colors group-hover:bg-[#F4C2C7] group-hover:text-[#450D15]">
                                                                 <Icon className="h-5 w-5" strokeWidth={1.6} />
                                                             </span>
-                                                            <span className="text-[10.5px] font-semibold tracking-[0.16em] text-[#5E121D] uppercase">{w.label}</span>
+                                                            <span className="text-[10.5px] font-semibold tracking-[0.16em] text-[#F4C2C7] uppercase">{w.label}</span>
                                                         </div>
-                                                        <div className="mt-6 font-sans text-3xl font-bold tracking-tight text-[#091324] tabular-nums">{w.figure}</div>
-                                                        <h3 className="mt-2 text-[17px] font-semibold text-[#091324]">{w.title}</h3>
-                                                        <p className="mt-2 text-[14px] leading-relaxed text-[#4A4F5C]">{w.description}</p>
+                                                        <div className="mt-6 font-sans text-3xl font-bold tracking-tight text-white tabular-nums">{w.figure}</div>
+                                                        <h3 className="mt-2 text-[17px] font-semibold text-white">{w.title}</h3>
+                                                        <p className="mt-2 text-[14px] leading-relaxed text-white/75">{w.description}</p>
                                                     </div>
                                                 </article>
                                             </Reveal>

@@ -38,7 +38,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
     return (
         <SignupDialogProvider>
             <Head title={meta.title} />
-            <div className="min-h-screen bg-white font-sans text-brand-navy antialiased selection:bg-brand-gold selection:text-brand-navy">
+            <div className="min-h-screen bg-white font-sans text-brand-navy antialiased selection:bg-brand-gold selection:text-white">
                 <PublicSiteHeader active={meta.nav} surface="white" />
                 <main id="main-content">
                     {page === 'about' && (

@@ -71,7 +71,7 @@ export function LandingFooter() {
 
                 <div className="flex flex-col items-start justify-between gap-3 pt-8 text-[12.5px] text-[#F8F5EE]/55 sm:flex-row sm:items-center">
                     <span>© {new Date().getFullYear()} CCINTAKE97.COM · All rights reserved</span>
-                    <span className="tracking-[0.22em] text-[#450D15]/80 uppercase">Fidelitas et Disciplina · Class of 1997</span>
+                    <span className="tracking-[0.22em] text-[#F4C2C7]/85 uppercase">Fidelitas et Disciplina · Class of 1997</span>
                 </div>
             </div>
             <ScrollToTop />

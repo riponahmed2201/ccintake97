@@ -23,7 +23,7 @@ export default function AuthSimpleLayout({ children, title, description }: AuthL
                             <BrandMark className="h-12 w-auto" />
                             <span>
                                 <span className="block font-brand text-[22px] font-semibold">
-                                    ccIntake<span className="text-[#450D15]">97</span>
+                                    ccIntake<span className="text-[#F4C2C7]">97</span>
                                 </span>
                                 <span className="text-[11px] text-[#F7F3EA]/55">Cadet College Alumni Network</span>
                             </span>

@@ -25,7 +25,7 @@ export function LandingContact({
     const inputCls = `${fieldBase} h-12 px-4`;
     const textareaCls = `${fieldBase} min-h-[136px] resize-y px-4 py-3.5 leading-relaxed`;
     return (
-                        <section id={omitHeading ? undefined : 'contact'} className={`bg-white ${LANDING_SECTION} ${className}`.trim()}>
+                        <section id={omitHeading ? undefined : 'contact'} className={`border-t border-[#450D15]/[0.06] bg-[#FAF5F6] ${LANDING_SECTION} ${className}`.trim()}>
                             <div className={LANDING_CONTAINER}>
                                 <div className={`grid grid-cols-1 lg:grid-cols-12 ${LANDING_GRID_GAP}`}>
                                     <div className="lg:col-span-5">

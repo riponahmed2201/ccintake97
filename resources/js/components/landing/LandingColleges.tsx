@@ -53,7 +53,7 @@ export function LandingColleges({
     );
 
     return (
-                        <section id={omitHeading ? undefined : 'colleges'} className={`${LANDING_SECTION} bg-white ${className}`.trim()}>
+                        <section id={omitHeading ? undefined : 'colleges'} className={`${LANDING_SECTION} border-y border-[#450D15]/[0.06] bg-[#FAF5F6] ${className}`.trim()}>
                             <div className={LANDING_CONTAINER}>
                                 {omitHeading ? (
                                     <Reveal>
