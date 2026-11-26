@@ -43,7 +43,7 @@ class ProfileController extends Controller
         $member = $user->member;
 
         foreach ([
-            'cadet_name', 'phone', 'blood_group', 'spouse_name', 'spouse_occupation', 'spouse_job_location',
+            'cadet_name', 'cccl_life_member_no', 'phone', 'blood_group', 'spouse_name', 'spouse_occupation', 'spouse_job_location',
             'address', 'city', 'country_code', 'present_address_line', 'present_area', 'present_postal_code',
             'permanent_address_line', 'permanent_area', 'permanent_city', 'permanent_postal_code', 'permanent_country_code',
             'house_name', 'house_color', 'job_type', 'organization', 'designation',
@@ -57,6 +57,7 @@ class ProfileController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'cadet_name' => 'nullable|string|max:255',
+            'cccl_life_member_no' => 'nullable|string|max:100',
             'phone' => 'required|string|max:30',
             'blood_group' => ['nullable', Rule::in(CadetProfileOptions::BLOOD_GROUPS)],
             'spouse_name' => 'nullable|string|max:255',
@@ -132,6 +133,7 @@ class ProfileController extends Controller
 
             $profileData = [
                 'cadet_name' => $validated['cadet_name'],
+                'cccl_life_member_no' => $validated['cccl_life_member_no'] ?? null,
                 'blood_group' => $validated['blood_group'],
                 'spouse_name' => $validated['spouse_name'],
                 'spouse_occupation' => $validated['spouse_occupation'],

@@ -13,6 +13,7 @@ class MemberProfile extends Model
     protected $fillable = [
         'member_id',
         'cadet_name',
+        'cccl_life_member_no',
         'city',
         'country_code',
         'address',

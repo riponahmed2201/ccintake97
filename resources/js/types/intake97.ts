@@ -33,6 +33,7 @@ export interface MemberProfile {
     id: number;
     member_id: number;
     cadet_name?: string;
+    cccl_life_member_no?: string | null;
     city?: string;
     country_code: string;
     address?: string;

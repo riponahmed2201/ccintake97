@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
 import {
     useReactTable,
@@ -34,7 +34,9 @@ import {
     Ban,
     RotateCcw,
     Eye,
+    Pencil,
     PlusCircle,
+    UserPlus,
 } from 'lucide-react';
 import type { Member, College, Industry } from '@/types';
 
@@ -43,6 +45,7 @@ interface MembersPageProps {
         data: Member[];
         current_page: number;
         last_page: number;
+        per_page?: number;
         total: number;
         from: number;
         to: number;
@@ -50,12 +53,14 @@ interface MembersPageProps {
     };
     colleges: College[];
     industries: Industry[];
+    houses: Record<string, string[]>;
     filters: {
         search?: string;
         college_id?: string;
         membership_status?: string;
         verification_status?: string;
         industry_id?: string;
+        per_page?: string;
     };
 }
 
@@ -76,12 +81,78 @@ const selectItemClass =
 export default function MembersIndex({
     members,
     colleges,
+    houses,
     filters,
 }: MembersPageProps) {
     const [search, setSearch] = useState(filters.search || '');
     const [selectedCollege, setSelectedCollege] = useState(filters.college_id || '');
     const [selectedStatus, setSelectedStatus] = useState(filters.membership_status || '');
     const [selectedVerification, setSelectedVerification] = useState(filters.verification_status || '');
+    const [perPage, setPerPage] = useState(filters.per_page || String(members.per_page || 10));
+
+    const [registerOpen, setRegisterOpen] = useState(false);
+    const registerForm = useForm({
+        name: '',
+        email: '',
+        phone: '',
+        password: '',
+        college_id: '',
+        college_roll_no: '',
+        intake_year: '1997',
+        house_name: '',
+        membership_status: 'approved',
+        verification_status: 'verified',
+    });
+
+    const selectedRegCollege = colleges.find((c) => String(c.id) === registerForm.data.college_id);
+    const regHouseOptions = selectedRegCollege?.short_name ? houses?.[selectedRegCollege.short_name] ?? [] : [];
+
+    const [editMember, setEditMember] = useState<Member | null>(null);
+    const editForm = useForm({
+        name: '',
+        email: '',
+        phone: '',
+        password: '',
+        college_id: '',
+        college_roll_no: '',
+        intake_year: '1997',
+        house_name: '',
+        designation: '',
+        organization: '',
+        cccl_life_member_no: '',
+    });
+
+    const selectedEditCollege = colleges.find((c) => String(c.id) === editForm.data.college_id);
+    const editHouseOptions = selectedEditCollege?.short_name ? houses?.[selectedEditCollege.short_name] ?? [] : [];
+
+    const openEditModal = (m: Member) => {
+        editForm.clearErrors();
+        editForm.setData({
+            name: m.user?.name || '',
+            email: m.user?.email || '',
+            phone: m.user?.phone || '',
+            password: '',
+            college_id: m.college_id ? String(m.college_id) : '',
+            college_roll_no: m.college_roll_no || '',
+            intake_year: m.intake_year ? String(m.intake_year) : '1997',
+            house_name: m.house_name || '',
+            designation: m.profile?.designation || '',
+            organization: m.profile?.organization || '',
+            cccl_life_member_no: m.profile?.cccl_life_member_no || '',
+        });
+        setEditMember(m);
+    };
+
+    const handleEditSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!editMember) return;
+        editForm.put(`/admin/members/${editMember.id}`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                setEditMember(null);
+            },
+        });
+    };
 
     const [verifyMember, setVerifyMember] = useState<Member | null>(null);
     const [verifyMethod, setVerifyMethod] = useState('committee_manual');
@@ -96,9 +167,21 @@ export default function MembersIndex({
             college_id: selectedCollege,
             membership_status: selectedStatus,
             verification_status: selectedVerification,
+            per_page: perPage,
             [key]: val,
         };
         router.get('/admin/members', query, { preserveState: true, replace: true });
+    };
+
+    const handleRegisterSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        registerForm.post('/admin/members', {
+            preserveScroll: true,
+            onSuccess: () => {
+                setRegisterOpen(false);
+                registerForm.reset();
+            },
+        });
     };
 
     const handleSearchSubmit = (e: React.FormEvent) => {
@@ -156,6 +239,15 @@ export default function MembersIndex({
     const columnHelper = createColumnHelper<Member>();
     const columns = useMemo(
         () => [
+            columnHelper.display({
+                id: 'sl_no',
+                header: 'SL',
+                cell: (info) => (
+                    <span className="text-[12.5px] font-medium text-[#78829D] tabular-nums">
+                        {(members.from || 1) + info.row.index}
+                    </span>
+                ),
+            }),
             columnHelper.accessor('member_code', {
                 header: 'Member ID',
                 cell: (info) => (
@@ -265,6 +357,14 @@ export default function MembersIndex({
                             >
                                 <Eye className="size-4" />
                             </Link>
+                            <button
+                                type="button"
+                                onClick={() => openEditModal(m)}
+                                className="cursor-pointer rounded-lg p-1.5 text-[#78829D] transition-colors hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
+                                title="Edit Member"
+                            >
+                                <Pencil className="size-4" />
+                            </button>
                             {m.membership_status === 'pending' && (
                                 <button
                                     type="button"
@@ -309,7 +409,7 @@ export default function MembersIndex({
                 },
             }),
         ],
-        []
+        [members.from]
     );
 
     const table = useReactTable({
@@ -333,13 +433,23 @@ export default function MembersIndex({
                             Showing {members.from || 0} to {members.to || 0} of {members.total} registered alumni across participating Cadet Colleges.
                         </p>
                     </div>
-                    <a
-                        href="/admin/members/export"
-                        className="inline-flex h-9 items-center gap-1.5 self-start rounded-lg border border-[#DBDFE9] bg-white px-3.5 text-[12.5px] font-semibold text-[#4B5675] transition-colors hover:bg-[#F9F9F9] hover:text-[#071437] sm:self-auto"
-                    >
-                        <Download className="size-3.5 text-[#78829D]" />
-                        Export CSV
-                    </a>
+                    <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+                        <a
+                            href="/admin/members/export"
+                            className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-[#DBDFE9] bg-white px-3.5 text-[12.5px] font-semibold text-[#4B5675] transition-colors hover:bg-[#F9F9F9] hover:text-[#071437]"
+                        >
+                            <Download className="size-3.5 text-[#78829D]" />
+                            Export CSV
+                        </a>
+                        <Button
+                            type="button"
+                            onClick={() => setRegisterOpen(true)}
+                            className="h-9 rounded-lg bg-[#1B84FF] px-3.5 text-[12.5px] font-semibold text-white hover:bg-[#006AE6]"
+                        >
+                            <UserPlus className="mr-1.5 size-3.5" />
+                            Register Member
+                        </Button>
+                    </div>
                 </div>
 
                 {/* Filter Toolbar */}
@@ -461,14 +571,40 @@ export default function MembersIndex({
 
                     {/* Pagination */}
                     <div className="flex flex-col items-center justify-between gap-3 border-t border-[#F1F1F4] px-5 py-3.5 text-[12.5px] text-[#78829D] sm:flex-row">
-                        <div>
-                            Page {members.current_page} of {members.last_page}
+                        <div className="flex flex-wrap items-center gap-3">
+                            <span>
+                                Showing <strong className="font-semibold text-[#071437]">{members.from || 0}</strong>–
+                                <strong className="font-semibold text-[#071437]">{members.to || 0}</strong> of{' '}
+                                <strong className="font-semibold text-[#071437]">{members.total}</strong> · Page {members.current_page} of {members.last_page}
+                            </span>
+                            <div className="flex items-center gap-1.5">
+                                <span className="text-[12px] text-[#78829D]">Rows:</span>
+                                <Select
+                                    value={perPage}
+                                    onValueChange={(val) => {
+                                        setPerPage(val);
+                                        applyFilter('per_page', val);
+                                    }}
+                                >
+                                    <SelectTrigger className="!h-8 w-[72px] cursor-pointer rounded-md !border-[#DBDFE9] !bg-[#FCFCFC] px-2.5 text-[12px] font-medium !text-[#071437] !shadow-none">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent className={selectMenuClass}>
+                                        {['10', '25', '50', '100'].map((size) => (
+                                            <SelectItem key={size} value={size} className={selectItemClass}>
+                                                {size}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
                         <div className="flex flex-wrap items-center gap-1.5">
                             {members.links.map((link, idx) => (
                                 <Link
                                     key={idx}
                                     href={link.url || '#'}
+                                    preserveScroll
                                     disabled={!link.url}
                                     dangerouslySetInnerHTML={{ __html: link.label }}
                                     className={`rounded-lg px-2.5 py-1 text-[12px] font-medium transition-colors ${
@@ -484,6 +620,401 @@ export default function MembersIndex({
                     </div>
                 </div>
             </div>
+
+            {/* Register Member Dialog */}
+            <Dialog open={registerOpen} onOpenChange={(open) => { setRegisterOpen(open); if (!open) registerForm.clearErrors(); }}>
+                <DialogContent className="max-h-[90vh] overflow-y-auto rounded-2xl border-[#F1F1F4] !bg-white p-0 !text-[#071437] shadow-[0_20px_50px_-12px_rgba(7,20,55,0.18)] sm:max-w-xl">
+                    <DialogHeader className="border-b border-[#F1F1F4] px-6 py-5">
+                        <DialogTitle className="flex items-center gap-2 text-[16px] font-semibold text-[#071437]">
+                            <UserPlus className="size-5 text-[#1B84FF]" />
+                            Register New Alumni Member
+                        </DialogTitle>
+                        <DialogDescription className="mt-1 text-[12.5px] text-[#78829D]">
+                            Create a new alumni member account directly from the admin registry.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handleRegisterSubmit} className="space-y-4 px-6 py-5">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div className="sm:col-span-2">
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Full Name <span className="text-[#F8285A]">*</span>
+                                </label>
+                                <Input
+                                    required
+                                    value={registerForm.data.name}
+                                    onChange={(e) => registerForm.setData('name', e.target.value)}
+                                    placeholder="e.g. Tariqul Islam"
+                                    className={fieldClass}
+                                />
+                                {registerForm.errors.name && <p className="mt-1 text-[11.5px] text-[#F8285A]">{registerForm.errors.name}</p>}
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Email Address <span className="text-[#F8285A]">*</span>
+                                </label>
+                                <Input
+                                    required
+                                    type="email"
+                                    value={registerForm.data.email}
+                                    onChange={(e) => registerForm.setData('email', e.target.value)}
+                                    placeholder="member@example.com"
+                                    className={fieldClass}
+                                />
+                                {registerForm.errors.email && <p className="mt-1 text-[11.5px] text-[#F8285A]">{registerForm.errors.email}</p>}
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Phone Number
+                                </label>
+                                <Input
+                                    type="tel"
+                                    value={registerForm.data.phone}
+                                    onChange={(e) => registerForm.setData('phone', e.target.value)}
+                                    placeholder="+88017..."
+                                    className={fieldClass}
+                                />
+                                {registerForm.errors.phone && <p className="mt-1 text-[11.5px] text-[#F8285A]">{registerForm.errors.phone}</p>}
+                            </div>
+                            <div className="sm:col-span-2">
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Initial Password <span className="text-[#F8285A]">*</span>
+                                </label>
+                                <Input
+                                    required
+                                    type="password"
+                                    minLength={8}
+                                    value={registerForm.data.password}
+                                    onChange={(e) => registerForm.setData('password', e.target.value)}
+                                    placeholder="Minimum 8 characters"
+                                    className={fieldClass}
+                                />
+                                {registerForm.errors.password && <p className="mt-1 text-[11.5px] text-[#F8285A]">{registerForm.errors.password}</p>}
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Cadet College
+                                </label>
+                                <Select
+                                    value={registerForm.data.college_id || ALL}
+                                    onValueChange={(val) => registerForm.setData((prev) => ({ ...prev, college_id: val === ALL ? '' : val, house_name: '' }))}
+                                >
+                                    <SelectTrigger className={selectTriggerClass}>
+                                        <SelectValue placeholder="Select college" />
+                                    </SelectTrigger>
+                                    <SelectContent className={selectMenuClass}>
+                                        <SelectItem value={ALL} className={selectItemClass}>Not assigned yet</SelectItem>
+                                        {colleges.map((c) => (
+                                            <SelectItem key={c.id} value={String(c.id)} className={selectItemClass}>
+                                                {c.short_name ? `${c.short_name} — ${c.name}` : c.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                {registerForm.errors.college_id && <p className="mt-1 text-[11.5px] text-[#F8285A]">{registerForm.errors.college_id}</p>}
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Cadet Roll No
+                                </label>
+                                <Input
+                                    value={registerForm.data.college_roll_no}
+                                    onChange={(e) => registerForm.setData('college_roll_no', e.target.value)}
+                                    placeholder="e.g. 1997-042"
+                                    className={fieldClass}
+                                />
+                                {registerForm.errors.college_roll_no && <p className="mt-1 text-[11.5px] text-[#F8285A]">{registerForm.errors.college_roll_no}</p>}
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Intake Year
+                                </label>
+                                <Input
+                                    type="number"
+                                    min={1950}
+                                    max={2035}
+                                    value={registerForm.data.intake_year}
+                                    onChange={(e) => registerForm.setData('intake_year', e.target.value)}
+                                    className={fieldClass}
+                                />
+                                {registerForm.errors.intake_year && <p className="mt-1 text-[11.5px] text-[#F8285A]">{registerForm.errors.intake_year}</p>}
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    House
+                                </label>
+                                {regHouseOptions.length > 0 ? (
+                                    <Select
+                                        value={registerForm.data.house_name || ALL}
+                                        onValueChange={(val) => registerForm.setData('house_name', val === ALL ? '' : val)}
+                                    >
+                                        <SelectTrigger className={selectTriggerClass}>
+                                            <SelectValue placeholder="Select house" />
+                                        </SelectTrigger>
+                                        <SelectContent className={selectMenuClass}>
+                                            <SelectItem value={ALL} className={selectItemClass}>None</SelectItem>
+                                            {regHouseOptions.map((h) => (
+                                                <SelectItem key={h} value={h} className={selectItemClass}>{h}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                ) : (
+                                    <Input
+                                        value={registerForm.data.house_name}
+                                        onChange={(e) => registerForm.setData('house_name', e.target.value)}
+                                        placeholder="House name"
+                                        className={fieldClass}
+                                    />
+                                )}
+                                {registerForm.errors.house_name && <p className="mt-1 text-[11.5px] text-[#F8285A]">{registerForm.errors.house_name}</p>}
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Membership Status
+                                </label>
+                                <Select
+                                    value={registerForm.data.membership_status}
+                                    onValueChange={(val) => registerForm.setData('membership_status', val)}
+                                >
+                                    <SelectTrigger className={selectTriggerClass}>
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent className={selectMenuClass}>
+                                        <SelectItem value="approved" className={selectItemClass}>Approved</SelectItem>
+                                        <SelectItem value="pending" className={selectItemClass}>Pending</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Verification Status
+                                </label>
+                                <Select
+                                    value={registerForm.data.verification_status}
+                                    onValueChange={(val) => registerForm.setData('verification_status', val)}
+                                >
+                                    <SelectTrigger className={selectTriggerClass}>
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent className={selectMenuClass}>
+                                        <SelectItem value="verified" className={selectItemClass}>Verified</SelectItem>
+                                        <SelectItem value="unverified" className={selectItemClass}>Unverified</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                        <DialogFooter className="border-t border-[#F1F1F4] pt-4">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setRegisterOpen(false)}
+                                className="h-9.5 rounded-lg border-[#DBDFE9] !bg-white px-4 text-[12.5px] font-semibold text-[#4B5675] hover:!bg-[#F9F9F9]"
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                disabled={registerForm.processing}
+                                className="h-9.5 rounded-lg bg-[#1B84FF] px-4 text-[12.5px] font-semibold text-white hover:bg-[#006AE6]"
+                            >
+                                {registerForm.processing ? 'Registering...' : 'Register Member'}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
+
+            {/* Edit Member Dialog */}
+            <Dialog open={!!editMember} onOpenChange={(open) => { if (!open) { setEditMember(null); editForm.clearErrors(); } }}>
+                <DialogContent className="max-h-[90vh] overflow-y-auto rounded-2xl border-[#F1F1F4] !bg-white p-0 !text-[#071437] shadow-[0_20px_50px_-12px_rgba(7,20,55,0.18)] sm:max-w-xl">
+                    <DialogHeader className="border-b border-[#F1F1F4] px-6 py-5">
+                        <DialogTitle className="flex items-center gap-2 text-[16px] font-semibold text-[#071437]">
+                            <Pencil className="size-5 text-[#1B84FF]" />
+                            Edit Member Details
+                        </DialogTitle>
+                        <DialogDescription className="mt-1 text-[12.5px] text-[#78829D]">
+                            Update profile, college affiliation, or credentials for <strong className="text-[#071437]">{editMember?.user?.name}</strong>.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handleEditSubmit} className="space-y-4 px-6 py-5">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div className="sm:col-span-2">
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Full Name <span className="text-[#F8285A]">*</span>
+                                </label>
+                                <Input
+                                    required
+                                    value={editForm.data.name}
+                                    onChange={(e) => editForm.setData('name', e.target.value)}
+                                    className={fieldClass}
+                                />
+                                {editForm.errors.name && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.name}</p>}
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Email Address <span className="text-[#F8285A]">*</span>
+                                </label>
+                                <Input
+                                    required
+                                    type="email"
+                                    value={editForm.data.email}
+                                    onChange={(e) => editForm.setData('email', e.target.value)}
+                                    className={fieldClass}
+                                />
+                                {editForm.errors.email && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.email}</p>}
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Phone Number
+                                </label>
+                                <Input
+                                    type="tel"
+                                    value={editForm.data.phone}
+                                    onChange={(e) => editForm.setData('phone', e.target.value)}
+                                    className={fieldClass}
+                                />
+                                {editForm.errors.phone && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.phone}</p>}
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Cadet College
+                                </label>
+                                <Select
+                                    value={editForm.data.college_id || ALL}
+                                    onValueChange={(val) => editForm.setData((prev) => ({ ...prev, college_id: val === ALL ? '' : val, house_name: '' }))}
+                                >
+                                    <SelectTrigger className={selectTriggerClass}>
+                                        <SelectValue placeholder="Select college" />
+                                    </SelectTrigger>
+                                    <SelectContent className={selectMenuClass}>
+                                        <SelectItem value={ALL} className={selectItemClass}>Not assigned</SelectItem>
+                                        {colleges.map((c) => (
+                                            <SelectItem key={c.id} value={String(c.id)} className={selectItemClass}>
+                                                {c.short_name ? `${c.short_name} — ${c.name}` : c.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                {editForm.errors.college_id && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.college_id}</p>}
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Cadet Roll No
+                                </label>
+                                <Input
+                                    value={editForm.data.college_roll_no}
+                                    onChange={(e) => editForm.setData('college_roll_no', e.target.value)}
+                                    className={fieldClass}
+                                />
+                                {editForm.errors.college_roll_no && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.college_roll_no}</p>}
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Intake Year
+                                </label>
+                                <Input
+                                    type="number"
+                                    min={1950}
+                                    max={2035}
+                                    value={editForm.data.intake_year}
+                                    onChange={(e) => editForm.setData('intake_year', e.target.value)}
+                                    className={fieldClass}
+                                />
+                                {editForm.errors.intake_year && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.intake_year}</p>}
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    House
+                                </label>
+                                {editHouseOptions.length > 0 ? (
+                                    <Select
+                                        value={editForm.data.house_name || ALL}
+                                        onValueChange={(val) => editForm.setData('house_name', val === ALL ? '' : val)}
+                                    >
+                                        <SelectTrigger className={selectTriggerClass}>
+                                            <SelectValue placeholder="Select house" />
+                                        </SelectTrigger>
+                                        <SelectContent className={selectMenuClass}>
+                                            <SelectItem value={ALL} className={selectItemClass}>None</SelectItem>
+                                            {editHouseOptions.map((h) => (
+                                                <SelectItem key={h} value={h} className={selectItemClass}>{h}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                ) : (
+                                    <Input
+                                        value={editForm.data.house_name}
+                                        onChange={(e) => editForm.setData('house_name', e.target.value)}
+                                        placeholder="House name"
+                                        className={fieldClass}
+                                    />
+                                )}
+                                {editForm.errors.house_name && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.house_name}</p>}
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Designation
+                                </label>
+                                <Input
+                                    value={editForm.data.designation}
+                                    onChange={(e) => editForm.setData('designation', e.target.value)}
+                                    className={fieldClass}
+                                />
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    Organization
+                                </label>
+                                <Input
+                                    value={editForm.data.organization}
+                                    onChange={(e) => editForm.setData('organization', e.target.value)}
+                                    className={fieldClass}
+                                />
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    CCCL Life Member No (if any)
+                                </label>
+                                <Input
+                                    value={editForm.data.cccl_life_member_no}
+                                    onChange={(e) => editForm.setData('cccl_life_member_no', e.target.value)}
+                                    className={fieldClass}
+                                />
+                            </div>
+                            <div>
+                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
+                                    New Password <span className="font-normal text-[#99A1B7]">(Optional)</span>
+                                </label>
+                                <Input
+                                    type="password"
+                                    minLength={8}
+                                    value={editForm.data.password}
+                                    onChange={(e) => editForm.setData('password', e.target.value)}
+                                    placeholder="Leave blank to keep current"
+                                    className={fieldClass}
+                                />
+                                {editForm.errors.password && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.password}</p>}
+                            </div>
+                        </div>
+                        <DialogFooter className="border-t border-[#F1F1F4] pt-4">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setEditMember(null)}
+                                className="h-9.5 rounded-lg border-[#DBDFE9] !bg-white px-4 text-[12.5px] font-semibold text-[#4B5675] hover:!bg-[#F9F9F9]"
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                disabled={editForm.processing}
+                                className="h-9.5 rounded-lg bg-[#1B84FF] px-4 text-[12.5px] font-semibold text-white hover:bg-[#006AE6]"
+                            >
+                                {editForm.processing ? 'Saving...' : 'Save Changes'}
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
 
             {/* Verification Dialog */}
             <Dialog open={!!verifyMember} onOpenChange={(open) => !open && setVerifyMember(null)}>

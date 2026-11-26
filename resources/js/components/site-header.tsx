@@ -94,26 +94,21 @@ export function SiteHeader({
             <div className={`flex h-[76px] items-center justify-between ${LANDING_CONTAINER}`}>
                 <Link href="/" className="group flex shrink-0 items-center gap-3">
                     <BrandMark
-                        className={`shrink-0 transition-all duration-500 group-hover:-translate-y-0.5 ${
+                        className={`shrink-0 transition-all duration-500 group-hover:scale-[1.03] ${
                             variant === 'hero' && !solidHeader
-                                ? 'h-[72px] w-[72px] translate-y-1.5 drop-shadow-[0_8px_18px_rgba(11,18,32,0.4)] sm:h-[84px] sm:w-[84px] sm:translate-y-2'
+                                ? 'h-[88px] w-[88px] translate-y-3 drop-shadow-[0_10px_22px_rgba(11,18,32,0.45)] sm:h-[112px] sm:w-[112px] sm:translate-y-4'
                                 : 'h-[58px] w-[58px] drop-shadow-[0_2px_6px_rgba(11,18,32,0.12)] sm:h-[64px] sm:w-[64px]'
                         }`}
                     />
-                    <span className="leading-tight">
-                        <span
-                            className={`block font-brand text-[22px] font-semibold tracking-[0.02em] transition-colors duration-500 ${
-                                solidHeader ? 'text-brand-navy' : variant === 'hero' ? 'text-brand-cream-text' : 'text-brand-navy'
-                            }`}
-                        >
+                    <span
+                        className={`overflow-hidden leading-tight whitespace-nowrap transition-all duration-500 ${
+                            variant === 'hero' && !solidHeader
+                                ? 'pointer-events-none max-w-0 opacity-0'
+                                : 'max-w-[200px] opacity-100'
+                        }`}
+                    >
+                        <span className="block font-brand text-[22px] font-semibold tracking-[0.02em] text-brand-navy">
                             ccIntake<span className="text-brand-gold [font-variant-numeric:lining-nums]">97</span>
-                        </span>
-                        <span
-                            className={`hidden text-[9.5px] font-medium tracking-[0.3em] uppercase transition-colors duration-500 sm:block ${
-                                solidHeader ? 'text-brand-navy/45' : variant === 'hero' ? 'text-brand-cream-text/45' : 'text-brand-navy/45'
-                            }`}
-                        >
-                            Cadet College Alumni
                         </span>
                     </span>
                 </Link>

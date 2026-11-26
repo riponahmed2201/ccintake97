@@ -130,6 +130,7 @@ const STEP_FIELDS: Record<string, number> = {
     intake_year: 1,
     house_name: 1,
     house_color: 1,
+    cccl_life_member_no: 1,
     address: 2,
     city: 2,
     country_code: 2,
@@ -231,6 +232,7 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
         intake_year: member.intake_year ? String(member.intake_year) : '1997',
         house_name: member.house_name || '',
         house_color: member.house_color || '',
+        cccl_life_member_no: member.profile?.cccl_life_member_no || '',
         job_type: member.profile?.job_type || '',
         organization: member.profile?.organization || '',
         designation: member.profile?.designation || '',
@@ -493,6 +495,7 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                                             ) : undefined
                                         }
                                     />
+                                    <InfoRow label="CCCL Life Member No" value={member.profile?.cccl_life_member_no} />
                                 </dl>
                             </section>
                         )}
@@ -929,6 +932,16 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                                 }))}
                             />
                             <ErrorText message={form.errors.house_color} />
+                        </div>
+                        <div className="sm:col-span-2">
+                            <Label optional>CCCL Life Member No (if any)</Label>
+                            <Input
+                                value={form.data.cccl_life_member_no}
+                                onChange={(event) => form.setData('cccl_life_member_no', event.target.value)}
+                                className={fieldClass}
+                                placeholder="Enter CCCL life member number (if any)"
+                            />
+                            <ErrorText message={form.errors.cccl_life_member_no} />
                         </div>
                     </div>
                 </Section>

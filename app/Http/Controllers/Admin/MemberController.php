@@ -7,11 +7,16 @@ use App\Models\AuditLog;
 use App\Models\College;
 use App\Models\Industry;
 use App\Models\Member;
+use App\Models\MemberPrivacySetting;
+use App\Models\MemberProfile;
 use App\Models\MembershipVerification;
+use App\Models\User;
 use App\Services\SequenceService;
+use App\Support\CadetProfileOptions;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -53,7 +58,12 @@ class MemberController extends Controller
             $query->whereHas('profile', fn ($q) => $q->where('industry_id', $industryId));
         }
 
-        $members = $query->paginate($request->input('per_page', 10))->withQueryString();
+        $perPage = (int) $request->input('per_page', 10);
+        if (! in_array($perPage, [10, 25, 50, 100], true)) {
+            $perPage = 10;
+        }
+
+        $members = $query->paginate($perPage)->withQueryString();
 
         $colleges = College::where('is_participating', true)->orderBy('name')->get(['id', 'name', 'short_name']);
         $industries = Industry::orderBy('name')->get(['id', 'name']);
@@ -62,8 +72,143 @@ class MemberController extends Controller
             'members' => $members,
             'colleges' => $colleges,
             'industries' => $industries,
-            'filters' => $request->only(['search', 'college_id', 'membership_status', 'verification_status', 'industry_id']),
+            'houses' => CadetProfileOptions::HOUSES,
+            'filters' => array_merge(
+                $request->only(['search', 'college_id', 'membership_status', 'verification_status', 'industry_id']),
+                ['per_page' => (string) $perPage]
+            ),
         ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        foreach (['phone', 'college_id', 'college_roll_no', 'house_name'] as $field) {
+            if ($request->input($field) === '') {
+                $request->merge([$field => null]);
+            }
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'phone' => 'nullable|string|max:30',
+            'password' => 'required|string|min:8',
+            'college_id' => 'nullable|exists:colleges,id',
+            'college_roll_no' => 'nullable|string|max:50',
+            'intake_year' => 'nullable|integer|min:1950|max:2035',
+            'house_name' => 'nullable|string|max:100',
+            'membership_status' => 'required|in:pending,approved',
+            'verification_status' => 'required|in:unverified,verified',
+        ]);
+
+        $member = null;
+
+        DB::transaction(function () use ($validated, &$member) {
+            $isVerified = $validated['verification_status'] === 'verified';
+            $membershipStatus = $isVerified ? 'approved' : $validated['membership_status'];
+            $isApproved = $membershipStatus === 'approved';
+
+            $user = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'] ?? null,
+                'password' => Hash::make($validated['password']),
+                'account_status' => 'active',
+                'email_verified_at' => now(),
+                'is_demo' => false,
+                'last_activity_at' => now(),
+            ]);
+            $user->syncRoles([$isVerified ? 'verified_member' : 'regular_member']);
+
+            $member = Member::create([
+                'user_id' => $user->id,
+                'member_code' => $isApproved ? SequenceService::next('member_code') : null,
+                'college_id' => $validated['college_id'] ?? null,
+                'college_roll_no' => $validated['college_roll_no'] ?? null,
+                'intake_year' => $validated['intake_year'] ?? 1997,
+                'house_name' => $validated['house_name'] ?? null,
+                'membership_status' => $membershipStatus,
+                'verification_status' => $validated['verification_status'],
+                'approved_at' => $isApproved ? now() : null,
+                'verified_at' => $isVerified ? now() : null,
+            ]);
+
+            MemberProfile::create([
+                'member_id' => $member->id,
+                'country_code' => 'BD',
+                'profile_completion' => 15,
+            ]);
+
+            foreach (['photo', 'organization', 'designation', 'country', 'city', 'linkedin', 'date_of_birth'] as $key) {
+                MemberPrivacySetting::create([
+                    'member_id' => $member->id,
+                    'field_key' => $key,
+                    'visibility' => in_array($key, ['date_of_birth', 'city'], true) ? 'connections' : 'verified_members',
+                ]);
+            }
+        });
+
+        AuditLog::log('member.created_by_admin', 'members', $member->id, null, $member->fresh()->toArray());
+
+        return back()->with('success', "Member {$validated['name']} registered successfully.");
+    }
+
+    public function update(Request $request, int $id): RedirectResponse
+    {
+        $member = Member::with(['user', 'profile'])->findOrFail($id);
+        $previousState = $member->toArray();
+
+        foreach (['phone', 'password', 'college_id', 'college_roll_no', 'house_name', 'designation', 'organization', 'cccl_life_member_no'] as $field) {
+            if ($request->input($field) === '') {
+                $request->merge([$field => null]);
+            }
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => "required|email|max:255|unique:users,email,{$member->user_id}",
+            'phone' => 'nullable|string|max:30',
+            'password' => 'nullable|string|min:8',
+            'college_id' => 'nullable|exists:colleges,id',
+            'college_roll_no' => 'nullable|string|max:50',
+            'intake_year' => 'nullable|integer|min:1950|max:2035',
+            'house_name' => 'nullable|string|max:100',
+            'designation' => 'nullable|string|max:150',
+            'organization' => 'nullable|string|max:150',
+            'cccl_life_member_no' => 'nullable|string|max:100',
+        ]);
+
+        DB::transaction(function () use ($member, $validated) {
+            $userData = [
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'] ?? null,
+            ];
+            if (! empty($validated['password'])) {
+                $userData['password'] = Hash::make($validated['password']);
+            }
+            $member->user->update($userData);
+
+            $member->update([
+                'college_id' => $validated['college_id'] ?? null,
+                'college_roll_no' => $validated['college_roll_no'] ?? null,
+                'intake_year' => $validated['intake_year'] ?? $member->intake_year ?? 1997,
+                'house_name' => $validated['house_name'] ?? null,
+            ]);
+
+            MemberProfile::updateOrCreate(
+                ['member_id' => $member->id],
+                [
+                    'designation' => $validated['designation'] ?? null,
+                    'organization' => $validated['organization'] ?? null,
+                    'cccl_life_member_no' => $validated['cccl_life_member_no'] ?? null,
+                ]
+            );
+        });
+
+        AuditLog::log('member.updated_by_admin', 'members', $member->id, $previousState, $member->fresh(['user', 'profile'])->toArray());
+
+        return back()->with('success', "Member {$validated['name']} updated successfully.");
     }
 
     public function show(int $id): Response
