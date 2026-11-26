@@ -27,6 +27,9 @@ import {
     ChevronDown,
     UserCircle,
     KeyRound,
+    Sparkles,
+    LayoutTemplate,
+    Images,
 } from 'lucide-react';
 import {
     DropdownMenu,
@@ -66,6 +69,14 @@ const NAV_GROUPS = [
             { label: 'Business Directory', href: '/admin/businesses', icon: Briefcase },
             { label: 'Initiatives', href: '/admin/initiatives', icon: HeartHandshake },
             { label: 'Support Tickets', href: '/admin/tickets', icon: LifeBuoy },
+        ],
+    },
+    {
+        label: 'Website & CMS',
+        items: [
+            { label: 'Hero & Banners', href: '/admin/cms/hero', icon: Sparkles },
+            { label: 'Landing Sections', href: '/admin/cms/sections', icon: LayoutTemplate },
+            { label: 'Campus Gallery', href: '/admin/gallery', icon: Images },
         ],
     },
     {

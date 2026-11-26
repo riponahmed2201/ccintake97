@@ -61,6 +61,14 @@ class PublicMemberPresenter
 
     private static function url(string $path): string
     {
-        return preg_match('#^(https?:)?//|^/#', $path) ? $path : '/storage/'.ltrim($path, '/');
+        if (preg_match('#^(https?:)?//#', $path)) {
+            return $path;
+        }
+
+        if (str_starts_with($path, '/')) {
+            return asset(ltrim($path, '/'));
+        }
+
+        return asset('storage/'.ltrim($path, '/'));
     }
 }

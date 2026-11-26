@@ -31,7 +31,7 @@ class IdCardController extends Controller
 
         return Inertia::render('member/id-card', [
             'member' => $member,
-            'photoUrl' => $user->avatar_path ? '/storage/'.$user->avatar_path : null,
+            'photoUrl' => $user->avatar_path ? asset('storage/'.ltrim($user->avatar_path, '/')) : null,
             'qrPayload' => json_encode($qrPayload),
         ]);
     }

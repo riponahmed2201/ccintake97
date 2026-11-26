@@ -10,6 +10,7 @@ use App\Models\Committee;
 use App\Models\Event;
 use App\Models\Member;
 use App\Support\PublicMemberPresenter;
+use App\Support\WebsiteCmsData;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -69,6 +70,7 @@ class HomeController extends Controller
             'committee' => $executiveCommittee,
             'businesses' => $businesses,
             'metrics' => $metrics,
+            ...WebsiteCmsData::forLanding(),
         ]);
     }
 }

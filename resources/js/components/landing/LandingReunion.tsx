@@ -4,6 +4,7 @@ import { PrimaryCta } from '@/components/landing/cta';
 import { LANDING_CONTAINER, LANDING_GRID_GAP, LANDING_SECTION } from '@/components/landing/layout';
 import { Reveal, SectionHeading } from '@/components/landing/primitives';
 import { useSignupDialog } from '@/contexts/signup-dialog-context';
+import { assetUrl } from '@/lib/utils';
 
 const REUNION_TARGET = new Date('2027-11-01T00:00:00+06:00');
 
@@ -35,7 +36,7 @@ export function LandingReunion() {
         <section id="reunion" className={`relative isolate overflow-hidden bg-brand-ink-deep text-brand-cream-text ${LANDING_SECTION}`}>
             <div className="pointer-events-none absolute inset-0 -z-10">
                 <img
-                    src="/images/campus/reunion-parade-rcc.jpg"
+                    src={assetUrl('/images/campus/reunion-parade-rcc.jpg')}
                     alt=""
                     loading="lazy"
                     className="h-full w-full object-cover object-[center_30%] sm:object-[center_35%]"

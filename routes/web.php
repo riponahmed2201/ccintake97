@@ -168,6 +168,26 @@ Route::middleware(['auth', 'role_or_permission:super_admin|admin.access'])
         Route::delete('/roles/{roleId}', [Admin\RoleController::class, 'destroy'])->name('roles.destroy');
         Route::get('/settings', [Admin\SettingController::class, 'index'])->name('settings.index');
         Route::put('/settings', [Admin\SettingController::class, 'update'])->name('settings.update');
+
+        // Website & CMS
+        Route::get('/cms/hero', [Admin\CmsHeroController::class, 'index'])->name('cms.hero');
+        Route::put('/cms/hero/config', [Admin\CmsHeroController::class, 'updateConfig'])->name('cms.hero.config');
+        Route::post('/cms/hero/slides', [Admin\CmsHeroController::class, 'storeSlide'])->name('cms.hero.slides.store');
+        Route::post('/cms/hero/slides/{id}', [Admin\CmsHeroController::class, 'updateSlide'])->name('cms.hero.slides.update');
+        Route::delete('/cms/hero/slides/{id}', [Admin\CmsHeroController::class, 'destroySlide'])->name('cms.hero.slides.destroy');
+        Route::post('/cms/hero/banners', [Admin\CmsHeroController::class, 'updateBanners'])->name('cms.hero.banners');
+
+        Route::get('/cms/sections', [Admin\CmsSectionController::class, 'index'])->name('cms.sections');
+        Route::post('/cms/sections/config', [Admin\CmsSectionController::class, 'updateSection'])->name('cms.sections.config');
+        Route::post('/cms/sections/milestones', [Admin\CmsSectionController::class, 'storeMilestone'])->name('cms.sections.milestones.store');
+        Route::put('/cms/sections/milestones/{id}', [Admin\CmsSectionController::class, 'updateMilestone'])->name('cms.sections.milestones.update');
+        Route::delete('/cms/sections/milestones/{id}', [Admin\CmsSectionController::class, 'destroyMilestone'])->name('cms.sections.milestones.destroy');
+        Route::put('/cms/sections/inquiries/{id}', [Admin\CmsSectionController::class, 'updateInquiry'])->name('cms.sections.inquiries.update');
+
+        Route::get('/gallery', [Admin\GalleryController::class, 'index'])->name('gallery.index');
+        Route::post('/gallery', [Admin\GalleryController::class, 'store'])->name('gallery.store');
+        Route::post('/gallery/{id}', [Admin\GalleryController::class, 'update'])->name('gallery.update');
+        Route::delete('/gallery/{id}', [Admin\GalleryController::class, 'destroy'])->name('gallery.destroy');
     });
 
 require __DIR__.'/settings.php';

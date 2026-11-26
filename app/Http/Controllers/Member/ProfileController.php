@@ -36,7 +36,7 @@ class ProfileController extends Controller
             'houseColors' => CadetProfileOptions::HOUSE_COLORS,
             'bloodGroups' => CadetProfileOptions::BLOOD_GROUPS,
             'jobTypes' => CadetProfileOptions::JOB_TYPES,
-            'photoUrl' => $user->avatar_path ? '/storage/'.$user->avatar_path : null,
+            'photoUrl' => $user->avatar_path ? asset('storage/'.ltrim($user->avatar_path, '/')) : null,
             'cadetEditable' => ! $member->college_id && ! $member->applications()->where('status', 'submitted')->exists(),
         ]);
     }

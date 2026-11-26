@@ -38,7 +38,7 @@ class College extends Model
      */
     public function getLogoUrlAttribute(): ?string
     {
-        return $this->logo_path ? '/storage/'.ltrim($this->logo_path, '/') : null;
+        return $this->logo_path ? asset('storage/'.ltrim($this->logo_path, '/')) : null;
     }
 
     public function members(): HasMany

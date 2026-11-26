@@ -13,6 +13,7 @@ import { MarketingPageHero } from '@/components/marketing/marketing-page-hero';
 import PublicSiteHeader from '@/components/public-site-header';
 import { SignupDialogProvider } from '@/contexts/signup-dialog-context';
 import { useLandingPage } from '@/hooks/use-landing-page';
+import { assetUrl } from '@/lib/utils';
 
 type MarketingPage = 'about' | 'colleges' | 'committee' | 'welfare' | 'contact';
 
@@ -43,7 +44,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                     {page === 'about' && (
                         <>
                             <MarketingPageHero
-                                image="/images/campus/cadets-in-class.jpg"
+                                image={assetUrl('/images/campus/cadets-in-class.jpg')}
                                 eyebrow="Our story"
                                 title={
                                     <>
@@ -78,7 +79,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                     {page === 'colleges' && (
                         <>
                             <MarketingPageHero
-                                image="/images/campus/hero-fcc.jpg"
+                                image={assetUrl('/images/campus/hero-fcc.jpg')}
                                 eyebrow="Constituent network"
                                 title={
                                     <>
@@ -119,7 +120,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                     {page === 'committee' && (
                         <>
                             <MarketingPageHero
-                                image="/images/campus/hero-mcc.jpg"
+                                image={assetUrl('/images/campus/hero-mcc.jpg')}
                                 eyebrow="Secretariat stewardship"
                                 title={
                                     <>
@@ -155,7 +156,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                     {page === 'welfare' && (
                         <>
                             <MarketingPageHero
-                                image="/images/campus/aerial-mcc.jpg"
+                                image={assetUrl('/images/campus/aerial-mcc.jpg')}
                                 eyebrow="The Sacred Covenant"
                                 title={
                                     <>
@@ -189,7 +190,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                     {page === 'contact' && (
                         <>
                             <MarketingPageHero
-                                image="/images/campus/hero-scc.jpg"
+                                image={assetUrl('/images/campus/hero-scc.jpg')}
                                 eyebrow="Central Secretariat"
                                 title={
                                     <>

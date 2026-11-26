@@ -34,6 +34,7 @@ export function LandingPage({
     businesses = [],
     metrics = DEFAULT_METRICS,
     directoryPreview = [],
+    cms,
 }: WelcomeProps) {
     const landing = useLandingPage(colleges);
     const activeNav = useScrollSpy(SCROLL_SPY_SECTIONS);
@@ -62,6 +63,8 @@ export function LandingPage({
                     setHeroSlide={landing.setHeroSlide}
                     heroPaused={landing.heroPaused}
                     setHeroPaused={landing.setHeroPaused}
+                    cmsSlides={cms?.heroSlides}
+                    heroConfig={cms?.heroConfig}
                 />
                 <LandingAbout />
                 <LandingColleges
@@ -73,8 +76,8 @@ export function LandingPage({
                     selectCollege={landing.selectCollege}
                     stepCollege={landing.stepCollege}
                 />
-                <LandingTimeline />
-                <LandingCampusLife />
+                <LandingTimeline milestones={cms?.milestones} />
+                <LandingCampusLife galleryItems={cms?.galleryItems} />
                 <LandingDirectory
                     directoryPreview={directoryPreview}
                     mergedColleges={landing.mergedColleges}

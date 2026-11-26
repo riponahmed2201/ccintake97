@@ -1,6 +1,7 @@
 import {
     Shield, Stethoscope, Cpu, Globe2, Coins, Scale, HeartHandshake, GraduationCap, Percent,
 } from 'lucide-react';
+import { assetUrl } from '@/lib/utils';
 
 export const CADET_COLLEGES_DATA = [
     { short_name: 'FCC', name: 'Faujdarhat Cadet College', established: 1958, location: 'Chittagong', region: 'Chittagong', houses: 'Babur, Fazlul Huq, Rab, Qasim Houses', cohort: '54 Cadets', tagline: 'The First & Pioneer College of Bangladesh' },
@@ -16,39 +17,39 @@ export const CADET_COLLEGES_DATA = [
 ];
 
 export const CAMPUS_PHOTOS: Record<string, string> = {
-    FCC: '/images/campus/fcc.jpg',
-    JCC: '/images/campus/jcc.jpg',
-    MCC: '/images/campus/mcc.jpg',
-    RCC: '/images/campus/rcc.jpg',
-    SCC: '/images/campus/scc.jpg',
-    CCR: '/images/campus/ccr.jpg',
-    BCC: '/images/campus/bcc.jpg',
-    MGCC: '/images/campus/mgcc.jpg',
-    CCC: '/images/campus/ccc.jpg',
+    FCC: assetUrl('/images/campus/fcc.jpg'),
+    JCC: assetUrl('/images/campus/jcc.jpg'),
+    MCC: assetUrl('/images/campus/mcc.jpg'),
+    RCC: assetUrl('/images/campus/rcc.jpg'),
+    SCC: assetUrl('/images/campus/scc.jpg'),
+    CCR: assetUrl('/images/campus/ccr.jpg'),
+    BCC: assetUrl('/images/campus/bcc.jpg'),
+    MGCC: assetUrl('/images/campus/mgcc.jpg'),
+    CCC: assetUrl('/images/campus/ccc.jpg'),
 };
 
 // Hero slideshow — only photos sharp enough for a full-screen background.
 // `dim` adds extra shade so the headline stays legible on bright daytime shots.
 export const HERO_SLIDES = [
-    { src: '/images/campus/hero-fcc.jpg', college: 'FCC', caption: 'Faujdarhat Cadet College', position: 'center 45%', dim: 0.35 },
-    { src: '/images/campus/hero-jcc.jpg', college: 'JCC', caption: 'Jhenaidah Cadet College', position: 'center 50%', dim: 0.45 },
-    { src: '/images/campus/hero-mcc.jpg', college: 'MCC', caption: 'Mirzapur Cadet College', position: 'center 40%', dim: 0.4 },
-    { src: '/images/campus/hero-rcc-sunset.jpg', college: 'RCC', caption: 'Rajshahi Cadet College, at dusk', position: 'center 60%', dim: 0 },
-    { src: '/images/campus/hero-scc.jpg', college: 'SCC', caption: 'Sylhet Cadet College', position: 'center 50%', dim: 0.5 },
-    { src: '/images/campus/hero-ccr.jpg', college: 'CCR', caption: 'Rangpur Cadet College', position: 'center 50%', dim: 0.35 },
-    { src: '/images/campus/hero-bcc.jpg', college: 'BCC', caption: 'Barishal Cadet College', position: 'center 45%', dim: 0.45 },
-    { src: '/images/campus/hero-pcc.jpg', college: 'PCC', caption: 'Pabna Cadet College', position: 'center 50%', dim: 0.55 },
-    { src: '/images/campus/hero-mgcc.jpg', college: 'MGCC', caption: "Mymensingh Girls' Cadet College", position: 'center 50%', dim: 0.35 },
-    { src: '/images/campus/hero-ccc.jpg', college: 'CCC', caption: 'Cumilla Cadet College', position: 'center 55%', dim: 0.4 },
+    { src: assetUrl('/images/campus/hero-fcc.jpg'), college: 'FCC', caption: 'Faujdarhat Cadet College', position: 'center 45%', dim: 0.35 },
+    { src: assetUrl('/images/campus/hero-jcc.jpg'), college: 'JCC', caption: 'Jhenaidah Cadet College', position: 'center 50%', dim: 0.45 },
+    { src: assetUrl('/images/campus/hero-mcc.jpg'), college: 'MCC', caption: 'Mirzapur Cadet College', position: 'center 40%', dim: 0.4 },
+    { src: assetUrl('/images/campus/hero-rcc-sunset.jpg'), college: 'RCC', caption: 'Rajshahi Cadet College, at dusk', position: 'center 60%', dim: 0 },
+    { src: assetUrl('/images/campus/hero-scc.jpg'), college: 'SCC', caption: 'Sylhet Cadet College', position: 'center 50%', dim: 0.5 },
+    { src: assetUrl('/images/campus/hero-ccr.jpg'), college: 'CCR', caption: 'Rangpur Cadet College', position: 'center 50%', dim: 0.35 },
+    { src: assetUrl('/images/campus/hero-bcc.jpg'), college: 'BCC', caption: 'Barishal Cadet College', position: 'center 45%', dim: 0.45 },
+    { src: assetUrl('/images/campus/hero-pcc.jpg'), college: 'PCC', caption: 'Pabna Cadet College', position: 'center 50%', dim: 0.55 },
+    { src: assetUrl('/images/campus/hero-mgcc.jpg'), college: 'MGCC', caption: "Mymensingh Girls' Cadet College", position: 'center 50%', dim: 0.35 },
+    { src: assetUrl('/images/campus/hero-ccc.jpg'), college: 'CCC', caption: 'Cumilla Cadet College', position: 'center 55%', dim: 0.4 },
 ];
 export const HERO_INTERVAL = 6500;
 
 export const CAMPUS_LIFE = [
-    { src: '/images/campus/athletics.jpg', title: 'Inter-house athletics', place: 'RCC' },
-    { src: '/images/campus/playground-mcc.jpg', title: 'The parade ground', place: 'MCC' },
-    { src: '/images/campus/rcc.jpg', title: 'The academic block', place: 'RCC' },
-    { src: '/images/campus/fcc.jpg', title: 'Where it all began', place: 'FCC' },
-    { src: '/images/campus/ccr.jpg', title: 'Northern sentinel', place: 'CCR' },
+    { src: assetUrl('/images/campus/athletics.jpg'), title: 'Inter-house athletics', place: 'RCC' },
+    { src: assetUrl('/images/campus/playground-mcc.jpg'), title: 'The parade ground', place: 'MCC' },
+    { src: assetUrl('/images/campus/rcc.jpg'), title: 'The academic block', place: 'RCC' },
+    { src: assetUrl('/images/campus/fcc.jpg'), title: 'Where it all began', place: 'FCC' },
+    { src: assetUrl('/images/campus/ccr.jpg'), title: 'Northern sentinel', place: 'CCR' },
 ];
 
 // Wikimedia Commons photographs — CC BY-SA unless noted. Attribution is required.
@@ -137,4 +138,8 @@ export const CHARTER_ARTICLES = [
     { numeral: 'IV', title: 'Fiduciary Transparency', text: 'Every welfare and endowment contribution is audited annually by chartered accountants and published to members.' },
 ];
 
-export const NEWS_FALLBACK_PHOTOS = ['/images/campus/playground-mcc.jpg', '/images/campus/athletics.jpg', '/images/campus/mgcc.jpg'];
+export const NEWS_FALLBACK_PHOTOS = [
+    assetUrl('/images/campus/playground-mcc.jpg'),
+    assetUrl('/images/campus/athletics.jpg'),
+    assetUrl('/images/campus/mgcc.jpg'),
+];

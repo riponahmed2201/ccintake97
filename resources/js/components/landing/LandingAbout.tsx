@@ -1,11 +1,11 @@
 import { LANDING_CONTAINER, LANDING_GRID_GAP, LANDING_SECTION } from '@/components/landing/layout';
 import { Reveal, SectionHeading } from '@/components/landing/primitives';
-import { cn } from '@/lib/utils';
+import { assetUrl, cn } from '@/lib/utils';
 
 const MOSAIC = [
-    { src: '/images/campus/cadets-in-class.jpg', alt: 'Cadets in a classroom', caption: 'Prep hour', cls: 'col-span-3 row-span-2' },
-    { src: '/images/campus/flag-raising.jpg', alt: 'Flag raising ceremony', caption: 'Morning colours', cls: 'col-span-2' },
-    { src: '/images/campus/athletes-contingent.jpg', alt: 'Athletes contingent on parade', caption: 'Inter-house athletics', cls: 'col-span-2' },
+    { src: assetUrl('/images/campus/cadets-in-class.jpg'), alt: 'Cadets in a classroom', caption: 'Prep hour', cls: 'col-span-3 row-span-2' },
+    { src: assetUrl('/images/campus/flag-raising.jpg'), alt: 'Flag raising ceremony', caption: 'Morning colours', cls: 'col-span-2' },
+    { src: assetUrl('/images/campus/athletes-contingent.jpg'), alt: 'Athletes contingent on parade', caption: 'Inter-house athletics', cls: 'col-span-2' },
 ];
 
 export function LandingAbout({ omitHeading = false, className }: { omitHeading?: boolean; className?: string }) {

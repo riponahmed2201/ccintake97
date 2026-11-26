@@ -7,6 +7,7 @@ import { LandingFooter } from '@/components/landing/LandingFooter';
 import { LANDING_CONTAINER } from '@/components/landing/layout';
 import { SectionHeading } from '@/components/landing/primitives';
 import PublicSiteHeader from '@/components/public-site-header';
+import { assetUrl } from '@/lib/utils';
 
 interface PublicMember {
     id: number;
@@ -76,7 +77,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
 
                 <section className="relative isolate overflow-hidden bg-[#091324] text-[#F8F5EE]">
                     <div className="pointer-events-none absolute inset-0 -z-10">
-                        <img src="/images/campus/rcc.jpg" alt="" className="h-full w-full object-cover opacity-30" />
+                        <img src={assetUrl('/images/campus/rcc.jpg')} alt="" className="h-full w-full object-cover opacity-30" />
                         <div className="absolute inset-0 bg-gradient-to-r from-[#060B15] via-[#091324]/90 to-[#091324]/70" />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#091324] via-[#091324]/25 to-[#091324]/50" />
                     </div>

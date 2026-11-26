@@ -1,11 +1,12 @@
 import { Head } from '@inertiajs/react';
 import { LandingPage } from '@/components/landing/LandingPage';
 import type { WelcomeProps } from '@/components/landing/types';
+import { assetUrl } from '@/lib/utils';
 
 const SITE_NAME = 'ccIntake97 — Cadet College Alumni Association · Class of 1997';
 const DESCRIPTION =
     'The central alumni association for the 1997 intake across ten cadet colleges — directory, welfare, reunion, and fraternity.';
-const OG_IMAGE = '/images/campus/hero-rcc-sunset.jpg';
+const OG_IMAGE = assetUrl('/images/campus/hero-rcc-sunset.jpg');
 
 export default function Welcome(props: WelcomeProps) {
     const base = (import.meta.env.VITE_APP_URL as string | undefined)?.replace(/\/$/, '') ?? '';

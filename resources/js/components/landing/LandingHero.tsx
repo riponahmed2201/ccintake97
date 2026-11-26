@@ -3,7 +3,7 @@ import { LANDING_CONTAINER, LANDING_HERO_INNER } from '@/components/landing/layo
 import { ExploreLink, Reveal } from '@/components/landing/primitives';
 import { useSignupDialog } from '@/contexts/signup-dialog-context';
 import { HERO_INTERVAL, HERO_SLIDES } from '@/components/landing/constants';
-import type { MergedCollege, WelcomeMetrics } from '@/components/landing/types';
+import type { CmsData, CmsSlideItem, MergedCollege, WelcomeMetrics } from '@/components/landing/types';
 
 const HERO_DOT_RING_R = 6;
 const HERO_DOT_RING_C = 2 * Math.PI * HERO_DOT_RING_R;
@@ -73,6 +73,8 @@ export function LandingHero({
     setHeroSlide,
     heroPaused,
     setHeroPaused,
+    cmsSlides,
+    heroConfig,
 }: {
     metrics: WelcomeMetrics;
     mergedColleges: MergedCollege[];
@@ -80,14 +82,18 @@ export function LandingHero({
     setHeroSlide: (n: number) => void;
     heroPaused: boolean;
     setHeroPaused: (v: boolean) => void;
+    cmsSlides?: CmsSlideItem[];
+    heroConfig?: CmsData['heroConfig'];
 }) {
     const { openSignup } = useSignupDialog();
     const verifiedLabel = metrics.verified_members > 0 ? String(metrics.verified_members) : '—';
+    const slides = cmsSlides && cmsSlides.length > 0 ? cmsSlides : HERO_SLIDES;
+    const activeIndex = heroSlide % slides.length;
 
     return (
         <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-brand-ink-deep text-brand-cream-text">
-            {HERO_SLIDES.map((sl, i) => {
-                const active = i === heroSlide;
+            {slides.map((sl, i) => {
+                const active = i === activeIndex;
                 return (
                     <div key={sl.src} aria-hidden={!active} className={`absolute inset-0 -z-20 transition-opacity duration-[1600ms] ease-in-out ${active ? 'opacity-100' : 'opacity-0'}`}>
                         <img
@@ -110,23 +116,23 @@ export function LandingHero({
             <div className={`${LANDING_CONTAINER} ${LANDING_HERO_INNER}`}>
                 <Reveal>
                     <h1 className="max-w-4xl font-serif text-[3rem] leading-[0.98] font-semibold tracking-[-0.02em] sm:text-6xl lg:text-[6.25rem]">
-                        Different colleges.
+                        {heroConfig?.headline || 'Different colleges.'}
                         <br />
-                        <em className="font-normal italic text-brand-gold-bright">One intake.</em>
+                        <em className="font-normal italic text-brand-gold-bright">{heroConfig?.highlight || 'One intake.'}</em>
                     </h1>
                 </Reveal>
                 <Reveal delay={200}>
                     <p className="mt-7 max-w-xl text-base leading-relaxed text-brand-cream-text/80 sm:text-lg">
-                        Ten cadet colleges. The intake of {metrics.intake_year}.
+                        {heroConfig?.subtitle || `Ten cadet colleges. The intake of ${metrics.intake_year}.`}
                     </p>
                 </Reveal>
                 <Reveal delay={300}>
                     <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5">
                         <PrimaryCta as="button" variant="navy" onClick={openSignup}>
-                            Apply for membership
+                            {heroConfig?.primary_cta || 'Apply for membership'}
                         </PrimaryCta>
                         <ExploreLink href="/about" light internal={false}>
-                            Explore our story
+                            {heroConfig?.secondary_cta || 'Explore our story'}
                         </ExploreLink>
                     </div>
                 </Reveal>
@@ -146,26 +152,26 @@ export function LandingHero({
                             ))}
                         </dl>
                         <div className="flex flex-col items-start gap-3 sm:items-end" onMouseEnter={() => setHeroPaused(true)} onMouseLeave={() => setHeroPaused(false)}>
-                            <div key={heroSlide} className="flex animate-in items-center gap-3 duration-700 fade-in slide-in-from-bottom-1">
+                            <div key={activeIndex} className="flex animate-in items-center gap-3 duration-700 fade-in slide-in-from-bottom-1">
                                 {(() => {
-                                    const col = mergedColleges.find((c) => c.short_name === HERO_SLIDES[heroSlide].college);
+                                    const col = mergedColleges.find((c) => c.short_name === slides[activeIndex].college);
                                     return col?.logo_url ? <img src={col.logo_url} alt="" className="h-9 w-9 rounded-full bg-white object-contain p-0.5" /> : null;
                                 })()}
                                 <div className="sm:text-right">
-                                    <div className="text-[14px] font-medium text-white">{HERO_SLIDES[heroSlide].caption}</div>
+                                    <div className="text-[14px] font-medium text-white">{slides[activeIndex].caption}</div>
                                     <div className="text-[11px] tracking-[0.18em] text-white/45 uppercase">
-                                        {String(heroSlide + 1).padStart(2, '0')} / {String(HERO_SLIDES.length).padStart(2, '0')}
+                                        {String(activeIndex + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
                                     </div>
                                 </div>
                             </div>
                             <div className="flex flex-nowrap items-center justify-start gap-0.5 sm:justify-end" role="tablist" aria-label="Hero slides">
-                                {HERO_SLIDES.map((sl, i) => (
+                                {slides.map((sl, i) => (
                                     <HeroSlideDot
                                         key={sl.src}
-                                        active={i === heroSlide}
-                                        passed={i < heroSlide}
+                                        active={i === activeIndex}
+                                        passed={i < activeIndex}
                                         paused={heroPaused}
-                                        slideKey={heroSlide}
+                                        slideKey={activeIndex}
                                         label={sl.caption}
                                         onSelect={() => setHeroSlide(i)}
                                     />
