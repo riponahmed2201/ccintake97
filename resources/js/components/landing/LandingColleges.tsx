@@ -41,7 +41,9 @@ export function LandingColleges({
                             type="button"
                             onClick={() => setSelectedRegion(tab)}
                             className={`relative -mb-px border-b-2 pb-3 text-[14px] whitespace-nowrap transition-colors duration-300 ${
-                                active ? 'border-[#091324] font-semibold text-[#091324]' : 'border-transparent text-[#091324]/45 hover:text-[#091324]'
+                                active
+                                    ? 'border-[#450D15] font-semibold text-[#450D15]'
+                                    : 'border-transparent font-medium text-[#091324]/75 hover:border-[#450D15]/35 hover:text-[#450D15]'
                             }`}
                         >
                             {tab === 'All' ? 'All (10)' : tab === 'Girls Colleges' ? 'Girls’' : tab}

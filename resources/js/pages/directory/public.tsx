@@ -164,7 +164,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                             </div>
                             <button
                                 type="submit"
-                                className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-[#0B1220] px-8 text-[15px] font-medium text-white transition-colors hover:bg-[#1A2438]"
+                                className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#6E1622] via-[#450D15] to-[#5E121D] px-8 text-[15px] font-semibold text-white shadow-[0_10px_24px_-8px_rgba(94,18,29,0.5)] transition-all hover:brightness-110"
                             >
                                 Search <ArrowRight className="h-4 w-4" />
                             </button>
@@ -175,7 +175,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                 type="button"
                                 onClick={() => visit({ college_id: null })}
                                 className={`shrink-0 rounded-full px-4 py-2 text-[13px] font-medium transition-colors ${
-                                    !collegeId ? 'bg-[#0B1220] text-white' : 'bg-[#F4F2EE] text-[#0B1220]/70 hover:text-[#0B1220]'
+                                    !collegeId ? 'bg-[#450D15] text-white shadow-sm' : 'bg-[#FAF5F6] text-[#0B1220]/75 hover:bg-[#F3E8EA] hover:text-[#0B1220]'
                                 }`}
                             >
                                 All colleges
@@ -189,7 +189,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                         title={c.name}
                                         onClick={() => visit({ college_id: active ? null : c.id })}
                                         className={`flex shrink-0 items-center gap-2 rounded-full py-1.5 pr-4 pl-1.5 text-[13px] font-medium transition-all ${
-                                            active ? 'bg-[#0B1220] text-white shadow-md' : 'bg-[#F4F2EE] text-[#0B1220]/70 hover:bg-[#FAF7F0]'
+                                            active ? 'bg-[#450D15] text-white shadow-sm' : 'bg-[#FAF5F6] text-[#0B1220]/75 hover:bg-[#F3E8EA] hover:text-[#0B1220]'
                                         }`}
                                     >
                                         <span className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-[#0B1220]/10">
@@ -264,7 +264,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                                     />
                                                 ) : (
                                                     <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F8FAFC] to-[#F1F5F9]">
-                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[#091324] font-serif text-3xl font-semibold text-[#F4C2C7] shadow-sm ring-2 ring-[#450D15]/30">
+                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[#450D15] font-serif text-3xl font-semibold text-[#F4C2C7] shadow-sm ring-2 ring-[#F4C2C7]/40">
                                                             {m.initials}
                                                         </span>
                                                     </div>
@@ -282,7 +282,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                                         {code ? `${code} ’97` : 'CCINTAKE 97'}
                                                     </span>
                                                     <span
-                                                        className="flex h-7 w-7 items-center justify-center rounded-full bg-[#091324] text-[#F4C2C7] shadow-xs ring-1 ring-[#450D15]/40"
+                                                        className="flex h-7 w-7 items-center justify-center rounded-full bg-[#450D15] text-[#F4C2C7] shadow-xs ring-1 ring-[#F4C2C7]/40"
                                                         aria-label="Verified member"
                                                     >
                                                         <ShieldCheck className="h-4 w-4" />
@@ -308,7 +308,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                                 )}
                                             </div>
 
-                                            <div className="flex items-center justify-between border-t border-[#091324]/[0.06] bg-[#F8FAFC]/60 px-5 py-3 text-[13px] font-semibold text-[#091324] transition-colors group-hover:bg-[#091324] group-hover:text-[#F4C2C7]">
+                                            <div className="flex items-center justify-between border-t border-[#091324]/[0.06] bg-[#F8FAFC]/60 px-5 py-3 text-[13px] font-semibold text-[#091324] transition-colors group-hover:bg-[#450D15] group-hover:text-white">
                                                 <span>View Dossier</span>
                                                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                                             </div>
@@ -365,7 +365,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                     <Link
                                         href={members.next_page_url}
                                         preserveScroll
-                                        className="inline-flex items-center gap-1.5 rounded-full bg-[#0B1220] px-5 py-2.5 text-[14px] font-medium text-white hover:bg-[#1A2438]"
+                                        className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#6E1622] via-[#450D15] to-[#5E121D] px-5 py-2.5 text-[14px] font-medium text-white transition-all hover:brightness-110"
                                     >
                                         Next <ArrowRight className="h-4 w-4" />
                                     </Link>
@@ -380,8 +380,8 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
 
                     <div className="mt-16 grid grid-cols-1 gap-5 md:grid-cols-2">
                         <div className="flex items-start gap-4 rounded-2xl bg-white p-7 ring-1 ring-[#091324]/[0.07] shadow-xs">
-                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F8FAFC] ring-1 ring-[#450D15]/30">
-                                <Lock className="h-5 w-5 text-[#5E121D]" aria-hidden />
+                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FAF5F6] ring-1 ring-[#450D15]/20">
+                                <Lock className="h-5 w-5 text-[#450D15]" aria-hidden />
                             </span>
                             <div>
                                 <div className="font-serif text-xl font-semibold text-[#091324]">Privacy first</div>
@@ -390,12 +390,12 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                 </p>
                             </div>
                         </div>
-                        <div className="flex flex-col justify-between gap-5 rounded-2xl bg-gradient-to-br from-[#F4C2C7] via-[#450D15] to-[#B08A3C] p-7 shadow-sm sm:flex-row sm:items-center">
+                        <div className="flex flex-col justify-between gap-5 rounded-2xl bg-gradient-to-br from-[#6E1622] via-[#450D15] to-[#2E080E] p-7 text-white shadow-[0_20px_50px_-22px_rgba(69,13,21,0.55)] sm:flex-row sm:items-center">
                             <div>
-                                <div className="font-serif text-xl font-semibold text-[#091324]">Not on the roll yet?</div>
-                                <p className="mt-1 text-[14px] text-[#091324]/80">Create your account and complete verification to be listed.</p>
+                                <div className="font-serif text-xl font-semibold text-white">Not on the roll yet?</div>
+                                <p className="mt-1 text-[14px] text-white/80">Create your account and complete verification to be listed.</p>
                             </div>
-                            <PrimaryCta as="link" href="/?signup=1" variant="navy" className="shrink-0 !px-6 !py-3 text-[14px]">
+                            <PrimaryCta as="link" href="/?signup=1" variant="cream" className="shrink-0 !px-6 !py-3 text-[14px]">
                                 Apply now
                             </PrimaryCta>
                         </div>

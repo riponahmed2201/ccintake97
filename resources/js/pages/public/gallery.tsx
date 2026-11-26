@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Head } from '@inertiajs/react';
+import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { CAMPUS_LIFE } from '@/components/landing/constants';
 import { LandingFooter } from '@/components/landing/LandingFooter';
 import { LANDING_CONTAINER, LANDING_SECTION } from '@/components/landing/layout';
@@ -39,6 +40,22 @@ export default function PublicGallery({ items = [] }: { items?: GalleryItem[] })
         [galleryItems, category],
     );
 
+    const activeIndex = activePhoto ? filtered.findIndex((g) => g.id === activePhoto.id) : -1;
+    const stepPhoto = (dir: 1 | -1) => {
+        if (filtered.length < 2 || activeIndex === -1) return;
+        setActivePhoto(filtered[(activeIndex + dir + filtered.length) % filtered.length]);
+    };
+
+    useEffect(() => {
+        if (!activePhoto) return;
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowRight') stepPhoto(1);
+            if (e.key === 'ArrowLeft') stepPhoto(-1);
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [activePhoto, activeIndex, filtered]);
+
     return (
         <SignupDialogProvider>
             <Head title="Gallery — CCINTAKE 97" />
@@ -56,26 +73,31 @@ export default function PublicGallery({ items = [] }: { items?: GalleryItem[] })
 
                 <section className={`${LANDING_SECTION} bg-[#F8FAFC]`}>
                     <div className={LANDING_CONTAINER}>
-                        <div className="mb-8 flex flex-wrap items-center gap-2">
-                            {[
-                                { key: 'all', label: 'All Photos' },
-                                { key: 'campus_life', label: 'Campus Life' },
-                                { key: 'reunion', label: 'Reunions' },
-                                { key: 'events', label: 'Events' },
-                            ].map((t) => (
-                                <button
-                                    key={t.key}
-                                    type="button"
-                                    onClick={() => setCategory(t.key as typeof category)}
-                                    className={`cursor-pointer rounded-full px-4 py-2 text-[13px] font-semibold transition-all ${
-                                        category === t.key
-                                            ? 'bg-[#091324] text-[#F7F3EA]'
-                                            : 'border border-[#091324]/12 bg-white text-[#091324]/75 hover:border-[#450D15]/60 hover:text-[#091324]'
-                                    }`}
-                                >
-                                    {t.label}
-                                </button>
-                            ))}
+                        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+                            <div className="flex flex-wrap items-center gap-2">
+                                {[
+                                    { key: 'all', label: 'All Photos' },
+                                    { key: 'campus_life', label: 'Campus Life' },
+                                    { key: 'reunion', label: 'Reunions' },
+                                    { key: 'events', label: 'Events' },
+                                ].map((t) => (
+                                    <button
+                                        key={t.key}
+                                        type="button"
+                                        onClick={() => setCategory(t.key as typeof category)}
+                                        className={`cursor-pointer rounded-full px-4 py-2 text-[13px] font-semibold transition-all ${
+                                            category === t.key
+                                                ? 'bg-gradient-to-r from-[#6E1622] via-[#450D15] to-[#5E121D] text-white shadow-sm'
+                                                : 'border border-[#091324]/12 bg-white text-[#091324]/75 hover:border-[#450D15]/60 hover:text-[#091324]'
+                                        }`}
+                                    >
+                                        {t.label}
+                                    </button>
+                                ))}
+                            </div>
+                            <span className="text-[13px] font-medium text-[#4A4F5C]">
+                                {filtered.length} {filtered.length === 1 ? 'photo' : 'photos'}
+                            </span>
                         </div>
 
                         {filtered.length === 0 ? (
@@ -97,6 +119,9 @@ export default function PublicGallery({ items = [] }: { items?: GalleryItem[] })
                                             loading="lazy"
                                             className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105"
                                         />
+                                        <span className="absolute top-3.5 right-3.5 flex h-9 w-9 items-center justify-center rounded-full bg-[#450D15]/85 text-white opacity-0 shadow-sm backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+                                            <Maximize2 className="h-4 w-4" />
+                                        </span>
                                         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 via-transparent to-transparent px-5 pt-14 pb-4 text-white">
                                             {item.place_label && (
                                                 <span className="block text-[10.5px] font-semibold tracking-[0.2em] text-[#F4C2C7] uppercase">
@@ -122,7 +147,29 @@ export default function PublicGallery({ items = [] }: { items?: GalleryItem[] })
                     <DialogTitle className="sr-only">{activePhoto?.title}</DialogTitle>
                     {activePhoto && (
                         <div>
-                            <img src={activePhoto.image_url} alt={activePhoto.title} className="max-h-[72vh] w-full bg-[#091324] object-contain" />
+                            <div className="relative bg-[#091324]">
+                                <img src={activePhoto.image_url} alt={activePhoto.title} className="max-h-[72vh] w-full object-contain" />
+                                {filtered.length > 1 && (
+                                    <>
+                                        <button
+                                            type="button"
+                                            aria-label="Previous photo"
+                                            onClick={() => stepPhoto(-1)}
+                                            className="absolute top-1/2 left-3 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#450D15]/85 text-white shadow-md backdrop-blur-sm transition-all hover:bg-[#450D15]"
+                                        >
+                                            <ChevronLeft className="h-5 w-5" />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            aria-label="Next photo"
+                                            onClick={() => stepPhoto(1)}
+                                            className="absolute top-1/2 right-3 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-[#450D15]/85 text-white shadow-md backdrop-blur-sm transition-all hover:bg-[#450D15]"
+                                        >
+                                            <ChevronRight className="h-5 w-5" />
+                                        </button>
+                                    </>
+                                )}
+                            </div>
                             <div className="flex items-center justify-between px-6 py-4">
                                 <div>
                                     <h3 className="font-serif text-xl font-semibold text-[#071437]">{activePhoto.title}</h3>
@@ -132,7 +179,7 @@ export default function PublicGallery({ items = [] }: { items?: GalleryItem[] })
                                         </p>
                                     )}
                                 </div>
-                                <span className="rounded-full bg-[#F1F6FF] px-3 py-1 text-[11px] font-semibold text-[#1B84FF] capitalize">
+                                <span className="rounded-full border border-[#450D15]/15 bg-[#FAF5F6] px-3 py-1 text-[11px] font-semibold text-[#450D15] capitalize">
                                     {activePhoto.category.replace('_', ' ')}
                                 </span>
                             </div>
