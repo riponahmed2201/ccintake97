@@ -182,7 +182,7 @@ export function LandingDirectory({
                                 <Link
                                     href="/directory"
                                     data-card
-                                    className="group flex h-[420px] w-[78vw] shrink-0 snap-start flex-col justify-between rounded-xl border border-brand-navy/10 bg-brand-cream p-7 text-brand-navy sm:w-[300px]"
+                                    className="group flex h-[420px] w-[78vw] shrink-0 snap-start flex-col justify-between rounded-xl border border-brand-navy/10 bg-slate-50 p-7 text-brand-navy sm:w-[300px]"
                                 >
                                     <Users className="h-8 w-8" strokeWidth={1.5} />
                                     <div>
@@ -201,7 +201,7 @@ export function LandingDirectory({
                                     <div className="flex flex-col gap-6 border-t border-brand-navy/10 pt-10 lg:flex-row lg:items-center lg:justify-between">
                                         <form
                                             onSubmit={submitDirectorySearch}
-                                            className="flex w-full items-center gap-2 rounded-full border border-brand-navy/10 bg-brand-cream p-1.5 pl-5 lg:max-w-xl"
+                                            className="flex w-full items-center gap-2 rounded-full border border-brand-navy/10 bg-slate-50 p-1.5 pl-5 lg:max-w-xl"
                                         >
                                             <Search className="h-5 w-5 shrink-0 text-[#0B1220]/40" />
                                             <input

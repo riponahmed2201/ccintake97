@@ -43,7 +43,7 @@ export function LandingAbout({ omitHeading = false, className }: { omitHeading?:
                             <p className="mt-4 text-[17px] leading-[1.75] text-[#4A4F5C]">
                                 ccIntake97 is their association — a verified directory, a way to find batchmates, and a home for welfare and the reunion planned for 2027.
                             </p>
-                            <blockquote className="mt-8 rounded-r-2xl border-l-2 border-brand-gold bg-brand-cream py-5 pr-6 pl-6 font-serif text-xl leading-snug text-brand-navy italic">
+                            <blockquote className="mt-8 rounded-r-2xl border-l-2 border-brand-gold bg-slate-50 py-5 pr-6 pl-6 font-serif text-xl leading-snug text-brand-navy italic">
                                 “No rank outside this room supersedes that of a brother who stood the same cold morning muster beside you.”
                                 <footer className="mt-2.5 font-sans text-[11px] font-medium tracking-[0.2em] text-[#8E6B28] uppercase not-italic">
                                     — Central Council Founding Charter

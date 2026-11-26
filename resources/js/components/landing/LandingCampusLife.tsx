@@ -6,7 +6,7 @@ import type { CmsGalleryItem } from '@/components/landing/types';
 export function LandingCampusLife({ className = '', galleryItems }: { className?: string; galleryItems?: CmsGalleryItem[] }) {
     const photos = galleryItems && galleryItems.length > 0 ? galleryItems : CAMPUS_LIFE;
     return (
-        <section className={`${LANDING_SECTION} bg-brand-cream ${className}`.trim()}>
+        <section className={`${LANDING_SECTION} bg-white ${className}`.trim()}>
             <div className={LANDING_CONTAINER}>
                 <SectionHeading
                     eyebrow="On the grounds"

@@ -41,7 +41,7 @@ export function LandingPage({
 
     return (
         <SignupDialogProvider>
-        <div className="min-h-screen bg-brand-cream font-sans text-brand-navy antialiased selection:bg-brand-gold selection:text-brand-navy">
+        <div className="min-h-screen bg-white font-sans text-brand-navy antialiased selection:bg-brand-gold selection:text-brand-navy">
             <a
                 href="#main-content"
                 className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:m-4 focus:rounded-full focus:bg-brand-navy focus:px-4 focus:py-2 focus:text-brand-cream-text"

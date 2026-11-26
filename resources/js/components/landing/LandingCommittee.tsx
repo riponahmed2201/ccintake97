@@ -17,7 +17,7 @@ export function LandingCommittee({
     className?: string;
 }) {
     return (
-                        <section id={omitHeading ? undefined : 'committee'} className={`${LANDING_SECTION} bg-brand-cream ${className}`.trim()}>
+                        <section id={omitHeading ? undefined : 'committee'} className={`${LANDING_SECTION} bg-white ${className}`.trim()}>
                             <div className={LANDING_CONTAINER}>
                                 {(() => {
                                     const people = (committee?.members && committee.members.length > 0

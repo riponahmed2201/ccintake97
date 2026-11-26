@@ -13,7 +13,7 @@ export function LandingNews({
     businesses?: Business[];
 }) {
     return (
-                        <section id="news" className={`${LANDING_SECTION} bg-brand-cream`}>
+                        <section id="news" className={`${LANDING_SECTION} bg-white`}>
                             <span id="businesses" className="sr-only" />
                             <div className={LANDING_CONTAINER}>
                                 <SectionHeading

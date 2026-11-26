@@ -77,7 +77,7 @@ export function LandingWelfare({ omitHeading = false, className = '' }: { omitHe
                                         const Icon = w.icon;
                                         return (
                                             <Reveal key={w.title} delay={i * 80} className="h-full">
-                                                <div className="flex h-full min-h-[11.5rem] flex-col justify-between rounded-xl border border-brand-navy/10 bg-brand-cream p-5 sm:min-h-[13rem] sm:p-6">
+                                                <div className="flex h-full min-h-[11.5rem] flex-col justify-between rounded-xl border border-brand-navy/10 bg-slate-50 p-5 sm:min-h-[13rem] sm:p-6">
                                                     <Icon className="h-5 w-5 text-brand-gold" strokeWidth={1.5} />
                                                     <div className="mt-5 font-serif text-4xl font-semibold text-brand-navy sm:text-[2.75rem]">{w.figure}</div>
                                                     <div className="mt-2 text-[14.5px] font-medium text-brand-navy">{w.title}</div>
