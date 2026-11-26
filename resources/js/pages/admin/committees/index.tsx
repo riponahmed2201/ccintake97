@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
 import { Button } from '@/components/ui/button';
+import { DatePicker } from '@/components/ui/date-picker';
 import {
     Dialog,
     DialogContent,
@@ -231,20 +232,18 @@ export default function CommitteesIndex({ committees, approvedMembers }: Committ
                         <div className="grid grid-cols-2 gap-3">
                             <div>
                                 <label className={labelClass}>Term Start Date</label>
-                                <input
-                                    type="date"
-                                    className={fieldClass}
+                                <DatePicker
                                     value={termStart}
-                                    onChange={(e) => setTermStart(e.target.value)}
+                                    onChange={setTermStart}
+                                    placeholder="Select start date"
                                 />
                             </div>
                             <div>
                                 <label className={labelClass}>Term End Date</label>
-                                <input
-                                    type="date"
-                                    className={fieldClass}
+                                <DatePicker
                                     value={termEnd}
-                                    onChange={(e) => setTermEnd(e.target.value)}
+                                    onChange={setTermEnd}
+                                    placeholder="Select end date"
                                 />
                             </div>
                         </div>

@@ -12,14 +12,26 @@ interface ApplicationsIndexProps {
         data: MembershipApplication[];
         current_page: number;
         last_page: number;
+        per_page?: number;
+        from?: number;
+        to?: number;
         total: number;
         links: any[];
     };
     colleges: College[];
+    counts?: {
+        total: number;
+        submitted: number;
+        under_review: number;
+        info_required: number;
+        approved: number;
+        rejected: number;
+    };
     filters: {
         search?: string;
         status?: string;
         college_id?: string;
+        per_page?: string;
     };
 }
 
@@ -40,21 +52,33 @@ const selectItemClass =
 export default function ApplicationsIndex({
     applications,
     colleges,
+    counts,
     filters,
 }: ApplicationsIndexProps) {
     const [search, setSearch] = useState(filters.search || '');
     const [selectedStatus, setSelectedStatus] = useState(filters.status || '');
     const [selectedCollege, setSelectedCollege] = useState(filters.college_id || '');
+    const [perPage, setPerPage] = useState(filters.per_page || String(applications.per_page || 10));
 
     const applyFilter = (key: string, val: string) => {
         const query = {
             search,
             status: selectedStatus,
             college_id: selectedCollege,
+            per_page: perPage,
             [key]: val,
         };
         router.get('/admin/applications', query, { preserveState: true, replace: true });
     };
+
+    const statusTabs = [
+        { key: '', label: 'All', count: counts?.total ?? applications.total },
+        { key: 'submitted', label: 'Submitted', count: counts?.submitted ?? 0 },
+        { key: 'under_review', label: 'Under Review', count: counts?.under_review ?? 0 },
+        { key: 'info_required', label: 'Info Required', count: counts?.info_required ?? 0 },
+        { key: 'approved', label: 'Approved', count: counts?.approved ?? 0 },
+        { key: 'rejected', label: 'Rejected', count: counts?.rejected ?? 0 },
+    ];
 
     return (
         <AdminLayout
@@ -69,8 +93,32 @@ export default function ApplicationsIndex({
                         Membership Application Review Queue
                     </h1>
                     <p className="mt-1 text-[13px] text-[#78829D]">
-                        Review declared Cadet College intake credentials and manage verification decision workflows.
+                        Showing {applications.from || 0} to {applications.to || 0} of {applications.total} applications · Review declared Cadet College intake credentials.
                     </p>
+                </div>
+
+                {/* Quick Status Tabs */}
+                <div className="flex flex-wrap items-center gap-2">
+                    {statusTabs.map((tab) => {
+                        const active = selectedStatus === tab.key;
+                        return (
+                            <button
+                                key={tab.key || 'all'}
+                                type="button"
+                                onClick={() => {
+                                    setSelectedStatus(tab.key);
+                                    applyFilter('status', tab.key);
+                                }}
+                                className={`inline-flex cursor-pointer items-center rounded-lg border px-3.5 py-1.5 text-[12.5px] font-semibold transition-colors ${
+                                    active
+                                        ? 'border-[#1B84FF] bg-[#F1F6FF] text-[#1B84FF]'
+                                        : 'border-[#F1F1F4] bg-white text-[#4B5675] hover:border-[#DBDFE9] hover:text-[#071437]'
+                                }`}
+                            >
+                                {tab.label}
+                            </button>
+                        );
+                    })}
                 </div>
 
                 {/* Filters */}
@@ -136,6 +184,7 @@ export default function ApplicationsIndex({
                     <Table>
                         <TableHeader className="bg-[#FCFCFC]">
                             <TableRow className="border-[#F1F1F4] hover:bg-transparent">
+                                <TableHead className="w-14 px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">SL</TableHead>
                                 <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">Application #</TableHead>
                                 <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">Applicant</TableHead>
                                 <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">Declared College &amp; Roll</TableHead>
@@ -147,13 +196,16 @@ export default function ApplicationsIndex({
                         <TableBody>
                             {applications.data.length === 0 ? (
                                 <TableRow className="hover:bg-transparent">
-                                    <TableCell colSpan={6} className="h-28 text-center text-[13px] text-[#99A1B7]">
+                                    <TableCell colSpan={7} className="h-28 text-center text-[13px] text-[#99A1B7]">
                                         No applications match your query.
                                     </TableCell>
                                 </TableRow>
                             ) : (
-                                applications.data.map((app) => (
+                                applications.data.map((app, idx) => (
                                     <TableRow key={app.id} className="border-[#F1F1F4] hover:bg-[#FCFCFC]">
+                                        <TableCell className="px-5 py-3.5 text-[12.5px] font-medium text-[#78829D] tabular-nums">
+                                            {(applications.from || 1) + idx}
+                                        </TableCell>
                                         <TableCell className="px-5 py-3.5 font-mono text-[12.5px] font-semibold text-[#071437]">
                                             {app.application_no}
                                         </TableCell>
@@ -167,10 +219,10 @@ export default function ApplicationsIndex({
                                         </TableCell>
                                         <TableCell className="px-5 py-3.5">
                                             <div className="text-[12.5px] font-medium text-[#071437]">
-                                                {app.declared_college?.name}
+                                                {app.declared_college?.name || 'Not assigned'}
                                             </div>
                                             <div className="text-[11px] text-[#99A1B7]">
-                                                Roll #{app.declared_roll_no} (Intake 1997)
+                                                {app.declared_roll_no ? `Roll #${app.declared_roll_no} (Intake 1997)` : 'Intake 1997'}
                                             </div>
                                         </TableCell>
                                         <TableCell className="px-5 py-3.5">
@@ -182,7 +234,9 @@ export default function ApplicationsIndex({
                                                           ? 'bg-[#FFF8DD] text-[#B45309]'
                                                           : app.status === 'under_review'
                                                             ? 'bg-[#F1F6FF] text-[#1B84FF]'
-                                                            : 'bg-[#FFEEF3] text-[#F8285A]'
+                                                            : app.status === 'info_required'
+                                                              ? 'bg-[#F8F5FF] text-[#7239EA]'
+                                                              : 'bg-[#FFEEF3] text-[#F8285A]'
                                                 }`}
                                             >
                                                 {app.status.replace('_', ' ')}
@@ -208,6 +262,56 @@ export default function ApplicationsIndex({
                             )}
                         </TableBody>
                     </Table>
+
+                    {/* Pagination */}
+                    <div className="flex flex-col items-center justify-between gap-3 border-t border-[#F1F1F4] px-5 py-3.5 text-[12.5px] text-[#78829D] sm:flex-row">
+                        <div className="flex flex-wrap items-center gap-3">
+                            <span>
+                                Showing <strong className="font-semibold text-[#071437]">{applications.from || 0}</strong>–
+                                <strong className="font-semibold text-[#071437]">{applications.to || 0}</strong> of{' '}
+                                <strong className="font-semibold text-[#071437]">{applications.total}</strong> · Page {applications.current_page} of {applications.last_page}
+                            </span>
+                            <div className="flex items-center gap-1.5">
+                                <span className="text-[12px] text-[#78829D]">Rows:</span>
+                                <Select
+                                    value={perPage}
+                                    onValueChange={(val) => {
+                                        setPerPage(val);
+                                        applyFilter('per_page', val);
+                                    }}
+                                >
+                                    <SelectTrigger className="!h-8 w-[72px] cursor-pointer rounded-md !border-[#DBDFE9] !bg-[#FCFCFC] px-2.5 text-[12px] font-medium !text-[#071437] !shadow-none">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent className={selectMenuClass}>
+                                        {['10', '25', '50', '100'].map((size) => (
+                                            <SelectItem key={size} value={size} className={selectItemClass}>
+                                                {size}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-1.5">
+                            {applications.links.map((link, idx) => (
+                                <Link
+                                    key={idx}
+                                    href={link.url || '#'}
+                                    preserveScroll
+                                    disabled={!link.url}
+                                    dangerouslySetInnerHTML={{ __html: link.label }}
+                                    className={`rounded-lg px-2.5 py-1 text-[12px] font-medium transition-colors ${
+                                        link.active
+                                            ? 'bg-[#1B84FF] font-semibold text-white'
+                                            : link.url
+                                              ? 'text-[#4B5675] hover:bg-[#F1F6FF] hover:text-[#1B84FF]'
+                                              : 'pointer-events-none text-[#DBDFE9]'
+                                    }`}
+                                />
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
         </AdminLayout>

@@ -40,13 +40,34 @@ class ApplicationController extends Controller
             $query->where('declared_college_id', $collegeId);
         }
 
-        $applications = $query->paginate(10)->withQueryString();
+        $perPage = (int) $request->input('per_page', 10);
+        if (! in_array($perPage, [10, 25, 50, 100], true)) {
+            $perPage = 10;
+        }
+
+        $applications = $query->paginate($perPage)->withQueryString();
         $colleges = College::where('is_participating', true)->orderBy('name')->get(['id', 'name', 'short_name']);
+
+        $statusCounts = MembershipApplication::query()
+            ->selectRaw('status, count(*) as aggregate')
+            ->groupBy('status')
+            ->pluck('aggregate', 'status');
 
         return Inertia::render('admin/applications/index', [
             'applications' => $applications,
             'colleges' => $colleges,
-            'filters' => $request->only(['search', 'status', 'college_id']),
+            'counts' => [
+                'total' => (int) $statusCounts->sum(),
+                'submitted' => (int) ($statusCounts['submitted'] ?? 0),
+                'under_review' => (int) ($statusCounts['under_review'] ?? 0),
+                'info_required' => (int) ($statusCounts['info_required'] ?? 0),
+                'approved' => (int) ($statusCounts['approved'] ?? 0),
+                'rejected' => (int) ($statusCounts['rejected'] ?? 0),
+            ],
+            'filters' => array_merge(
+                $request->only(['search', 'status', 'college_id']),
+                ['per_page' => (string) $perPage]
+            ),
         ]);
     }
 

@@ -89,6 +89,7 @@ Route::middleware(['auth', 'role:super_admin|association_admin|membership_manage
         Route::get('/members', [Admin\MemberController::class, 'index'])->name('members.index');
         Route::post('/members', [Admin\MemberController::class, 'store'])->name('members.store');
         Route::get('/members/export', [Admin\MemberController::class, 'export'])->name('members.export');
+        Route::get('/members/{id}/edit', [Admin\MemberController::class, 'edit'])->name('members.edit');
         Route::get('/members/{id}', [Admin\MemberController::class, 'show'])->name('members.show');
         Route::put('/members/{id}', [Admin\MemberController::class, 'update'])->name('members.update');
         Route::post('/members/{id}/approve', [Admin\MemberController::class, 'approve'])->name('members.approve');

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
 import { Button } from '@/components/ui/button';
+import { DatePicker } from '@/components/ui/date-picker';
 import {
     Select,
     SelectContent,
@@ -184,32 +185,30 @@ export default function EventCreate({ categories }: EventCreateProps) {
 
                             <div>
                                 <label className={labelClass}>Registration Closes At</label>
-                                <input
-                                    type="date"
-                                    className={fieldClass}
+                                <DatePicker
                                     value={registrationClosesAt}
-                                    onChange={(e) => setRegistrationClosesAt(e.target.value)}
+                                    onChange={setRegistrationClosesAt}
+                                    placeholder="Select deadline date"
                                 />
                             </div>
 
                             <div>
                                 <label className={labelClass}>Event Start Date *</label>
-                                <input
+                                <DatePicker
                                     required
-                                    type="date"
-                                    className={fieldClass}
+                                    clearable={false}
                                     value={startsOn}
-                                    onChange={(e) => setStartsOn(e.target.value)}
+                                    onChange={setStartsOn}
+                                    placeholder="Select start date"
                                 />
                             </div>
 
                             <div>
                                 <label className={labelClass}>Event End Date</label>
-                                <input
-                                    type="date"
-                                    className={fieldClass}
+                                <DatePicker
                                     value={endsOn}
-                                    onChange={(e) => setEndsOn(e.target.value)}
+                                    onChange={setEndsOn}
+                                    placeholder="Select end date"
                                 />
                             </div>
 

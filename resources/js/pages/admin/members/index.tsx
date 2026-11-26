@@ -27,6 +27,13 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
     Download,
     Search,
     ShieldCheck,
@@ -34,6 +41,7 @@ import {
     Ban,
     RotateCcw,
     Eye,
+    MoreHorizontal,
     Pencil,
     PlusCircle,
     UserPlus,
@@ -106,53 +114,6 @@ export default function MembersIndex({
 
     const selectedRegCollege = colleges.find((c) => String(c.id) === registerForm.data.college_id);
     const regHouseOptions = selectedRegCollege?.short_name ? houses?.[selectedRegCollege.short_name] ?? [] : [];
-
-    const [editMember, setEditMember] = useState<Member | null>(null);
-    const editForm = useForm({
-        name: '',
-        email: '',
-        phone: '',
-        password: '',
-        college_id: '',
-        college_roll_no: '',
-        intake_year: '1997',
-        house_name: '',
-        designation: '',
-        organization: '',
-        cccl_life_member_no: '',
-    });
-
-    const selectedEditCollege = colleges.find((c) => String(c.id) === editForm.data.college_id);
-    const editHouseOptions = selectedEditCollege?.short_name ? houses?.[selectedEditCollege.short_name] ?? [] : [];
-
-    const openEditModal = (m: Member) => {
-        editForm.clearErrors();
-        editForm.setData({
-            name: m.user?.name || '',
-            email: m.user?.email || '',
-            phone: m.user?.phone || '',
-            password: '',
-            college_id: m.college_id ? String(m.college_id) : '',
-            college_roll_no: m.college_roll_no || '',
-            intake_year: m.intake_year ? String(m.intake_year) : '1997',
-            house_name: m.house_name || '',
-            designation: m.profile?.designation || '',
-            organization: m.profile?.organization || '',
-            cccl_life_member_no: m.profile?.cccl_life_member_no || '',
-        });
-        setEditMember(m);
-    };
-
-    const handleEditSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!editMember) return;
-        editForm.put(`/admin/members/${editMember.id}`, {
-            preserveScroll: true,
-            onSuccess: () => {
-                setEditMember(null);
-            },
-        });
-    };
 
     const [verifyMember, setVerifyMember] = useState<Member | null>(null);
     const [verifyMethod, setVerifyMethod] = useState('committee_manual');
@@ -349,61 +310,68 @@ export default function MembersIndex({
                 cell: (info) => {
                     const m = info.row.original;
                     return (
-                        <div className="flex items-center justify-end gap-1">
-                            <Link
-                                href={`/admin/members/${m.id}`}
-                                className="rounded-lg p-1.5 text-[#78829D] transition-colors hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
-                                title="View Full Profile"
-                            >
-                                <Eye className="size-4" />
-                            </Link>
-                            <button
-                                type="button"
-                                onClick={() => openEditModal(m)}
-                                className="cursor-pointer rounded-lg p-1.5 text-[#78829D] transition-colors hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
-                                title="Edit Member"
-                            >
-                                <Pencil className="size-4" />
-                            </button>
-                            {m.membership_status === 'pending' && (
-                                <button
-                                    type="button"
-                                    onClick={() => handleApprove(m.id)}
-                                    className="cursor-pointer rounded-lg p-1.5 text-[#17C653] transition-colors hover:bg-[#EAFFF1]"
-                                    title="Approve Membership"
-                                >
-                                    <CheckCircle2 className="size-4" />
-                                </button>
-                            )}
-                            {m.verification_status !== 'verified' && (
-                                <button
-                                    type="button"
-                                    onClick={() => setVerifyMember(m)}
-                                    className="cursor-pointer rounded-lg p-1.5 text-[#1B84FF] transition-colors hover:bg-[#F1F6FF]"
-                                    title="Verify 1997 Intake Affiliation"
-                                >
-                                    <ShieldCheck className="size-4" />
-                                </button>
-                            )}
-                            {m.membership_status !== 'suspended' ? (
-                                <button
-                                    type="button"
-                                    onClick={() => setSuspendMember(m)}
-                                    className="cursor-pointer rounded-lg p-1.5 text-[#F8285A] transition-colors hover:bg-[#FFEEF3]"
-                                    title="Suspend Member"
-                                >
-                                    <Ban className="size-4" />
-                                </button>
-                            ) : (
-                                <button
-                                    type="button"
-                                    onClick={() => handleReactivate(m.id)}
-                                    className="cursor-pointer rounded-lg p-1.5 text-[#B45309] transition-colors hover:bg-[#FFF8DD]"
-                                    title="Reactivate Member"
-                                >
-                                    <RotateCcw className="size-4" />
-                                </button>
-                            )}
+                        <div className="flex justify-end">
+                            <DropdownMenu modal={false}>
+                                <DropdownMenuTrigger asChild>
+                                    <button
+                                        type="button"
+                                        className="inline-flex size-8 cursor-pointer items-center justify-center rounded-lg border border-transparent text-[#78829D] transition-colors hover:border-[#DBDFE9] hover:bg-[#F9F9F9] hover:text-[#071437]"
+                                        aria-label="Member actions"
+                                    >
+                                        <MoreHorizontal className="size-4" />
+                                    </button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-52 rounded-xl border-[#F1F1F4] !bg-white p-1.5 !text-[#071437] shadow-[0_12px_32px_-8px_rgba(7,20,55,0.16)]">
+                                    <DropdownMenuItem asChild className="cursor-pointer rounded-lg px-2.5 py-2 text-[13px] font-medium text-[#071437] focus:!bg-[#F1F6FF] focus:!text-[#1B84FF]">
+                                        <Link href={`/admin/members/${m.id}`}>
+                                            <Eye className="size-4 text-[#78829D]" />
+                                            View Profile
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem asChild className="cursor-pointer rounded-lg px-2.5 py-2 text-[13px] font-medium text-[#071437] focus:!bg-[#F1F6FF] focus:!text-[#1B84FF]">
+                                        <Link href={`/admin/members/${m.id}/edit`}>
+                                            <Pencil className="size-4 text-[#78829D]" />
+                                            Edit Member
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    {m.membership_status === 'pending' && (
+                                        <DropdownMenuItem
+                                            onSelect={() => handleApprove(m.id)}
+                                            className="cursor-pointer rounded-lg px-2.5 py-2 text-[13px] font-medium text-[#17C653] focus:!bg-[#EAFFF1] focus:!text-[#17C653]"
+                                        >
+                                            <CheckCircle2 className="size-4 text-[#17C653]" />
+                                            Approve Membership
+                                        </DropdownMenuItem>
+                                    )}
+                                    {m.verification_status !== 'verified' && (
+                                        <DropdownMenuItem
+                                            onSelect={() => setVerifyMember(m)}
+                                            className="cursor-pointer rounded-lg px-2.5 py-2 text-[13px] font-medium text-[#1B84FF] focus:!bg-[#F1F6FF] focus:!text-[#1B84FF]"
+                                        >
+                                            <ShieldCheck className="size-4 text-[#1B84FF]" />
+                                            Verify Affiliation
+                                        </DropdownMenuItem>
+                                    )}
+                                    <DropdownMenuSeparator className="my-1 bg-[#F1F1F4]" />
+                                    {m.membership_status !== 'suspended' ? (
+                                        <DropdownMenuItem
+                                            onSelect={() => setSuspendMember(m)}
+                                            className="cursor-pointer rounded-lg px-2.5 py-2 text-[13px] font-medium text-[#F8285A] focus:!bg-[#FFEEF3] focus:!text-[#F8285A]"
+                                        >
+                                            <Ban className="size-4 text-[#F8285A]" />
+                                            Suspend Member
+                                        </DropdownMenuItem>
+                                    ) : (
+                                        <DropdownMenuItem
+                                            onSelect={() => handleReactivate(m.id)}
+                                            className="cursor-pointer rounded-lg px-2.5 py-2 text-[13px] font-medium text-[#B45309] focus:!bg-[#FFF8DD] focus:!text-[#B45309]"
+                                        >
+                                            <RotateCcw className="size-4 text-[#B45309]" />
+                                            Reactivate Member
+                                        </DropdownMenuItem>
+                                    )}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
                     );
                 },
@@ -817,199 +785,6 @@ export default function MembersIndex({
                                 className="h-9.5 rounded-lg bg-[#1B84FF] px-4 text-[12.5px] font-semibold text-white hover:bg-[#006AE6]"
                             >
                                 {registerForm.processing ? 'Registering...' : 'Register Member'}
-                            </Button>
-                        </DialogFooter>
-                    </form>
-                </DialogContent>
-            </Dialog>
-
-            {/* Edit Member Dialog */}
-            <Dialog open={!!editMember} onOpenChange={(open) => { if (!open) { setEditMember(null); editForm.clearErrors(); } }}>
-                <DialogContent className="max-h-[90vh] overflow-y-auto rounded-2xl border-[#F1F1F4] !bg-white p-0 !text-[#071437] shadow-[0_20px_50px_-12px_rgba(7,20,55,0.18)] sm:max-w-xl">
-                    <DialogHeader className="border-b border-[#F1F1F4] px-6 py-5">
-                        <DialogTitle className="flex items-center gap-2 text-[16px] font-semibold text-[#071437]">
-                            <Pencil className="size-5 text-[#1B84FF]" />
-                            Edit Member Details
-                        </DialogTitle>
-                        <DialogDescription className="mt-1 text-[12.5px] text-[#78829D]">
-                            Update profile, college affiliation, or credentials for <strong className="text-[#071437]">{editMember?.user?.name}</strong>.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <form onSubmit={handleEditSubmit} className="space-y-4 px-6 py-5">
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <div className="sm:col-span-2">
-                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
-                                    Full Name <span className="text-[#F8285A]">*</span>
-                                </label>
-                                <Input
-                                    required
-                                    value={editForm.data.name}
-                                    onChange={(e) => editForm.setData('name', e.target.value)}
-                                    className={fieldClass}
-                                />
-                                {editForm.errors.name && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.name}</p>}
-                            </div>
-                            <div>
-                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
-                                    Email Address <span className="text-[#F8285A]">*</span>
-                                </label>
-                                <Input
-                                    required
-                                    type="email"
-                                    value={editForm.data.email}
-                                    onChange={(e) => editForm.setData('email', e.target.value)}
-                                    className={fieldClass}
-                                />
-                                {editForm.errors.email && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.email}</p>}
-                            </div>
-                            <div>
-                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
-                                    Phone Number
-                                </label>
-                                <Input
-                                    type="tel"
-                                    value={editForm.data.phone}
-                                    onChange={(e) => editForm.setData('phone', e.target.value)}
-                                    className={fieldClass}
-                                />
-                                {editForm.errors.phone && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.phone}</p>}
-                            </div>
-                            <div>
-                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
-                                    Cadet College
-                                </label>
-                                <Select
-                                    value={editForm.data.college_id || ALL}
-                                    onValueChange={(val) => editForm.setData((prev) => ({ ...prev, college_id: val === ALL ? '' : val, house_name: '' }))}
-                                >
-                                    <SelectTrigger className={selectTriggerClass}>
-                                        <SelectValue placeholder="Select college" />
-                                    </SelectTrigger>
-                                    <SelectContent className={selectMenuClass}>
-                                        <SelectItem value={ALL} className={selectItemClass}>Not assigned</SelectItem>
-                                        {colleges.map((c) => (
-                                            <SelectItem key={c.id} value={String(c.id)} className={selectItemClass}>
-                                                {c.short_name ? `${c.short_name} — ${c.name}` : c.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                {editForm.errors.college_id && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.college_id}</p>}
-                            </div>
-                            <div>
-                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
-                                    Cadet Roll No
-                                </label>
-                                <Input
-                                    value={editForm.data.college_roll_no}
-                                    onChange={(e) => editForm.setData('college_roll_no', e.target.value)}
-                                    className={fieldClass}
-                                />
-                                {editForm.errors.college_roll_no && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.college_roll_no}</p>}
-                            </div>
-                            <div>
-                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
-                                    Intake Year
-                                </label>
-                                <Input
-                                    type="number"
-                                    min={1950}
-                                    max={2035}
-                                    value={editForm.data.intake_year}
-                                    onChange={(e) => editForm.setData('intake_year', e.target.value)}
-                                    className={fieldClass}
-                                />
-                                {editForm.errors.intake_year && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.intake_year}</p>}
-                            </div>
-                            <div>
-                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
-                                    House
-                                </label>
-                                {editHouseOptions.length > 0 ? (
-                                    <Select
-                                        value={editForm.data.house_name || ALL}
-                                        onValueChange={(val) => editForm.setData('house_name', val === ALL ? '' : val)}
-                                    >
-                                        <SelectTrigger className={selectTriggerClass}>
-                                            <SelectValue placeholder="Select house" />
-                                        </SelectTrigger>
-                                        <SelectContent className={selectMenuClass}>
-                                            <SelectItem value={ALL} className={selectItemClass}>None</SelectItem>
-                                            {editHouseOptions.map((h) => (
-                                                <SelectItem key={h} value={h} className={selectItemClass}>{h}</SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                ) : (
-                                    <Input
-                                        value={editForm.data.house_name}
-                                        onChange={(e) => editForm.setData('house_name', e.target.value)}
-                                        placeholder="House name"
-                                        className={fieldClass}
-                                    />
-                                )}
-                                {editForm.errors.house_name && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.house_name}</p>}
-                            </div>
-                            <div>
-                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
-                                    Designation
-                                </label>
-                                <Input
-                                    value={editForm.data.designation}
-                                    onChange={(e) => editForm.setData('designation', e.target.value)}
-                                    className={fieldClass}
-                                />
-                            </div>
-                            <div>
-                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
-                                    Organization
-                                </label>
-                                <Input
-                                    value={editForm.data.organization}
-                                    onChange={(e) => editForm.setData('organization', e.target.value)}
-                                    className={fieldClass}
-                                />
-                            </div>
-                            <div>
-                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
-                                    CCCL Life Member No (if any)
-                                </label>
-                                <Input
-                                    value={editForm.data.cccl_life_member_no}
-                                    onChange={(e) => editForm.setData('cccl_life_member_no', e.target.value)}
-                                    className={fieldClass}
-                                />
-                            </div>
-                            <div>
-                                <label className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
-                                    New Password <span className="font-normal text-[#99A1B7]">(Optional)</span>
-                                </label>
-                                <Input
-                                    type="password"
-                                    minLength={8}
-                                    value={editForm.data.password}
-                                    onChange={(e) => editForm.setData('password', e.target.value)}
-                                    placeholder="Leave blank to keep current"
-                                    className={fieldClass}
-                                />
-                                {editForm.errors.password && <p className="mt-1 text-[11.5px] text-[#F8285A]">{editForm.errors.password}</p>}
-                            </div>
-                        </div>
-                        <DialogFooter className="border-t border-[#F1F1F4] pt-4">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={() => setEditMember(null)}
-                                className="h-9.5 rounded-lg border-[#DBDFE9] !bg-white px-4 text-[12.5px] font-semibold text-[#4B5675] hover:!bg-[#F9F9F9]"
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                type="submit"
-                                disabled={editForm.processing}
-                                className="h-9.5 rounded-lg bg-[#1B84FF] px-4 text-[12.5px] font-semibold text-white hover:bg-[#006AE6]"
-                            >
-                                {editForm.processing ? 'Saving...' : 'Save Changes'}
                             </Button>
                         </DialogFooter>
                     </form>
