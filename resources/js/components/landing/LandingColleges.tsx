@@ -103,8 +103,7 @@ export function LandingColleges({
                                                     <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_75%_30%,rgba(200,162,82,0.25),transparent_55%)]" />
                                                 )}
                                             </div>
-                                            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#060B15]/95 via-[#060B15]/50 to-[#060B15]/15" />
-                                            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#060B15]/75 to-transparent" />
+                                            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
         
                                             <div className="flex min-h-[500px] flex-col justify-between p-6 sm:p-10 lg:min-h-[600px] lg:p-12">
                                                 <div className="flex items-start justify-between text-[11px] tracking-[0.2em] uppercase">
@@ -174,7 +173,7 @@ export function LandingColleges({
                                                         ) : (
                                                             <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_70%_25%,rgba(201,165,92,0.3),transparent_60%)]" />
                                                         )}
-                                                        <div className={`absolute inset-0 -z-10 transition-colors duration-500 ${active ? 'bg-gradient-to-t from-black/80 via-black/20 to-transparent' : 'bg-gradient-to-t from-black/80 via-black/40 to-black/25 group-hover:via-black/20 group-hover:to-transparent'}`} />
+                                                        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                                                         <div className={`absolute inset-0 transition-all duration-300 ${active ? 'ring-[3px] ring-[#450D15] ring-inset' : ''}`} />
                                                         <div className="absolute inset-x-0 bottom-0 flex items-center gap-2.5 p-3 sm:p-4">
                                                             <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-white/50">

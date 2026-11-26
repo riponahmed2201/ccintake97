@@ -109,24 +109,20 @@ export function LandingHero({
                     </div>
                 );
             })}
-            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#071018]/80 via-[#071018]/20 to-transparent" />
-            <div className="absolute inset-x-0 top-0 -z-10 h-36 bg-gradient-to-b from-[#071018]/35 to-transparent" />
-            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#071018]/55 via-[#071018]/15 to-transparent" />
-
             <div className={`${LANDING_CONTAINER} ${LANDING_HERO_INNER}`}>
                 <Reveal>
                     <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-[#F4C2C7]/30 bg-[#450D15]/85 px-4 py-1.5 text-[11px] font-medium tracking-[0.22em] text-white uppercase shadow-sm backdrop-blur-md">
                         <span className="h-1.5 w-1.5 rounded-full bg-[#F4C2C7]" />
                         CCINTAKE 97 · Ten Cadet Colleges · Est. {metrics.intake_year}
                     </div>
-                    <h1 className="max-w-4xl font-serif text-[3rem] leading-[0.98] font-semibold tracking-[-0.02em] sm:text-6xl lg:text-[6.25rem]">
+                    <h1 className="max-w-4xl font-serif text-[3rem] leading-[0.98] font-semibold tracking-[-0.02em] drop-shadow-[0_2px_14px_rgba(0,0,0,0.55)] sm:text-6xl lg:text-[6.25rem]">
                         {heroConfig?.headline || 'Different colleges.'}
                         <br />
                         <em className="font-normal italic text-brand-gold-bright">{heroConfig?.highlight || 'One intake.'}</em>
                     </h1>
                 </Reveal>
                 <Reveal delay={200}>
-                    <p className="mt-7 max-w-xl text-base leading-relaxed text-brand-cream-text/80 sm:text-lg">
+                    <p className="mt-7 max-w-xl text-base leading-relaxed text-brand-cream-text/95 drop-shadow-[0_1px_10px_rgba(0,0,0,0.55)] sm:text-lg">
                         {heroConfig?.subtitle || `Ten cadet colleges. The intake of ${metrics.intake_year}.`}
                     </p>
                 </Reveal>

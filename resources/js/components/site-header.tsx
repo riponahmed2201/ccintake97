@@ -73,7 +73,7 @@ export function SiteHeader({
                       ? 'border-b border-brand-navy/[0.06] bg-white shadow-[0_1px_30px_-12px_rgba(11,18,32,0.18)] backdrop-blur-xl'
                       : 'border-b border-transparent bg-transparent'
               }`
-            : 'sticky top-0 z-50 border-b border-brand-navy/[0.06] bg-white/95 backdrop-blur-xl';
+            : 'fixed inset-x-0 top-0 z-50 border-b border-brand-navy/[0.06] bg-white/95 shadow-[0_1px_24px_-12px_rgba(11,18,32,0.14)] backdrop-blur-xl';
 
     const closeMobile = () => setMobileMenuOpen(false);
     const { openSignup } = useSignupDialog();
@@ -88,6 +88,7 @@ export function SiteHeader({
     };
 
     return (
+        <>
         <header className={headerShell}>
             <div className={`flex h-[76px] items-center justify-between ${LANDING_CONTAINER}`}>
                 <Link href="/" className="group flex shrink-0 items-center gap-3">
@@ -221,6 +222,8 @@ export function SiteHeader({
                 </div>
             )}
         </header>
+        {variant !== 'hero' && <div className="h-[77px] shrink-0" aria-hidden="true" />}
+        </>
     );
 }
 

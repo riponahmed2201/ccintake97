@@ -27,7 +27,7 @@ export function LandingCampusLife({ className = '', galleryItems }: { className?
                             loading="lazy"
                             className="aspect-[4/5] h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105 motion-reduce:transition-none"
                         />
-                        <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent px-6 pt-16 pb-5 text-white">
+                        <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/55 via-transparent to-transparent px-6 pt-16 pb-5 text-white">
                             <span className="block text-[11px] font-medium tracking-[0.2em] text-[#F4C2C7] uppercase">{ph.place}</span>
                             <span className="mt-1 block font-serif text-2xl font-medium">{ph.title}</span>
                         </figcaption>

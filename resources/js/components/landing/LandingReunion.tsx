@@ -41,8 +41,7 @@ export function LandingReunion() {
                     loading="lazy"
                     className="h-full w-full object-cover object-[center_30%] sm:object-[center_35%]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#070B14]/95 via-[#070B14]/75 to-[#070B14]/40" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#070B14]/70 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#070B14]/55 via-[#070B14]/15 to-transparent" />
             </div>
             <div className={LANDING_CONTAINER}>
                 <div className={`grid grid-cols-1 items-center lg:grid-cols-12 ${LANDING_GRID_GAP}`}>

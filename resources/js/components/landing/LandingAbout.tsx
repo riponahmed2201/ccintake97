@@ -91,7 +91,7 @@ export function LandingAbout({ omitHeading = false, className }: { omitHeading?:
                                             loading="lazy"
                                             className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                                         />
-                                        <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent px-5 pt-12 pb-4">
+                                        <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/50 via-transparent to-transparent px-5 pt-12 pb-4">
                                             <span className="block text-[11px] font-medium tracking-[0.2em] text-white/80 uppercase">{ph.caption}</span>
                                         </figcaption>
                                     </figure>
