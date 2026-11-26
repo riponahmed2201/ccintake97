@@ -19,11 +19,11 @@ export function LandingAbout({ omitHeading = false, className }: { omitHeading?:
                     <div className="lg:col-span-5">
                         {omitHeading ? (
                             <div className="space-y-3">
-                                <p className="text-[11px] font-medium tracking-[0.26em] text-[#047857] uppercase">
+                                <p className="text-[11px] font-medium tracking-[0.26em] text-[#5E121D] uppercase">
                                     The Crucible · 1997–2003
                                 </p>
                                 <h2 className="font-serif text-3xl leading-tight font-medium text-[#091324] sm:text-4xl">
-                                    Six years that forged a <em className="font-normal italic text-[#047857]">lifetime.</em>
+                                    Six years that forged a <em className="font-normal italic text-[#5E121D]">lifetime.</em>
                                 </h2>
                             </div>
                         ) : (
@@ -31,7 +31,7 @@ export function LandingAbout({ omitHeading = false, className }: { omitHeading?:
                                 eyebrow="Our story"
                                 title={
                                     <>
-                                        Bound by a <em className="font-normal italic text-[#047857]">shared</em> beginning.
+                                        Bound by a <em className="font-normal italic text-[#5E121D]">shared</em> beginning.
                                     </>
                                 }
                             />
@@ -45,7 +45,7 @@ export function LandingAbout({ omitHeading = false, className }: { omitHeading?:
                             </p>
                             <blockquote className="mt-8 rounded-r-2xl border-l-2 border-brand-gold bg-slate-50 py-5 pr-6 pl-6 font-serif text-xl leading-snug text-brand-navy italic">
                                 “No rank outside this room supersedes that of a brother who stood the same cold morning muster beside you.”
-                                <footer className="mt-2.5 font-sans text-[11px] font-medium tracking-[0.2em] text-[#047857] uppercase not-italic">
+                                <footer className="mt-2.5 font-sans text-[11px] font-medium tracking-[0.2em] text-[#5E121D] uppercase not-italic">
                                     — Central Council Founding Charter
                                 </footer>
                             </blockquote>
@@ -57,7 +57,7 @@ export function LandingAbout({ omitHeading = false, className }: { omitHeading?:
                                         { k: '1997 Affinity', v: 'Verified batchmates only' },
                                     ].map((pillar) => (
                                         <div key={pillar.k}>
-                                            <dt className="text-[11px] font-semibold tracking-[0.16em] text-[#047857] uppercase">{pillar.k}</dt>
+                                            <dt className="text-[11px] font-semibold tracking-[0.16em] text-[#5E121D] uppercase">{pillar.k}</dt>
                                             <dd className="mt-1 text-[13.5px] text-[#4A4F5C]">{pillar.v}</dd>
                                         </div>
                                     ))}

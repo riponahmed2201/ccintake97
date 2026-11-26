@@ -59,11 +59,11 @@ export function LandingColleges({
                                     <Reveal>
                                         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
                                             <div>
-                                                <p className="text-[11px] font-medium tracking-[0.26em] text-[#047857] uppercase">
+                                                <p className="text-[11px] font-medium tracking-[0.26em] text-[#5E121D] uppercase">
                                                     Select a Campus
                                                 </p>
                                                 <h2 className="mt-2 font-serif text-2xl font-medium text-[#091324] sm:text-3xl">
-                                                    Browse by <em className="font-normal italic text-[#047857]">region.</em>
+                                                    Browse by <em className="font-normal italic text-[#5E121D]">region.</em>
                                                 </h2>
                                             </div>
                                             {regionTabs}
@@ -73,11 +73,11 @@ export function LandingColleges({
                                     <Reveal>
                                         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
                                             <div className="max-w-2xl">
-                                                <p className="text-[11px] font-medium tracking-[0.26em] text-[#047857] uppercase">
+                                                <p className="text-[11px] font-medium tracking-[0.26em] text-[#5E121D] uppercase">
                                                     Constituent Network
                                                 </p>
                                                 <h2 className="mt-4 font-serif text-5xl leading-[1.02] font-medium tracking-[-0.01em] text-[#091324] lg:text-[3.75rem]">
-                                                    Ten colleges. <em className="font-normal italic text-[#047857]">Equal voice.</em>
+                                                    Ten colleges. <em className="font-normal italic text-[#5E121D]">Equal voice.</em>
                                                 </h2>
                                                 <p className="mt-5 max-w-xl text-[16px] leading-relaxed text-[#4A4F5C]">
                                                     Every constituent college holds an equal seat in the Central Secretariat.
@@ -108,7 +108,7 @@ export function LandingColleges({
         
                                             <div className="flex min-h-[500px] flex-col justify-between p-6 sm:p-10 lg:min-h-[600px] lg:p-12">
                                                 <div className="flex items-start justify-between text-[11px] tracking-[0.2em] uppercase">
-                                                    <span className="text-[#34D399]">
+                                                    <span className="text-[#F4C2C7]">
                                                         <span className="font-serif text-lg tracking-normal normal-case italic">{String(CADET_COLLEGES_DATA.findIndex((c) => c.short_name === activeCollege.short_name) + 1).padStart(2, '0')}</span>
                                                         <span className="text-[#F7F3EA]/45"> / {CADET_COLLEGES_DATA.length}</span>
                                                     </span>
@@ -121,7 +121,7 @@ export function LandingColleges({
                                                             <CollegeEmblem logo={activeCollege.logo_url} code={activeCollege.short_name} name={activeCollege.name} size={84} />
                                                             <div>
                                                                 <h3 className="font-serif text-[2.1rem] leading-[1.05] font-medium sm:text-5xl">{activeCollege.name}</h3>
-                                                                <p className="mt-2 font-serif text-lg text-[#34D399] italic">{activeCollege.tagline}</p>
+                                                                <p className="mt-2 font-serif text-lg text-[#F4C2C7] italic">{activeCollege.tagline}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -175,7 +175,7 @@ export function LandingColleges({
                                                             <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_70%_25%,rgba(201,165,92,0.3),transparent_60%)]" />
                                                         )}
                                                         <div className={`absolute inset-0 -z-10 transition-colors duration-500 ${active ? 'bg-gradient-to-t from-black/80 via-black/20 to-transparent' : 'bg-gradient-to-t from-black/80 via-black/40 to-black/25 group-hover:via-black/20 group-hover:to-transparent'}`} />
-                                                        <div className={`absolute inset-0 transition-all duration-300 ${active ? 'ring-[3px] ring-[#10B981] ring-inset' : ''}`} />
+                                                        <div className={`absolute inset-0 transition-all duration-300 ${active ? 'ring-[3px] ring-[#450D15] ring-inset' : ''}`} />
                                                         <div className="absolute inset-x-0 bottom-0 flex items-center gap-2.5 p-3 sm:p-4">
                                                             <span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white ring-1 ring-white/50">
                                                                 {col.logo_url ? (

@@ -68,12 +68,12 @@
     --color-sidebar-ring: var(--sidebar-ring);
 
     --color-brand-navy: #101a2c;
-    --color-brand-cream: #f6f3ec;
-    --color-brand-gold: #10B981;
-    --color-brand-gold-bright: #34D399;
-    --color-brand-gold-muted: #047857;
+    --color-brand-cream: #F8FAFC;
+    --color-brand-gold: #450D15;
+    --color-brand-gold-bright: #F4C2C7;
+    --color-brand-gold-muted: #5E121D;
     --color-brand-ink-deep: #071018;
-    --color-brand-cream-text: #f6f3ec;
+    --color-brand-cream-text: #F8FAFC;
 }
 
 :root {

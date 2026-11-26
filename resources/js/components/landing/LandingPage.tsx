@@ -49,7 +49,8 @@ export function LandingPage({
                 Skip to main content
             </a>
             <SiteHeader
-                variant="hero"
+                variant="solid"
+                surface="white"
                 activeNav={activeNav}
                 scrolled={landing.scrolled}
                 mobileMenuOpen={landing.mobileMenuOpen}

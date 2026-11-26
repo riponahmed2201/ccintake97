@@ -18,8 +18,8 @@ export const LANDING_GRID_GAP = 'gap-12 lg:gap-16';
 /** Space between two major blocks inside one section (e.g. committee + charter). */
 export const LANDING_SUBSECTION = 'mt-16 lg:mt-20';
 
-/** Hero: clear fixed header + comfortable bottom breathing room. */
-export const LANDING_HERO_INNER = 'pt-[7.5rem] pb-20 sm:pt-36 sm:pb-24 lg:pt-40 lg:pb-28';
+/** Hero: comfortable top and bottom breathing room below sticky header. */
+export const LANDING_HERO_INNER = 'pt-16 pb-20 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-28';
 
 /** Horizontal scroll track — snap, hide scrollbar, use with LANDING_BLEED. */
 export const LANDING_SCROLL_TRACK =

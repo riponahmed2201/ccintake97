@@ -46,7 +46,7 @@ const FIELDS = [
 ] as const;
 
 const inputBase =
-    'h-12 w-full rounded-xl border border-[#091324]/10 bg-[#FAF8F3] text-[15px] text-[#091324] transition-colors placeholder:text-[#091324]/35 focus:border-[#047857] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#10B981]/15';
+    'h-12 w-full rounded-xl border border-[#091324]/10 bg-[#F8FAFC] text-[15px] text-[#091324] transition-colors placeholder:text-[#091324]/35 focus:border-[#5E121D] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#450D15]/15';
 
 export default function PublicDirectory({ members, colleges, filters, total }: Props) {
     const { auth } = usePage().props as { auth?: { user?: unknown } };
@@ -72,7 +72,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
     return (
         <>
             <Head title="Public Directory — ccIntake97" />
-            <div className="min-h-screen bg-[#FAF8F3] font-sans text-[#091324] antialiased selection:bg-[#10B981] selection:text-[#091324]">
+            <div className="min-h-screen bg-[#F8FAFC] font-sans text-[#091324] antialiased selection:bg-[#450D15] selection:text-white">
                 <PublicSiteHeader active="Directory" />
 
                 <section className="relative isolate overflow-hidden bg-[#091324] text-[#F8F5EE]">
@@ -90,18 +90,18 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                 eyebrow="Batch directory"
                                 title={
                                     <>
-                                        Meet verified <em className="font-normal italic text-[#34D399]">batchmates.</em>
+                                        Meet verified <em className="font-normal italic text-[#F4C2C7]">batchmates.</em>
                                     </>
                                 }
                                 intro="INTAKE 1997 alumni across ten cadet colleges. Only details members mark as public appear here."
                             />
-                            <dl className="flex gap-10 rounded-2xl border border-[#10B981]/30 bg-white/[0.06] px-8 py-6 shadow-[0_24px_48px_-24px_rgba(0,0,0,0.6)] backdrop-blur-md">
+                            <dl className="flex gap-10 rounded-2xl border border-[#450D15]/30 bg-white/[0.06] px-8 py-6 shadow-[0_24px_48px_-24px_rgba(0,0,0,0.6)] backdrop-blur-md">
                                 <div>
-                                    <dd className="font-serif text-4xl font-semibold tabular-nums text-[#34D399]">{total}</dd>
+                                    <dd className="font-serif text-4xl font-semibold tabular-nums text-[#F4C2C7]">{total}</dd>
                                     <dt className="mt-1 text-[10.5px] font-medium tracking-[0.2em] text-[#F8F5EE]/60 uppercase">Verified</dt>
                                 </div>
                                 <div>
-                                    <dd className="font-serif text-4xl font-semibold tabular-nums text-[#34D399]">{colleges.length}</dd>
+                                    <dd className="font-serif text-4xl font-semibold tabular-nums text-[#F4C2C7]">{colleges.length}</dd>
                                     <dt className="mt-1 text-[10.5px] font-medium tracking-[0.2em] text-[#F8F5EE]/60 uppercase">Colleges</dt>
                                 </div>
                             </dl>
@@ -236,7 +236,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                     setSearch('');
                                     router.get('/directory');
                                 }}
-                                className="text-[14px] font-medium text-[#047857] underline decoration-[#047857]/40 underline-offset-4 hover:decoration-[#047857]"
+                                className="text-[14px] font-medium text-[#5E121D] underline decoration-[#5E121D]/40 underline-offset-4 hover:decoration-[#5E121D]"
                             >
                                 Clear filters
                             </button>
@@ -252,9 +252,9 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                     <li key={m.id}>
                                         <Link
                                             href={profileHref(m)}
-                                            className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#091324]/[0.08] bg-white text-[#091324] shadow-[0_8px_28px_-14px_rgba(9,19,36,0.12)] transition-all duration-300 hover:-translate-y-1 hover:border-[#10B981]/60 hover:shadow-[0_22px_45px_-20px_rgba(9,19,36,0.2)]"
+                                            className="group flex h-full flex-col overflow-hidden rounded-2xl border border-[#091324]/[0.08] bg-white text-[#091324] shadow-[0_8px_28px_-14px_rgba(9,19,36,0.12)] transition-all duration-300 hover:-translate-y-1 hover:border-[#450D15]/60 hover:shadow-[0_22px_45px_-20px_rgba(9,19,36,0.2)]"
                                         >
-                                            <div className="relative h-56 w-full overflow-hidden bg-[#FAF8F3]">
+                                            <div className="relative h-56 w-full overflow-hidden bg-[#F8FAFC]">
                                                 {m.photo_url ? (
                                                     <img
                                                         src={m.photo_url}
@@ -263,8 +263,8 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                                         className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                                                     />
                                                 ) : (
-                                                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#FAF8F3] to-[#EFEAE0]">
-                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[#091324] font-serif text-3xl font-semibold text-[#34D399] shadow-sm ring-2 ring-[#10B981]/30">
+                                                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F8FAFC] to-[#F1F5F9]">
+                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[#091324] font-serif text-3xl font-semibold text-[#F4C2C7] shadow-sm ring-2 ring-[#450D15]/30">
                                                             {m.initials}
                                                         </span>
                                                     </div>
@@ -282,7 +282,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                                         {code ? `${code} ’97` : 'CCINTAKE 97'}
                                                     </span>
                                                     <span
-                                                        className="flex h-7 w-7 items-center justify-center rounded-full bg-[#091324] text-[#34D399] shadow-xs ring-1 ring-[#10B981]/40"
+                                                        className="flex h-7 w-7 items-center justify-center rounded-full bg-[#091324] text-[#F4C2C7] shadow-xs ring-1 ring-[#450D15]/40"
                                                         aria-label="Verified member"
                                                     >
                                                         <ShieldCheck className="h-4 w-4" />
@@ -291,7 +291,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                             </div>
 
                                             <div className="flex flex-1 flex-col p-5">
-                                                <h2 className="line-clamp-1 font-serif text-[20px] leading-snug font-semibold text-[#091324] transition-colors group-hover:text-[#047857]">
+                                                <h2 className="line-clamp-1 font-serif text-[20px] leading-snug font-semibold text-[#091324] transition-colors group-hover:text-[#5E121D]">
                                                     {m.name}
                                                 </h2>
                                                 <p className="mt-1 line-clamp-1 text-[13px] text-[#4A4F5C]">
@@ -299,7 +299,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                                 </p>
                                                 {m.city && (
                                                     <p className="mt-2.5 flex items-center gap-1 text-[12px] text-[#78829D]">
-                                                        <MapPin className="h-3.5 w-3.5 shrink-0 text-[#047857]" aria-hidden />
+                                                        <MapPin className="h-3.5 w-3.5 shrink-0 text-[#5E121D]" aria-hidden />
                                                         <span className="truncate">
                                                             {m.city}
                                                             {m.country_code && m.country_code !== 'BD' ? ` · ${m.country_code}` : ''}
@@ -308,7 +308,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                                 )}
                                             </div>
 
-                                            <div className="flex items-center justify-between border-t border-[#091324]/[0.06] bg-[#FAF8F3]/60 px-5 py-3 text-[13px] font-semibold text-[#091324] transition-colors group-hover:bg-[#091324] group-hover:text-[#34D399]">
+                                            <div className="flex items-center justify-between border-t border-[#091324]/[0.06] bg-[#F8FAFC]/60 px-5 py-3 text-[13px] font-semibold text-[#091324] transition-colors group-hover:bg-[#091324] group-hover:text-[#F4C2C7]">
                                                 <span>View Dossier</span>
                                                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                                             </div>
@@ -319,8 +319,8 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                         </ul>
                     ) : (
                         <div className="mt-8 flex flex-col items-center rounded-3xl bg-white px-6 py-20 text-center ring-1 ring-[#0B1220]/[0.06]">
-                            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#10B981]/15">
-                                <Users className="h-7 w-7 text-[#047857]" strokeWidth={1.5} />
+                            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#450D15]/15">
+                                <Users className="h-7 w-7 text-[#5E121D]" strokeWidth={1.5} />
                             </div>
                             <h2 className="mt-6 font-serif text-2xl font-medium text-[#0B1220]">No batchmates match that search</h2>
                             <p className="mt-3 max-w-md text-[15px] leading-relaxed text-[#4A4F5C]">
@@ -332,7 +332,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                     setSearch('');
                                     router.get('/directory');
                                 }}
-                                className="mt-8 text-[14px] font-medium text-[#047857] underline decoration-[#047857]/40 underline-offset-4"
+                                className="mt-8 text-[14px] font-medium text-[#5E121D] underline decoration-[#5E121D]/40 underline-offset-4"
                             >
                                 Reset directory
                             </button>
@@ -380,8 +380,8 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
 
                     <div className="mt-16 grid grid-cols-1 gap-5 md:grid-cols-2">
                         <div className="flex items-start gap-4 rounded-2xl bg-white p-7 ring-1 ring-[#091324]/[0.07] shadow-xs">
-                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FAF8F3] ring-1 ring-[#10B981]/30">
-                                <Lock className="h-5 w-5 text-[#047857]" aria-hidden />
+                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F8FAFC] ring-1 ring-[#450D15]/30">
+                                <Lock className="h-5 w-5 text-[#5E121D]" aria-hidden />
                             </span>
                             <div>
                                 <div className="font-serif text-xl font-semibold text-[#091324]">Privacy first</div>
@@ -390,7 +390,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                 </p>
                             </div>
                         </div>
-                        <div className="flex flex-col justify-between gap-5 rounded-2xl bg-gradient-to-br from-[#34D399] via-[#10B981] to-[#B08A3C] p-7 shadow-sm sm:flex-row sm:items-center">
+                        <div className="flex flex-col justify-between gap-5 rounded-2xl bg-gradient-to-br from-[#F4C2C7] via-[#450D15] to-[#B08A3C] p-7 shadow-sm sm:flex-row sm:items-center">
                             <div>
                                 <div className="font-serif text-xl font-semibold text-[#091324]">Not on the roll yet?</div>
                                 <p className="mt-1 text-[14px] text-[#091324]/80">Create your account and complete verification to be listed.</p>

@@ -42,7 +42,7 @@ export default function PublicGallery({ items = [] }: { items?: GalleryItem[] })
     return (
         <SignupDialogProvider>
             <Head title="Gallery — CCINTAKE 97" />
-            <div className="min-h-screen bg-[#FAF8F3] font-sans text-[#091324] antialiased selection:bg-[#10B981] selection:text-[#091324]">
+            <div className="min-h-screen bg-[#F8FAFC] font-sans text-[#091324] antialiased selection:bg-[#450D15] selection:text-white">
                 <PublicSiteHeader active="Gallery" />
 
                 <MarketingPageHero
@@ -54,7 +54,7 @@ export default function PublicGallery({ items = [] }: { items?: GalleryItem[] })
                     onCtaClick={() => landing.openSignup()}
                 />
 
-                <section className={`${LANDING_SECTION} bg-[#FAF8F3]`}>
+                <section className={`${LANDING_SECTION} bg-[#F8FAFC]`}>
                     <div className={LANDING_CONTAINER}>
                         <div className="mb-8 flex flex-wrap items-center gap-2">
                             {[
@@ -70,7 +70,7 @@ export default function PublicGallery({ items = [] }: { items?: GalleryItem[] })
                                     className={`cursor-pointer rounded-full px-4 py-2 text-[13px] font-semibold transition-all ${
                                         category === t.key
                                             ? 'bg-[#091324] text-[#F7F3EA]'
-                                            : 'border border-[#091324]/12 bg-white text-[#091324]/75 hover:border-[#10B981]/60 hover:text-[#091324]'
+                                            : 'border border-[#091324]/12 bg-white text-[#091324]/75 hover:border-[#450D15]/60 hover:text-[#091324]'
                                     }`}
                                 >
                                     {t.label}
@@ -89,7 +89,7 @@ export default function PublicGallery({ items = [] }: { items?: GalleryItem[] })
                                         key={item.id}
                                         type="button"
                                         onClick={() => setActivePhoto(item)}
-                                        className="group relative cursor-pointer overflow-hidden rounded-2xl bg-[#091324] text-left shadow-[0_18px_45px_-22px_rgba(9,19,36,0.3)] ring-1 ring-[#091324]/10 transition-all duration-300 hover:-translate-y-1 hover:ring-[#10B981]/60"
+                                        className="group relative cursor-pointer overflow-hidden rounded-2xl bg-[#091324] text-left shadow-[0_18px_45px_-22px_rgba(9,19,36,0.3)] ring-1 ring-[#091324]/10 transition-all duration-300 hover:-translate-y-1 hover:ring-[#450D15]/60"
                                     >
                                         <img
                                             src={item.image_url}
@@ -99,7 +99,7 @@ export default function PublicGallery({ items = [] }: { items?: GalleryItem[] })
                                         />
                                         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent px-5 pt-14 pb-4 text-white">
                                             {item.place_label && (
-                                                <span className="block text-[10.5px] font-semibold tracking-[0.2em] text-[#34D399] uppercase">
+                                                <span className="block text-[10.5px] font-semibold tracking-[0.2em] text-[#F4C2C7] uppercase">
                                                     {item.place_label}
                                                 </span>
                                             )}
@@ -127,7 +127,7 @@ export default function PublicGallery({ items = [] }: { items?: GalleryItem[] })
                                 <div>
                                     <h3 className="font-serif text-xl font-semibold text-[#071437]">{activePhoto.title}</h3>
                                     {activePhoto.place_label && (
-                                        <p className="text-[12px] font-semibold tracking-wide text-[#047857] uppercase">
+                                        <p className="text-[12px] font-semibold tracking-wide text-[#5E121D] uppercase">
                                             {activePhoto.place_label}
                                         </p>
                                     )}

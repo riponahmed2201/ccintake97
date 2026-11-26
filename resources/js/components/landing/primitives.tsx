@@ -65,7 +65,7 @@ export function SectionHeading({
             <div className={`max-w-3xl space-y-5 ${centered ? 'flex flex-col items-center' : 'min-w-0'}`}>
                 {(index || eyebrow) && (
                     <div className={`inline-flex items-center gap-3 ${centered ? 'justify-center' : ''}`}>
-                        <span className={`h-px w-7 ${light ? 'bg-brand-gold-bright/60' : 'bg-[#10B981]'}`} />
+                        <span className={`h-px w-7 ${light ? 'bg-brand-gold-bright/60' : 'bg-[#450D15]'}`} />
                         <p
                             className={`text-[11px] font-semibold uppercase ${light ? 'text-brand-gold-bright/85' : 'text-brand-gold-muted'} ${
                                 centered ? 'tracking-[0.28em]' : 'tracking-[0.22em] sm:tracking-[0.28em]'
@@ -101,7 +101,7 @@ export function SectionHeading({
 
 export function GhostLink({ href, children, light = false, internal = false }: { href: string; children: React.ReactNode; light?: boolean; internal?: boolean }) {
     const cls = `group inline-flex items-center gap-2 border-b pb-1 text-[13px] font-medium tracking-wide transition-colors ${
-        light ? 'border-[#34D399]/40 text-[#F7F3EA] hover:border-[#34D399]' : 'border-[#0B1220]/20 text-[#0B1220] hover:border-[#047857]'
+        light ? 'border-[#F4C2C7]/40 text-[#F7F3EA] hover:border-[#F4C2C7]' : 'border-[#0B1220]/20 text-[#0B1220] hover:border-[#5E121D]'
     }`;
     const inner = (
         <>
@@ -133,16 +133,16 @@ export function CollegeEmblem({ logo, code, name, size = 88 }: { logo?: string |
     return (
         <div className="relative shrink-0" style={{ width: size, height: size }}>
             <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full transition-transform duration-[1200ms] ease-out group-hover:rotate-[30deg]" aria-hidden="true">
-                <circle cx="50" cy="50" r="48.5" fill="none" stroke="#10B981" strokeWidth="0.6" opacity="0.55" />
+                <circle cx="50" cy="50" r="48.5" fill="none" stroke="#450D15" strokeWidth="0.6" opacity="0.55" />
                 {Array.from({ length: 48 }).map((_, i) => {
                     const a = (i * 7.5 * Math.PI) / 180;
                     const r2 = i % 4 === 0 ? 44 : 45.5;
-                    return <line key={i} x1={50 + 47 * Math.cos(a)} y1={50 + 47 * Math.sin(a)} x2={50 + r2 * Math.cos(a)} y2={50 + r2 * Math.sin(a)} stroke="#10B981" strokeWidth="0.6" opacity="0.6" />;
+                    return <line key={i} x1={50 + 47 * Math.cos(a)} y1={50 + 47 * Math.sin(a)} x2={50 + r2 * Math.cos(a)} y2={50 + r2 * Math.sin(a)} stroke="#450D15" strokeWidth="0.6" opacity="0.6" />;
                 })}
             </svg>
             <div
                 style={{ inset }}
-                className={`absolute flex items-center justify-center overflow-hidden rounded-full ring-1 ring-[#10B981]/50 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)] ${
+                className={`absolute flex items-center justify-center overflow-hidden rounded-full ring-1 ring-[#450D15]/50 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)] ${
                     showLogo ? 'bg-white' : 'bg-gradient-to-br from-[#1E2A42] via-[#0E1628] to-[#070B14]'
                 }`}
             >

@@ -16,14 +16,14 @@ export default function AuthSimpleLayout({ children, title, description }: AuthL
                             backgroundSize: '56px 56px',
                         }}
                     />
-                    <div className="pointer-events-none absolute -right-24 bottom-0 h-[420px] w-[420px] rounded-full bg-[#10B981]/12 blur-3xl" />
+                    <div className="pointer-events-none absolute -right-24 bottom-0 h-[420px] w-[420px] rounded-full bg-[#450D15]/12 blur-3xl" />
 
                     <div className="relative z-10 px-12 pt-12 xl:px-16">
                         <Link href="/" className="inline-flex items-center gap-3">
                             <BrandMark className="h-12 w-auto" />
                             <span>
                                 <span className="block font-brand text-[22px] font-semibold">
-                                    ccIntake<span className="text-[#10B981]">97</span>
+                                    ccIntake<span className="text-[#450D15]">97</span>
                                 </span>
                                 <span className="text-[11px] text-[#F7F3EA]/55">Cadet College Alumni Network</span>
                             </span>
@@ -31,10 +31,10 @@ export default function AuthSimpleLayout({ children, title, description }: AuthL
                     </div>
 
                     <div className="relative z-10 px-12 pb-16 xl:px-16">
-                        <div className="mb-5 h-px w-12 bg-[#10B981]" />
+                        <div className="mb-5 h-px w-12 bg-[#450D15]" />
                         <h2 className="max-w-lg font-serif text-5xl leading-[1.06] font-medium tracking-[-0.02em] xl:text-[3.5rem]">
                             Ten Cadet Colleges.
-                            <span className="mt-1 block text-[#34D399]">One verified portal.</span>
+                            <span className="mt-1 block text-[#F4C2C7]">One verified portal.</span>
                         </h2>
                         <p className="mt-5 max-w-md text-[15.5px] leading-relaxed text-[#F7F3EA]/65">
                             Access the alumni directory, batch events, and member services for the 1997 Cadet College intake.
@@ -48,13 +48,13 @@ export default function AuthSimpleLayout({ children, title, description }: AuthL
 
                 <main className="relative flex items-center justify-center px-5 py-10 sm:px-8">
                     <div className="w-full max-w-[440px] overflow-hidden rounded-3xl bg-white shadow-[0_30px_80px_-36px_rgba(7,17,31,0.45)] ring-1 ring-[#0B1220]/[0.06]">
-                        <div className="h-1 bg-gradient-to-r from-[#34D399] via-[#10B981] to-[#047857]" />
+                        <div className="h-1 bg-gradient-to-r from-[#F4C2C7] via-[#450D15] to-[#5E121D]" />
                         <div className="px-7 py-8 sm:px-9 sm:py-10">
                             <Link href="/" className="inline-flex items-center gap-2.5">
                                 <BrandMark className="h-11 w-auto" />
                                 <span>
                                     <span className="block font-brand text-lg leading-none font-semibold">
-                                        ccIntake<span className="text-[#047857]">97</span>
+                                        ccIntake<span className="text-[#5E121D]">97</span>
                                     </span>
                                     <span className="mt-1 block text-[11px] text-[#0B1220]/45">Member portal</span>
                                 </span>

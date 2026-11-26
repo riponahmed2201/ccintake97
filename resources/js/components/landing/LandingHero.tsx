@@ -41,7 +41,7 @@ function HeroSlideDot({
                         cy="10"
                         r={HERO_DOT_RING_R}
                         fill="none"
-                        stroke="#34D399"
+                        stroke="#F4C2C7"
                         strokeWidth="1.75"
                         strokeLinecap="round"
                         strokeDasharray={HERO_DOT_RING_C}
@@ -91,7 +91,7 @@ export function LandingHero({
     const activeIndex = heroSlide % slides.length;
 
     return (
-        <section className="relative isolate flex min-h-[100svh] items-end overflow-hidden bg-brand-ink-deep text-brand-cream-text">
+        <section className="relative isolate flex min-h-[calc(100svh-76px)] items-end overflow-hidden bg-brand-ink-deep text-brand-cream-text">
             {slides.map((sl, i) => {
                 const active = i === activeIndex;
                 return (
@@ -115,8 +115,8 @@ export function LandingHero({
 
             <div className={`${LANDING_CONTAINER} ${LANDING_HERO_INNER}`}>
                 <Reveal>
-                    <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-[#34D399]/25 bg-white/[0.06] px-4 py-1.5 text-[11px] font-medium tracking-[0.22em] text-[#34D399] uppercase backdrop-blur-md">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#34D399]" />
+                    <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-[#F4C2C7]/25 bg-white/[0.06] px-4 py-1.5 text-[11px] font-medium tracking-[0.22em] text-[#F4C2C7] uppercase backdrop-blur-md">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#F4C2C7]" />
                         CCINTAKE 97 · Ten Cadet Colleges · Est. {metrics.intake_year}
                     </div>
                     <h1 className="max-w-4xl font-serif text-[3rem] leading-[0.98] font-semibold tracking-[-0.02em] sm:text-6xl lg:text-[6.25rem]">

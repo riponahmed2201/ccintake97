@@ -88,7 +88,7 @@ export default function IdCardPage({ member, photoUrl, qrPayload }: IdCardPagePr
                                             <BrandMark className="size-full" />
                                         </div>
                                         <div>
-                                            <div className="text-[14px] font-bold tracking-[0.08em] text-[#34D399] uppercase">
+                                            <div className="text-[14px] font-bold tracking-[0.08em] text-[#F4C2C7] uppercase">
                                                 CCINTAKE 97
                                             </div>
                                             <div className="text-[10px] font-medium tracking-[0.14em] text-slate-300 uppercase">
@@ -112,7 +112,7 @@ export default function IdCardPage({ member, photoUrl, qrPayload }: IdCardPagePr
                                 {/* Card Body: Photo & Credentials */}
                                 <div className="relative flex flex-col items-center gap-5 py-6 sm:flex-row sm:items-center">
                                     <div className="relative shrink-0">
-                                        <div className="flex size-24 items-center justify-center overflow-hidden rounded-2xl border-2 border-[#D4AF37]/50 bg-[#0D1E4A] text-3xl font-bold text-[#34D399] shadow-lg sm:size-28">
+                                        <div className="flex size-24 items-center justify-center overflow-hidden rounded-2xl border-2 border-[#D4AF37]/50 bg-[#0D1E4A] text-3xl font-bold text-[#F4C2C7] shadow-lg sm:size-28">
                                             {photoUrl ? (
                                                 <img
                                                     src={photoUrl}
@@ -134,7 +134,7 @@ export default function IdCardPage({ member, photoUrl, qrPayload }: IdCardPagePr
                                         <h2 className="truncate text-[20px] font-bold tracking-tight text-white sm:text-[22px]">
                                             {member.user?.name}
                                         </h2>
-                                        <div className="flex items-center justify-center gap-1.5 text-[13px] font-medium text-[#34D399] sm:justify-start">
+                                        <div className="flex items-center justify-center gap-1.5 text-[13px] font-medium text-[#F4C2C7] sm:justify-start">
                                             <GraduationCap className="size-4 shrink-0" />
                                             <span className="truncate">{member.college?.name || 'College not selected'}</span>
                                         </div>
@@ -156,7 +156,7 @@ export default function IdCardPage({ member, photoUrl, qrPayload }: IdCardPagePr
                                         <div className="text-[10px] font-semibold tracking-[0.12em] text-slate-400 uppercase">
                                             Member Identification
                                         </div>
-                                        <div className="mt-0.5 font-mono text-[15px] font-bold tracking-wider text-[#34D399] sm:text-[16px]">
+                                        <div className="mt-0.5 font-mono text-[15px] font-bold tracking-wider text-[#F4C2C7] sm:text-[16px]">
                                             {member.member_code || 'PENDING VERIFICATION'}
                                         </div>
                                     </div>

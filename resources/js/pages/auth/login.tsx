@@ -17,7 +17,7 @@ type Props = {
 };
 
 const fieldClass =
-    'h-12 rounded-xl border-[#0B1220]/10 bg-white pl-11 text-[15px] shadow-none placeholder:text-[#0B1220]/35 focus-visible:border-[#047857] focus-visible:ring-4 focus-visible:ring-[#10B981]/15';
+    'h-12 rounded-xl border-[#0B1220]/10 bg-white pl-11 text-[15px] shadow-none placeholder:text-[#0B1220]/35 focus-visible:border-[#5E121D] focus-visible:ring-4 focus-visible:ring-[#450D15]/15';
 
 export default function Login({ status, canResetPassword }: Props) {
     return (
@@ -59,7 +59,7 @@ export default function Login({ status, canResetPassword }: Props) {
                                         Password
                                     </Label>
                                     {canResetPassword && (
-                                        <TextLink href={request()} className="ml-auto text-[13px] text-[#047857]" tabIndex={5}>
+                                        <TextLink href={request()} className="ml-auto text-[13px] text-[#5E121D]" tabIndex={5}>
                                             Forgot password?
                                         </TextLink>
                                     )}
@@ -88,7 +88,7 @@ export default function Login({ status, canResetPassword }: Props) {
 
                             <Button
                                 type="submit"
-                                className="mt-1 h-12 w-full rounded-xl bg-[#0B1220] text-[15px] font-medium text-white hover:bg-[#1A2438]"
+                                className="mt-1 h-12 w-full rounded-xl bg-[#450D15] text-[15px] font-medium text-white hover:bg-[#5E121D]"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
@@ -100,7 +100,7 @@ export default function Login({ status, canResetPassword }: Props) {
 
                         <p className="text-center text-[14px] text-[#4A4F5C]">
                             Not on the roll yet?{' '}
-                            <TextLink href="/register-alumni" className="font-medium text-[#047857]" tabIndex={5}>
+                            <TextLink href="/register-alumni" className="font-medium text-[#5E121D]" tabIndex={5}>
                                 Apply for membership
                             </TextLink>
                         </p>

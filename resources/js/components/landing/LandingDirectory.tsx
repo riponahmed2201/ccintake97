@@ -111,9 +111,9 @@ export function LandingDirectory({
                                             key={m.key}
                                             href={m.href}
                                             data-card
-                                            className="group flex w-[78vw] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-[#091324]/[0.08] bg-white text-[#091324] shadow-[0_8px_28px_-14px_rgba(9,19,36,0.12)] transition-all duration-300 hover:-translate-y-1 hover:border-[#10B981]/60 hover:shadow-[0_22px_45px_-20px_rgba(9,19,36,0.2)] sm:w-[290px]"
+                                            className="group flex w-[78vw] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-[#091324]/[0.08] bg-white text-[#091324] shadow-[0_8px_28px_-14px_rgba(9,19,36,0.12)] transition-all duration-300 hover:-translate-y-1 hover:border-[#450D15]/60 hover:shadow-[0_22px_45px_-20px_rgba(9,19,36,0.2)] sm:w-[290px]"
                                         >
-                                            <div className="relative h-56 w-full overflow-hidden bg-[#FAF8F3]">
+                                            <div className="relative h-56 w-full overflow-hidden bg-[#F8FAFC]">
                                                 {m.photo ? (
                                                     <img
                                                         src={m.photo}
@@ -122,8 +122,8 @@ export function LandingDirectory({
                                                         className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                                                     />
                                                 ) : (
-                                                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#FAF8F3] to-[#EFEAE0]">
-                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[#091324] font-serif text-3xl font-semibold text-[#34D399] shadow-sm ring-2 ring-[#10B981]/30">
+                                                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#F8FAFC] to-[#F1F5F9]">
+                                                        <span className="flex h-24 w-24 items-center justify-center rounded-full bg-[#091324] font-serif text-3xl font-semibold text-[#F4C2C7] shadow-sm ring-2 ring-[#450D15]/30">
                                                             {m.initials}
                                                         </span>
                                                     </div>

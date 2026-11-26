@@ -3,8 +3,8 @@ import { Link, useForm } from '@inertiajs/react';
 import { ArrowRight, Eye, EyeOff } from 'lucide-react';
 
 const inputBase =
-    'h-11 w-full rounded-xl border bg-[#FAF8F3] px-3.5 text-[15px] text-[#091324] transition-all duration-200 placeholder:text-[#091324]/35 focus:bg-white focus:outline-none focus:ring-4';
-const inputOk = 'border-[#091324]/12 hover:border-[#091324]/25 focus:border-[#047857] focus:ring-[#10B981]/15';
+    'h-11 w-full rounded-xl border bg-[#F8FAFC] px-3.5 text-[15px] text-[#091324] transition-all duration-200 placeholder:text-[#091324]/35 focus:bg-white focus:outline-none focus:ring-4';
+const inputOk = 'border-[#091324]/12 hover:border-[#091324]/25 focus:border-[#5E121D] focus:ring-[#450D15]/15';
 const inputErr = 'border-red-300 bg-red-50/40 focus:border-red-500 focus:ring-red-500/10';
 
 function Field({ label, error, children, className = '' }: {
@@ -71,7 +71,7 @@ export function AlumniSignupForm({
             {!compact && (
                 <p className="text-[14px] text-[#4A4F5C]">
                     Already a member?{' '}
-                    <Link href="/login" className="font-medium text-[#0B1220] underline decoration-[#047857]/40 underline-offset-4">
+                    <Link href="/login" className="font-medium text-[#0B1220] underline decoration-[#5E121D]/40 underline-offset-4">
                         Sign in
                     </Link>
                 </p>
@@ -157,14 +157,14 @@ export function AlumniSignupForm({
             <button
                 type="submit"
                 disabled={processing || passwordsMismatch}
-                className="group mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#091324] text-[15px] font-semibold text-[#F8F5EE] transition-all duration-300 hover:bg-[#152238] hover:shadow-[0_12px_28px_-10px_rgba(9,19,36,0.55)] disabled:cursor-not-allowed disabled:opacity-65"
+                className="group mt-2 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#450D15] text-[15px] font-semibold text-white transition-all duration-300 hover:bg-[#5E121D] hover:shadow-[0_12px_28px_-10px_rgba(94, 18, 29,0.55)] disabled:cursor-not-allowed disabled:opacity-65"
             >
                 {processing ? (
-                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#34D399]/30 border-t-[#34D399]" />
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                 ) : (
                     <>
                         Create account
-                        <ArrowRight className="h-4 w-4 text-[#34D399] transition-transform duration-300 group-hover:translate-x-1" />
+                        <ArrowRight className="h-4 w-4 text-white/90 transition-transform duration-300 group-hover:translate-x-1" />
                     </>
                 )}
             </button>
@@ -178,7 +178,7 @@ export function AlumniSignupForm({
                         Already a member?{' '}
                         <Link
                             href="/login"
-                            className="font-semibold text-[#091324] underline decoration-[#10B981]/60 underline-offset-4 hover:text-[#047857]"
+                            className="font-semibold text-[#091324] underline decoration-[#450D15]/60 underline-offset-4 hover:text-[#5E121D]"
                         >
                             Sign in
                         </Link>

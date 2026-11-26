@@ -122,8 +122,8 @@ export function SiteHeader({
                                   ? 'text-brand-gold-muted hover:text-brand-gold-muted'
                                   : 'text-brand-navy hover:text-brand-gold-muted'
                                 : isActive
-                                  ? 'text-[#34D399]'
-                                  : 'text-white hover:text-[#34D399]'
+                                  ? 'text-[#F4C2C7]'
+                                  : 'text-white hover:text-[#F4C2C7]'
                         }`;
                         return (
                             <Link key={l.href} href={l.href} aria-current={isActive ? 'page' : undefined} className={linkClass}>
@@ -140,7 +140,7 @@ export function SiteHeader({
                             className={`hidden items-center gap-2 rounded-full border px-4 py-2 font-nav text-[15px] font-medium transition-all duration-300 lg:inline-flex ${
                                 solidHeader
                                     ? 'border-brand-gold-muted/40 text-brand-gold-muted hover:bg-brand-gold-muted/10'
-                                    : 'border-[#34D399]/40 text-[#34D399] hover:bg-white/5'
+                                    : 'border-[#F4C2C7]/40 text-[#F4C2C7] hover:bg-white/5'
                             }`}
                         >
                             <span className="h-1.5 w-1.5 rounded-full bg-brand-gold" />
@@ -152,22 +152,22 @@ export function SiteHeader({
                             href="/dashboard"
                             className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-nav text-[15px] font-medium transition-all duration-300 ${
                                 solidHeader
-                                    ? 'bg-brand-navy text-brand-cream-text hover:bg-[#1A2438]'
-                                    : 'bg-brand-cream-text text-brand-navy hover:bg-white'
+                                    ? 'bg-brand-gold text-white hover:bg-brand-gold-muted shadow-sm'
+                                    : 'bg-brand-gold text-white hover:bg-brand-gold-muted shadow-sm'
                             }`}
                         >
-                            Member Portal <ArrowRight className="h-3.5 w-3.5 text-brand-gold" />
+                            Member Portal <ArrowRight className="h-3.5 w-3.5 text-white" />
                         </Link>
                     ) : (
                         <Link
                             href="/login"
                             className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 font-nav text-[15px] font-medium transition-all duration-300 ${
                                 solidHeader
-                                    ? 'bg-brand-navy text-brand-cream-text hover:bg-[#1A2438]'
-                                    : 'bg-brand-cream-text text-brand-navy hover:bg-white'
+                                    ? 'bg-brand-gold text-white hover:bg-brand-gold-muted shadow-sm'
+                                    : 'bg-brand-gold text-white hover:bg-brand-gold-muted shadow-sm'
                             }`}
                         >
-                            <UserRound className="h-4 w-4 text-brand-gold" />
+                            <UserRound className="h-4 w-4 text-white" />
                             <span>Sign in</span>
                         </Link>
                     )}
@@ -218,8 +218,8 @@ export function SiteHeader({
                         </a>
                     )}
                     <div className="mt-4 grid grid-cols-2 gap-3">
-                        <Link href="/login" onClick={closeMobile} className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-navy py-3 text-center text-sm font-medium text-brand-cream-text">
-                            <UserRound className="h-4 w-4 text-brand-gold" />
+                        <Link href="/login" onClick={closeMobile} className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-gold py-3 text-center text-sm font-medium text-white hover:bg-brand-gold-muted">
+                            <UserRound className="h-4 w-4 text-white" />
                             Sign in
                         </Link>
                         <button type="button" onClick={openApply} className="rounded-full border border-brand-navy/15 py-3 text-center text-sm font-medium text-brand-navy">

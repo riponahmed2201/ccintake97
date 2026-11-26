@@ -4,7 +4,7 @@ import { CADET_COLLEGES_DATA, HERO_INTERVAL, HERO_SLIDES } from '@/components/la
 import type { MergedCollege, WelcomeProps } from '@/components/landing/types';
 
 export const CONTACT_INPUT_CLASS =
-    'w-full border-0 border-b border-[#0B1220]/15 bg-transparent px-0 py-3 text-[15px] text-[#0B1220] placeholder:text-[#0B1220]/35 focus:border-[#047857] focus:outline-none focus:ring-0 transition-colors';
+    'w-full border-0 border-b border-[#0B1220]/15 bg-transparent px-0 py-3 text-[15px] text-[#0B1220] placeholder:text-[#0B1220]/35 focus:border-[#5E121D] focus:outline-none focus:ring-0 transition-colors';
 export const CONTACT_LABEL_CLASS = 'block text-[11px] font-medium uppercase tracking-[0.2em] text-[#0B1220]/50';
 
 export function useLandingPage(colleges: WelcomeProps['colleges'] = []) {

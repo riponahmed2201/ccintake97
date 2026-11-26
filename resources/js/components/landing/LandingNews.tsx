@@ -18,7 +18,7 @@ export function LandingNews({
                             <div className={LANDING_CONTAINER}>
                                 <SectionHeading
                                     eyebrow="Community"
-                                    title={<>News &amp; <em className="font-normal text-[#047857]">ventures.</em></>}
+                                    title={<>News &amp; <em className="font-normal text-[#5E121D]">ventures.</em></>}
                                     intro="Official dispatches from the Central Secretariat and commercial enterprises led by 1997 batchmates."
                                     action={
                                         articles.length === 0 ? (
@@ -62,10 +62,10 @@ export function LandingNews({
                                                                 <img src={lead.image} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105" />
                                                             </div>
                                                             <div className="mt-6 flex items-center gap-3 text-[11px] tracking-[0.18em] uppercase">
-                                                                <span className="font-semibold text-[#047857]">{lead.cat}</span>
+                                                                <span className="font-semibold text-[#5E121D]">{lead.cat}</span>
                                                                 <span className="text-[#091324]/40">{lead.date}</span>
                                                             </div>
-                                                            <h3 className="mt-3 font-serif text-3xl leading-[1.15] font-medium text-[#091324] transition-colors group-hover:text-[#047857] sm:text-[2.25rem]">{lead.title}</h3>
+                                                            <h3 className="mt-3 font-serif text-3xl leading-[1.15] font-medium text-[#091324] transition-colors group-hover:text-[#5E121D] sm:text-[2.25rem]">{lead.title}</h3>
                                                             <p className="mt-3 line-clamp-2 max-w-2xl text-[15px] leading-relaxed text-[#4A4F5C]">{lead.excerpt}</p>
                                                         </Link>
                                                     </Reveal>
@@ -79,8 +79,8 @@ export function LandingNews({
                                                                         <img src={a.image} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
                                                                     </div>
                                                                     <div className="min-w-0">
-                                                                        <div className="text-[10.5px] tracking-[0.18em] text-[#047857] uppercase">{a.cat}</div>
-                                                                        <h4 className="mt-1.5 line-clamp-3 font-serif text-lg leading-snug text-[#0B1220] group-hover:underline group-hover:decoration-[#047857]/50 group-hover:underline-offset-4">{a.title}</h4>
+                                                                        <div className="text-[10.5px] tracking-[0.18em] text-[#5E121D] uppercase">{a.cat}</div>
+                                                                        <h4 className="mt-1.5 line-clamp-3 font-serif text-lg leading-snug text-[#0B1220] group-hover:underline group-hover:decoration-[#5E121D]/50 group-hover:underline-offset-4">{a.title}</h4>
                                                                     </div>
                                                                 </Link>
                                                             </Reveal>
@@ -101,16 +101,16 @@ export function LandingNews({
                                                         <Reveal key={b.key} delay={i * 60}>
                                                             <Link
                                                                 href={`/directory?search=${encodeURIComponent(b.lead)}`}
-                                                                className="group flex items-center gap-4 rounded-xl border border-[#0B1220]/[0.07] bg-[#FAF8F3]/70 p-4 transition-all duration-300 hover:border-[#10B981]/45 hover:bg-white hover:shadow-[0_12px_28px_-16px_rgba(11,18,32,0.14)]"
+                                                                className="group flex items-center gap-4 rounded-xl border border-[#0B1220]/[0.07] bg-[#F8FAFC]/70 p-4 transition-all duration-300 hover:border-[#450D15]/45 hover:bg-white hover:shadow-[0_12px_28px_-16px_rgba(11,18,32,0.14)]"
                                                             >
-                                                                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#091324]/[0.06] font-sans text-xs font-bold text-[#047857] tabular-nums">
+                                                                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#091324]/[0.06] font-sans text-xs font-bold text-[#5E121D] tabular-nums">
                                                                     {String(i + 1).padStart(2, '0')}
                                                                 </span>
                                                                 <div className="min-w-0 flex-1">
-                                                                    <div className="truncate font-serif text-lg font-medium text-[#0B1220] transition-colors group-hover:text-[#047857]">{b.lead}</div>
+                                                                    <div className="truncate font-serif text-lg font-medium text-[#0B1220] transition-colors group-hover:text-[#5E121D]">{b.lead}</div>
                                                                     <div className="mt-0.5 truncate text-[12.5px] text-[#4A4F5C]">{b.sector} · {b.city}</div>
                                                                 </div>
-                                                                <ArrowUpRight className="h-4 w-4 shrink-0 text-[#0B1220]/30 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#047857]" />
+                                                                <ArrowUpRight className="h-4 w-4 shrink-0 text-[#0B1220]/30 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#5E121D]" />
                                                             </Link>
                                                         </Reveal>
                                                     ))}

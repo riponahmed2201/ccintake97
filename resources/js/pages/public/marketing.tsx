@@ -48,7 +48,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                                 eyebrow="Our story"
                                 title={
                                     <>
-                                        Bound by a <em className="font-normal italic text-[#34D399]">shared</em> beginning.
+                                        Bound by a <em className="font-normal italic text-[#F4C2C7]">shared</em> beginning.
                                     </>
                                 }
                                 intro="INTAKE 1997 brings together the cadets who entered ten cadet colleges that year — one cohort, still known to each other by college, house and roll."
@@ -63,7 +63,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                                 omitHeading
                                 className="relative z-10 -mt-12 !scroll-mt-0 !pt-8 !pb-14 shadow-[0_32px_64px_-40px_rgba(9,19,36,0.22)] ring-1 ring-[#091324]/[0.07] sm:-mt-16 sm:!pt-10 sm:!pb-16 lg:mx-auto lg:max-w-[calc(1440px-5rem)] lg:rounded-[1.75rem] xl:max-w-[calc(1440px-5rem)]"
                             />
-                            <LandingTimeline className="mt-12 bg-[#FAF8F3]" />
+                            <LandingTimeline className="mt-12 bg-[#F8FAFC]" />
                             <LandingCampusLife className="!bg-white" />
                             <MarketingCtaBand
                                 title="Explore the batch"
@@ -83,7 +83,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                                 eyebrow="Constituent network"
                                 title={
                                     <>
-                                        Ten colleges. <em className="font-normal italic text-[#34D399]">Equal voice.</em>
+                                        Ten colleges. <em className="font-normal italic text-[#F4C2C7]">Equal voice.</em>
                                     </>
                                 }
                                 intro="Every constituent cadet college from the 1997 intake holds an equal seat and sovereign parity in the Central Secretariat."
@@ -124,7 +124,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                                 eyebrow="Secretariat stewardship"
                                 title={
                                     <>
-                                        Led by <em className="font-normal italic text-[#34D399]">batchmates.</em>
+                                        Led by <em className="font-normal italic text-[#F4C2C7]">batchmates.</em>
                                     </>
                                 }
                                 intro="The Central Executive Committee — elected from every college chapter to serve the whole intake with zero hierarchy."
@@ -160,7 +160,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                                 eyebrow="The Sacred Covenant"
                                 title={
                                     <>
-                                        We leave <em className="font-normal italic text-[#34D399]">no comrade</em> behind.
+                                        We leave <em className="font-normal italic text-[#F4C2C7]">no comrade</em> behind.
                                     </>
                                 }
                                 intro="Medical lifelines, protected futures for the children of fallen batchmates, and privileges shared among our own."
@@ -194,7 +194,7 @@ export default function Marketing({ page, colleges = [], committee = null }: Pro
                                 eyebrow="Central Secretariat"
                                 title={
                                     <>
-                                        Write to the <em className="font-normal italic text-[#34D399]">Council.</em>
+                                        Write to the <em className="font-normal italic text-[#F4C2C7]">Council.</em>
                                     </>
                                 }
                                 intro="For membership verification, Grand Reunion 2027 reservations, welfare endowments, or regional chapter affiliations."

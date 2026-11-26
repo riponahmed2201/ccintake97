@@ -62,7 +62,7 @@ const HOUSE_SWATCH: Record<string, string> = {
     Blue: 'bg-blue-600',
     Green: 'bg-emerald-600',
     Yellow: 'bg-yellow-400',
-    Maroon: 'bg-[#7F1D1D]',
+    Maroon: 'bg-[#5E121D]',
     White: 'bg-white ring-1 ring-slate-300',
     Orange: 'bg-orange-500',
     Purple: 'bg-purple-600',

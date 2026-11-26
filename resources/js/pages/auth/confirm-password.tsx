@@ -13,7 +13,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { store } from '@/routes/password/confirm';
 
 const fieldClass =
-    'h-12 rounded-xl border-[#0B1220]/10 bg-white pl-11 text-[15px] shadow-none placeholder:text-[#0B1220]/35 focus-visible:border-[#047857] focus-visible:ring-4 focus-visible:ring-[#10B981]/15';
+    'h-12 rounded-xl border-[#0B1220]/10 bg-white pl-11 text-[15px] shadow-none placeholder:text-[#0B1220]/35 focus-visible:border-[#5E121D] focus-visible:ring-4 focus-visible:ring-[#450D15]/15';
 
 export default function ConfirmPassword() {
     return (

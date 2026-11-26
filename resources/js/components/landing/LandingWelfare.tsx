@@ -11,18 +11,18 @@ export function LandingWelfare({ omitHeading = false, className = '' }: { omitHe
                     <Reveal>
                         <div className="flex flex-col justify-between gap-6 border-b border-[#091324]/10 pb-8 md:flex-row md:items-end">
                             <div className="max-w-2xl">
-                                <p className="text-[11px] font-medium tracking-[0.26em] text-[#047857] uppercase">
+                                <p className="text-[11px] font-medium tracking-[0.26em] text-[#5E121D] uppercase">
                                     Endowment &amp; Mutual Aid
                                 </p>
                                 <h2 className="mt-2 font-serif text-3xl font-medium text-[#091324] sm:text-4xl">
-                                    Four pillars of <em className="font-normal italic text-[#047857]">brotherhood.</em>
+                                    Four pillars of <em className="font-normal italic text-[#5E121D]">brotherhood.</em>
                                 </h2>
                                 <p className="mt-3 text-[15.5px] leading-relaxed text-[#4A4F5C]">
                                     Every contribution is ring-fenced, independently audited, and deployed with zero administrative overhead.
                                 </p>
                             </div>
-                            <div className="flex shrink-0 items-center gap-2.5 rounded-full bg-[#FAF8F3] px-4 py-2 text-[13px] font-semibold text-[#091324] ring-1 ring-[#10B981]/35">
-                                <ShieldCheck className="h-4 w-4 text-[#047857]" />
+                            <div className="flex shrink-0 items-center gap-2.5 rounded-full bg-[#F8FAFC] px-4 py-2 text-[13px] font-semibold text-[#091324] ring-1 ring-[#450D15]/35">
+                                <ShieldCheck className="h-4 w-4 text-[#5E121D]" />
                                 <span>100% Audited Fiduciary Parity</span>
                             </div>
                         </div>
@@ -33,13 +33,13 @@ export function LandingWelfare({ omitHeading = false, className = '' }: { omitHe
                             const Icon = w.icon;
                             return (
                                 <Reveal key={w.title} delay={i * 70} className="h-full">
-                                    <article className="group flex h-full flex-col justify-between rounded-2xl bg-[#FAF8F3] p-6 ring-1 ring-[#091324]/[0.07] transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:ring-[#10B981]/45 hover:shadow-md">
+                                    <article className="group flex h-full flex-col justify-between rounded-2xl bg-[#F8FAFC] p-6 ring-1 ring-[#091324]/[0.07] transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:ring-[#450D15]/45 hover:shadow-md">
                                         <div>
                                             <div className="flex items-center justify-between">
-                                                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#091324] text-[#34D399] transition-colors group-hover:bg-[#047857] group-hover:text-white">
+                                                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#091324] text-[#F4C2C7] transition-colors group-hover:bg-[#5E121D] group-hover:text-white">
                                                     <Icon className="h-5 w-5" strokeWidth={1.6} />
                                                 </span>
-                                                <span className="text-[10.5px] font-semibold tracking-[0.18em] text-[#047857] uppercase">{w.label}</span>
+                                                <span className="text-[10.5px] font-semibold tracking-[0.18em] text-[#5E121D] uppercase">{w.label}</span>
                                             </div>
                                             <div className="mt-6 font-sans text-3xl font-bold tracking-tight text-[#091324] tabular-nums">{w.figure}</div>
                                             <h3 className="mt-2 text-[17px] font-semibold text-[#091324]">{w.title}</h3>
@@ -77,13 +77,13 @@ export function LandingWelfare({ omitHeading = false, className = '' }: { omitHe
                                         const Icon = w.icon;
                                         return (
                                             <Reveal key={w.title} delay={i * 80} className="h-full">
-                                                <article className="group flex h-full flex-col justify-between rounded-2xl border border-[#091324]/[0.08] bg-[#FAF8F3] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[#10B981]/45 hover:bg-white hover:shadow-[0_18px_40px_-20px_rgba(9,19,36,0.16)]">
+                                                <article className="group flex h-full flex-col justify-between rounded-2xl border border-[#091324]/[0.08] bg-[#F8FAFC] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[#450D15]/45 hover:bg-white hover:shadow-[0_18px_40px_-20px_rgba(9,19,36,0.16)]">
                                                     <div>
                                                         <div className="flex items-center justify-between gap-2">
-                                                            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#091324] text-[#34D399] transition-colors group-hover:bg-[#047857] group-hover:text-white">
+                                                            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#091324] text-[#F4C2C7] transition-colors group-hover:bg-[#5E121D] group-hover:text-white">
                                                                 <Icon className="h-5 w-5" strokeWidth={1.6} />
                                                             </span>
-                                                            <span className="text-[10.5px] font-semibold tracking-[0.16em] text-[#047857] uppercase">{w.label}</span>
+                                                            <span className="text-[10.5px] font-semibold tracking-[0.16em] text-[#5E121D] uppercase">{w.label}</span>
                                                         </div>
                                                         <div className="mt-6 font-sans text-3xl font-bold tracking-tight text-[#091324] tabular-nums">{w.figure}</div>
                                                         <h3 className="mt-2 text-[17px] font-semibold text-[#091324]">{w.title}</h3>
