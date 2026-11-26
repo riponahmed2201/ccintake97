@@ -91,7 +91,8 @@ export function LandingHero({
     const activeIndex = heroSlide % slides.length;
 
     return (
-        <section className="relative isolate flex min-h-[calc(100svh-76px)] items-end overflow-hidden bg-brand-ink-deep text-brand-cream-text">
+        <>
+        <section className="relative isolate flex min-h-[calc(100svh-170px)] items-end overflow-hidden bg-brand-ink-deep text-brand-cream-text">
             {slides.map((sl, i) => {
                 const active = i === activeIndex;
                 return (
@@ -111,10 +112,6 @@ export function LandingHero({
             })}
             <div className={`${LANDING_CONTAINER} ${LANDING_HERO_INNER}`}>
                 <Reveal>
-                    <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-[#F4C2C7]/30 bg-[#450D15]/85 px-4 py-1.5 text-[11px] font-medium tracking-[0.22em] text-white uppercase shadow-sm backdrop-blur-md">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#F4C2C7]" />
-                        CCINTAKE 97 · Ten Cadet Colleges · Est. {metrics.intake_year}
-                    </div>
                     <h1 className="max-w-4xl font-serif text-[3rem] leading-[0.98] font-semibold tracking-[-0.02em] drop-shadow-[0_2px_14px_rgba(0,0,0,0.55)] sm:text-6xl lg:text-[6.25rem]">
                         {heroConfig?.headline || 'Different colleges.'}
                         <br />
@@ -136,51 +133,52 @@ export function LandingHero({
                         </ExploreLink>
                     </div>
                 </Reveal>
+            </div>
+        </section>
 
-                <Reveal delay={400}>
-                    <div className="mt-14 flex flex-col gap-6 rounded-2xl border border-white/10 bg-[#071018]/55 px-6 py-5 backdrop-blur-md sm:mt-18 sm:flex-row sm:items-center sm:justify-between lg:px-8 lg:py-6">
-                        <dl className="flex gap-10 sm:gap-16">
-                            {[
-                                { v: String(metrics.total_colleges), l: 'Colleges' },
-                                { v: verifiedLabel, l: 'Verified', title: metrics.verified_members > 0 ? undefined : 'Updates as members verify' },
-                                { v: String(metrics.intake_year), l: 'Intake' },
-                            ].map((st) => (
-                                <div key={st.l} title={st.title}>
-                                    <dd className="font-sans text-3xl font-bold tracking-tight text-white tabular-nums sm:text-4xl">{st.v}</dd>
-                                    <dt className="mt-1 text-[11px] font-medium tracking-[0.24em] text-brand-gold-bright/80 uppercase">{st.l}</dt>
-                                </div>
-                            ))}
-                        </dl>
-                        <div className="flex flex-col items-start gap-3 sm:items-end" onMouseEnter={() => setHeroPaused(true)} onMouseLeave={() => setHeroPaused(false)}>
-                            <div key={activeIndex} className="flex animate-in items-center gap-3 duration-700 fade-in slide-in-from-bottom-1">
-                                {(() => {
-                                    const col = mergedColleges.find((c) => c.short_name === slides[activeIndex].college);
-                                    return col?.logo_url ? <img src={col.logo_url} alt="" className="h-9 w-9 rounded-full bg-white object-contain p-0.5" /> : null;
-                                })()}
-                                <div className="sm:text-right">
-                                    <div className="text-[14px] font-medium text-white">{slides[activeIndex].caption}</div>
-                                    <div className="text-[11px] tracking-[0.18em] text-white/45 uppercase">
-                                        {String(activeIndex + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex flex-nowrap items-center justify-start gap-0.5 sm:justify-end" role="tablist" aria-label="Hero slides">
-                                {slides.map((sl, i) => (
-                                    <HeroSlideDot
-                                        key={sl.src}
-                                        active={i === activeIndex}
-                                        passed={i < activeIndex}
-                                        paused={heroPaused}
-                                        slideKey={activeIndex}
-                                        label={sl.caption}
-                                        onSelect={() => setHeroSlide(i)}
-                                    />
-                                ))}
+        <div className="border-b border-[#450D15]/15 bg-[#450D15] text-white">
+            <div className={`${LANDING_CONTAINER} flex flex-col gap-6 py-5 sm:flex-row sm:items-center sm:justify-between lg:py-6`}>
+                <dl className="flex gap-10 sm:gap-16">
+                    {[
+                        { v: String(metrics.total_colleges), l: 'Colleges' },
+                        { v: verifiedLabel, l: 'Verified', title: metrics.verified_members > 0 ? undefined : 'Updates as members verify' },
+                        { v: String(metrics.intake_year), l: 'Intake' },
+                    ].map((st) => (
+                        <div key={st.l} title={st.title}>
+                            <dd className="font-sans text-3xl font-bold tracking-tight text-white tabular-nums sm:text-4xl">{st.v}</dd>
+                            <dt className="mt-1 text-[11px] font-medium tracking-[0.24em] text-[#F4C2C7]/85 uppercase">{st.l}</dt>
+                        </div>
+                    ))}
+                </dl>
+                <div className="flex flex-col items-start gap-2.5 sm:items-end" onMouseEnter={() => setHeroPaused(true)} onMouseLeave={() => setHeroPaused(false)}>
+                    <div key={activeIndex} className="flex animate-in items-center gap-3 duration-700 fade-in slide-in-from-bottom-1">
+                        {(() => {
+                            const col = mergedColleges.find((c) => c.short_name === slides[activeIndex].college);
+                            return col?.logo_url ? <img src={col.logo_url} alt="" className="h-9 w-9 rounded-full bg-white object-contain p-0.5" /> : null;
+                        })()}
+                        <div className="sm:text-right">
+                            <div className="text-[14px] font-medium text-white">{slides[activeIndex].caption}</div>
+                            <div className="text-[11px] tracking-[0.18em] text-[#F4C2C7]/75 uppercase">
+                                {String(activeIndex + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
                             </div>
                         </div>
                     </div>
-                </Reveal>
+                    <div className="flex flex-nowrap items-center justify-start gap-0.5 sm:justify-end" role="tablist" aria-label="Hero slides">
+                        {slides.map((sl, i) => (
+                            <HeroSlideDot
+                                key={sl.src}
+                                active={i === activeIndex}
+                                passed={i < activeIndex}
+                                paused={heroPaused}
+                                slideKey={activeIndex}
+                                label={sl.caption}
+                                onSelect={() => setHeroSlide(i)}
+                            />
+                        ))}
+                    </div>
+                </div>
             </div>
-        </section>
+        </div>
+        </>
     );
 }
