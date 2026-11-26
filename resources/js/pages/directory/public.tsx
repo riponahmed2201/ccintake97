@@ -278,7 +278,7 @@ export default function PublicDirectory({ members, colleges, filters, total }: P
                                                                 <span className="text-[8px] font-bold text-[#0B1220]">{code || 'CC'}</span>
                                                             )}
                                                         </span>
-                                                        {code ? `${code} ’97` : 'INTAKE 97'}
+                                                        {code ? `${code} ’97` : 'CCINTAKE 97'}
                                                     </span>
                                                     <span
                                                         className="flex h-7 w-7 items-center justify-center rounded-full bg-white/95 text-emerald-600 shadow-xs ring-1 ring-[#0B1220]/10"

@@ -237,7 +237,7 @@ export default function StatusPage({ status, message }: StatusPageProps) {
     if (auth) {
         return (
             <MemberLayout title={meta.title} breadcrumbs={[{ title: `${status}` }]}>
-                <Head title={`${status} ${meta.title} - INTAKE97.COM`} />
+                <Head title={`${status} ${meta.title} - CCINTAKE97.COM`} />
                 {content}
             </MemberLayout>
         );
@@ -245,7 +245,7 @@ export default function StatusPage({ status, message }: StatusPageProps) {
 
     return (
         <>
-            <Head title={`${status} ${meta.title} - INTAKE97.COM`} />
+            <Head title={`${status} ${meta.title} - CCINTAKE97.COM`} />
             {content}
         </>
     );

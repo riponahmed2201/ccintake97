@@ -86,7 +86,7 @@ export default function EventsIndex({ events, categories = [], filters }: Events
             title="Events & Reunion Management"
             breadcrumbs={[{ title: 'Events' }]}
         >
-            <Head title="Events Management - INTAKE 97 Admin" />
+            <Head title="Events Management - CCINTAKE 97 Admin" />
 
             <div className="space-y-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

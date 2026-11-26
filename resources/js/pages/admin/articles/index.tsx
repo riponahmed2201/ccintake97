@@ -106,7 +106,7 @@ export default function ArticlesIndex({ articles, categories = [], filters }: Ar
             title="News & Announcements"
             breadcrumbs={[{ title: 'News & Notices' }]}
         >
-            <Head title="News & Notices - INTAKE 97 Admin" />
+            <Head title="News & Notices - CCINTAKE 97 Admin" />
 
             <div className="space-y-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

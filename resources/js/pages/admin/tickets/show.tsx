@@ -80,7 +80,7 @@ export default function TicketShow({ ticket }: TicketShowProps) {
                 { title: ticket.ticket_no },
             ]}
         >
-            <Head title={`Ticket ${ticket.ticket_no} - INTAKE 97 Admin`} />
+            <Head title={`Ticket ${ticket.ticket_no} - CCINTAKE 97 Admin`} />
 
             <div className="w-full space-y-6">
                 <Link

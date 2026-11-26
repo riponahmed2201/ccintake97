@@ -33,7 +33,7 @@ export default function MemberArticlesIndex({
             title="News & Notices"
             breadcrumbs={[{ title: 'News & Notices' }]}
         >
-            <Head title="News & Notices - INTAKE97.COM" />
+            <Head title="News & Notices - CCINTAKE97.COM" />
 
             <div className="w-full space-y-6">
                 {/* Page Header */}

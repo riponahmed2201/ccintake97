@@ -79,7 +79,7 @@ Route::middleware(['auth'])->prefix('member')->name('member.')->group(function (
 });
 
 // Admin Panel Routes
-Route::middleware(['auth', 'role:super_admin|association_admin|membership_manager|membership_reviewer|event_manager|content_editor|content_publisher'])
+Route::middleware(['auth', 'role_or_permission:super_admin|admin.access'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -156,11 +156,16 @@ Route::middleware(['auth', 'role:super_admin|association_admin|membership_manage
         Route::get('/audit-logs', [Admin\AuditLogController::class, 'index'])->name('audit_logs.index');
         Route::get('/reports', [Admin\ReportController::class, 'index'])->name('reports.index');
         Route::get('/reports/download/{type}', [Admin\ReportController::class, 'download'])->name('reports.download');
+        // Users, Roles & Settings
+        Route::get('/users', [Admin\UserController::class, 'index'])->name('users.index');
+        Route::post('/users', [Admin\UserController::class, 'store'])->name('users.store');
+        Route::post('/users/{userId}/roles', [Admin\UserController::class, 'assignRoles'])->name('users.assign_roles');
+        Route::post('/users/{userId}/toggle-status', [Admin\UserController::class, 'toggleStatus'])->name('users.toggle_status');
+
         Route::get('/roles', [Admin\RoleController::class, 'index'])->name('roles.index');
         Route::post('/roles', [Admin\RoleController::class, 'store'])->name('roles.store');
         Route::put('/roles/{roleId}', [Admin\RoleController::class, 'update'])->name('roles.update');
         Route::delete('/roles/{roleId}', [Admin\RoleController::class, 'destroy'])->name('roles.destroy');
-        Route::post('/roles/assign/{userId}', [Admin\RoleController::class, 'assign'])->name('roles.assign');
         Route::get('/settings', [Admin\SettingController::class, 'index'])->name('settings.index');
         Route::put('/settings', [Admin\SettingController::class, 'update'])->name('settings.update');
     });

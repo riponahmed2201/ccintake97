@@ -39,7 +39,7 @@ export default function MemberTicketShow({ ticket }: TicketShowProps) {
                 { title: ticket.ticket_no },
             ]}
         >
-            <Head title={`Ticket ${ticket.ticket_no} - INTAKE97.COM`} />
+            <Head title={`Ticket ${ticket.ticket_no} - CCINTAKE97.COM`} />
 
             <div className="w-full space-y-6">
                 <div>

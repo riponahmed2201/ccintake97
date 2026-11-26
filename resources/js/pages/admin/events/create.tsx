@@ -83,7 +83,7 @@ export default function EventCreate({ categories }: EventCreateProps) {
                 { title: 'Create Event' },
             ]}
         >
-            <Head title="Create New Event - INTAKE 97 Admin" />
+            <Head title="Create New Event - CCINTAKE 97 Admin" />
 
             <div className="w-full space-y-5">
                 <Link
@@ -111,7 +111,7 @@ export default function EventCreate({ categories }: EventCreateProps) {
                                 <input
                                     required
                                     className={fieldClass}
-                                    placeholder="e.g. INTAKE 97 Grand Silver Jubilee Reunion"
+                                    placeholder="e.g. CCINTAKE 97 Grand Silver Jubilee Reunion"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />

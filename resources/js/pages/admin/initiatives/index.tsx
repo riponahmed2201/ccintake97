@@ -129,7 +129,7 @@ export default function InitiativesIndex({ initiatives, approvedMembers, filters
             title="Community Welfare & Initiatives"
             breadcrumbs={[{ title: 'Initiatives' }]}
         >
-            <Head title="Community Initiatives - INTAKE 97 Admin" />
+            <Head title="Community Initiatives - CCINTAKE 97 Admin" />
 
             <div className="space-y-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

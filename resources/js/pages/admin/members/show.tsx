@@ -103,7 +103,7 @@ export default function MemberShow({ member, auditLogs }: MemberShowProps) {
                 { title: member.user?.name || 'Profile' },
             ]}
         >
-            <Head title={`${member.user?.name} - Member Profile - INTAKE 97 Admin`} />
+            <Head title={`${member.user?.name} - Member Profile - CCINTAKE 97 Admin`} />
 
             <div className="w-full space-y-6">
                 {/* Back & Action Toolbar */}

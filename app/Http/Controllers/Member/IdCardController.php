@@ -3,15 +3,20 @@
 namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class IdCardController extends Controller
 {
-    public function show(Request $request): Response
+    public function show(Request $request): Response|RedirectResponse
     {
         $user = $request->user();
+        if (! $user->member) {
+            return redirect()->route('member.dashboard')->with('info', 'Digital Alumni ID is only available for alumni member accounts.');
+        }
+
         $member = $user->member->load(['user', 'college', 'profile.industry']);
 
         // Generate or retrieve QR verification payload

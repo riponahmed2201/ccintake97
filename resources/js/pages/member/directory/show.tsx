@@ -47,7 +47,7 @@ export default function DirectoryShow({
                 { title: member.user?.name || 'Profile' },
             ]}
         >
-            <Head title={`${member.user?.name} - INTAKE 97 Alumni Profile`} />
+            <Head title={`${member.user?.name} - CCINTAKE 97 Alumni Profile`} />
 
             <div className="mx-auto max-w-4xl space-y-6">
                 <Link

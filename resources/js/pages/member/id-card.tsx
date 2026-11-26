@@ -36,7 +36,7 @@ export default function IdCardPage({ member, photoUrl, qrPayload }: IdCardPagePr
             title="Digital Alumni ID"
             breadcrumbs={[{ title: 'Digital Alumni ID' }]}
         >
-            <Head title="Digital Alumni ID - INTAKE97.COM" />
+            <Head title="Digital Alumni ID - CCINTAKE97.COM" />
 
             <div className="w-full space-y-6">
                 {/* Page Header */}
@@ -46,7 +46,7 @@ export default function IdCardPage({ member, photoUrl, qrPayload }: IdCardPagePr
                             Official Digital Membership Card
                         </h1>
                         <p className="mt-1 text-[13px] text-[#78829D]">
-                            Authorized credentials for INTAKE 97 reunions, chapter privileges, and events.
+                            Authorized credentials for CCINTAKE 97 reunions, chapter privileges, and events.
                         </p>
                     </div>
                     <div className="flex items-center gap-2.5">
@@ -89,7 +89,7 @@ export default function IdCardPage({ member, photoUrl, qrPayload }: IdCardPagePr
                                         </div>
                                         <div>
                                             <div className="text-[14px] font-bold tracking-[0.08em] text-[#E8D5A3] uppercase">
-                                                INTAKE 97
+                                                CCINTAKE 97
                                             </div>
                                             <div className="text-[10px] font-medium tracking-[0.14em] text-slate-300 uppercase">
                                                 Cadet College Alumni Association
@@ -215,7 +215,7 @@ export default function IdCardPage({ member, photoUrl, qrPayload }: IdCardPagePr
                                 Verification Notice
                             </div>
                             <p className="mt-1.5 text-[12.5px] leading-relaxed text-[#78829D]">
-                                This digital alumni identity card is issued by INTAKE 97 Central Administration. The embedded QR code enables authorized event gate staff to verify identity and event access without exposing private contact data.
+                                This digital alumni identity card is issued by CCINTAKE 97 Central Administration. The embedded QR code enables authorized event gate staff to verify identity and event access without exposing private contact data.
                             </p>
                         </div>
                     </div>

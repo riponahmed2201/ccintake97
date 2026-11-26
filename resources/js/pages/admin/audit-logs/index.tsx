@@ -66,7 +66,7 @@ export default function AuditLogsIndex({ logs, modules = [], filters }: AuditLog
             title="System Audit Logs & Security Activity"
             breadcrumbs={[{ title: 'Audit Logs' }]}
         >
-            <Head title="Audit Logs - INTAKE 97 Admin" />
+            <Head title="Audit Logs - CCINTAKE 97 Admin" />
 
             <div className="space-y-6">
                 <div>

@@ -85,7 +85,7 @@ export default function ApplicationsIndex({
             title="Membership Applications"
             breadcrumbs={[{ title: 'Applications' }]}
         >
-            <Head title="Membership Applications Queue - INTAKE 97 Admin" />
+            <Head title="Membership Applications Queue - CCINTAKE 97 Admin" />
 
             <div className="w-full space-y-6">
                 <div>

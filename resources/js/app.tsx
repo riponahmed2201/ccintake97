@@ -19,12 +19,11 @@ void createInertiaApp({
             case name.startsWith('news/'):
             case name.startsWith('member/'):
             case name.startsWith('admin/'):
+            case name.startsWith('settings/'):
             case name.startsWith('errors/'):
                 return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
-            case name.startsWith('settings/'):
-                return [AppLayout, SettingsLayout];
             default:
                 return AppLayout;
         }

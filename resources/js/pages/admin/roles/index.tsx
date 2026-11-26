@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,13 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
     Table,
     TableBody,
     TableCell,
@@ -20,7 +27,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { Edit2, Plus, Search, ShieldCheck, Trash2, UserCheck } from 'lucide-react';
+import { Edit2, Eye, MoreHorizontal, Plus, Search, ShieldCheck, Trash2 } from 'lucide-react';
 
 interface PermissionItem {
     id: number;
@@ -30,21 +37,14 @@ interface PermissionItem {
 interface RoleItem {
     id: number;
     name: string;
+    users_count: number;
+    permissions_count: number;
     permissions: PermissionItem[];
-}
-
-interface StaffUserItem {
-    id: number;
-    name: string;
-    email: string;
-    roles: { id: number; name: string }[];
 }
 
 interface RolesIndexProps {
-    roles: RoleItem[];
-    permissions: PermissionItem[];
-    staffUsers: {
-        data: StaffUserItem[];
+    roles: {
+        data: RoleItem[];
         current_page: number;
         last_page: number;
         per_page?: number;
@@ -53,22 +53,17 @@ interface RolesIndexProps {
         total: number;
         links: any[];
     };
+    permissions: PermissionItem[];
     filters: {
         search?: string;
-        role?: string;
         per_page?: string;
     };
 }
 
 const PROTECTED_ROLES = ['super_admin', 'regular_member', 'verified_member'];
 
-const ALL = '__all__';
-
 const fieldClass =
     'h-10 w-full rounded-md border !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none outline-none transition-all duration-200 placeholder:!text-[#99A1B7] hover:!border-[#C4CADA] focus:!border-[#1B84FF] focus:!bg-white focus:!ring-[3px] focus:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:!text-[#071437]';
-
-const selectTriggerClass =
-    '!h-10 w-full cursor-pointer rounded-md !border-[#DBDFE9] !bg-[#FCFCFC] px-3 text-[13px] font-normal !text-[#071437] !shadow-none transition-all duration-200 hover:!border-[#C4CADA] hover:!bg-[#FCFCFC] focus-visible:!border-[#1B84FF] focus-visible:!bg-white focus-visible:!ring-[3px] focus-visible:!ring-[#1B84FF]/10 dark:!bg-[#FCFCFC] dark:hover:!bg-[#FCFCFC]';
 
 const selectMenuClass =
     'z-[60] rounded-xl !border-[#F1F1F4] !bg-white p-1 !text-[#071437] shadow-[0_12px_32px_-8px_rgba(7,20,55,0.16)] dark:!bg-white dark:!text-[#071437]';
@@ -76,14 +71,24 @@ const selectMenuClass =
 const selectItemClass =
     'cursor-pointer rounded-lg py-2 pr-8 pl-2.5 text-[13px] text-[#071437] focus:!bg-[#F1F6FF] focus:!text-[#1B84FF] dark:text-[#071437]';
 
-export default function RolesIndex({ roles, permissions = [], staffUsers, filters }: RolesIndexProps) {
-    const [searchQuery, setSearchQuery] = useState(filters?.search || '');
-    const [selectedRole, setSelectedRole] = useState(filters?.role || '');
-    const [perPage, setPerPage] = useState(filters?.per_page || String(staffUsers.per_page || 20));
-    const [selectedUser, setSelectedUser] = useState<StaffUserItem | null>(null);
-    const [userRoles, setUserRoles] = useState<string[]>([]);
-    const [submitting, setSubmitting] = useState(false);
+function groupPermissionsByModule(items: PermissionItem[]): [string, PermissionItem[]][] {
+    const map = new Map<string, PermissionItem[]>();
+    for (const perm of items) {
+        const prefix = perm.name.includes('.') ? perm.name.split('.')[0] : 'general';
+        if (!map.has(prefix)) map.set(prefix, []);
+        map.get(prefix)!.push(perm);
+    }
+    return Array.from(map.entries());
+}
 
+export default function RolesIndex({ roles, permissions = [], filters }: RolesIndexProps) {
+    const [searchQuery, setSearchQuery] = useState(filters?.search || '');
+    const [perPage, setPerPage] = useState(filters?.per_page || String(roles.per_page || 20));
+
+    // View Role Modal
+    const [viewingRole, setViewingRole] = useState<RoleItem | null>(null);
+
+    // Create / Edit Role Modal
     const [roleModalOpen, setRoleModalOpen] = useState(false);
     const [editingRole, setEditingRole] = useState<RoleItem | null>(null);
     const [roleName, setRoleName] = useState('');
@@ -92,7 +97,17 @@ export default function RolesIndex({ roles, permissions = [], staffUsers, filter
     const [roleSaving, setRoleSaving] = useState(false);
     const [roleNameError, setRoleNameError] = useState('');
 
-    const staffRoles = roles.filter((r) => !['regular_member', 'verified_member'].includes(r.name));
+    const applyFilter = (key: string, val: string) => {
+        router.get(
+            '/admin/roles',
+            {
+                search: searchQuery,
+                per_page: perPage,
+                [key]: val,
+            },
+            { preserveState: true, replace: true },
+        );
+    };
 
     const openCreateRole = () => {
         setEditingRole(null);
@@ -116,6 +131,16 @@ export default function RolesIndex({ roles, permissions = [], staffUsers, filter
         setRolePermissions((prev) =>
             prev.includes(permName) ? prev.filter((p) => p !== permName) : [...prev, permName],
         );
+    };
+
+    const toggleModulePermissions = (modulePerms: PermissionItem[]) => {
+        const names = modulePerms.map((p) => p.name);
+        const allSelected = names.every((n) => rolePermissions.includes(n));
+        if (allSelected) {
+            setRolePermissions((prev) => prev.filter((p) => !names.includes(p)));
+        } else {
+            setRolePermissions((prev) => Array.from(new Set([...prev, ...names])));
+        }
     };
 
     const handleRoleSubmit = (e: React.FormEvent) => {
@@ -152,66 +177,33 @@ export default function RolesIndex({ roles, permissions = [], staffUsers, filter
         router.delete(`/admin/roles/${role.id}`, { preserveScroll: true });
     };
 
-    const filteredPermissions = permissions.filter((p) =>
-        p.name.toLowerCase().includes(permSearch.trim().toLowerCase()),
-    );
+    const groupedEditPermissions = useMemo(() => {
+        const q = permSearch.trim().toLowerCase();
+        const filtered = q
+            ? permissions.filter((p) => p.name.toLowerCase().includes(q))
+            : permissions;
+        return groupPermissionsByModule(filtered);
+    }, [permissions, permSearch]);
 
-    const applyFilter = (key: string, val: string) => {
-        const query = {
-            search: searchQuery,
-            role: selectedRole,
-            per_page: perPage,
-            [key]: val,
-        };
-        router.get('/admin/roles', query, { preserveState: true, replace: true });
-    };
-
-    const openAssign = (u: StaffUserItem) => {
-        setSelectedUser(u);
-        setUserRoles(u.roles.map((r) => r.name));
-    };
-
-    const handleAssignSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!selectedUser || userRoles.length === 0 || submitting) return;
-
-        router.post(
-            `/admin/roles/assign/${selectedUser.id}`,
-            {
-                roles: userRoles,
-            },
-            {
-                preserveScroll: true,
-                onStart: () => setSubmitting(true),
-                onFinish: () => setSubmitting(false),
-                onSuccess: () => setSelectedUser(null),
-            },
-        );
-    };
-
-    const toggleRole = (roleName: string) => {
-        if (userRoles.includes(roleName)) {
-            setUserRoles(userRoles.filter((r) => r !== roleName));
-        } else {
-            setUserRoles([...userRoles, roleName]);
-        }
-    };
+    const groupedViewPermissions = useMemo(() => {
+        return viewingRole ? groupPermissionsByModule(viewingRole.permissions) : [];
+    }, [viewingRole]);
 
     return (
         <AdminLayout
-            title="User Roles & Access Control"
+            title="Roles & Permissions"
             breadcrumbs={[{ title: 'Roles & Permissions' }]}
         >
-            <Head title="Roles & Access Control - INTAKE 97 Admin" />
+            <Head title="Roles & Permissions - CCINTAKE 97 Admin" />
 
             <div className="space-y-6">
                 <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                     <div>
                         <h1 className="text-[20px] font-bold tracking-tight text-[#071437]">
-                            Roles & Action-Level Permission Management
+                            Roles & Action-Level Permissions
                         </h1>
                         <p className="mt-1 text-[13px] text-[#78829D]">
-                            Spatie Role-Based Access Control (RBAC) assigning operational privileges across admin modules.
+                            Create roles, inspect permission matrices by module, and configure granular access controls.
                         </p>
                     </div>
                     <Button
@@ -225,54 +217,25 @@ export default function RolesIndex({ roles, permissions = [], staffUsers, filter
 
                 {/* Filter Toolbar */}
                 <div className="rounded-xl border border-[#F1F1F4] bg-white p-4 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                applyFilter('search', searchQuery);
-                            }}
-                            className="relative sm:col-span-2"
-                        >
-                            <Search className="absolute top-3 left-3 size-4 text-[#99A1B7]" />
-                            <Input
-                                placeholder="Search by staff name or email..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className={`${fieldClass} pl-9`}
-                            />
-                        </form>
-                        <Select
-                            value={selectedRole || ALL}
-                            onValueChange={(val) => {
-                                const next = val === ALL ? '' : val;
-                                setSelectedRole(next);
-                                applyFilter('role', next);
-                            }}
-                        >
-                            <SelectTrigger className={selectTriggerClass}>
-                                <SelectValue placeholder="All Roles" />
-                            </SelectTrigger>
-                            <SelectContent className={selectMenuClass}>
-                                <SelectItem value={ALL} className={selectItemClass}>All Roles</SelectItem>
-                                {staffRoles.map((r) => (
-                                    <SelectItem key={r.id} value={r.name} className={`${selectItemClass} uppercase`}>
-                                        {r.name.replace(/_/g, ' ')}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            applyFilter('search', searchQuery);
+                        }}
+                        className="relative max-w-md"
+                    >
+                        <Search className="absolute top-3 left-3 size-4 text-[#99A1B7]" />
+                        <Input
+                            placeholder="Search role by name..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className={`${fieldClass} pl-9`}
+                        />
+                    </form>
                 </div>
 
+                {/* Roles Table */}
                 <div className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
-                    <div className="flex items-center gap-2.5 border-b border-[#F1F1F4] px-6 py-4">
-                        <span className="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
-                            <UserCheck className="size-4" />
-                        </span>
-                        <h2 className="text-[15px] font-bold text-[#071437]">
-                            Administrative Staff & Role Assignments
-                        </h2>
-                    </div>
                     <div className="overflow-x-auto">
                         <Table>
                             <TableHeader className="bg-[#FCFCFC]">
@@ -281,63 +244,111 @@ export default function RolesIndex({ roles, permissions = [], staffUsers, filter
                                         SL
                                     </TableHead>
                                     <TableHead className="px-5 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
-                                        User Name & Email
+                                        Role Name
                                     </TableHead>
                                     <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
-                                        Assigned Roles
+                                        Type
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Assigned Users
+                                    </TableHead>
+                                    <TableHead className="px-4 py-3.5 text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
+                                        Permissions
                                     </TableHead>
                                     <TableHead className="px-5 py-3.5 text-right text-[11.5px] font-semibold tracking-wide text-[#78829D] uppercase">
-                                        Action
+                                        Actions
                                     </TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {staffUsers.data.length === 0 ? (
+                                {roles.data.length === 0 ? (
                                     <TableRow className="border-[#F1F1F4] hover:bg-transparent">
-                                        <TableCell colSpan={4} className="h-32 text-center text-[13px] text-[#78829D]">
-                                            No administrative staff found.
+                                        <TableCell colSpan={6} className="h-32 text-center text-[13px] text-[#78829D]">
+                                            No roles found.
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    staffUsers.data.map((u, idx) => (
-                                        <TableRow
-                                            key={u.id}
-                                            className="border-[#F1F1F4] transition-colors hover:bg-[#FCFCFC]"
-                                        >
-                                            <TableCell className="px-5 py-3.5 text-[12.5px] font-medium text-[#78829D] tabular-nums">
-                                                {(staffUsers.from || 1) + idx}
-                                            </TableCell>
-                                            <TableCell className="px-5 py-3.5">
-                                                <div className="text-[13px] font-semibold text-[#071437]">
-                                                    {u.name}
-                                                </div>
-                                                <div className="text-[11.5px] text-[#78829D]">
-                                                    {u.email}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="px-4 py-3.5">
-                                                <div className="flex flex-wrap gap-1.5">
-                                                    {u.roles.map((r) => (
-                                                        <span
-                                                            key={r.id}
-                                                            className="inline-flex items-center rounded-md border border-[#DCEBFF] bg-[#F1F6FF] px-2 py-0.5 font-mono text-[11px] font-semibold text-[#1B84FF] uppercase"
-                                                        >
-                                                            {r.name.replace(/_/g, ' ')}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            </TableCell>
-                                            <TableCell className="px-5 py-3.5 text-right">
-                                                <Button
-                                                    variant="outline"
-                                                    onClick={() => openAssign(u)}
-                                                    className="h-8 rounded-lg border-[#DBDFE9] bg-white px-3 text-[12px] font-semibold text-[#071437] hover:border-[#1B84FF] hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
-                                                >
-                                                    <Edit2 className="mr-1.5 size-3.5" /> Edit Roles
-                                                </Button>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))
+                                    roles.data.map((r, idx) => {
+                                        const isProtected = PROTECTED_ROLES.includes(r.name);
+                                        return (
+                                            <TableRow
+                                                key={r.id}
+                                                className="border-[#F1F1F4] transition-colors hover:bg-[#FCFCFC]"
+                                            >
+                                                <TableCell className="px-5 py-3.5 text-[12.5px] font-medium text-[#78829D] tabular-nums">
+                                                    {(roles.from || 1) + idx}
+                                                </TableCell>
+                                                <TableCell className="px-5 py-3.5">
+                                                    <div className="flex items-center gap-2 text-[13px] font-bold text-[#071437] uppercase">
+                                                        <ShieldCheck className="size-4 text-[#1B84FF]" />
+                                                        {r.name.replace(/_/g, ' ')}
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell className="px-4 py-3.5">
+                                                    <span
+                                                        className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${
+                                                            isProtected
+                                                                ? 'border-slate-200 bg-slate-50 text-slate-600'
+                                                                : 'border-[#DCEBFF] bg-[#F1F6FF] text-[#1B84FF]'
+                                                        }`}
+                                                    >
+                                                        {isProtected ? 'System' : 'Custom'}
+                                                    </span>
+                                                </TableCell>
+                                                <TableCell className="px-4 py-3.5 text-[13px] font-medium text-[#4B5675]">
+                                                    {r.users_count} {r.users_count === 1 ? 'user' : 'users'}
+                                                </TableCell>
+                                                <TableCell className="px-4 py-3.5">
+                                                    <span className="inline-flex items-center rounded-full border border-[#E5E7EB] bg-[#FCFCFC] px-2.5 py-0.5 text-[11px] font-semibold text-[#4B5675]">
+                                                        {r.permissions_count} permissions
+                                                    </span>
+                                                </TableCell>
+                                                <TableCell className="px-5 py-3.5 text-right">
+                                                    <div className="flex justify-end">
+                                                        <DropdownMenu modal={false}>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <button
+                                                                    type="button"
+                                                                    className="inline-flex size-8 cursor-pointer items-center justify-center rounded-lg border border-transparent text-[#78829D] transition-colors hover:border-[#DBDFE9] hover:bg-[#F9F9F9] hover:text-[#071437]"
+                                                                    aria-label="Role actions"
+                                                                >
+                                                                    <MoreHorizontal className="size-4" />
+                                                                </button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="end" className="w-48 rounded-xl border-[#F1F1F4] !bg-white p-1.5 !text-[#071437] shadow-[0_12px_32px_-8px_rgba(7,20,55,0.16)]">
+                                                                <DropdownMenuItem
+                                                                    onSelect={() => setViewingRole(r)}
+                                                                    className="cursor-pointer rounded-lg px-2.5 py-2 text-[13px] font-medium text-[#071437] focus:!bg-[#F1F6FF] focus:!text-[#1B84FF]"
+                                                                >
+                                                                    <Eye className="size-4 text-[#78829D]" />
+                                                                    View Permissions
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem
+                                                                    onSelect={() => openEditRole(r)}
+                                                                    className="cursor-pointer rounded-lg px-2.5 py-2 text-[13px] font-medium text-[#071437] focus:!bg-[#F1F6FF] focus:!text-[#1B84FF]"
+                                                                >
+                                                                    <Edit2 className="size-4 text-[#78829D]" />
+                                                                    Edit Role
+                                                                </DropdownMenuItem>
+                                                                {!isProtected && (
+                                                                    <>
+                                                                        <DropdownMenuSeparator className="my-1 bg-[#F1F1F4]" />
+                                                                        <DropdownMenuItem
+                                                                            onSelect={() => handleDeleteRole(r)}
+                                                                            className="cursor-pointer rounded-lg px-2.5 py-2 text-[13px] font-medium text-[#F8285A] focus:!bg-[#FFEEF3] focus:!text-[#F8285A]"
+                                                                        >
+                                                                            <Trash2 className="size-4 text-[#F8285A]" />
+                                                                            Delete Role
+                                                                        </DropdownMenuItem>
+                                                                    </>
+                                                                )}
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })
                                 )}
                             </TableBody>
                         </Table>
@@ -347,9 +358,9 @@ export default function RolesIndex({ roles, permissions = [], staffUsers, filter
                     <div className="flex flex-col items-center justify-between gap-3 border-t border-[#F1F1F4] px-5 py-3.5 text-[12.5px] text-[#78829D] sm:flex-row">
                         <div className="flex flex-wrap items-center gap-3">
                             <span>
-                                Showing <strong className="font-semibold text-[#071437]">{staffUsers.from || 0}</strong>–
-                                <strong className="font-semibold text-[#071437]">{staffUsers.to || 0}</strong> of{' '}
-                                <strong className="font-semibold text-[#071437]">{staffUsers.total}</strong> · Page {staffUsers.current_page} of {staffUsers.last_page}
+                                Showing <strong className="font-semibold text-[#071437]">{roles.from || 0}</strong>–
+                                <strong className="font-semibold text-[#071437]">{roles.to || 0}</strong> of{' '}
+                                <strong className="font-semibold text-[#071437]">{roles.total}</strong> · Page {roles.current_page} of {roles.last_page}
                             </span>
                             <div className="flex items-center gap-1.5">
                                 <span className="text-[12px] text-[#78829D]">Rows:</span>
@@ -374,7 +385,7 @@ export default function RolesIndex({ roles, permissions = [], staffUsers, filter
                             </div>
                         </div>
                         <div className="flex flex-wrap items-center gap-1.5">
-                            {staffUsers.links.map((link, idx) => (
+                            {roles.links.map((link, idx) => (
                                 <Link
                                     key={idx}
                                     href={link.url || '#'}
@@ -393,169 +404,87 @@ export default function RolesIndex({ roles, permissions = [], staffUsers, filter
                         </div>
                     </div>
                 </div>
-
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                    {roles.map((r) => {
-                        const isProtected = PROTECTED_ROLES.includes(r.name);
-                        return (
-                            <div
-                                key={r.id}
-                                className="space-y-3 rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]"
-                            >
-                                <div className="flex items-center justify-between gap-2">
-                                    <span className="flex items-center gap-2 text-[13px] font-bold text-[#071437] uppercase">
-                                        <ShieldCheck className="size-4 shrink-0 text-[#1B84FF]" />
-                                        {r.name.replace(/_/g, ' ')}
-                                    </span>
-                                    <div className="flex items-center gap-1.5">
-                                        <span className="inline-flex items-center rounded-full border border-[#E5E7EB] bg-[#FCFCFC] px-2.5 py-0.5 text-[11px] font-semibold text-[#4B5675]">
-                                            {r.permissions.length} perms
-                                        </span>
-                                        <button
-                                            type="button"
-                                            onClick={() => openEditRole(r)}
-                                            title="Edit role & permissions"
-                                            className="flex size-7 cursor-pointer items-center justify-center rounded-lg border border-[#E5E7EB] bg-white text-[#4B5675] transition-colors hover:border-[#1B84FF] hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
-                                        >
-                                            <Edit2 className="size-3.5" />
-                                        </button>
-                                        {!isProtected && (
-                                            <button
-                                                type="button"
-                                                onClick={() => handleDeleteRole(r)}
-                                                title="Delete role"
-                                                className="flex size-7 cursor-pointer items-center justify-center rounded-lg border border-[#E5E7EB] bg-white text-[#4B5675] transition-colors hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600"
-                                            >
-                                                <Trash2 className="size-3.5" />
-                                            </button>
-                                        )}
-                                    </div>
-                                </div>
-                                <div className="flex max-h-24 flex-wrap gap-1.5 overflow-y-auto pt-1">
-                                    {r.permissions.length === 0 ? (
-                                        <span className="text-[11.5px] text-[#99A1B7]">
-                                            No permissions assigned
-                                        </span>
-                                    ) : (
-                                        <>
-                                            {r.permissions.slice(0, 8).map((p) => (
-                                                <span
-                                                    key={p.id}
-                                                    className="rounded-md border border-[#F1F1F4] bg-[#FCFCFC] px-2 py-0.5 font-mono text-[10.5px] text-[#4B5675]"
-                                                >
-                                                    {p.name}
-                                                </span>
-                                            ))}
-                                            {r.permissions.length > 8 && (
-                                                <span className="self-center pl-1 text-[11px] text-[#99A1B7]">
-                                                    +{r.permissions.length - 8} more
-                                                </span>
-                                            )}
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
             </div>
 
-            <Dialog open={!!selectedUser} onOpenChange={(open) => !open && setSelectedUser(null)}>
-                <DialogContent className="flex max-h-[85vh] flex-col gap-0 overflow-hidden rounded-2xl border-[#F1F1F4] !bg-white p-0 !text-[#071437] shadow-[0_20px_50px_-12px_rgba(7,20,55,0.18)] sm:max-w-lg">
+            {/* View Role Modal */}
+            <Dialog open={!!viewingRole} onOpenChange={(open) => !open && setViewingRole(null)}>
+                <DialogContent className="flex max-h-[85vh] flex-col gap-0 overflow-hidden rounded-2xl border-[#F1F1F4] !bg-white p-0 !text-[#071437] shadow-[0_20px_50px_-12px_rgba(7,20,55,0.18)] sm:max-w-2xl">
                     <DialogHeader className="shrink-0 border-b border-[#F1F1F4] bg-[#FCFCFC] px-6 py-5">
                         <div className="flex items-start gap-3 pr-6">
                             <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#F1F6FF] text-[#1B84FF]">
                                 <ShieldCheck className="size-4.5" />
                             </span>
                             <div className="min-w-0">
-                                <DialogTitle className="text-[16px] font-bold text-[#071437]">
-                                    Assign Roles
+                                <DialogTitle className="text-[16px] font-bold text-[#071437] uppercase">
+                                    {viewingRole?.name.replace(/_/g, ' ')}
                                 </DialogTitle>
-                                {selectedUser && (
-                                    <p className="mt-0.5 truncate text-[12.5px] text-[#78829D]">
-                                        <span className="font-semibold text-[#4B5675]">{selectedUser.name}</span>
-                                        {' · '}
-                                        {selectedUser.email}
+                                {viewingRole && (
+                                    <p className="mt-0.5 text-[12.5px] text-[#78829D]">
+                                        {viewingRole.users_count} assigned {viewingRole.users_count === 1 ? 'user' : 'users'} · {viewingRole.permissions_count} permissions
                                     </p>
                                 )}
                             </div>
                         </div>
                     </DialogHeader>
-                    <form onSubmit={handleAssignSubmit} className="flex min-h-0 flex-1 flex-col">
-                        <div className="flex shrink-0 items-center justify-between px-6 pt-4 pb-3 text-[12px] text-[#78829D]">
-                            <span>Select one or more roles for this staff member</span>
-                            <span className="font-semibold text-[#1B84FF]">
-                                {userRoles.length} selected
-                            </span>
-                        </div>
-
-                        <div className="min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain px-6 pb-4">
-                            {roles.map((r) => {
-                                const checked = userRoles.includes(r.name);
-                                return (
-                                    <label
-                                        key={r.id}
-                                        className={`flex cursor-pointer items-center justify-between gap-3 rounded-xl border p-3.5 transition-all ${
-                                            checked
-                                                ? 'border-[#1B84FF] bg-[#F1F6FF]/60 shadow-[0_1px_3px_0_rgba(27,132,255,0.08)]'
-                                                : 'border-[#F1F1F4] bg-[#FCFCFC] hover:border-[#DBDFE9] hover:bg-white'
-                                        }`}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <Checkbox
-                                                checked={checked}
-                                                onCheckedChange={() => toggleRole(r.name)}
-                                                className="size-4.5 cursor-pointer rounded-[5px] !border-[#DBDFE9] !bg-white data-[state=checked]:!border-[#1B84FF] data-[state=checked]:!bg-[#1B84FF] data-[state=checked]:!text-white focus-visible:!ring-[#1B84FF]/20"
-                                            />
-                                            <span className="text-[13px] font-semibold text-[#071437] uppercase">
-                                                {r.name.replace(/_/g, ' ')}
-                                            </span>
-                                        </div>
-                                        <span
-                                            className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${
-                                                checked
-                                                    ? 'border-[#DCEBFF] bg-white text-[#1B84FF]'
-                                                    : 'border-[#E5E7EB] bg-white text-[#78829D]'
-                                            }`}
-                                        >
-                                            {r.permissions.length} perms
-                                        </span>
-                                    </label>
-                                );
-                            })}
-                        </div>
-
-                        {userRoles.length === 0 && (
-                            <p className="shrink-0 px-6 pb-3 text-[12px] font-medium text-rose-600">
-                                Please select at least one role before saving.
+                    <div className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain px-6 py-5">
+                        {groupedViewPermissions.length === 0 ? (
+                            <p className="py-8 text-center text-[13px] text-[#78829D]">
+                                No permissions assigned to this role.
                             </p>
+                        ) : (
+                            groupedViewPermissions.map(([module, perms]) => (
+                                <div key={module} className="rounded-xl border border-[#F1F1F4] bg-[#FCFCFC] p-4">
+                                    <div className="mb-2.5 flex items-center justify-between">
+                                        <span className="text-[12px] font-bold tracking-wide text-[#071437] uppercase">
+                                            {module}
+                                        </span>
+                                        <span className="text-[11px] font-semibold text-[#78829D]">
+                                            {perms.length}
+                                        </span>
+                                    </div>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {perms.map((p) => (
+                                            <span
+                                                key={p.id}
+                                                className="rounded-md border border-[#DCEBFF] bg-white px-2.5 py-1 font-mono text-[11px] font-medium text-[#1B84FF]"
+                                            >
+                                                {p.name}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))
                         )}
-
-                        <DialogFooter className="shrink-0 gap-2 border-t border-[#F1F1F4] bg-[#FCFCFC] px-6 py-4">
+                    </div>
+                    <DialogFooter className="shrink-0 gap-2 border-t border-[#F1F1F4] bg-[#FCFCFC] px-6 py-4">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => setViewingRole(null)}
+                            className="h-9 cursor-pointer rounded-lg !border-[#DBDFE9] !bg-white px-4 text-[13px] font-semibold !text-[#4B5675] hover:!border-[#C4CADA] hover:!bg-[#F9FAFB] hover:!text-[#071437]"
+                        >
+                            Close
+                        </Button>
+                        {viewingRole && (
                             <Button
                                 type="button"
-                                variant="outline"
-                                onClick={() => setSelectedUser(null)}
-                                disabled={submitting}
-                                className="h-9 cursor-pointer rounded-lg !border-[#DBDFE9] !bg-white px-4 text-[13px] font-semibold !text-[#4B5675] hover:!border-[#C4CADA] hover:!bg-[#F9FAFB] hover:!text-[#071437]"
+                                onClick={() => {
+                                    const target = viewingRole;
+                                    setViewingRole(null);
+                                    openEditRole(target);
+                                }}
+                                className="h-9 cursor-pointer rounded-lg bg-[#1B84FF] px-4 text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90"
                             >
-                                Cancel
+                                <Edit2 className="mr-1.5 size-3.5" /> Edit Permissions
                             </Button>
-                            <Button
-                                type="submit"
-                                disabled={submitting || userRoles.length === 0}
-                                className="h-9 cursor-pointer rounded-lg bg-[#1B84FF] px-4 text-[13px] font-semibold text-white hover:bg-[#1B84FF]/90 disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                                {submitting ? 'Saving...' : 'Save Role Assignments'}
-                            </Button>
-                        </DialogFooter>
-                    </form>
+                        )}
+                    </DialogFooter>
                 </DialogContent>
             </Dialog>
 
-            {/* Create / Edit Role Modal */}
+            {/* Create / Edit Role & Set Permissions Modal */}
             <Dialog open={roleModalOpen} onOpenChange={(open) => !open && setRoleModalOpen(false)}>
-                <DialogContent className="flex max-h-[85vh] flex-col gap-0 overflow-hidden rounded-2xl border-[#F1F1F4] !bg-white p-0 !text-[#071437] shadow-[0_20px_50px_-12px_rgba(7,20,55,0.18)] sm:max-w-lg">
+                <DialogContent className="flex max-h-[88vh] flex-col gap-0 overflow-hidden rounded-2xl border-[#F1F1F4] !bg-white p-0 !text-[#071437] shadow-[0_20px_50px_-12px_rgba(7,20,55,0.18)] sm:max-w-2xl">
                     <DialogHeader className="shrink-0 border-b border-[#F1F1F4] bg-[#FCFCFC] px-6 py-5">
                         <div className="flex items-start gap-3 pr-6">
                             <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#F1F6FF] text-[#1B84FF]">
@@ -567,8 +496,8 @@ export default function RolesIndex({ roles, permissions = [], staffUsers, filter
                                 </DialogTitle>
                                 <p className="mt-0.5 text-[12.5px] text-[#78829D]">
                                     {editingRole
-                                        ? `Update permissions for ${editingRole.name.replace(/_/g, ' ')}.`
-                                        : 'Define a new role name and select the permissions it grants.'}
+                                        ? `Configure module permissions for ${editingRole.name.replace(/_/g, ' ')}.`
+                                        : 'Define a new role name and select permissions by module.'}
                                 </p>
                             </div>
                         </div>
@@ -601,7 +530,7 @@ export default function RolesIndex({ roles, permissions = [], staffUsers, filter
 
                             <div className="flex items-center justify-between gap-2 pt-1">
                                 <span className="text-[12.5px] font-semibold text-[#071437]">
-                                    Permissions ({rolePermissions.length}/{permissions.length})
+                                    Permissions Matrix ({rolePermissions.length}/{permissions.length})
                                 </span>
                                 <div className="flex items-center gap-2 text-[12px]">
                                     <button
@@ -627,38 +556,70 @@ export default function RolesIndex({ roles, permissions = [], staffUsers, filter
                                 <Input
                                     value={permSearch}
                                     onChange={(e) => setPermSearch(e.target.value)}
-                                    placeholder="Filter permissions..."
+                                    placeholder="Filter permissions by module or action..."
                                     className={`${fieldClass} pl-9`}
                                 />
                             </div>
                         </div>
 
-                        <div className="min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain px-6 pb-4">
-                            {filteredPermissions.length === 0 ? (
+                        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-6 pb-5">
+                            {groupedEditPermissions.length === 0 ? (
                                 <p className="py-6 text-center text-[12.5px] text-[#78829D]">
                                     No matching permissions found.
                                 </p>
                             ) : (
-                                filteredPermissions.map((p) => {
-                                    const checked = rolePermissions.includes(p.name);
+                                groupedEditPermissions.map(([module, modulePerms]) => {
+                                    const selectedCount = modulePerms.filter((p) =>
+                                        rolePermissions.includes(p.name),
+                                    ).length;
+                                    const allSelected = selectedCount === modulePerms.length;
                                     return (
-                                        <label
-                                            key={p.id}
-                                            className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-all ${
-                                                checked
-                                                    ? 'border-[#1B84FF] bg-[#F1F6FF]/60'
-                                                    : 'border-[#F1F1F4] bg-[#FCFCFC] hover:border-[#DBDFE9] hover:bg-white'
-                                            }`}
+                                        <div
+                                            key={module}
+                                            className="rounded-xl border border-[#F1F1F4] bg-[#FCFCFC] p-3.5"
                                         >
-                                            <Checkbox
-                                                checked={checked}
-                                                onCheckedChange={() => toggleRolePermission(p.name)}
-                                                className="size-4.5 cursor-pointer rounded-[5px] !border-[#DBDFE9] !bg-white data-[state=checked]:!border-[#1B84FF] data-[state=checked]:!bg-[#1B84FF] data-[state=checked]:!text-white focus-visible:!ring-[#1B84FF]/20"
-                                            />
-                                            <span className="font-mono text-[12.5px] font-medium text-[#071437]">
-                                                {p.name}
-                                            </span>
-                                        </label>
+                                            <div className="mb-2.5 flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-[12px] font-bold tracking-wide text-[#071437] uppercase">
+                                                        {module}
+                                                    </span>
+                                                    <span className="text-[11px] font-semibold text-[#78829D]">
+                                                        ({selectedCount}/{modulePerms.length})
+                                                    </span>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => toggleModulePermissions(modulePerms)}
+                                                    className="cursor-pointer text-[11.5px] font-semibold text-[#1B84FF] hover:underline"
+                                                >
+                                                    {allSelected ? 'Unselect module' : 'Select module'}
+                                                </button>
+                                            </div>
+                                            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                                                {modulePerms.map((p) => {
+                                                    const checked = rolePermissions.includes(p.name);
+                                                    return (
+                                                        <label
+                                                            key={p.id}
+                                                            className={`flex cursor-pointer items-center gap-2.5 rounded-lg border p-2.5 transition-all ${
+                                                                checked
+                                                                    ? 'border-[#1B84FF] bg-white shadow-[0_1px_2px_0_rgba(27,132,255,0.08)]'
+                                                                    : 'border-[#F1F1F4] bg-white hover:border-[#DBDFE9]'
+                                                            }`}
+                                                        >
+                                                            <Checkbox
+                                                                checked={checked}
+                                                                onCheckedChange={() => toggleRolePermission(p.name)}
+                                                                className="size-4 cursor-pointer rounded-[4px] !border-[#DBDFE9] !bg-white data-[state=checked]:!border-[#1B84FF] data-[state=checked]:!bg-[#1B84FF] data-[state=checked]:!text-white focus-visible:!ring-[#1B84FF]/20"
+                                                            />
+                                                            <span className="truncate font-mono text-[12px] font-medium text-[#071437]">
+                                                                {p.name}
+                                                            </span>
+                                                        </label>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
                                     );
                                 })
                             )}

@@ -117,7 +117,7 @@ export default function ForbiddenPage({ message }: ForbiddenPageProps) {
     if (auth) {
         return (
             <MemberLayout title="Access Restricted" breadcrumbs={[{ title: 'Verification Required' }]}>
-                <Head title="Access Restricted - INTAKE97.COM" />
+                <Head title="Access Restricted - CCINTAKE97.COM" />
                 {content}
             </MemberLayout>
         );
@@ -125,7 +125,7 @@ export default function ForbiddenPage({ message }: ForbiddenPageProps) {
 
     return (
         <>
-            <Head title="403 Access Restricted - INTAKE97.COM" />
+            <Head title="403 Access Restricted - CCINTAKE97.COM" />
             {content}
         </>
     );

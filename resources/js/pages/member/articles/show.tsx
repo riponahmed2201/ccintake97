@@ -17,7 +17,7 @@ export default function MemberArticleShow({ article }: ArticleShowProps) {
                 { title: article.title },
             ]}
         >
-            <Head title={`${article.title} - INTAKE97.COM`} />
+            <Head title={`${article.title} - CCINTAKE97.COM`} />
 
             <div className="w-full space-y-5">
                 <div>

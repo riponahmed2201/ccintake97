@@ -15,6 +15,7 @@ import {
     BarChart3,
     ShieldAlert,
     ShieldCheck,
+    UserCog,
     Settings,
     LogOut,
     Menu,
@@ -70,9 +71,10 @@ const NAV_GROUPS = [
     {
         label: 'System & Security',
         items: [
+            { label: 'Users', href: '/admin/users', icon: UserCog },
+            { label: 'Roles & Permissions', href: '/admin/roles', icon: ShieldCheck },
             { label: 'Reports', href: '/admin/reports', icon: BarChart3 },
             { label: 'Audit Logs', href: '/admin/audit-logs', icon: ShieldAlert },
-            { label: 'Roles & Permissions', href: '/admin/roles', icon: ShieldCheck },
             { label: 'Website Settings', href: '/admin/settings', icon: Settings },
         ],
     },
@@ -348,6 +350,31 @@ export default function AdminLayout({ children, title, breadcrumbs = [], fluid =
                 <main className={fluid ? 'w-full flex-1 bg-white' : 'w-full flex-1 bg-white p-4 sm:p-6 lg:p-7'}>
                     {children}
                 </main>
+
+                {/* Admin Footer */}
+                <footer className="border-t border-[#F1F1F4] bg-white px-4 py-4 sm:px-6 lg:px-7">
+                    <div className="flex flex-col items-center justify-between gap-2 text-[12px] text-[#78829D] sm:flex-row">
+                        <div className="flex items-center gap-1.5">
+                            <span className="font-semibold text-[#071437]">CCINTAKE97.COM</span>
+                            <span>·</span>
+                            <span>© {new Date().getFullYear()} Cadet College 1997 Intake Alumni Network</span>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-4 font-medium">
+                            <Link href="/admin/reports" className="transition-colors hover:text-[#1B84FF]">
+                                Reports
+                            </Link>
+                            <Link href="/admin/audit-logs" className="transition-colors hover:text-[#1B84FF]">
+                                Audit Logs
+                            </Link>
+                            <Link href="/admin/settings" className="transition-colors hover:text-[#1B84FF]">
+                                Settings
+                            </Link>
+                            <Link href="/" className="transition-colors hover:text-[#1B84FF]">
+                                Public Site
+                            </Link>
+                        </div>
+                    </div>
+                </footer>
             </div>
         </div>
     );

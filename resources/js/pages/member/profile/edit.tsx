@@ -355,7 +355,7 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
 
     return (
         <MemberLayout title="My Alumni Profile" breadcrumbs={[{ title: 'My Profile' }]}>
-            <Head title="My Profile - INTAKE 97 Alumni" />
+            <Head title="My Profile - CCINTAKE 97 Alumni" />
 
             {!editing ? (
                 <div className="w-full space-y-6">

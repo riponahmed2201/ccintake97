@@ -388,7 +388,7 @@ export default function MembersIndex({
 
     return (
         <AdminLayout title="Member Management" breadcrumbs={[{ title: 'Members' }]}>
-            <Head title="Member Management - INTAKE 97 Admin" />
+            <Head title="Member Management - CCINTAKE 97 Admin" />
 
             <div className="w-full space-y-6">
                 {/* Topbar */}

@@ -64,7 +64,7 @@ export default function ApplicationShow({ application }: ApplicationShowProps) {
                 { title: application.application_no },
             ]}
         >
-            <Head title={`Application ${application.application_no} - INTAKE 97 Admin`} />
+            <Head title={`Application ${application.application_no} - CCINTAKE 97 Admin`} />
 
             <div className="w-full space-y-6">
                 <div>

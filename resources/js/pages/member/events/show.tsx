@@ -71,7 +71,7 @@ export default function MemberEventShow({ event, myRegistration }: EventShowProp
                 { title: event.title },
             ]}
         >
-            <Head title={`${event.title} - INTAKE 97 Alumni Event`} />
+            <Head title={`${event.title} - CCINTAKE 97 Alumni Event`} />
 
             <div className="w-full space-y-6">
                 <div>

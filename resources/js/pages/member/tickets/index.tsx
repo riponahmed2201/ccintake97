@@ -71,7 +71,7 @@ export default function MemberTicketsIndex({ tickets }: TicketsIndexProps) {
             title="Help & Support"
             breadcrumbs={[{ title: 'Help & Support' }]}
         >
-            <Head title="Help & Support - INTAKE97.COM" />
+            <Head title="Help & Support - CCINTAKE97.COM" />
 
             <div className="w-full space-y-6">
                 {/* Page Header */}

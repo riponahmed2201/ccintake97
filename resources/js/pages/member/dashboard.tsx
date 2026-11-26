@@ -77,7 +77,7 @@ export default function MemberDashboard({
 
     return (
         <MemberLayout title="Alumni Dashboard" breadcrumbs={[{ title: 'Overview' }]}>
-            <Head title="Alumni Portal - INTAKE97.COM" />
+            <Head title="Alumni Portal - CCINTAKE97.COM" />
 
             <div className="space-y-6">
                 {/* Clean Metronic Welcome Header + Digital ID */}

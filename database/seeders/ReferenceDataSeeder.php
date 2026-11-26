@@ -208,7 +208,7 @@ class ReferenceDataSeeder extends Seeder
 
         // 7. System Settings
         $settings = [
-            ['key' => 'site_name', 'value' => 'INTAKE97.COM', 'group' => 'general'],
+            ['key' => 'site_name', 'value' => 'CCINTAKE97.COM', 'group' => 'general'],
             ['key' => 'site_tagline', 'value' => 'Cadet College 1997 Intake Alumni Community of Bangladesh', 'group' => 'general'],
             ['key' => 'contact_email', 'value' => 'contact@intake97.com', 'group' => 'general'],
             ['key' => 'contact_phone', 'value' => '+880 1711 000097', 'group' => 'general'],

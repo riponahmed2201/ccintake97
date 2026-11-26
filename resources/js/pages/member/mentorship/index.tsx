@@ -90,7 +90,7 @@ export default function MemberMentorshipIndex({
             title="Mentorship Hub"
             breadcrumbs={[{ title: 'Mentorship Hub' }]}
         >
-            <Head title="Mentorship Hub - INTAKE97.COM" />
+            <Head title="Mentorship Hub - CCINTAKE97.COM" />
 
             <div className="w-full space-y-6">
                 {/* Page Header */}

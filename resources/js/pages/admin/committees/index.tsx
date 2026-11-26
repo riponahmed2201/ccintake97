@@ -134,7 +134,7 @@ export default function CommitteesIndex({ committees, approvedMembers }: Committ
             title="Leadership & Executive Committees"
             breadcrumbs={[{ title: 'Committees' }]}
         >
-            <Head title="Leadership & Committees - INTAKE 97 Admin" />
+            <Head title="Leadership & Committees - CCINTAKE 97 Admin" />
 
             <div className="space-y-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

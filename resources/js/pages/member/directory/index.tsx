@@ -66,7 +66,7 @@ export default function DirectoryIndex({
             title="Verified Alumni Directory"
             breadcrumbs={[{ title: 'Alumni Directory' }]}
         >
-            <Head title="Alumni Directory - INTAKE97.COM" />
+            <Head title="Alumni Directory - CCINTAKE97.COM" />
 
             <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

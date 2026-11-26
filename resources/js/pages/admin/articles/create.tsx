@@ -63,7 +63,7 @@ export default function ArticleCreate({ categories }: ArticleCreateProps) {
                 { title: 'Compose Article' },
             ]}
         >
-            <Head title="Compose Article - INTAKE 97 Admin" />
+            <Head title="Compose Article - CCINTAKE 97 Admin" />
 
             <div className="w-full space-y-5">
                 <Link

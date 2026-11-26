@@ -186,7 +186,7 @@ export default function CollegesIndex({ colleges, filters }: CollegesIndexProps)
             title="Cadet College Network Management"
             breadcrumbs={[{ title: 'Cadet Colleges' }]}
         >
-            <Head title="Cadet College Network - INTAKE 97 Admin" />
+            <Head title="Cadet College Network - CCINTAKE 97 Admin" />
 
             <div className="space-y-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

@@ -66,7 +66,7 @@ export function LandingReunion() {
                             <dl className="mt-10 grid grid-cols-1 gap-8 border-t border-[#F7F3EA]/10 pt-10 sm:grid-cols-3">
                                 {[
                                     { icon: MapPin, k: 'Venue', v: 'Sena Malancha · Dhaka Club · Kurmitola' },
-                                    { icon: Calendar, k: 'When', v: 'Winter 2027 · Three days · INTAKE 97' },
+                                    { icon: Calendar, k: 'When', v: 'Winter 2027 · Three days · CCINTAKE 97' },
                                     { icon: QrCode, k: 'Access', v: 'Encrypted digital pass' },
                                 ].map((d) => (
                                     <div key={d.k}>

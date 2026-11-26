@@ -91,7 +91,7 @@ export default function BusinessesIndex({ businesses, filters }: BusinessesIndex
             title="Business Directory Management"
             breadcrumbs={[{ title: 'Business Directory' }]}
         >
-            <Head title="Business Directory - INTAKE 97 Admin" />
+            <Head title="Business Directory - CCINTAKE 97 Admin" />
 
             <div className="space-y-6">
                 <div>

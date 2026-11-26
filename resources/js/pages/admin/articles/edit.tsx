@@ -58,7 +58,7 @@ export default function ArticleEdit({ article, categories }: ArticleEditProps) {
                 { title: 'Edit Article' },
             ]}
         >
-            <Head title={`Edit ${article.title} - INTAKE 97 Admin`} />
+            <Head title={`Edit ${article.title} - CCINTAKE 97 Admin`} />
 
             <div className="w-full space-y-5">
                 <Link

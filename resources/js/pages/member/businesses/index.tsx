@@ -66,7 +66,7 @@ export default function MemberBusinessesIndex({
             title="Business Network"
             breadcrumbs={[{ title: 'Business Network' }]}
         >
-            <Head title="Business Network - INTAKE97.COM" />
+            <Head title="Business Network - CCINTAKE97.COM" />
 
             <div className="w-full space-y-6">
                 {/* Page Header */}

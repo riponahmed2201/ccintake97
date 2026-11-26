@@ -29,7 +29,7 @@ export default function MemberNotificationsIndex({ notifications }: Notification
             title="Notifications"
             breadcrumbs={[{ title: 'Notifications' }]}
         >
-            <Head title="Notifications - INTAKE97.COM" />
+            <Head title="Notifications - CCINTAKE97.COM" />
 
             <div className="w-full space-y-6">
                 {/* Page Header */}

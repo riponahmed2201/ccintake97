@@ -17,40 +17,24 @@ class RoleController extends Controller
 {
     public function index(Request $request): Response
     {
-        $roles = Role::with('permissions')->get();
-        $query = User::with('roles')
-            ->whereHas('roles', function ($q) {
-                $q->whereNotIn('name', ['regular_member', 'verified_member']);
-            });
+        $query = Role::with('permissions:id,name')->withCount(['users', 'permissions']);
 
         if ($request->filled('search')) {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
-
-        if ($request->filled('role')) {
-            $role = $request->input('role');
-            $query->whereHas('roles', function ($q) use ($role) {
-                $q->where('name', $role);
-            });
+            $search = str_replace(' ', '_', trim($request->input('search')));
+            $query->where('name', 'like', "%{$search}%");
         }
 
         $perPage = in_array((int) $request->input('per_page', 20), [10, 20, 50, 100])
             ? (int) $request->input('per_page', 20)
             : 20;
 
-        $staffUsers = $query->orderBy('name')->paginate($perPage)->withQueryString();
+        $roles = $query->orderBy('name')->paginate($perPage)->withQueryString();
 
         return Inertia::render('admin/roles/index', [
             'roles' => $roles,
-            'permissions' => Permission::orderBy('name')->get(),
-            'staffUsers' => $staffUsers,
+            'permissions' => Permission::orderBy('name')->get(['id', 'name']),
             'filters' => [
                 'search' => $request->input('search', ''),
-                'role' => $request->input('role', ''),
                 'per_page' => (string) $perPage,
             ],
         ]);

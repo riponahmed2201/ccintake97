@@ -81,7 +81,7 @@ export default function TicketsIndex({ tickets, filters }: TicketsIndexProps) {
             title="Support Tickets & Inquiries"
             breadcrumbs={[{ title: 'Support Tickets' }]}
         >
-            <Head title="Support Tickets - INTAKE 97 Admin" />
+            <Head title="Support Tickets - CCINTAKE 97 Admin" />
 
             <div className="space-y-6">
                 <div>

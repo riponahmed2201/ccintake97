@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
 
         return [
             ...parent::share($request),
-            'name' => 'INTAKE97.COM',
+            'name' => 'CCINTAKE97.COM',
             'auth' => [
                 'user' => $user ? [
                     'id' => $user->id,

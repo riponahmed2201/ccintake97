@@ -17,7 +17,7 @@ export default function MemberEventsIndex({ events, myRegistrations }: EventsInd
             title="Reunions & Events"
             breadcrumbs={[{ title: 'Reunions & Events' }]}
         >
-            <Head title="Reunions & Events - INTAKE97.COM" />
+            <Head title="Reunions & Events - CCINTAKE97.COM" />
 
             <div className="w-full space-y-6">
                 {/* Page Header */}

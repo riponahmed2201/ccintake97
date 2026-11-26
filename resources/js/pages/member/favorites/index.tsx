@@ -20,7 +20,7 @@ export default function MemberFavoritesIndex({ favorites }: FavoritesIndexProps)
             title="Saved Items"
             breadcrumbs={[{ title: 'Saved Items' }]}
         >
-            <Head title="Saved Items - INTAKE97.COM" />
+            <Head title="Saved Items - CCINTAKE97.COM" />
 
             <div className="w-full space-y-6">
                 {/* Page Header */}

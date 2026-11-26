@@ -13,6 +13,9 @@ import {
     ChevronRight,
     Award,
     HeartHandshake,
+    Globe,
+    Building2,
+    BarChart3,
 } from 'lucide-react';
 import type { MembershipApplication, Event } from '@/types';
 
@@ -42,6 +45,8 @@ interface DashboardProps {
 export default function AdminDashboard({
     stats,
     collegeDistribution,
+    countryDistribution = [],
+    industryDistribution = [],
     recentApplications,
     recentEvents,
     recentActivities,
@@ -61,7 +66,7 @@ export default function AdminDashboard({
 
     return (
         <AdminLayout title="Admin Dashboard">
-            <Head title="Admin Dashboard - INTAKE97.COM" />
+            <Head title="Admin Dashboard - CCINTAKE97.COM" />
 
             <div className="w-full space-y-6">
                 {/* Header Welcome Card */}
@@ -71,16 +76,25 @@ export default function AdminDashboard({
                             Association Executive Dashboard
                         </h1>
                         <p className="mt-1 text-[13px] text-[#78829D]">
-                            Real-time organizational statistics and platform operations for INTAKE 97 Cadet College Network.
+                            Real-time organizational statistics and platform operations for CCINTAKE 97 Cadet College Network.
                         </p>
                     </div>
-                    <Link
-                        href="/admin/applications"
-                        className="inline-flex h-9.5 shrink-0 items-center gap-2 self-start rounded-lg bg-[#1B84FF] px-4 text-[12.5px] font-semibold text-white transition-colors hover:bg-[#006AE6] sm:self-auto"
-                    >
-                        <FileText className="size-4" />
-                        Review Applications ({stats.pending_applications})
-                    </Link>
+                    <div className="flex flex-wrap items-center gap-2.5 self-start sm:self-auto">
+                        <Link
+                            href="/admin/reports"
+                            className="inline-flex h-9.5 shrink-0 items-center gap-2 rounded-lg border border-[#DBDFE9] bg-white px-3.5 text-[12.5px] font-semibold text-[#4B5675] transition-colors hover:border-[#1B84FF] hover:bg-[#F1F6FF] hover:text-[#1B84FF]"
+                        >
+                            <BarChart3 className="size-4" />
+                            Reports
+                        </Link>
+                        <Link
+                            href="/admin/applications"
+                            className="inline-flex h-9.5 shrink-0 items-center gap-2 rounded-lg bg-[#1B84FF] px-4 text-[12.5px] font-semibold text-white transition-colors hover:bg-[#006AE6]"
+                        >
+                            <FileText className="size-4" />
+                            Review Applications ({stats.pending_applications})
+                        </Link>
+                    </div>
                 </div>
 
                 {/* KPI Cards Grid */}
@@ -89,12 +103,12 @@ export default function AdminDashboard({
                         const Icon = k.icon;
                         return (
                             <Link key={idx} href={k.href} className="group block">
-                                <div className="flex h-full flex-col justify-between rounded-xl border border-[#F1F1F4] bg-white p-4.5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] transition-colors hover:border-[#DBDFE9]">
+                                <div className="flex h-full flex-col justify-between rounded-xl border border-[#F1F1F4] bg-white p-4.5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)] transition-all hover:border-[#1B84FF]/40 hover:shadow-[0_4px_12px_rgba(27,132,255,0.06)]">
                                     <div className={`flex size-9 items-center justify-center rounded-lg ${k.bg} ${k.color}`}>
                                         <Icon className="size-4.5" strokeWidth={1.75} />
                                     </div>
                                     <div className="mt-3.5">
-                                        <div className="text-[24px] leading-tight font-bold tracking-tight text-[#071437]">
+                                        <div className="text-[24px] leading-tight font-bold tracking-tight text-[#071437] tabular-nums">
                                             {k.value}
                                         </div>
                                         <div className="mt-0.5 truncate text-[12px] font-medium text-[#78829D]">
@@ -139,6 +153,59 @@ export default function AdminDashboard({
                                         </div>
                                     );
                                 })}
+                            </div>
+                        </div>
+
+                        {/* Country & Industry Breakdown */}
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                            <div className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                                <div className="flex items-center justify-between border-b border-[#F1F1F4] pb-3.5">
+                                    <h3 className="flex items-center gap-2 text-[14px] font-semibold text-[#071437]">
+                                        <Globe className="size-4 text-[#1B84FF]" />
+                                        Top Countries
+                                    </h3>
+                                    <span className="text-[11px] font-medium text-[#99A1B7]">Alumni Reach</span>
+                                </div>
+                                <div className="mt-3.5 space-y-2.5">
+                                    {countryDistribution.length === 0 ? (
+                                        <p className="py-4 text-center text-[12.5px] text-[#99A1B7]">No country data yet.</p>
+                                    ) : (
+                                        countryDistribution.map((item, idx) => (
+                                            <div key={idx} className="flex items-center justify-between text-[12.5px]">
+                                                <span className="font-medium text-[#4B5675] uppercase">
+                                                    {item.country_code || 'Unknown'}
+                                                </span>
+                                                <span className="rounded-md bg-[#F1F6FF] px-2 py-0.5 font-semibold text-[#1B84FF] tabular-nums">
+                                                    {item.count}
+                                                </span>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="rounded-xl border border-[#F1F1F4] bg-white p-5 shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
+                                <div className="flex items-center justify-between border-b border-[#F1F1F4] pb-3.5">
+                                    <h3 className="flex items-center gap-2 text-[14px] font-semibold text-[#071437]">
+                                        <Building2 className="size-4 text-[#17C653]" />
+                                        Top Industries
+                                    </h3>
+                                    <span className="text-[11px] font-medium text-[#99A1B7]">Professions</span>
+                                </div>
+                                <div className="mt-3.5 space-y-2.5">
+                                    {industryDistribution.length === 0 ? (
+                                        <p className="py-4 text-center text-[12.5px] text-[#99A1B7]">No industry data yet.</p>
+                                    ) : (
+                                        industryDistribution.map((item, idx) => (
+                                            <div key={idx} className="flex items-center justify-between gap-2 text-[12.5px]">
+                                                <span className="truncate font-medium text-[#4B5675]">{item.name}</span>
+                                                <span className="shrink-0 rounded-md bg-[#EAFFF1] px-2 py-0.5 font-semibold text-[#17C653] tabular-nums">
+                                                    {item.count}
+                                                </span>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
                             </div>
                         </div>
 
@@ -256,11 +323,17 @@ export default function AdminDashboard({
 
                         {/* Recent Activity Log */}
                         <div className="overflow-hidden rounded-xl border border-[#F1F1F4] bg-white shadow-[0_3px_4px_0_rgba(0,0,0,0.03)]">
-                            <div className="border-b border-[#F1F1F4] px-5 py-4 sm:px-6">
+                            <div className="flex items-center justify-between border-b border-[#F1F1F4] px-5 py-4 sm:px-6">
                                 <h2 className="flex items-center gap-2 text-[15px] font-semibold text-[#071437]">
                                     <Clock className="size-4 text-[#1B84FF]" />
-                                    Recent Audit Trail
+                                    Recent Activity
                                 </h2>
+                                <Link
+                                    href="/admin/audit-logs"
+                                    className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-[#1B84FF] hover:text-[#006AE6]"
+                                >
+                                    Audit Logs <ChevronRight className="size-3.5" />
+                                </Link>
                             </div>
                             <div className="divide-y divide-[#F1F1F4]">
                                 {recentActivities.length === 0 ? (
@@ -276,7 +349,9 @@ export default function AdminDashboard({
                                             <div className="flex items-center justify-between text-[11px] text-[#99A1B7]">
                                                 <span>By {act.user?.name || 'System'}</span>
                                                 <span>
-                                                    {new Date(act.created_at).toLocaleTimeString([], {
+                                                    {new Date(act.created_at).toLocaleString([], {
+                                                        month: 'short',
+                                                        day: 'numeric',
                                                         hour: '2-digit',
                                                         minute: '2-digit',
                                                     })}

@@ -19,9 +19,13 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
-    public function edit(Request $request): Response
+    public function edit(Request $request): Response|RedirectResponse
     {
         $user = $request->user();
+        if (! $user->member) {
+            return redirect()->route('profile.edit')->with('info', 'This account does not have an alumni member profile. Showing account settings instead.');
+        }
+
         $member = $user->member->load(['user', 'college', 'profile', 'privacySettings']);
         $colleges = College::where('is_participating', true)->orderBy('display_order')->get(['id', 'name', 'short_name']);
 
@@ -41,6 +45,9 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $member = $user->member;
+        if (! $member) {
+            return redirect()->route('profile.edit');
+        }
 
         foreach ([
             'cadet_name', 'cccl_life_member_no', 'phone', 'blood_group', 'spouse_name', 'spouse_occupation', 'spouse_job_location',

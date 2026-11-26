@@ -33,7 +33,7 @@ export default function ReportsIndex({
             title="Reports & Analytics"
             breadcrumbs={[{ title: 'Reports' }]}
         >
-            <Head title="Reports & Analytics - INTAKE 97 Admin" />
+            <Head title="Reports & Analytics - CCINTAKE 97 Admin" />
 
             <div className="space-y-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

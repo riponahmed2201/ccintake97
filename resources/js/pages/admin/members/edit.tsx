@@ -249,7 +249,7 @@ export default function AdminMemberEdit({
                 { title: 'Edit' },
             ]}
         >
-            <Head title={`Edit ${member.user?.name || 'Member'} - INTAKE 97 Admin`} />
+            <Head title={`Edit ${member.user?.name || 'Member'} - CCINTAKE 97 Admin`} />
 
             <div className="w-full space-y-6">
                 {/* Header */}

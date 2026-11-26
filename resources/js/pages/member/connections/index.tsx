@@ -86,7 +86,7 @@ export default function ConnectionsIndex({
             title="My Connections"
             breadcrumbs={[{ title: 'My Connections' }]}
         >
-            <Head title="My Connections - INTAKE97.COM" />
+            <Head title="My Connections - CCINTAKE97.COM" />
 
             <div className="w-full space-y-6">
                 {/* Page Header */}

@@ -55,7 +55,7 @@ export function SignupDialogProvider({ children }: { children: React.ReactNode }
                                 </span>
                             </div>
                             <DialogTitle className="font-serif text-3xl font-medium tracking-[-0.01em] text-white">
-                                Join <em className="font-normal italic text-[#E8D5A3]">INTAKE 97</em>
+                                Join <em className="font-normal italic text-[#E8D5A3]">CCINTAKE 97</em>
                             </DialogTitle>
                             <DialogDescription id="signup-dialog-desc" className="mt-1.5 text-[13.5px] leading-relaxed text-[#F8F5EE]/70">
                                 Create your member account, then complete your cadet college and roll details inside your portal.

@@ -351,7 +351,7 @@ class DevSampleDataSeeder extends Seeder
                 'job_type' => 'Banking & Finance',
                 'organization' => 'NorthBridge Capital Bank',
                 'industry_id' => $fin->id,
-                'professional_bio' => 'Coordinating INTAKE 97 North America chapter outreach and alumni mentorship.',
+                'professional_bio' => 'Coordinating CCINTAKE 97 North America chapter outreach and alumni mentorship.',
                 'owns_business' => false,
                 'profile_completion' => 85,
             ]
@@ -393,7 +393,7 @@ class DevSampleDataSeeder extends Seeder
                 'job_type' => 'Healthcare',
                 'organization' => 'Dhaka Medical College Hospital',
                 'industry_id' => $med->id,
-                'professional_bio' => 'Leading INTAKE 97 medical camp and child health outreach initiatives.',
+                'professional_bio' => 'Leading CCINTAKE 97 medical camp and child health outreach initiatives.',
                 'owns_business' => false,
                 'profile_completion' => 85,
             ]
@@ -512,7 +512,7 @@ class DevSampleDataSeeder extends Seeder
             ['slug' => 'demo-annual-reunion'],
             [
                 'category_id' => $annualReunionCat->id,
-                'title' => 'INTAKE 97 Grand Annual Reunion 2027',
+                'title' => 'CCINTAKE 97 Grand Annual Reunion 2027',
                 'description' => 'The flagship reunion gathering of 1997 intake Cadet College alumni and families from across the globe.',
                 'starts_on' => now()->addDays(45)->toDateString(),
                 'ends_on' => now()->addDays(46)->toDateString(),
@@ -537,7 +537,7 @@ class DevSampleDataSeeder extends Seeder
             ['slug' => 'intake-97-inter-college-golf-cup'],
             [
                 'category_id' => $sportsCat->id,
-                'title' => 'INTAKE 97 Inter-College Golf & Family Day',
+                'title' => 'CCINTAKE 97 Inter-College Golf & Family Day',
                 'description' => 'Morning tee-off tournament followed by brunch and family sports activities at Kurmitola Golf Club.',
                 'starts_on' => now()->addDays(22)->toDateString(),
                 'ends_on' => now()->addDays(22)->toDateString(),
@@ -599,9 +599,9 @@ class DevSampleDataSeeder extends Seeder
             ['slug' => 'demo-welcome-to-intake-97'],
             [
                 'category_id' => $newsCat->id,
-                'title' => 'Welcome to INTAKE97.COM: Uniting the 1997 Cadet College Network',
-                'excerpt' => 'An official welcome message from the INTAKE 97 Central Coordination Committee.',
-                'body' => '<p>Welcome batchmates of INTAKE 97. This platform unites all participating Cadet Colleges from our 1997 intake year under one verified, secure, and collaborative alumni network.</p>',
+                'title' => 'Welcome to CCINTAKE97.COM: Uniting the 1997 Cadet College Network',
+                'excerpt' => 'An official welcome message from the CCINTAKE 97 Central Coordination Committee.',
+                'body' => '<p>Welcome batchmates of CCINTAKE 97. This platform unites all participating Cadet Colleges from our 1997 intake year under one verified, secure, and collaborative alumni network.</p>',
                 'cover_image_path' => $newsLeadershipImg,
                 'author_id' => $users['editor@example.test']->id,
                 'status' => 'published',
@@ -684,7 +684,7 @@ class DevSampleDataSeeder extends Seeder
             ['slug' => 'central-executive-committee-2025-2027'],
             [
                 'name' => 'Central Executive Committee (2025-2027)',
-                'description' => 'The executive body governing INTAKE 97 alumni affairs and community initiatives.',
+                'description' => 'The executive body governing CCINTAKE 97 alumni affairs and community initiatives.',
                 'head_member_id' => $memberAlpha->id,
                 'term_start' => now()->startOfYear(),
                 'term_end' => now()->addYears(2)->endOfYear(),
@@ -758,7 +758,7 @@ class DevSampleDataSeeder extends Seeder
         $album = GalleryAlbum::updateOrCreate(
             ['slug' => 'intake-97-highlights-2026'],
             [
-                'title' => 'INTAKE 97 Reunion & Welfare Highlights',
+                'title' => 'CCINTAKE 97 Reunion & Welfare Highlights',
                 'description' => 'Selected moments from alumni gatherings, golf day, executive meetings, and community outreach.',
                 'cover_image_path' => $eventReunionImg,
                 'event_id' => $eventReunion->id,
@@ -858,7 +858,7 @@ class DevSampleDataSeeder extends Seeder
                 'notifiable_id' => $users['alpha@example.test']->id,
                 'category' => 'membership',
                 'data' => json_encode([
-                    'message' => 'Congratulations! Your membership for INTAKE 97 has been approved and verified.',
+                    'message' => 'Congratulations! Your membership for CCINTAKE 97 has been approved and verified.',
                 ]),
                 'created_at' => now(),
                 'updated_at' => now(),

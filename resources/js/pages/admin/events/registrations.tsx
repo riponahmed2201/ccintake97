@@ -65,7 +65,7 @@ export default function EventRegistrations({ event, registrations }: Registratio
                 { title: 'Attendees & Check-in' },
             ]}
         >
-            <Head title={`Attendees: ${event.title} - INTAKE 97 Admin`} />
+            <Head title={`Attendees: ${event.title} - CCINTAKE 97 Admin`} />
 
             <div className="space-y-6">
                 <Link
