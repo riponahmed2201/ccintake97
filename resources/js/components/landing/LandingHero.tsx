@@ -105,13 +105,13 @@ export function LandingHero({
                             style={{ objectPosition: sl.position }}
                             className={`h-full w-full object-cover ${active ? 'animate-[heroZoom_9s_ease-out_forwards] motion-reduce:animate-none' : 'scale-105'}`}
                         />
-                        {sl.dim > 0 && <div className="absolute inset-0 bg-brand-ink-deep" style={{ opacity: sl.dim }} />}
+                        {sl.dim > 0 && <div className="absolute inset-0 bg-brand-ink-deep" style={{ opacity: Math.min(sl.dim * 0.45, 0.25) }} />}
                     </div>
                 );
             })}
-            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-brand-ink-deep via-brand-ink-deep/50 to-brand-ink-deep/15" />
-            <div className="absolute inset-x-0 top-0 -z-10 h-44 bg-gradient-to-b from-brand-ink-deep/70 to-transparent" />
-            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-brand-ink-deep/85 via-brand-ink-deep/35 to-transparent" />
+            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#071018]/80 via-[#071018]/20 to-transparent" />
+            <div className="absolute inset-x-0 top-0 -z-10 h-36 bg-gradient-to-b from-[#071018]/35 to-transparent" />
+            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#071018]/55 via-[#071018]/15 to-transparent" />
 
             <div className={`${LANDING_CONTAINER} ${LANDING_HERO_INNER}`}>
                 <Reveal>
@@ -150,8 +150,8 @@ export function LandingHero({
                                 { v: String(metrics.intake_year), l: 'Intake' },
                             ].map((st) => (
                                 <div key={st.l} title={st.title}>
-                                    <dd className="font-serif text-4xl font-semibold text-white sm:text-5xl">{st.v}</dd>
-                                    <dt className="mt-1.5 text-[11px] font-medium tracking-[0.24em] text-brand-gold-bright/80 uppercase">{st.l}</dt>
+                                    <dd className="font-sans text-3xl font-bold tracking-tight text-white tabular-nums sm:text-4xl">{st.v}</dd>
+                                    <dt className="mt-1 text-[11px] font-medium tracking-[0.24em] text-brand-gold-bright/80 uppercase">{st.l}</dt>
                                 </div>
                             ))}
                         </dl>

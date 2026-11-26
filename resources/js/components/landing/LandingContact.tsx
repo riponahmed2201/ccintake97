@@ -56,7 +56,7 @@ export function LandingContact({
                                         )}
         
                                         <Reveal delay={100}>
-                                            <dl className="mt-10 space-y-5">
+                                            <dl className="mt-8 space-y-5">
                                                 {[
                                                     { icon: MapPin, k: 'Address', v: <>Central Alumni Secretariat<br />Gulshan-2 / Mohakhali DOHS, Dhaka</> },
                                                     { icon: Mail, k: 'Email', v: <a href="mailto:secretariat@intake97.com" className="underline decoration-[#9A7B3F]/40 underline-offset-4 hover:decoration-[#9A7B3F]">secretariat@intake97.com</a> },
@@ -71,18 +71,6 @@ export function LandingContact({
                                                     </div>
                                                 ))}
                                             </dl>
-                                        </Reveal>
-        
-                                        <Reveal delay={150}>
-                                            <div className="mt-12 border-t border-[#0B1220]/10 pt-8">
-                                                <div className="text-[11px] tracking-[0.2em] text-[#0B1220]/45 uppercase">Regional liaison desks</div>
-                                                <div className="mt-4 grid grid-cols-2 gap-y-3 text-[14px] text-[#0B1220]">
-                                                    <span>New York · DC</span>
-                                                    <span>London</span>
-                                                    <span>Dubai · Riyadh</span>
-                                                    <span>Sydney · Melbourne</span>
-                                                </div>
-                                            </div>
                                         </Reveal>
                                     </div>
         
@@ -125,15 +113,11 @@ export function LandingContact({
                                                             <span className={labelCls}>Message <span className="text-[#8E6B28]">*</span></span>
                                                             <textarea required rows={4} value={contactForm.message} onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })} placeholder="How can the Central Council assist you?" className={textareaCls} />
                                                         </label>
-                                                        <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center sm:justify-between">
-                                                            <button type="submit" className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#091324] px-8 py-3.5 text-sm font-semibold text-[#F8F5EE] transition-all duration-300 hover:bg-[#152238] hover:shadow-[0_14px_28px_-12px_rgba(9,19,36,0.55)]">
+                                                        <div className="pt-2">
+                                                            <button type="submit" className="group inline-flex cursor-pointer items-center justify-center gap-3 rounded-full bg-[#091324] px-8 py-3.5 text-sm font-semibold text-[#F8F5EE] transition-all duration-300 hover:bg-[#152238] hover:shadow-[0_14px_28px_-12px_rgba(9,19,36,0.55)]">
                                                                 <span>Send message</span>
                                                                 <ArrowRight className="h-4 w-4 text-[#E8D5A3] transition-transform duration-300 group-hover:translate-x-1" />
                                                             </button>
-                                                            <span className="inline-flex items-center gap-1.5 text-[12px] text-[#091324]/50">
-                                                                <Lock className="h-3.5 w-3.5 text-[#8E6B28]" />
-                                                                Secretariat confidentiality
-                                                            </span>
                                                         </div>
                                                     </form>
                                                 )}

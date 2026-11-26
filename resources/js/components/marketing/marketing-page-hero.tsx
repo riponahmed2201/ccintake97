@@ -24,19 +24,9 @@ export function MarketingPageHero({
                 <div className="absolute inset-0 bg-gradient-to-r from-[#060B15] via-[#091324]/90 to-[#091324]/70" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#091324] via-[#091324]/25 to-[#091324]/55" />
             </div>
-            <div className={`${LANDING_CONTAINER} pt-28 pb-24 sm:pt-32 sm:pb-28 lg:pt-36 lg:pb-32`}>
-                <div className="flex flex-col justify-between gap-10 lg:flex-row lg:items-end">
+            <div className={`${LANDING_CONTAINER} pt-28 pb-20 sm:pt-32 sm:pb-24 lg:pt-36 lg:pb-28`}>
+                <div className="max-w-3xl">
                     <SectionHeading reveal={false} titleTag="h1" light eyebrow={eyebrow} title={title} intro={intro} />
-                    {stats && stats.length > 0 && (
-                        <dl className="grid shrink-0 grid-cols-2 gap-x-8 gap-y-5 rounded-2xl border border-[#C8A252]/30 bg-white/[0.06] px-8 py-6 shadow-[0_24px_48px_-24px_rgba(0,0,0,0.6)] backdrop-blur-md sm:grid-cols-4 lg:gap-x-10">
-                            {stats.map((st) => (
-                                <div key={st.label}>
-                                    <dd className="font-serif text-3xl font-semibold tabular-nums text-[#E8D5A3] sm:text-4xl">{st.value}</dd>
-                                    <dt className="mt-1 text-[10px] font-medium tracking-[0.2em] text-[#F8F5EE]/60 uppercase sm:text-[10.5px]">{st.label}</dt>
-                                </div>
-                            ))}
-                        </dl>
-                    )}
                 </div>
             </div>
         </section>

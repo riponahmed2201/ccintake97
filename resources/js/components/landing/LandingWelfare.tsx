@@ -41,7 +41,7 @@ export function LandingWelfare({ omitHeading = false, className = '' }: { omitHe
                                                 </span>
                                                 <span className="text-[10.5px] font-semibold tracking-[0.18em] text-[#8E6B28] uppercase">{w.label}</span>
                                             </div>
-                                            <div className="mt-6 font-serif text-4xl font-semibold text-[#091324]">{w.figure}</div>
+                                            <div className="mt-6 font-sans text-3xl font-bold tracking-tight text-[#091324] tabular-nums">{w.figure}</div>
                                             <h3 className="mt-2 text-[17px] font-semibold text-[#091324]">{w.title}</h3>
                                             <p className="mt-2.5 text-[14px] leading-relaxed text-[#4A4F5C]">{w.description}</p>
                                         </div>
@@ -72,17 +72,24 @@ export function LandingWelfare({ omitHeading = false, className = '' }: { omitHe
                                     </div>
                                 </Reveal>
         
-                                <div className={`grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4 ${LANDING_SECTION_BODY}`}>
+                                <div className={`grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 ${LANDING_SECTION_BODY}`}>
                                     {WELFARE_PILLARS.map((w, i) => {
                                         const Icon = w.icon;
                                         return (
                                             <Reveal key={w.title} delay={i * 80} className="h-full">
-                                                <div className="flex h-full min-h-[11.5rem] flex-col justify-between rounded-xl border border-brand-navy/10 bg-slate-50 p-5 sm:min-h-[13rem] sm:p-6">
-                                                    <Icon className="h-5 w-5 text-brand-gold" strokeWidth={1.5} />
-                                                    <div className="mt-5 font-serif text-4xl font-semibold text-brand-navy sm:text-[2.75rem]">{w.figure}</div>
-                                                    <div className="mt-2 text-[14.5px] font-medium text-brand-navy">{w.title}</div>
-                                                    <div className="mt-0.5 text-[11.5px] tracking-[0.14em] text-brand-gold-muted uppercase">{w.label}</div>
-                                                </div>
+                                                <article className="group flex h-full flex-col justify-between rounded-2xl border border-[#091324]/[0.08] bg-[#FAF8F3] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[#C9A55C]/45 hover:bg-white hover:shadow-[0_18px_40px_-20px_rgba(9,19,36,0.16)]">
+                                                    <div>
+                                                        <div className="flex items-center justify-between gap-2">
+                                                            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#091324] text-[#E8D5A3] transition-colors group-hover:bg-[#8E6B28] group-hover:text-white">
+                                                                <Icon className="h-5 w-5" strokeWidth={1.6} />
+                                                            </span>
+                                                            <span className="text-[10.5px] font-semibold tracking-[0.16em] text-[#8E6B28] uppercase">{w.label}</span>
+                                                        </div>
+                                                        <div className="mt-6 font-sans text-3xl font-bold tracking-tight text-[#091324] tabular-nums">{w.figure}</div>
+                                                        <h3 className="mt-2 text-[17px] font-semibold text-[#091324]">{w.title}</h3>
+                                                        <p className="mt-2 text-[14px] leading-relaxed text-[#4A4F5C]">{w.description}</p>
+                                                    </div>
+                                                </article>
                                             </Reveal>
                                         );
                                     })}

@@ -96,22 +96,25 @@ export function LandingNews({
                                                         <ExploreLink href="/directory" internal={false}>Directory</ExploreLink>
                                                     </div>
                                                 </Reveal>
-                                                <ul className="divide-y divide-[#0B1220]/10">
+                                                <div className="mt-4 space-y-3">
                                                     {ventures.slice(0, 5).map((b, i) => (
                                                         <Reveal key={b.key} delay={i * 60}>
-                                                            <li>
-                                                                <Link href={`/directory?search=${encodeURIComponent(b.lead)}`} className="group flex items-center gap-4 py-5">
-                                                                    <span className="w-6 font-serif text-sm text-[#9A7B3F] italic">{String(i + 1).padStart(2, '0')}</span>
-                                                                    <div className="min-w-0 flex-1">
-                                                                        <div className="truncate font-serif text-xl text-[#0B1220] transition-transform duration-500 group-hover:translate-x-1">{b.lead}</div>
-                                                                        <div className="mt-0.5 truncate text-[13px] text-[#4A4F5C]">{b.sector} · {b.city}</div>
-                                                                    </div>
-                                                                    <ArrowUpRight className="h-4 w-4 shrink-0 text-[#0B1220]/30 transition-colors group-hover:text-[#9A7B3F]" />
-                                                                </Link>
-                                                            </li>
+                                                            <Link
+                                                                href={`/directory?search=${encodeURIComponent(b.lead)}`}
+                                                                className="group flex items-center gap-4 rounded-xl border border-[#0B1220]/[0.07] bg-[#FAF8F3]/70 p-4 transition-all duration-300 hover:border-[#C9A55C]/45 hover:bg-white hover:shadow-[0_12px_28px_-16px_rgba(11,18,32,0.14)]"
+                                                            >
+                                                                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#091324]/[0.06] font-sans text-xs font-bold text-[#8E6B28] tabular-nums">
+                                                                    {String(i + 1).padStart(2, '0')}
+                                                                </span>
+                                                                <div className="min-w-0 flex-1">
+                                                                    <div className="truncate font-serif text-lg font-medium text-[#0B1220] transition-colors group-hover:text-[#8E6B28]">{b.lead}</div>
+                                                                    <div className="mt-0.5 truncate text-[12.5px] text-[#4A4F5C]">{b.sector} · {b.city}</div>
+                                                                </div>
+                                                                <ArrowUpRight className="h-4 w-4 shrink-0 text-[#0B1220]/30 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#9A7B3F]" />
+                                                            </Link>
                                                         </Reveal>
                                                     ))}
-                                                </ul>
+                                                </div>
                                             </div>
                                         </div>
                                     );

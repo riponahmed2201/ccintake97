@@ -179,6 +179,19 @@
     body {
         @apply bg-background text-foreground;
     }
+
+    button,
+    [role='button'],
+    a[href],
+    select,
+    summary {
+        cursor: pointer;
+    }
+
+    button:disabled,
+    [aria-disabled='true'] {
+        cursor: not-allowed;
+    }
 }
 
 @keyframes heroZoom {

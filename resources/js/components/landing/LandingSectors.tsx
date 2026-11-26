@@ -26,8 +26,8 @@ export function LandingSectors() {
                                             <Icon className="h-5 w-5" strokeWidth={1.6} />
                                         </span>
                                         <div className="text-right">
-                                            <div className="font-serif text-3xl font-semibold text-brand-navy">{s.count}</div>
-                                            <div className="text-[10px] tracking-[0.16em] text-brand-navy/50 uppercase">{s.unit}</div>
+                                            <div className="font-sans text-2xl font-bold tracking-tight text-brand-navy tabular-nums">{s.count}</div>
+                                            <div className="text-[10px] font-semibold tracking-[0.16em] text-brand-navy/50 uppercase">{s.unit}</div>
                                         </div>
                                     </div>
                                     <h3 className="mt-6 text-lg font-semibold text-brand-navy">{s.title}</h3>
