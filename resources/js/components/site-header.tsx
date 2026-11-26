@@ -73,9 +73,7 @@ export function SiteHeader({
                       ? 'border-b border-brand-navy/[0.06] bg-white shadow-[0_1px_30px_-12px_rgba(11,18,32,0.18)] backdrop-blur-xl'
                       : 'border-b border-transparent bg-transparent'
               }`
-            : `sticky top-0 z-50 border-b border-brand-navy/[0.06] backdrop-blur-xl ${
-                  surface === 'white' ? 'bg-white/95' : 'bg-brand-cream/90'
-              }`;
+            : 'sticky top-0 z-50 border-b border-brand-navy/[0.06] bg-white/95 backdrop-blur-xl';
 
     const closeMobile = () => setMobileMenuOpen(false);
     const { openSignup } = useSignupDialog();
@@ -193,7 +191,7 @@ export function SiteHeader({
             {mobileMenuOpen && (
                 <div
                     id="site-mobile-menu"
-                    className={`border-t border-brand-navy/[0.06] px-5 pt-2 pb-6 xl:hidden ${variant === 'hero' || surface === 'white' ? 'bg-white' : 'bg-brand-cream'}`}
+                    className="border-t border-brand-navy/[0.06] bg-white px-5 pt-2 pb-6 xl:hidden"
                 >
                     {NAV_LINKS.map((l) => (
                         <Link
