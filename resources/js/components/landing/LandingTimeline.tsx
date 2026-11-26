@@ -12,21 +12,27 @@ export function LandingTimeline({ className = '', milestones }: { className?: st
         
                                 <div className={`relative ${LANDING_SECTION_BODY}`}>
                                     <div className="absolute top-[30px] right-0 left-0 hidden h-px bg-gradient-to-r from-transparent via-[#C8A252]/45 to-transparent md:block" />
-                                    <ol className={`grid grid-cols-1 gap-6 md:grid-cols-4 lg:gap-8`}>
+                                    <ol className={`grid grid-cols-1 gap-6 md:grid-cols-4 lg:gap-7`}>
                                         {items.map((m, i) => {
                                             const highlighted = m.is_highlighted ?? i === items.length - 1;
                                             return (
                                             <Reveal key={m.year} delay={i * 90}>
-                                                <li className="relative h-full rounded-xl border border-transparent p-4">
+                                                <li
+                                                    className={`relative h-full rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 ${
+                                                        highlighted
+                                                            ? 'border-[#C9A55C]/45 bg-[#091324] text-[#F7F3EA] shadow-[0_24px_50px_-20px_rgba(9,19,36,0.45)]'
+                                                            : 'border-[#0B1220]/[0.07] bg-[#FAF8F3]/75 hover:border-[#C9A55C]/45 hover:bg-white hover:shadow-[0_18px_40px_-18px_rgba(11,18,32,0.14)]'
+                                                    }`}
+                                                >
                                                     <div className="flex items-center gap-4 md:flex-col md:items-start">
-                                                        <span className={`relative z-10 flex h-[60px] w-[60px] shrink-0 items-center justify-center rounded-full border ${highlighted ? 'border-[#C8A252] bg-[#091324] shadow-[0_0_0_6px_rgba(200,162,82,0.22)]' : 'border-[#091324]/15 bg-white shadow-xs'}`}>
+                                                        <span className={`relative z-10 flex h-[56px] w-[56px] shrink-0 items-center justify-center rounded-full border ${highlighted ? 'border-[#C9A55C] bg-[#0F1E36] shadow-[0_0_0_6px_rgba(200,162,82,0.2)]' : 'border-[#091324]/15 bg-white shadow-xs'}`}>
                                                             <span className={`h-2.5 w-2.5 rounded-full ${highlighted ? 'bg-[#E8D5A3]' : 'bg-[#8E6B28]'}`} />
                                                         </span>
-                                                        <span className="font-serif text-4xl font-semibold text-[#091324] md:mt-6">{m.year}</span>
+                                                        <span className={`font-serif text-4xl font-semibold md:mt-5 ${highlighted ? 'text-[#E8D5A3]' : 'text-[#091324]'}`}>{m.year}</span>
                                                     </div>
-                                                    <h3 className="mt-4 text-[16px] font-semibold text-[#091324]">{m.title}</h3>
-                                                    <p className="mt-1 text-[11px] font-medium tracking-[0.18em] text-[#8E6B28] uppercase">{m.tagline}</p>
-                                                    <p className="mt-3 text-[14px] leading-relaxed text-[#4A4F5C]">{m.description}</p>
+                                                    <h3 className={`mt-4 text-[17px] font-semibold ${highlighted ? 'text-white' : 'text-[#091324]'}`}>{m.title}</h3>
+                                                    <p className={`mt-1 text-[11px] font-medium tracking-[0.18em] uppercase ${highlighted ? 'text-[#E8D5A3]/80' : 'text-[#8E6B28]'}`}>{m.tagline}</p>
+                                                    <p className={`mt-3 text-[14px] leading-relaxed ${highlighted ? 'text-[#F7F3EA]/75' : 'text-[#4A4F5C]'}`}>{m.description}</p>
                                                 </li>
                                             </Reveal>
                                             );

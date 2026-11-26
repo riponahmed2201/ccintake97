@@ -26,6 +26,7 @@ import {
     ChevronDown,
     KeyRound,
     AlertCircle,
+    Images,
 } from 'lucide-react';
 import {
     DropdownMenu,
@@ -62,6 +63,7 @@ const NAV_GROUPS = [
         items: [
             { label: 'Reunions & Events', href: '/member/events', icon: Calendar },
             { label: 'News & Notices', href: '/member/articles', icon: Newspaper },
+            { label: 'Gallery', href: '/member/gallery', icon: Images },
             { label: 'Business Network', href: '/member/businesses', icon: Briefcase },
             { label: 'Mentorship Hub', href: '/member/mentorship', icon: GraduationCap },
         ],

@@ -64,13 +64,16 @@ export function SectionHeading({
         <>
             <div className={`max-w-3xl space-y-5 ${centered ? 'flex flex-col items-center' : 'min-w-0'}`}>
                 {(index || eyebrow) && (
-                    <p
-                        className={`text-[11px] font-medium uppercase ${light ? 'text-brand-gold-bright/80' : 'text-brand-gold-muted'} ${
-                            centered ? 'tracking-[0.28em]' : 'tracking-[0.22em] sm:tracking-[0.28em]'
-                        }`}
-                    >
-                        {[index, eyebrow].filter(Boolean).join(' · ')}
-                    </p>
+                    <div className={`inline-flex items-center gap-3 ${centered ? 'justify-center' : ''}`}>
+                        <span className={`h-px w-7 ${light ? 'bg-brand-gold-bright/60' : 'bg-[#C9A55C]'}`} />
+                        <p
+                            className={`text-[11px] font-semibold uppercase ${light ? 'text-brand-gold-bright/85' : 'text-brand-gold-muted'} ${
+                                centered ? 'tracking-[0.28em]' : 'tracking-[0.22em] sm:tracking-[0.28em]'
+                            }`}
+                        >
+                            {[index, eyebrow].filter(Boolean).join(' · ')}
+                        </p>
+                    </div>
                 )}
                 <TitleTag
                     className={`font-serif text-4xl leading-[1.05] font-medium tracking-[-0.01em] sm:text-5xl lg:text-[3.5rem] ${

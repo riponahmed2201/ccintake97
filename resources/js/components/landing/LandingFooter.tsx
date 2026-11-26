@@ -31,8 +31,8 @@ export function LandingFooter() {
                         </Link>
                     </div>
                     {[
-                        { h: 'Association', links: [['/about', 'About'], ['/colleges', 'Colleges'], ['/directory', 'Directory'], ['/committee', 'Committee']] },
-                        { h: 'Activities', links: [['/welfare', 'Welfare & Trust'], ['/#news', 'News & ventures'], ['/#constitution', 'Charter'], ['/#reunion', 'Reunion 2027']] },
+                        { h: 'Association', links: [['/about', 'About'], ['/colleges', 'Colleges'], ['/directory', 'Directory'], ['/gallery', 'Gallery']] },
+                        { h: 'Activities', links: [['/#news', 'News & ventures'], ['/#constitution', 'Charter'], ['/#reunion', 'Reunion 2027']] },
                     ].map((col) => (
                         <div key={col.h} className="md:col-span-2">
                             <h4 className="text-[12px] font-semibold tracking-[0.22em] text-brand-gold-bright/90 uppercase">{col.h}</h4>

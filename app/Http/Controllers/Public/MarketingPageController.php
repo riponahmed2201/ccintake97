@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\College;
 use App\Models\Committee;
+use App\Models\GalleryItem;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -45,6 +46,26 @@ class MarketingPageController extends Controller
     {
         return Inertia::render('public/marketing', [
             'page' => 'contact',
+        ]);
+    }
+
+    public function gallery(): Response
+    {
+        $items = GalleryItem::where('is_active', true)
+            ->orderBy('display_order')
+            ->orderBy('id')
+            ->get()
+            ->map(fn (GalleryItem $g) => [
+                'id' => $g->id,
+                'title' => $g->title,
+                'place_label' => $g->place_label,
+                'category' => $g->category,
+                'image_url' => $g->image_url,
+            ])
+            ->values();
+
+        return Inertia::render('public/gallery', [
+            'items' => $items,
         ]);
     }
 

@@ -70,7 +70,7 @@ export function SiteHeader({
         variant === 'hero'
             ? `fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
                   solidHeader
-                      ? 'border-b border-brand-navy/[0.06] bg-brand-cream/85 shadow-[0_1px_30px_-12px_rgba(11,18,32,0.18)] backdrop-blur-xl'
+                      ? 'border-b border-brand-navy/[0.06] bg-white shadow-[0_1px_30px_-12px_rgba(11,18,32,0.18)] backdrop-blur-xl'
                       : 'border-b border-transparent bg-transparent'
               }`
             : `sticky top-0 z-50 border-b border-brand-navy/[0.06] backdrop-blur-xl ${
@@ -193,7 +193,7 @@ export function SiteHeader({
             {mobileMenuOpen && (
                 <div
                     id="site-mobile-menu"
-                    className={`border-t border-brand-navy/[0.06] px-5 pt-2 pb-6 xl:hidden ${surface === 'white' ? 'bg-white' : 'bg-brand-cream'}`}
+                    className={`border-t border-brand-navy/[0.06] px-5 pt-2 pb-6 xl:hidden ${variant === 'hero' || surface === 'white' ? 'bg-white' : 'bg-brand-cream'}`}
                 >
                     {NAV_LINKS.map((l) => (
                         <Link

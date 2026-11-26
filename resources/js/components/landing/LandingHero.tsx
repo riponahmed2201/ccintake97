@@ -115,6 +115,10 @@ export function LandingHero({
 
             <div className={`${LANDING_CONTAINER} ${LANDING_HERO_INNER}`}>
                 <Reveal>
+                    <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-[#E8D5A3]/25 bg-white/[0.06] px-4 py-1.5 text-[11px] font-medium tracking-[0.22em] text-[#E8D5A3] uppercase backdrop-blur-md">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#E8D5A3]" />
+                        CCINTAKE 97 · Ten Cadet Colleges · Est. {metrics.intake_year}
+                    </div>
                     <h1 className="max-w-4xl font-serif text-[3rem] leading-[0.98] font-semibold tracking-[-0.02em] sm:text-6xl lg:text-[6.25rem]">
                         {heroConfig?.headline || 'Different colleges.'}
                         <br />
@@ -128,7 +132,7 @@ export function LandingHero({
                 </Reveal>
                 <Reveal delay={300}>
                     <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5">
-                        <PrimaryCta as="button" variant="navy" onClick={openSignup}>
+                        <PrimaryCta as="button" variant="gold" onClick={openSignup}>
                             {heroConfig?.primary_cta || 'Apply for membership'}
                         </PrimaryCta>
                         <ExploreLink href="/about" light internal={false}>
@@ -138,7 +142,7 @@ export function LandingHero({
                 </Reveal>
 
                 <Reveal delay={400}>
-                    <div className="mt-16 flex flex-col gap-6 border-t border-brand-gold-bright/30 pt-8 sm:mt-20 sm:flex-row sm:items-end sm:justify-between lg:pt-10">
+                    <div className="mt-14 flex flex-col gap-6 rounded-2xl border border-white/10 bg-[#071018]/55 px-6 py-5 backdrop-blur-md sm:mt-18 sm:flex-row sm:items-center sm:justify-between lg:px-8 lg:py-6">
                         <dl className="flex gap-10 sm:gap-16">
                             {[
                                 { v: String(metrics.total_colleges), l: 'Colleges' },

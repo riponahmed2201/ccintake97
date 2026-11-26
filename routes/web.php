@@ -11,6 +11,7 @@ Route::get('/about', [Public\MarketingPageController::class, 'about'])->name('ab
 Route::get('/colleges', [Public\MarketingPageController::class, 'colleges'])->name('colleges');
 Route::get('/committee', [Public\MarketingPageController::class, 'committee'])->name('committee');
 Route::get('/welfare', [Public\MarketingPageController::class, 'welfare'])->name('welfare');
+Route::get('/gallery', [Public\MarketingPageController::class, 'gallery'])->name('gallery');
 Route::get('/contact', [Public\MarketingPageController::class, 'contact'])->name('contact');
 Route::get('/directory', [Public\DirectoryController::class, 'index'])->name('directory.public');
 Route::get('/directory/{id}', [Public\DirectoryController::class, 'show'])->whereNumber('id')->name('directory.public.show');
@@ -56,6 +57,7 @@ Route::middleware(['auth'])->prefix('member')->name('member.')->group(function (
 
     Route::get('/articles', [Member\ArticleController::class, 'index'])->name('articles.index');
     Route::get('/articles/{slug}', [Member\ArticleController::class, 'show'])->name('articles.show');
+    Route::get('/gallery', [Member\GalleryController::class, 'index'])->name('gallery.index');
 
     Route::get('/businesses', [Member\BusinessController::class, 'index'])->name('businesses.index');
     Route::post('/businesses', [Member\BusinessController::class, 'store'])->name('businesses.store');

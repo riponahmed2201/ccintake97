@@ -20,7 +20,7 @@ export function LandingCampusLife({ className = '', galleryItems }: { className?
             </div>
             <div className={`${LANDING_SCROLL_TRACK} gap-4 pb-2 ${LANDING_SECTION_BODY} ${LANDING_BLEED}`}>
                 {photos.map((ph) => (
-                    <figure key={ph.src} className="group relative w-[78vw] shrink-0 snap-start overflow-hidden rounded-xl bg-brand-navy ring-1 ring-brand-navy/10 sm:w-[400px]">
+                    <figure key={ph.src} className="group relative w-[78vw] shrink-0 snap-start overflow-hidden rounded-2xl bg-brand-navy shadow-[0_20px_50px_-24px_rgba(11,18,32,0.35)] ring-1 ring-brand-navy/10 transition-all duration-300 hover:ring-[#C9A55C]/50 sm:w-[400px]">
                         <img
                             src={ph.src}
                             alt={ph.title}

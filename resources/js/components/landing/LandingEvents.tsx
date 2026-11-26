@@ -25,35 +25,35 @@ export function LandingEvents({ events }: { events: Event[] }) {
                     }
                     intro="Public events open to verified batchmates and guests — reunions, conclaves, and chapter musters."
                 />
-                <ul className={`divide-y divide-brand-navy/10 ${LANDING_SECTION_BODY}`}>
+                <div className={`grid grid-cols-1 gap-4 ${LANDING_SECTION_BODY}`}>
                     {events.map((ev, i) => (
                         <Reveal key={ev.id} delay={i * 50}>
-                            <li className="flex flex-col gap-4 py-7 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="group flex flex-col gap-4 rounded-2xl border border-brand-navy/[0.08] bg-[#FAF8F3]/60 p-6 transition-all duration-300 hover:border-[#C9A55C]/45 hover:bg-white hover:shadow-[0_18px_40px_-22px_rgba(11,18,32,0.15)] sm:flex-row sm:items-center sm:justify-between">
                                 <div className="min-w-0">
                                     <div className="flex flex-wrap items-center gap-3 text-[11px] tracking-[0.18em] text-brand-gold-muted uppercase">
-                                        <span>{ev.category?.name ?? 'Event'}</span>
-                                        <span className="flex items-center gap-1.5 text-brand-navy/50 normal-case tracking-normal">
-                                            <Calendar className="h-3.5 w-3.5" />
+                                        <span className="rounded-full bg-[#C9A55C]/15 px-2.5 py-0.5 font-semibold text-[#8E6B28]">{ev.category?.name ?? 'Event'}</span>
+                                        <span className="flex items-center gap-1.5 text-brand-navy/60 normal-case tracking-normal">
+                                            <Calendar className="h-3.5 w-3.5 text-[#8E6B28]" />
                                             {formatEventDate(ev.starts_on, ev.start_time)}
                                         </span>
                                     </div>
-                                    <h3 className="mt-2 font-serif text-2xl text-brand-navy">{ev.title}</h3>
+                                    <h3 className="mt-2.5 font-serif text-2xl font-medium text-brand-navy transition-colors group-hover:text-[#8E6B28]">{ev.title}</h3>
                                     {ev.description && <p className="mt-2 line-clamp-2 max-w-2xl text-[15px] text-[#4A4F5C]">{ev.description}</p>}
-                                    <p className="mt-2 flex items-center gap-1.5 text-[13px] text-brand-navy/60">
-                                        <MapPin className="h-3.5 w-3.5 shrink-0" />
+                                    <p className="mt-2.5 flex items-center gap-1.5 text-[13px] text-brand-navy/65">
+                                        <MapPin className="h-3.5 w-3.5 shrink-0 text-[#8E6B28]" />
                                         {[ev.venue, ev.city].filter(Boolean).join(' · ')}
                                     </p>
                                 </div>
                                 <Link
                                     href={`/events/${ev.slug}`}
-                                    className="inline-flex shrink-0 items-center gap-2 text-[14px] font-medium text-brand-navy hover:text-brand-gold-muted"
+                                    className="inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-brand-navy/15 bg-white px-5 py-2.5 text-[13.5px] font-semibold text-brand-navy transition-all hover:border-[#091324] hover:bg-[#091324] hover:text-[#F7F3EA] sm:self-center"
                                 >
                                     Details <ArrowRight className="h-4 w-4" />
                                 </Link>
-                            </li>
+                            </div>
                         </Reveal>
                     ))}
-                </ul>
+                </div>
             </div>
         </section>
     );

@@ -7,8 +7,9 @@ export default function PublicSiteHeader({ active, surface = 'cream' }: { active
         About: 'about',
         Colleges: 'colleges',
         Directory: 'directory',
-        Committee: 'committee',
-        Welfare: 'welfare',
+        Gallery: 'gallery',
+        // Committee: 'committee',
+        // Welfare: 'welfare',
         Contact: 'contact',
     };
     return <SiteHeader variant="solid" surface={surface} activeNav={active ? spyMap[active] ?? null : null} />;
