@@ -83,8 +83,8 @@ export function LandingReunion() {
 
                     <div className="lg:col-span-5">
                         <Reveal delay={200}>
-                            <div className="relative rounded-[2rem] bg-gradient-to-b from-[#450D15]/50 via-[#450D15]/10 to-transparent p-px">
-                                <div className="rounded-[calc(2rem-1px)] bg-[#0B1220]/95 p-8 backdrop-blur-xl sm:p-10">
+                            <div className="relative rounded-[2rem] bg-gradient-to-b from-[#F4C2C7]/45 via-[#450D15]/70 to-transparent p-px shadow-[0_24px_60px_-20px_rgba(69,13,21,0.5)]">
+                                <div className="rounded-[calc(2rem-1px)] bg-[#14070B]/95 p-8 backdrop-blur-xl sm:p-10">
                                     <div className="flex items-center justify-between gap-3">
                                         <span className="text-[11px] tracking-[0.24em] text-[#F4C2C7] uppercase">Class of 1997 Pass</span>
                                         <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/10 px-3 py-1 text-[11px] text-emerald-300">

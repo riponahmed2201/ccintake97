@@ -19,7 +19,7 @@ export function LandingTimeline({ className = '', milestones }: { className?: st
                                                 <li
                                                     className={`relative flex h-full flex-col justify-between rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1 ${
                                                         highlighted
-                                                            ? 'border-[#450D15]/45 bg-[#091324] text-[#F7F3EA] shadow-[0_24px_50px_-20px_rgba(9,19,36,0.45)]'
+                                                            ? 'border-[#F4C2C7]/35 bg-[#450D15] text-white shadow-[0_24px_50px_-20px_rgba(69,13,21,0.5)]'
                                                             : 'border-[#0B1220]/[0.07] bg-[#F8FAFC]/75 hover:border-[#450D15]/45 hover:bg-white hover:shadow-[0_18px_40px_-18px_rgba(11,18,32,0.14)]'
                                                     }`}
                                                 >
@@ -28,7 +28,7 @@ export function LandingTimeline({ className = '', milestones }: { className?: st
                                                             <span
                                                                 className={`inline-flex items-center rounded-full px-3 py-1 font-sans text-[11px] font-bold tracking-[0.18em] tabular-nums uppercase ${
                                                                     highlighted
-                                                                        ? 'bg-[#450D15]/20 text-[#F4C2C7]'
+                                                                        ? 'bg-white/10 text-[#F4C2C7]'
                                                                         : 'bg-[#091324]/[0.06] text-[#5E121D]'
                                                                 }`}
                                                             >

@@ -197,7 +197,7 @@ export function LandingColleges({
 
                                 <Reveal delay={200}>
                                     <div className="mt-14 flex justify-center">
-                                        <PrimaryCta as="button" onClick={openSignup}>
+                                        <PrimaryCta as="button" variant="gold" onClick={openSignup}>
                                             Apply for membership
                                         </PrimaryCta>
                                     </div>

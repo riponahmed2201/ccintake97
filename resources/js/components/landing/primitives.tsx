@@ -143,13 +143,13 @@ export function CollegeEmblem({ logo, code, name, size = 88 }: { logo?: string |
             <div
                 style={{ inset }}
                 className={`absolute flex items-center justify-center overflow-hidden rounded-full ring-1 ring-[#450D15]/50 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.6)] ${
-                    showLogo ? 'bg-white' : 'bg-gradient-to-br from-[#1E2A42] via-[#0E1628] to-[#070B14]'
+                    showLogo ? 'bg-white' : 'bg-gradient-to-br from-[#450D15] via-[#2E080E] to-[#1A0408]'
                 }`}
             >
                 {showLogo ? (
                     <img src={logo!} alt={`${name} crest`} loading="lazy" onError={() => setFailed(true)} className="h-full w-full object-contain p-[8%]" />
                 ) : (
-                    <span style={{ fontSize }} className="bg-gradient-to-b from-[#F1DFB0] to-[#B8924A] bg-clip-text font-serif leading-none font-medium text-transparent">
+                    <span style={{ fontSize }} className="bg-gradient-to-b from-[#F4C2C7] to-[#E89CA7] bg-clip-text font-serif leading-none font-medium text-transparent">
                         {code}
                     </span>
                 )}

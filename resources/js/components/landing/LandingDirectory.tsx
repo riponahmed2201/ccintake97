@@ -53,7 +53,7 @@ export function LandingDirectory({
                                                     type="button"
                                                     aria-label="Previous profile"
                                                     onClick={() => scrollSpotlight(-1)}
-                                                    className="flex h-12 w-12 items-center justify-center rounded-full border border-brand-navy/15 text-brand-navy transition-colors hover:bg-brand-navy hover:text-brand-cream-text"
+                                                    className="flex h-12 w-12 items-center justify-center rounded-full border border-brand-navy/15 text-brand-navy transition-colors hover:border-[#450D15] hover:bg-[#450D15] hover:text-white"
                                                 >
                                                     <ArrowRight className="h-4 w-4 rotate-180" />
                                                 </button>
@@ -61,7 +61,7 @@ export function LandingDirectory({
                                                     type="button"
                                                     aria-label="Next profile"
                                                     onClick={() => scrollSpotlight(1)}
-                                                    className="flex h-12 w-12 items-center justify-center rounded-full border border-brand-navy/15 text-brand-navy transition-colors hover:bg-brand-navy hover:text-brand-cream-text"
+                                                    className="flex h-12 w-12 items-center justify-center rounded-full border border-brand-navy/15 text-brand-navy transition-colors hover:border-[#450D15] hover:bg-[#450D15] hover:text-white"
                                                 >
                                                     <ArrowRight className="h-4 w-4" />
                                                 </button>
@@ -212,7 +212,7 @@ export function LandingDirectory({
                                                 aria-label="Search the directory"
                                                 className="h-12 min-w-0 flex-1 border-0 bg-transparent text-[16px] text-[#0B1220] placeholder:text-[#0B1220]/40 focus:ring-0 focus:outline-none"
                                             />
-                                            <button type="submit" className="flex h-12 shrink-0 items-center gap-2 rounded-full bg-[#0B1220] px-7 text-[15px] font-medium text-white hover:bg-[#1A2438]">
+                                            <button type="submit" className="flex h-12 shrink-0 items-center gap-2 rounded-full bg-gradient-to-r from-[#6E1622] via-[#450D15] to-[#5E121D] px-7 text-[15px] font-semibold text-white shadow-[0_10px_24px_-8px_rgba(94,18,29,0.5)] transition-all duration-300 hover:brightness-110">
                                                 Search
                                             </button>
                                         </form>

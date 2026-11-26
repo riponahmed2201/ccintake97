@@ -11,7 +11,7 @@ import { LandingCampusLife } from '@/components/landing/LandingCampusLife';
 import { LandingDirectory } from '@/components/landing/LandingDirectory';
 import { LandingSectors } from '@/components/landing/LandingSectors';
 import { LandingEvents } from '@/components/landing/LandingEvents';
-import { LandingCommittee } from '@/components/landing/LandingCommittee';
+// import { LandingCommittee } from '@/components/landing/LandingCommittee';
 import { LandingWelfare } from '@/components/landing/LandingWelfare';
 import { LandingNews } from '@/components/landing/LandingNews';
 import { LandingReunion } from '@/components/landing/LandingReunion';
@@ -93,7 +93,7 @@ export function LandingPage({
                 />
                 <LandingSectors />
                 <LandingEvents events={events} />
-                <LandingCommittee committee={committee} mergedColleges={landing.mergedColleges} />
+                {/* <LandingCommittee committee={committee} mergedColleges={landing.mergedColleges} /> */}
                 <LandingWelfare />
                 <LandingNews articles={articles} businesses={businesses} />
                 <LandingReunion />
