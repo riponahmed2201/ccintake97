@@ -14,8 +14,6 @@ import { LandingEvents } from '@/components/landing/LandingEvents';
 // import { LandingCommittee } from '@/components/landing/LandingCommittee';
 import { LandingWelfare } from '@/components/landing/LandingWelfare';
 import { LandingNews } from '@/components/landing/LandingNews';
-import { LandingReunion } from '@/components/landing/LandingReunion';
-import { LandingContact } from '@/components/landing/LandingContact';
 import { LandingFooter } from '@/components/landing/LandingFooter';
 import { SignupDialogProvider } from '@/contexts/signup-dialog-context';
 
@@ -96,13 +94,6 @@ export function LandingPage({
                 {/* <LandingCommittee committee={committee} mergedColleges={landing.mergedColleges} /> */}
                 <LandingWelfare />
                 <LandingNews articles={articles} businesses={businesses} />
-                <LandingReunion />
-                <LandingContact
-                    contactSubmitted={landing.contactSubmitted}
-                    contactForm={landing.contactForm}
-                    setContactForm={landing.setContactForm}
-                    handleContactSubmit={landing.handleContactSubmit}
-                />
             </main>
             <LandingFooter />
         </div>

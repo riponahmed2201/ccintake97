@@ -9,6 +9,20 @@ use Inertia\Response;
 
 class ArticleController extends Controller
 {
+    public function index(): Response
+    {
+        $articles = Article::with(['category', 'author'])
+            ->where('status', 'published')
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now())
+            ->orderByDesc('published_at')
+            ->get();
+
+        return Inertia::render('news/index', [
+            'articles' => $articles,
+        ]);
+    }
+
     public function show(string $slug): Response
     {
         $article = Article::with(['category', 'author'])

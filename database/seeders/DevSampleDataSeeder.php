@@ -638,6 +638,8 @@ class DevSampleDataSeeder extends Seeder
             ]
         );
 
+        $this->call(NewsDispatchSeeder::class);
+
         // 11. Businesses with Logos
         $techBizCat = BusinessCategory::where('slug', 'technology-software')->first();
         $engBizCat = BusinessCategory::where('slug', 'engineering-consultancy')->first()

@@ -15,6 +15,7 @@ Route::get('/gallery', [Public\MarketingPageController::class, 'gallery'])->name
 Route::get('/contact', [Public\MarketingPageController::class, 'contact'])->name('contact');
 Route::get('/directory', [Public\DirectoryController::class, 'index'])->name('directory.public');
 Route::get('/directory/{id}', [Public\DirectoryController::class, 'show'])->whereNumber('id')->name('directory.public.show');
+Route::get('/news', [Public\ArticleController::class, 'index'])->name('news.index');
 Route::get('/news/{slug}', [Public\ArticleController::class, 'show'])->name('news.show');
 Route::get('/register-alumni', [Public\RegistrationController::class, 'create'])->name('register.alumni');
 Route::post('/register-alumni', [Public\RegistrationController::class, 'store'])->name('register.alumni.store');
