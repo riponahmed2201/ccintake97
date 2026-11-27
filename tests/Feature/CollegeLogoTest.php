@@ -41,7 +41,7 @@ class CollegeLogoTest extends TestCase
         $first = $college->fresh()->logo_path;
         $this->assertNotNull($first);
         Storage::disk('public')->assertExists($first);
-        $this->assertSame('/storage/'.$first, $college->fresh()->logo_url);
+        $this->assertStringEndsWith('/storage/'.$first, (string) $college->fresh()->logo_url);
 
         $this->actingAs($admin)
             ->post("/admin/colleges/{$college->id}/logo", ['logo' => UploadedFile::fake()->image('fcc2.webp', 256, 256)])

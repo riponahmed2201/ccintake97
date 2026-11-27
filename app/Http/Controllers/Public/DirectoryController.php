@@ -77,6 +77,16 @@ class DirectoryController extends Controller
                 'professional_bio' => $member->profile?->professional_bio,
                 'linkedin_url' => $isPublic('linkedin') ? $member->profile?->linkedin_url : null,
                 'website_url' => $isPublic('organization') ? $member->profile?->website_url : null,
+                // Approved businesses are already public on the landing page; contact
+                // details (email/phone) are intentionally left out.
+                'businesses' => $member->businesses->map(fn ($b) => [
+                    'id' => $b->id,
+                    'name' => $b->name,
+                    'description' => $b->description,
+                    'website' => $b->website,
+                    'city' => $b->city,
+                    'logo_url' => $b->logo_path ? asset('storage/'.ltrim($b->logo_path, '/')) : null,
+                ])->values(),
             ]),
         ]);
     }

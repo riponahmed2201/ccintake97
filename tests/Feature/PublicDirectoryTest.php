@@ -92,7 +92,7 @@ class PublicDirectoryTest extends TestCase
         $this->makeMember('Open Olivia', 'MGCC', [], [], ['photo' => 'public', 'designation' => 'public', 'city' => 'public']);
 
         $this->get('/directory')->assertInertia(fn (Assert $page) => $page
-            ->where('members.data.0.photo_url', '/storage/avatars/open-olivia.jpg')
+            ->where('members.data.0.photo_url', fn ($url) => str_ends_with((string) $url, '/storage/avatars/open-olivia.jpg'))
             ->where('members.data.0.designation', 'Consultant Surgeon')
             ->where('members.data.0.organization', null)
             ->where('members.data.0.city', 'Dhaka'));

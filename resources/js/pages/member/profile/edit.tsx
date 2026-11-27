@@ -256,6 +256,7 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
     }, {});
 
     const [privacySettings, setPrivacySettings] = useState<Record<string, string>>({
+        photo: existingPrivacy.photo || 'verified_members',
         organization: existingPrivacy.organization || 'verified_members',
         designation: existingPrivacy.designation || 'verified_members',
         city: existingPrivacy.city || 'connections',
@@ -600,7 +601,7 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                                         <div>
                                             <h2 className="text-[15px] font-semibold text-[#071437]">Who can see these details</h2>
                                             <p className="mt-0.5 text-[12.5px] text-[#78829D]">
-                                                Choose who can see organization, designation, and LinkedIn in the alumni directory.
+                                                Choose who can see your photo and details. “Everyone” also shows it on the public website and directory.
                                             </p>
                                         </div>
                                         {privacySaved && (
@@ -611,6 +612,7 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                                     </div>
                                     <div className="mt-2 divide-y divide-[#F1F1F4]">
                                         {[
+                                            { key: 'photo', label: 'Profile photo' },
                                             { key: 'organization', label: 'Organization' },
                                             { key: 'designation', label: 'Designation' },
                                             { key: 'linkedin', label: 'LinkedIn' },
@@ -626,6 +628,7 @@ export default function ProfileEdit({ member, colleges, houses, houseColors, blo
                                                         setPrivacySettings({ ...privacySettings, [item.key]: visibility });
                                                     }}
                                                     options={[
+                                                        { value: 'public', label: 'Everyone (public website)' },
                                                         { value: 'verified_members', label: 'Verified members' },
                                                         { value: 'connections', label: 'Connections only' },
                                                         { value: 'private', label: 'Only me and admin' },
