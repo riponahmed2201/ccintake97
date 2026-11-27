@@ -141,7 +141,10 @@ Route::middleware(['auth', 'role_or_permission:super_admin|admin.access'])
 
         // Businesses
         Route::get('/businesses', [Admin\BusinessController::class, 'index'])->name('businesses.index');
+        Route::get('/businesses/create', [Admin\BusinessController::class, 'create'])->name('businesses.create');
         Route::post('/businesses', [Admin\BusinessController::class, 'store'])->name('businesses.store');
+        Route::get('/businesses/{id}/edit', [Admin\BusinessController::class, 'edit'])->name('businesses.edit');
+        Route::put('/businesses/{id}', [Admin\BusinessController::class, 'update'])->name('businesses.update');
         Route::post('/businesses/{id}/verify', [Admin\BusinessController::class, 'verify'])->name('businesses.verify');
         Route::post('/businesses/{id}/reject', [Admin\BusinessController::class, 'reject'])->name('businesses.reject');
         Route::post('/businesses/{id}/feature', [Admin\BusinessController::class, 'toggleFeatured'])->name('businesses.feature');

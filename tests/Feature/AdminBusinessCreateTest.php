@@ -51,7 +51,6 @@ class AdminBusinessCreateTest extends TestCase
             'city' => 'Chattogram',
             'country_code' => 'bd',
             'status' => 'approved',
-            'is_featured' => true,
         ], $overrides);
     }
 
@@ -64,13 +63,12 @@ class AdminBusinessCreateTest extends TestCase
         $this->actingAs($admin)
             ->post('/admin/businesses', $this->payload($owner, ['logo' => UploadedFile::fake()->image('logo.png', 200, 200)]))
             ->assertSessionHasNoErrors()
-            ->assertRedirect();
+            ->assertRedirect('/admin/businesses');
 
         $biz = Business::where('name', 'Apex Logistics')->firstOrFail();
         $this->assertSame($owner->id, $biz->owner_member_id);
         $this->assertSame('approved', $biz->status);
         $this->assertSame('BD', $biz->country_code);
-        $this->assertTrue((bool) $biz->is_featured);
         $this->assertNotNull($biz->verified_at);
         Storage::disk('public')->assertExists($biz->logo_path);
     }
@@ -90,5 +88,44 @@ class AdminBusinessCreateTest extends TestCase
         $this->actingAs($member)->post('/admin/businesses', $this->payload($owner))->assertForbidden();
 
         $this->assertSame(0, Business::where('name', 'Apex Logistics')->count());
+    }
+
+    public function test_admin_can_open_pages_and_edit_business(): void
+    {
+        $admin = User::factory()->create(['account_status' => 'active']);
+        $admin->assignRole('association_admin');
+        $owner = $this->owner();
+
+        $this->actingAs($admin)->get('/admin/businesses/create')->assertOk()
+            ->assertInertia(fn ($page) => $page->component('admin/businesses/form')->where('business', null)->has('owners', 1));
+
+        $this->actingAs($admin)->post('/admin/businesses', $this->payload($owner, [
+            'status' => 'pending',
+            'logo' => UploadedFile::fake()->image('old.png'),
+        ]));
+        $biz = Business::where('name', 'Apex Logistics')->firstOrFail();
+        $oldLogo = $biz->logo_path;
+        $this->assertNull($biz->verified_at);
+
+        $this->actingAs($admin)->get("/admin/businesses/{$biz->id}/edit")->assertOk()
+            ->assertInertia(fn ($page) => $page->component('admin/businesses/form')->where('business.name', 'Apex Logistics'));
+
+        // Edits are sent as POST with _method=put so the logo file can be uploaded.
+        $this->actingAs($admin)->post("/admin/businesses/{$biz->id}", $this->payload($owner, [
+            '_method' => 'put',
+            'name' => 'Apex Global Logistics',
+            'status' => 'approved',
+            'logo' => UploadedFile::fake()->image('new.png'),
+        ]))->assertSessionHasNoErrors()->assertRedirect('/admin/businesses');
+
+        $biz->refresh();
+        $this->assertSame('Apex Global Logistics', $biz->name);
+        $this->assertSame('approved', $biz->status);
+        $this->assertNotNull($biz->verified_at);
+        $this->assertNotSame($oldLogo, $biz->logo_path);
+        Storage::disk('public')->assertMissing($oldLogo);
+
+        $this->actingAs($admin)->put("/admin/businesses/{$biz->id}", $this->payload($owner, ['remove_logo' => true]))->assertSessionHasNoErrors();
+        $this->assertNull($biz->fresh()->logo_path);
     }
 }

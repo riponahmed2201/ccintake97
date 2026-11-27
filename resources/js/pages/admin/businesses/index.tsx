@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Head, Link, router, useForm } from '@inertiajs/react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Head, Link, router } from '@inertiajs/react';
 import AdminLayout from '@/layouts/admin-layout';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -19,7 +18,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { Briefcase, CheckCircle2, ExternalLink, ImagePlus, MoreHorizontal, Plus, Search, Star, XCircle } from 'lucide-react';
+import { Briefcase, CheckCircle2, ExternalLink, MoreHorizontal, Pencil, Plus, Search, Star, XCircle } from 'lucide-react';
 import type { Business } from '@/types';
 
 interface BusinessesIndexProps {
@@ -38,22 +37,6 @@ interface BusinessesIndexProps {
         status?: string;
         per_page?: string;
     };
-    categories?: { id: number; name: string }[];
-    industries?: { id: number; name: string }[];
-    owners?: { id: number; name: string; college?: string | null }[];
-}
-
-function FormField({ label, error, required, children, className = '' }: { label: string; error?: string; required?: boolean; children: React.ReactNode; className?: string }) {
-    return (
-        <label className={`block ${className}`}>
-            <span className="mb-1.5 block text-[12.5px] font-semibold text-[#071437]">
-                {label}
-                {required && <span className="ml-0.5 text-[#F8285A]">*</span>}
-            </span>
-            {children}
-            {error && <span className="mt-1 block text-[12px] text-[#F8285A]">{error}</span>}
-        </label>
-    );
 }
 
 const ALL = '__all__';
@@ -76,34 +59,7 @@ const statusPill = (status: string) => {
     return 'border border-rose-200 bg-rose-50 text-rose-700';
 };
 
-export default function BusinessesIndex({ businesses, filters, categories = [], industries = [], owners = [] }: BusinessesIndexProps) {
-    const [addOpen, setAddOpen] = useState(false);
-    const [logoPreview, setLogoPreview] = useState<string | null>(null);
-    const form = useForm({
-        owner_member_id: '',
-        name: '',
-        category_id: '',
-        industry_id: '',
-        description: '',
-        website: '',
-        email: '',
-        phone: '',
-        city: '',
-        country_code: 'BD',
-        status: 'approved',
-        logo: null as File | null,
-    });
-    const closeAdd = () => {
-        setAddOpen(false);
-        form.reset();
-        form.clearErrors();
-        setLogoPreview(null);
-    };
-    const submitAdd = (e: React.FormEvent) => {
-        e.preventDefault();
-        form.post('/admin/businesses', { forceFormData: true, preserveScroll: true, onSuccess: closeAdd });
-    };
-    const ferr = form.errors as Record<string, string | undefined>;
+export default function BusinessesIndex({ businesses, filters }: BusinessesIndexProps) {
 
     const [search, setSearch] = useState(filters?.search || '');
     const [selectedStatus, setSelectedStatus] = useState(filters?.status || '');
@@ -148,13 +104,12 @@ export default function BusinessesIndex({ businesses, filters, categories = [], 
                             Review and verify member business listings to foster mutual commercial engagement.
                         </p>
                     </div>
-                    <button
-                        type="button"
-                        onClick={() => setAddOpen(true)}
-                        className="inline-flex h-10 shrink-0 cursor-pointer items-center gap-1.5 self-start rounded-lg bg-[#1B84FF] px-4 text-[13px] font-semibold text-white shadow-[0_6px_16px_-6px_rgba(27,132,255,0.6)] transition-colors hover:bg-[#006AE6] sm:self-auto"
+                    <Link
+                        href="/admin/businesses/create"
+                        className="inline-flex h-10 shrink-0 items-center gap-1.5 self-start rounded-lg bg-[#1B84FF] px-4 text-[13px] font-semibold text-white shadow-[0_6px_16px_-6px_rgba(27,132,255,0.6)] transition-colors hover:bg-[#006AE6] sm:self-auto"
                     >
                         <Plus className="size-4" /> Add Business
-                    </button>
+                    </Link>
                 </div>
 
                 {/* Filter Toolbar */}
@@ -249,9 +204,9 @@ export default function BusinessesIndex({ businesses, filters, categories = [], 
                                                         <Briefcase className="size-4" />
                                                     </div>
                                                     <div>
-                                                        <div className="text-[13px] font-semibold text-[#071437]">
+                                                        <Link href={`/admin/businesses/${b.id}/edit`} className="text-[13px] font-semibold text-[#071437] hover:text-[#1B84FF]">
                                                             {b.name}
-                                                        </div>
+                                                        </Link>
                                                         {b.website && (
                                                             <a
                                                                 href={b.website}
@@ -315,6 +270,13 @@ export default function BusinessesIndex({ businesses, filters, categories = [], 
                                                             </button>
                                                         </DropdownMenuTrigger>
                                                         <DropdownMenuContent align="end" className="w-48 rounded-xl border-[#F1F1F4] !bg-white p-1.5 !text-[#071437] shadow-[0_12px_32px_-8px_rgba(7,20,55,0.16)]">
+                                                            <DropdownMenuItem
+                                                                onSelect={() => router.visit(`/admin/businesses/${b.id}/edit`)}
+                                                                className="cursor-pointer rounded-lg px-2.5 py-2 text-[13px] font-medium text-[#071437] focus:!bg-[#F1F6FF] focus:!text-[#1B84FF]"
+                                                            >
+                                                                <Pencil className="size-4 text-[#1B84FF]" />
+                                                                Edit Business
+                                                            </DropdownMenuItem>
                                                             <DropdownMenuItem
                                                                 onSelect={() => handleToggleFeatured(b.id)}
                                                                 className="cursor-pointer rounded-lg px-2.5 py-2 text-[13px] font-medium text-[#071437] focus:!bg-[#F1F6FF] focus:!text-[#1B84FF]"
@@ -405,130 +367,6 @@ export default function BusinessesIndex({ businesses, filters, categories = [], 
                     </div>
                 </div>
             </div>
-            <Dialog open={addOpen} onOpenChange={(open) => (open ? setAddOpen(true) : closeAdd())}>
-                <DialogContent className="max-h-[90vh] overflow-y-auto !bg-white !text-[#071437] sm:max-w-2xl">
-                    <DialogHeader>
-                        <DialogTitle className="text-[17px] font-bold text-[#071437]">Add Business</DialogTitle>
-                        <DialogDescription className="text-[13px] text-[#78829D]">
-                            List a business on behalf of an alumni member.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <form onSubmit={submitAdd} className="space-y-4">
-                        <div className="flex items-center gap-4 rounded-xl border border-dashed border-[#DBDFE9] p-3">
-                            <span className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#F1F6FF]">
-                                {logoPreview ? <img src={logoPreview} alt="" className="size-full object-contain p-1" /> : <Briefcase className="size-6 text-[#1B84FF]" />}
-                            </span>
-                            <div className="text-[12.5px]">
-                                <div className="font-semibold text-[#071437]">Business logo</div>
-                                <div className="text-[#78829D]">PNG, JPG or WebP · max 2 MB · optional</div>
-                                <label className="mt-1.5 inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-[#DBDFE9] px-3 py-1.5 text-[12px] font-semibold text-[#071437] hover:bg-[#F9F9F9]">
-                                    <ImagePlus className="size-3.5" /> {logoPreview ? 'Change' : 'Upload'}
-                                    <input
-                                        type="file"
-                                        accept="image/png,image/jpeg,image/webp"
-                                        className="hidden"
-                                        onChange={(e) => {
-                                            const file = e.target.files?.[0] ?? null;
-                                            form.setData('logo', file);
-                                            setLogoPreview(file ? URL.createObjectURL(file) : null);
-                                        }}
-                                    />
-                                </label>
-                                {ferr.logo && <div className="mt-1 text-[#F8285A]">{ferr.logo}</div>}
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            <FormField label="Business name" required error={ferr.name} className="sm:col-span-2">
-                                <Input value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} placeholder="Enter business name" className={fieldClass} />
-                            </FormField>
-                            <FormField label="Alumni owner" required error={ferr.owner_member_id} className="sm:col-span-2">
-                                <Select value={form.data.owner_member_id} onValueChange={(v) => form.setData('owner_member_id', v)}>
-                                    <SelectTrigger className={selectTriggerClass}>
-                                        <SelectValue placeholder="Select member" />
-                                    </SelectTrigger>
-                                    <SelectContent className={selectMenuClass}>
-                                        {owners.map((o) => (
-                                            <SelectItem key={o.id} value={String(o.id)} className={selectItemClass}>
-                                                {o.name}{o.college ? ` · ${o.college}` : ''}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </FormField>
-                            <FormField label="Category" required error={ferr.category_id}>
-                                <Select value={form.data.category_id} onValueChange={(v) => form.setData('category_id', v)}>
-                                    <SelectTrigger className={selectTriggerClass}>
-                                        <SelectValue placeholder="Select category" />
-                                    </SelectTrigger>
-                                    <SelectContent className={selectMenuClass}>
-                                        {categories.map((c) => (
-                                            <SelectItem key={c.id} value={String(c.id)} className={selectItemClass}>{c.name}</SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </FormField>
-                            <FormField label="Industry" required error={ferr.industry_id}>
-                                <Select value={form.data.industry_id} onValueChange={(v) => form.setData('industry_id', v)}>
-                                    <SelectTrigger className={selectTriggerClass}>
-                                        <SelectValue placeholder="Select industry" />
-                                    </SelectTrigger>
-                                    <SelectContent className={selectMenuClass}>
-                                        {industries.map((c) => (
-                                            <SelectItem key={c.id} value={String(c.id)} className={selectItemClass}>{c.name}</SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </FormField>
-                            <FormField label="Description" error={ferr.description} className="sm:col-span-2">
-                                <textarea
-                                    rows={3}
-                                    value={form.data.description}
-                                    onChange={(e) => form.setData('description', e.target.value)}
-                                    placeholder="What the business does"
-                                    className={`${fieldClass} h-auto resize-none py-2.5`}
-                                />
-                            </FormField>
-                            <FormField label="Website" error={ferr.website}>
-                                <Input value={form.data.website} onChange={(e) => form.setData('website', e.target.value)} placeholder="https://example.com" className={fieldClass} />
-                            </FormField>
-                            <FormField label="Email" error={ferr.email}>
-                                <Input type="email" value={form.data.email} onChange={(e) => form.setData('email', e.target.value)} placeholder="Enter email" className={fieldClass} />
-                            </FormField>
-                            <FormField label="Phone" error={ferr.phone}>
-                                <Input value={form.data.phone} onChange={(e) => form.setData('phone', e.target.value)} placeholder="Enter phone number" className={fieldClass} />
-                            </FormField>
-                            <FormField label="City" error={ferr.city}>
-                                <Input value={form.data.city} onChange={(e) => form.setData('city', e.target.value)} placeholder="Enter city" className={fieldClass} />
-                            </FormField>
-                            <FormField label="Status" required error={ferr.status} className="sm:col-span-2">
-                                <Select value={form.data.status} onValueChange={(v) => form.setData('status', v)}>
-                                    <SelectTrigger className={selectTriggerClass}>
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent className={selectMenuClass}>
-                                        <SelectItem value="approved" className={selectItemClass}>Approved (publish now)</SelectItem>
-                                        <SelectItem value="pending" className={selectItemClass}>Pending review</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </FormField>
-                        </div>
-
-                        <div className="flex justify-end gap-2 border-t border-[#F1F1F4] pt-4">
-                            <button type="button" onClick={closeAdd} className="h-10 cursor-pointer rounded-lg border border-[#DBDFE9] px-4 text-[13px] font-semibold text-[#4B5675] hover:bg-[#F9F9F9]">
-                                Cancel
-                            </button>
-                            <button
-                                type="submit"
-                                disabled={form.processing}
-                                className="inline-flex h-10 cursor-pointer items-center gap-1.5 rounded-lg bg-[#1B84FF] px-5 text-[13px] font-semibold text-white hover:bg-[#006AE6] disabled:opacity-60"
-                            >
-                                <Plus className="size-4" /> {form.processing ? 'Saving…' : 'Add Business'}
-                            </button>
-                        </div>
-                    </form>
-                </DialogContent>
-            </Dialog>
         </AdminLayout>
     );
 }
